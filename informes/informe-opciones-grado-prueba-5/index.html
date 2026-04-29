@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Opciones de Grado – Jesús Domingo Segarra</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  :root {
+    --teal: #0a9baa;
+    --teal-dark: #077a87;
+    --teal-light: #e0f5f7;
+    --navy: #0d2b3e;
+    --text: #1e2d3d;
+    --muted: #5a6b7c;
+    --bg: #f4f8fa;
+    --white: #ffffff;
+    --border: #c8e0e5;
+    --red: #c0392b;
+    --orange: #c0711a;
+    --green: #1e8a4c;
+    --shadow: 0 4px 24px rgba(10,155,170,0.09);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "DM Sans", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 16px;
+  }
+
+  /* ── STICKY HEADER ── */
+  .sticky-header {
+    position: sticky; top: 0; z-index: 1000;
+    background: linear-gradient(135deg, var(--navy) 0%, #0a5c6e 60%, var(--teal) 100%);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.28);
+  }
+  .header-inner { max-width: 980px; margin: 0 auto; padding: 16px 28px 0; }
+  .header-top { display: flex; align-items: center; gap: 24px; margin-bottom: 14px; flex-wrap: wrap; }
+  .logo-wrap svg { height: 40px; width: auto; display: block; }
+  .header-title h1 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(16px, 2.2vw, 24px);
+    font-weight: 700; color: white; line-height: 1.2;
+  }
+  .header-title .subtitle {
+    font-size: 11.5px; letter-spacing: 2px; text-transform: uppercase;
+    color: rgba(255,255,255,0.5); margin-top: 3px;
+  }
+
+  /* ── TABS NAV ── */
+  .tabs-nav { display: flex; gap: 3px; flex-wrap: wrap; }
+  .tab-btn {
+    background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.72);
+    border: none; padding: 11px 17px;
+    font-family: "DM Sans", sans-serif; font-size: 13px; font-weight: 500;
+    cursor: pointer; border-radius: 8px 8px 0 0; transition: all 0.18s;
+    white-space: nowrap; display: flex; align-items: center; gap: 8px; position: relative;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.18); color: white; }
+  .tab-btn.active { background: var(--bg); color: var(--navy); font-weight: 700; }
+  .tab-btn.active::after {
+    content: ""; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; background: var(--teal); border-radius: 3px 3px 0 0;
+  }
+
+  /* ── TABS CONTENT ── */
+  .tabs-content { background: var(--bg); min-height: 60vh; }
+  .tab-panel { display: none; padding: 44px 0 90px; }
+  .tab-panel.active { display: block; }
+  .container { max-width: 980px; margin: 0 auto; padding: 0 28px; }
+
+  /* ── TEXT BLOCKS ── */
+  .intro-block, .country-intro, .explainer-intro {
+    background: white; border: 1px solid var(--border);
+    border-radius: 12px; padding: 30px 36px;
+    margin-bottom: 28px; box-shadow: var(--shadow);
+    font-size: 16px; line-height: 1.85; color: var(--text);
+  }
+  .intro-block p + p { margin-top: 14px; }
+  .explainer-intro h2 {
+    font-family: "Playfair Display", serif; font-size: 24px;
+    color: var(--navy); margin-bottom: 18px;
+  }
+  .section-label {
+    font-size: 15px; font-weight: 700; color: var(--navy); margin: 20px 0 8px;
+  }
+  .diff-links {
+    margin-top: 22px; padding: 16px 20px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px; font-size: 15px;
+  }
+  .diff-links p { margin-bottom: 6px; }
+  .diff-links a { color: var(--teal); text-decoration: none; font-weight: 600; }
+  .diff-links a:hover { text-decoration: underline; }
+
+  /* ── TOC ── */
+  .toc {
+    background: white; border: 1px solid var(--border); border-radius: 12px;
+    padding: 28px 36px; margin-bottom: 28px; box-shadow: var(--shadow);
+  }
+  .toc h2 { font-family: "Playfair Display", serif; font-size: 22px; color: var(--navy); margin-bottom: 20px; }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 16px; }
+  .toc-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .toc-card-head {
+    background: var(--teal); color: white; font-size: 12.5px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase; padding: 10px 16px;
+    display: flex; align-items: center; gap: 9px;
+  }
+  .toc-list { list-style: none; padding: 10px 16px; }
+  .toc-list li { font-size: 14px; padding: 4px 0; color: var(--text); }
+  .toc-list li a {
+    color: var(--text); text-decoration: none; display: flex; align-items: flex-start; gap: 6px;
+    flex-direction: column;
+  }
+  .toc-list li a:hover { color: var(--teal); }
+  .toc-list li a:hover .toc-uni { color: var(--teal-dark); }
+  .toc-list li { display: flex; align-items: flex-start; gap: 6px; }
+  .toc-list li::before { content: "→"; color: var(--teal); flex-shrink: 0; margin-top: 2px; }
+  .toc-degree { font-size: 13.5px; font-weight: 500; line-height: 1.4; }
+  .toc-uni {
+    font-family: "Playfair Display", serif;
+    font-size: 11.5px; font-weight: 400; font-style: italic;
+    color: var(--muted); margin-top: 1px; line-height: 1.3;
+  }
+
+  /* ── CTA ── */
+  .cta-block {
+    background: linear-gradient(135deg, var(--navy), #0a5c6e);
+    color: white; padding: 34px 38px; border-radius: 12px;
+  }
+  .cta-block h2 {
+    font-family: "Playfair Display", serif; font-size: 23px; margin-bottom: 12px; color: white;
+  }
+  .cta-block p { color: rgba(255,255,255,0.87); font-size: 16px; line-height: 1.8; }
+
+  /* ── COUNTRY HEADER ── */
+  .country-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+  .country-name-text { font-family: "Playfair Display", serif; font-size: 28px; font-weight: 700; color: var(--navy); }
+  .country-meta-row {
+    display: flex; gap: 24px; flex-wrap: wrap; margin-top: 10px;
+    font-size: 14.5px; color: var(--teal-dark); font-weight: 500;
+  }
+  .country-text {
+    margin-top: 14px; font-size: 15.5px; line-height: 1.85; color: var(--text);
+    padding-top: 14px; border-top: 1px solid var(--border);
+  }
+
+  /* ── TYPE LABEL ── */
+  .type-label {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--teal-dark); padding: 22px 0 10px; border-top: 2px solid var(--border); margin-top: 8px;
+  }
+  .type-label:first-of-type { border-top: none; padding-top: 4px; }
+
+  /* ── UNI CARD ── */
+  .uni-card {
+    background: var(--white); border: 2px solid var(--border);
+    border-radius: 12px; margin-bottom: 26px; overflow: hidden;
+    box-shadow: var(--shadow); transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .uni-card:hover { box-shadow: 0 10px 40px rgba(10,155,170,0.16); border-color: var(--teal); }
+
+  .uni-card-header { padding: 20px 26px 16px; border-bottom: 2px solid var(--bg); }
+  .uni-title-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    text-decoration: none; margin-bottom: 6px;
+  }
+  .uni-title-link:hover .uni-name { color: var(--teal); text-decoration: underline; }
+  .uni-title-link:hover .click-icon { transform: scale(1.15); }
+  .uni-name {
+    font-family: "Playfair Display", serif; font-size: 19px; font-weight: 700;
+    color: var(--navy); line-height: 1.3; transition: color 0.15s;
+  }
+  .click-icon {
+    font-size: 17px; flex-shrink: 0; transition: transform 0.15s;
+    filter: drop-shadow(0 1px 2px rgba(10,155,170,0.3));
+  }
+  .uni-school { font-size: 13.5px; color: var(--teal); font-weight: 600; margin-bottom: 8px; }
+  .card-header-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 12px; flex-wrap: wrap;
+  }
+  .difficulty-badge {
+    font-size: 12px; font-weight: 700; padding: 5px 13px; border-radius: 20px;
+    white-space: nowrap; letter-spacing: 0.3px; flex-shrink: 0; margin-top: 2px;
+  }
+  .diff-muy-alta { background: #fce8e8; color: var(--red); border: 1px solid #f5b7b1; }
+  .diff-alta { background: #fef3e2; color: var(--orange); border: 1px solid #f5cba7; }
+  .diff-media { background: #e8f8ef; color: var(--green); border: 1px solid #a9dfbf; }
+  .diff-directa { background: #e8f8ef; color: var(--green); border: 1px solid #a9dfbf; }
+
+  .ranking-tags { margin-top: 6px; }
+  .ranking-tag {
+    display: inline-block; background: var(--teal-light); color: var(--teal-dark);
+    font-size: 12px; font-weight: 600; padding: 3px 11px; border-radius: 20px; margin: 2px 2px 0 0;
+  }
+  .ranking-tag.gold { background: #fef9e7; color: #7d6608; border: 1px solid #f9e79f; }
+
+  .uni-body { padding: 20px 26px; }
+  .meta-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(162px, 1fr));
+    gap: 11px; margin-bottom: 18px;
+  }
+  .meta-item { background: var(--bg); border: 1px solid var(--border); border-radius: 9px; padding: 10px 15px; }
+  .meta-item .label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 4px;
+  }
+  .meta-item .value { font-size: 14.5px; font-weight: 700; color: var(--navy); }
+  .meta-item .value.free { color: var(--teal); }
+  .meta-item .value.high { color: var(--red); }
+  .meta-item .value.mid { color: var(--orange); }
+  .meta-item .value.low { color: var(--green); }
+
+  .description {
+    font-size: 15px; color: var(--text); line-height: 1.82; margin-bottom: 16px;
+    padding: 15px 18px; background: #f2fafc;
+    border-left: 4px solid var(--teal-light); border-radius: 0 8px 8px 0;
+  }
+
+  details { border: 1px solid var(--border); border-radius: 9px; overflow: hidden; margin-top: 12px; }
+  details summary {
+    padding: 12px 18px; font-size: 14px; font-weight: 600; color: var(--teal-dark);
+    cursor: pointer; user-select: none; background: var(--teal-light);
+    list-style: none; display: flex; align-items: center; gap: 8px;
+  }
+  details summary::before { content: "▶"; font-size: 10px; transition: transform 0.2s; }
+  details[open] summary::before { transform: rotate(90deg); }
+  details summary::-webkit-details-marker { display: none; }
+  .req-body { padding: 18px 20px; background: white; }
+  .req-section-title {
+    font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+    color: var(--muted); margin: 16px 0 7px;
+  }
+  .req-section-title:first-child { margin-top: 0; }
+  .req-row {
+    display: flex; gap: 9px; align-items: flex-start; margin-bottom: 8px;
+    font-size: 14.5px; line-height: 1.65;
+  }
+  .req-row::before { content: "✓"; color: var(--teal); font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+  .deadline-row {
+    background: #fffbee; border: 1px solid #f5d76e; border-radius: 7px;
+    padding: 9px 14px; font-size: 14px; font-weight: 700; color: #7d6300;
+    display: flex; align-items: center; gap: 8px; margin-top: 14px;
+  }
+  a { color: var(--teal); }
+
+  /* ── MAP SCROLL BUTTON ── */
+  .map-scroll-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--teal-light); color: var(--teal-dark);
+    border: 1px solid var(--teal); border-radius: 6px;
+    padding: 3px 9px; font-size: 12px; font-weight: 600;
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+    vertical-align: middle; margin-left: 6px;
+  }
+  .map-scroll-btn:hover { background: var(--teal); color: white; }
+
+  /* ── MAP ── */
+  .map-section {
+    margin-top: 36px; background: white; border: 2px solid var(--border);
+    border-radius: 12px; overflow: hidden; box-shadow: var(--shadow);
+  }
+  .map-section-header {
+    padding: 14px 22px; background: var(--navy); color: white;
+    font-size: 14px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .map-container { height: 420px; width: 100%; }
+
+  /* Custom map marker */
+  .uni-marker {
+    background: var(--teal); color: white; border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg); border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; cursor: pointer;
+  }
+  .uni-marker-inner { transform: rotate(45deg); font-size: 16px; }
+  .leaflet-popup-content-wrapper { border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.18); }
+  .leaflet-popup-content { margin: 12px 16px; font-family: "DM Sans", sans-serif; }
+  .popup-name { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .popup-school { font-size: 12.5px; color: var(--teal); font-weight: 600; margin-bottom: 8px; }
+  .popup-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .popup-link {
+    font-size: 12px; font-weight: 600; color: white; background: var(--teal);
+    padding: 4px 10px; border-radius: 15px; text-decoration: none; display: inline-block;
+  }
+  .popup-link:hover { background: var(--teal-dark); }
+  .popup-link.map-link { background: var(--navy); }
+
+  /* ── CSS FLAGS ── */
+  .flag-css { display: inline-block; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; overflow: hidden; position: relative; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 32px; color: var(--muted);
+    font-size: 13px; letter-spacing: 0.3px;
+    border-top: 1px solid var(--border); margin-top: 40px;
+  }
+  .footer-logo { display: block; margin: 0 auto 10px; width: 160px; opacity: 0.38; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ STICKY HEADER ═══════════ -->
+<div class="sticky-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="logo-wrap"><svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #36aadc;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        opacity: .8;
+      }
+
+      .cls-2 {
+        fill: #30ac71;
+      }
+
+      .cls-5 {
+        fill: #ffffff;
+      }
+
+      .cls-3 {
+        fill: #32abbb;
+      }
+
+      .cls-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="Capa_3" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="cls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="cls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="cls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="cls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="cls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="cls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+      <div class="header-title">
+        <h1>Informe Personalizado de Opciones de Grado</h1>
+        <div class="subtitle">Preparado para Jesús Domingo Segarra</div>
+      </div>
+    </div>
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="showTab('intro',this)">📋 Introducción</button>
+      <button class="tab-btn" onclick="showTab('research',this)">📚 Research vs Applied</button>
+      <button class="tab-btn" onclick="showTab('dk',this)">
+        <span class="flag-css" style="width:22px;height:15px;background:#c60c30;">
+          <span style="position:absolute;top:0;bottom:0;left:8px;width:3px;background:white;"></span>
+          <span style="position:absolute;left:0;right:0;top:6px;height:3px;background:white;"></span>
+        </span>Dinamarca
+      </button>
+      <button class="tab-btn" onclick="showTab('nl',this)">
+        <span class="flag-css" style="width:22px;height:15px;background:white;">
+          <span style="position:absolute;top:0;left:0;right:0;height:5px;background:#AE1C28;"></span>
+          <span style="position:absolute;bottom:0;left:0;right:0;height:5px;background:#21468B;"></span>
+        </span>Holanda
+      </button>
+      <button class="tab-btn" onclick="showTab('be',this)">
+        <span class="flag-css" style="width:22px;height:15px;">
+          <span style="position:absolute;top:0;bottom:0;left:0;width:7px;background:#000;"></span>
+          <span style="position:absolute;top:0;bottom:0;left:7px;width:8px;background:#FDDA24;"></span>
+          <span style="position:absolute;top:0;bottom:0;right:0;width:7px;background:#EF3340;"></span>
+        </span>Bélgica
+      </button>
+      <button class="tab-btn" onclick="showTab('se',this)">
+        <span class="flag-css" style="width:22px;height:15px;background:#006AA7;">
+          <span style="position:absolute;top:0;bottom:0;left:7px;width:3px;background:#FECC02;"></span>
+          <span style="position:absolute;left:0;right:0;top:6px;height:3px;background:#FECC02;"></span>
+        </span>Suecia
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-content">
+
+<!-- ═══════════ TAB: INTRODUCCIÓN ═══════════ -->
+<div id="tab-intro" class="tab-panel active">
+<div class="container">
+  <div class="intro-block">
+    <p>Hola Jesús,</p>
+    <p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencido de que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+    <p>Estos días he estado trabajando en la búsqueda de los grados en Negocios y afines que, según lo que hemos hablado, más podrían interesarte.</p>
+    <p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p>
+  </div>
+
+  <div class="toc">
+    <h2>Contenido</h2>
+    <div class="toc-grid">
+
+      <div class="toc-card">
+        <div class="toc-card-head">
+          <span class="flag-css" style="width:20px;height:13px;background:#c60c30;">
+            <span style="position:absolute;top:0;bottom:0;left:7px;width:3px;background:white;"></span>
+            <span style="position:absolute;left:0;right:0;top:5px;height:3px;background:white;"></span>
+          </span>Dinamarca · 0 €/año
+        </div>
+        <ul class="toc-list">
+          <li><a href="#" onclick="goTo('dk','dk-cbs-ib');return false;"><span class="toc-degree">BSc in International Business</span><span class="toc-uni">CBS (Copenhaguen Business School)</span></a></li>
+          <li><a href="#" onclick="goTo('dk','dk-cbs-dm');return false;"><span class="toc-degree">BSc in Business Administration in Digital Management</span><span class="toc-uni">CBS (Copenhaguen Business School)</span></a></li>
+          <li><a href="#" onclick="goTo('dk','dk-aarhus');return false;"><span class="toc-degree">Economics and Business Administration</span><span class="toc-uni">Aarhus University</span></a></li>
+          <li><a href="#" onclick="goTo('dk','dk-aalborg');return false;"><span class="toc-degree">Economics and Business Administration</span><span class="toc-uni">Aalborg University</span></a></li>
+          <li><a href="#" onclick="goTo('dk','dk-sdu');return false;"><span class="toc-degree">BA in Economics and Business Administration – Global Business Relationships</span><span class="toc-uni">University of Southern Denmark (SDU)</span></a></li>
+        </ul>
+      </div>
+
+      <div class="toc-card">
+        <div class="toc-card-head">
+          <span class="flag-css" style="width:20px;height:13px;background:white;border:1px solid rgba(255,255,255,0.3);">
+            <span style="position:absolute;top:0;left:0;right:0;height:4px;background:#AE1C28;"></span>
+            <span style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#21468B;"></span>
+          </span>Holanda · 2.601 €/año
+        </div>
+        <ul class="toc-list">
+          <li><a href="#" onclick="goTo('nl','nl-maastricht');return false;"><span class="toc-degree">Economics and Business Economics</span><span class="toc-uni">Maastricht University</span></a></li>
+          <li><a href="#" onclick="goTo('nl','nl-tilburg');return false;"><span class="toc-degree">Entrepreneurship and Business Innovation</span><span class="toc-uni">Tilburg University</span></a></li>
+          <li><a href="#" onclick="goTo('nl','nl-hanze');return false;"><span class="toc-degree">International Business</span><span class="toc-uni">Hanze University of Applied Sciences</span></a></li>
+          <li><a href="#" onclick="goTo('nl','nl-nhl');return false;"><span class="toc-degree">International Business</span><span class="toc-uni">NHL Stenden University of Applied Sciences</span></a></li>
+          <li><a href="#" onclick="goTo('nl','nl-rotterdam');return false;"><span class="toc-degree">International Business</span><span class="toc-uni">Rotterdam University of Applied Sciences</span></a></li>
+        </ul>
+      </div>
+
+      <div class="toc-card">
+        <div class="toc-card-head">
+          <span class="flag-css" style="width:20px;height:13px;">
+            <span style="position:absolute;top:0;bottom:0;left:0;width:7px;background:#000;"></span>
+            <span style="position:absolute;top:0;bottom:0;left:7px;width:6px;background:#FDDA24;"></span>
+            <span style="position:absolute;top:0;bottom:0;right:0;width:7px;background:#EF3340;"></span>
+          </span>Bélgica · 1.157 €/año
+        </div>
+        <ul class="toc-list">
+          <li><a href="#" onclick="goTo('be','be-kuleuven');return false;"><span class="toc-degree">Business Administration</span><span class="toc-uni">KU Leuven</span></a></li>
+          <li><a href="#" onclick="goTo('be','be-vives');return false;"><span class="toc-degree">International Business</span><span class="toc-uni">VIVES University of Applied Sciences</span></a></li>
+          <li><a href="#" onclick="goTo('be','be-artevelde');return false;"><span class="toc-degree">International Business</span><span class="toc-uni">Artevelde University of Applied Sciences</span></a></li>
+          <li><a href="#" onclick="goTo('be','be-thomasmore');return false;"><span class="toc-degree">International Business Management</span><span class="toc-uni">Thomas More University of Applied Sciences</span></a></li>
+        </ul>
+      </div>
+
+      <div class="toc-card">
+        <div class="toc-card-head">
+          <span class="flag-css" style="width:20px;height:13px;background:#006AA7;">
+            <span style="position:absolute;top:0;bottom:0;left:7px;width:3px;background:#FECC02;"></span>
+            <span style="position:absolute;left:0;right:0;top:5px;height:3px;background:#FECC02;"></span>
+          </span>Suecia · 0 €/año
+        </div>
+        <ul class="toc-list">
+          <li><a href="#" onclick="goTo('se','se-gothenburg');return false;"><span class="toc-degree">Business and Economics</span><span class="toc-uni">University of Gothenburg</span></a></li>
+          <li><a href="#" onclick="goTo('se','se-lund');return false;"><span class="toc-degree">International Business</span><span class="toc-uni">Lund University</span></a></li>
+          <li><a href="#" onclick="goTo('se','se-umea');return false;"><span class="toc-degree">International Business and Economics</span><span class="toc-uni">Umea University</span></a></li>
+          <li><a href="#" onclick="goTo('se','se-jonkoping');return false;"><span class="toc-degree">International Management</span><span class="toc-uni">Jonkoping University</span></a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="cta-block">
+    <h2>¿QUÉ TIENES QUE HACER AHORA?</h2>
+    <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+    <p style="margin-top:10px;">¡Un saludo!</p>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════ TAB: RESEARCH vs APPLIED ═══════════ -->
+<div id="tab-research" class="tab-panel">
+<div class="container">
+  <div class="explainer-intro">
+    <h2>Entendiendo las diferencias de "research" vs "applied sciences"</h2>
+    <p>Como creo que ya te hemos explicado, en la mayoría de países europeos tenemos que diferenciar entre 2 tipos de universidades: <em>"Research"</em> y <em>"Applied Sciences"</em>. Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+
+    <div class="section-label">· Metodología teórica vs práctica</div>
+    <p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project/Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+
+    <div class="section-label">· Duración</div>
+    <p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+    <p>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+
+    <div class="section-label">· Ranking / Prestigio</div>
+    <p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.</p>
+    <p>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+
+    <div class="section-label">· Acceso a Másteres</div>
+    <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. En cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research</em>, te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p>
+
+    <div class="diff-links">
+      <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de Research y otra de Applied Sciences):</p>
+      <p>— <a href="https://www.rug.nl/education/bachelor/international-students/applying-to-rug/what-type-of-university/applied-science-vs-research-university" target="_blank">Applied Science vs. Research University</a></p>
+      <p>— <a href="https://www.studyinholland.nl/education-system/types-of-higher-education" target="_blank">Types of universities in the Netherlands</a></p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════ TAB: DINAMARCA ═══════════ -->
+<div id="tab-dk" class="tab-panel">
+<div class="container">
+  <div class="country-intro">
+    <div class="country-header">
+      <span class="flag-css" style="width:48px;height:32px;background:#c60c30;">
+        <span style="position:absolute;top:0;bottom:0;left:18px;width:5px;background:white;"></span>
+        <span style="position:absolute;left:0;right:0;top:13px;height:5px;background:white;"></span>
+      </span>
+      <span class="country-name-text">Dinamarca</span>
+    </div>
+    <div class="country-meta-row">
+      <span>💶 Coste matrícula: <strong>0 €/año</strong></span>
+      <span>🏠 Alojamiento medio: <strong>~600 €/mes</strong></span>
+    </div>
+    <div class="country-text">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Dinamarca, siendo el coste anual que tenemos que pagar de <strong>0€ / año</strong>.<br>En Dinamarca el coste medio del alojamiento es de 600 €.</div>
+  </div>
+
+  <div class="type-label">RESEARCH UNIVERSITIES</div>
+
+  <div class="uni-card" id="dk-cbs-ib">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.cbs.dk/en/study/bachelor/bsc-in-international-business" target="_blank">
+          <span class="uni-name">BSc in International Business</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">CBS (Copenhaguen Business School) · Copenhaguen</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag gold">🏆 #1 universidad del mundo en Business Administration (ranking de Shanghai)</span>
+          <span class="ranking-tag">#6 universidad de Dinamarca</span>
+          <span class="ranking-tag">#701-800 universidad del mundo</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-muy-alta">Dificultad: Muy Alta</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Copenhaguen (~850.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('dk','map-dk');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value free">0 €/año</div></div>
+        <div class="meta-item"><div class="label">Nota de corte Quota 1</div><div class="value high">9,75 media Bachiller</div></div>
+      </div>
+      <div class="description">En el programa de International Business de CBS, te prepararás para convertirte en un profesional global capaz de desenvolverte con éxito en mercados internacionales. Aprenderás a comprender el contexto económico, cultural y político de diferentes países, desarrollarás habilidades en estrategia, marketing y gestión, y trabajarás en proyectos reales que te permitirán aplicar lo aprendido desde el primer día.<br><br>Además, estudiarás en una universidad reconocida mundialmente por su calidad académica y su red internacional, lo que te abrirá puertas a oportunidades laborales en empresas multinacionales o a emprender tu propio negocio. Con este grado, estarás listo para afrontar los retos del mundo globalizado y destacar en un entorno dinámico y competitivo.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Título de bachillerato español. Además, es necesario demostrar que has cursado, durante los últimos 3 cursos, las siguientes horas en las siguientes asignaturas: Matemáticas – 250 horas · Historia o Economía – 150 horas · Inglés con nota mínima de un 7 – 210 horas</div>
+          <div class="req-section-title">Requisitos de inglés (entregarlo antes del 5 de julio)</div>
+          <div class="req-row">Cambridge C1 Advanced aprobado con una calificación mínima de C y una puntuación global mínima de 185</div>
+          <div class="req-row">IELTS Academic aprobado con una puntuación global de al menos 7.0 y una puntuación mínima de 6.0 en cada una de las cuatro secciones</div>
+          <div class="req-row">TOEFL iBT/iBT Home Edition aprobado con una puntuación global mínima de 94 y una puntuación mínima de 20 en cada una de las cuatro secciones</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">Sí, la universidad usa como principal criterio de admisión la nota media de los candidatos</div>
+          <div class="req-section-title">Dificultad de acceso</div>
+          <div class="req-row">Muy alta. El año anterior la nota de corte de la Quota 1, por donde tú entrarías compitiendo también con tu nota media, fue de un 11,1 en la escala danesa, que equivale a un 9.75 de media en Bachiller (nota media de los 2 años)</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="dk-cbs-dm">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.cbs.dk/en/study/bachelor/bsc-in-business-administration-and-digital-management" target="_blank">
+          <span class="uni-name">BSc in Business Administration in Digital Management</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">CBS (Copenhaguen Business School) · Copenhaguen</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag gold">🏆 #1 universidad del mundo en Business Administration (ranking de Shanghai)</span>
+          <span class="ranking-tag">#6 universidad de Dinamarca</span>
+          <span class="ranking-tag">#701-800 universidad del mundo</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-muy-alta">Dificultad: Muy Alta</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Copenhaguen (~850.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('dk','map-dk');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value free">0 €/año</div></div>
+        <div class="meta-item"><div class="label">Nota de corte Quota 1</div><div class="value mid">9,0 media Bachiller</div></div>
+      </div>
+      <div class="description">Este grado te prepara para liderar en un mundo empresarial cada vez más digitalizado. Aprenderás a integrar la innovación digital, el análisis de datos y las tecnologías dentro de la estrategia de negocio, entendiendo cómo estas transformaciones afectan tanto a las empresas como a la sociedad. No solo te formarás en tecnología, sino en cómo aplicarla para tomar decisiones empresariales eficaces y responsables, enfrentando desafíos como la privacidad y la ética.<br><br>Trabajarás con áreas clave como finanzas, estrategia e innovación, y desarrollarás habilidades para analizar datos complejos y crear soluciones digitales que impulsen la competitividad de cualquier organización. Este enfoque integrado te convertirá en un profesional capaz de gestionar el cambio digital, con una mentalidad de negocio y digital a la vez, cualidad imprescindible para ser un líder moderno y responsable en cualquier sector.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Título de bachillerato español. Además, es necesario demostrar que has cursado, durante los últimos 3 cursos, las siguientes horas en las siguientes asignaturas: Matemáticas – 250 horas · Historia o Economía – 150 horas · Inglés con nota mínima de un 7 – 210 horas</div>
+          <div class="req-section-title">Requisitos de inglés (entregarlo antes del 5 de julio)</div>
+          <div class="req-row">Cambridge C1 Advanced aprobado con una calificación mínima de C y una puntuación global mínima de 185</div>
+          <div class="req-row">IELTS Academic aprobado con una puntuación global de al menos 7.0 y una puntuación mínima de 6.0 en cada una de las cuatro secciones</div>
+          <div class="req-row">TOEFL iBT/iBT Home Edition aprobado con una puntuación global mínima de 94 y una puntuación mínima de 20 en cada una de las cuatro secciones</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">Sí, la universidad usa como principal criterio de admisión la nota media de los candidatos</div>
+          <div class="req-section-title">Dificultad de acceso</div>
+          <div class="req-row">Muy alta. El año anterior la nota de corte de la Quota 1, por donde tú entrarías compitiendo también con tu nota media, fue de un 9,6 en la escala danesa, que equivale a un 9 de media en Bachiller (nota media de los 2 años)</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="dk-aarhus">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://bachelor.au.dk/en/economicsandbusinessadministration" target="_blank">
+          <span class="uni-name">Economics and Business Administration</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Aarhus University · Aarhus / Herning</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag gold">#2 de Dinamarca (ranking de Shanghai)</span>
+          <span class="ranking-tag">#71 del mundo en Business (ranking de Shanghai)</span>
+          <span class="ranking-tag">#80 del mundo (ranking de Shanghai)</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-alta">Dificultad: Alta (Aarhus) / Media (Herning)</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Aarhus (~300.000 hab.) o Herning (~47.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('dk','map-dk');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value free">0 €/año</div></div>
+        <div class="meta-item"><div class="label">Nota de corte Aarhus</div><div class="value mid">8,1 media Bachiller</div></div>
+        <div class="meta-item"><div class="label">Nota de corte Herning</div><div class="value low">6,6 media Bachiller</div></div>
+      </div>
+      <div class="description">Este grado forma a los estudiantes para afrontar desafíos empresariales, especialmente en el sector privado, y desarrollar estrategias de negocio orientadas al crecimiento. A lo largo del programa se estudian áreas como comportamiento organizacional, estrategia, contabilidad, logística, marketing, finanzas, derecho empresarial, micro y macroeconomía, así como metodologías propias de la administración y economía. El alumno puede personalizar su itinerario eligiendo asignaturas optativas o cursando un semestre en el extranjero, y finalizará con un proyecto de grado. Las clases se imparten principalmente en el campus de Aarhus BSS mediante clases magistrales, sesiones prácticas y trabajo en grupo. Este grado ofrece una amplia preparación para carreras en gestión, marketing, finanzas o desarrollo organizacional, además de acceso a programas de máster especializados en áreas empresariales.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Bachillerato español, incluyendo las siguientes horas cursadas durante los 3 últimos cursos (4º ESO, 1º y 2º de bachillerato): Matemáticas (250 horas) · Inglés (210 horas) · Historia (150 horas) o Economía (210 horas)</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">TOEFL iBT nota mínima: 83</div>
+          <div class="req-row">Cambridge CAE (C1) / CPE (C2) nota mínima: 180</div>
+          <div class="req-row">IELTS Academic nota mínima: 6.5</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">La universidad usará las notas de años anteriores y la información de tu Motivation Letter y resto de documentos para seleccionar a los mejores candidatos. Es posible que seas invitado a una entrevista de selección para conocerte mejor.</div>
+          <div class="req-section-title">Dificultad de acceso</div>
+          <div class="req-row">Alta en Aarhus, media en Herning. El año anterior en Aarhus, la nota de corte de la Quota 1, por donde tú entrarías compitiendo también con tu nota media, fue de un 8,2 en la escala danesa, que equivale a un 8,1 de media en Bachiller (nota media de los 2 años). En Herning, fue de un 6.0, lo que equivale a un 6.6 en la escala española</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="dk-aalborg">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.en.aau.dk/education/bachelor/economics-and-business-administration" target="_blank">
+          <span class="uni-name">Economics and Business Administration</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Aalborg University · Aalborg</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag">#5 de su país (ranking de Shanghai)</span>
+          <span class="ranking-tag">#301-400 del mundo en Business (ranking de Shanghai)</span>
+          <span class="ranking-tag">#401-500 del mundo (ranking de Shanghai)</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-media">Dificultad: Media</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Aalborg (~120.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('dk','map-dk');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value free">100% subvencionado</div></div>
+        <div class="meta-item"><div class="label">Nota de corte Quota 1</div><div class="value low">6,6 media Bachiller</div></div>
+      </div>
+      <div class="description">Este grado combina economía y gestión empresarial con una metodología práctica basada en proyectos (Problem-Based Learning). Desde el inicio, los estudiantes trabajan con casos reales y empresas, integrando teoría y práctica. A lo largo de tres años, se profundiza en áreas como contabilidad, marketing, finanzas, estrategia y derecho mercantil, culminando con un proyecto final vinculado al mundo empresarial o investigativo. El programa ofrece intercambios internacionales, prácticas y alta empleabilidad en sectores como consultoría, finanzas o gestión.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Bachillerato español, incluyendo las siguientes horas cursadas durante los 3 últimos cursos (4º ESO, 1º y 2º de bachillerato): Matemáticas (250 horas) · Inglés (210 horas) · Historia (150 horas) o Economía (210 horas)</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">TOEFL (basado en internet): 85 puntos, con un mínimo de 20 en cada sección. Al registrarse hay que introducir el código de la universidad: 8892</div>
+          <div class="req-row">Cambridge CAE (C1) / CPE (C2) nota mínima: 180</div>
+          <div class="req-row">IELTS Academic puntuación global mínima de 6.5, con al menos 6.0 en cada sección</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">El programa tiene admisión restringida. Por lo tanto, no todos los solicitantes que presenten su solicitud dentro del plazo establecido y cumplan con los requisitos de acceso tienen garantizada la admisión al programa.</div>
+          <div class="req-section-title">Dificultad de acceso</div>
+          <div class="req-row">Media. El año anterior la nota mínima de la Quota 1, por donde tú entrarías compitiendo también con tu nota media, fue de un 5,9 en la escala danesa, que equivale a un 6,6 de media en Bachiller (nota media de los 2 años)</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="dk-sdu">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.sdu.dk/en/uddannelse/bachelor/oekonomi_virksomhedsledelse_globale_forretningsrelationer" target="_blank">
+          <span class="uni-name">BA in Economics and Business Administration - Global Business Relationships</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">University of Southern Denmark (SDU) · Sønderborg</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag">#4 de su país (ranking de Shanghai)</span>
+          <span class="ranking-tag">#301-400 universidad del mundo (ranking de Shanghai)</span>
+          <span class="ranking-tag">#101-200 en Business Administration (ranking de Shanghai)</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-media">Dificultad: Media</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Sønderborg (~28.333 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('dk','map-dk');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value free">0 €/año</div></div>
+        <div class="meta-item"><div class="label">Plazas disponibles</div><div class="value">65</div></div>
+        <div class="meta-item"><div class="label">Nota corte Quota 1</div><div class="value low">8,0 + uniTEST</div></div>
+      </div>
+      <div class="description">Este programa se centra en marketing global, relaciones colaborativas internacionales y cuestiones culturales en el ámbito empresarial, preparándote para roles en compañías privadas y públicas con enfoque internacional. El programa dura 6 semestres (180 ECTS), combina asignaturas básicas de economía, contabilidad, finanzas, derecho y gestión con cursos específicos sobre marketing global y comunicación intercultural, e incluye la posibilidad de realizar prácticas o estudiar en el extranjero en el quinto semestre, para acabar con un trabajo de fin de grado en el sexto. El entorno es vibrante e internacional, con un alumnado diverso, y ofrece amplias oportunidades profesionales o académicas tras la graduación.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Título de bachillerato español. Además, es necesario demostrar que has cursado, durante los últimos 3 cursos, las siguientes horas en las siguientes asignaturas: Matemáticas – 250 horas · Historia o Economía – 150 horas · Inglés – 210 horas</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">Aceptan inglés de bachillerato: 210 horas y 6 de nota media en inglés</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">Obligatorio realizar el examen <a href="https://www.sdu.dk/en/uddannelse/bachelor/oekonomi_virksomhedsledelse_globale_forretningsrelationer/optagelse/unitest" target="_blank">uniTEST</a> entre el 28 de marzo y el 26 de abril. El resultado del test determina la admisión. Nº de plazas disponibles: 65</div>
+          <div class="req-section-title">Dificultad de acceso</div>
+          <div class="req-row">Media. El año anterior la nota de corte de la Quota 1, por donde tú entrarías compitiendo también con tu nota media, fue de un 8,0 en la escala danesa, que equivale a un 8,0 de media en Bachiller (nota media de los 2 años) + Resultados del Unitest</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="map-section">
+    <div class="map-section-header">🗺️ Universidades en Dinamarca</div>
+    <div class="map-container" id="map-dk"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════ TAB: HOLANDA ═══════════ -->
+<div id="tab-nl" class="tab-panel">
+<div class="container">
+  <div class="country-intro">
+    <div class="country-header">
+      <span class="flag-css" style="width:48px;height:32px;background:white;">
+        <span style="position:absolute;top:0;left:0;right:0;height:11px;background:#AE1C28;"></span>
+        <span style="position:absolute;bottom:0;left:0;right:0;height:11px;background:#21468B;"></span>
+      </span>
+      <span class="country-name-text">Holanda</span>
+    </div>
+    <div class="country-meta-row">
+      <span>💶 Coste matrícula: <strong>2.601 €/año</strong></span>
+      <span>🏠 Alojamiento medio: <strong>~850 €/mes</strong></span>
+    </div>
+    <div class="country-text">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <strong>2.601 €/año</strong>.<br>Cabe destacar que el alojamiento en Holanda tiene un precio medio de 850€.</div>
+  </div>
+
+  <div class="type-label">RESEARCH UNIVERSITIES</div>
+
+  <div class="uni-card" id="nl-maastricht">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.maastrichtuniversity.nl/education/bachelor/economics-and-business-economics" target="_blank">
+          <span class="uni-name">Economics and Business Economics</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Maastricht University · Maastricht</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag">#101-150 en Business Administration (según Ranking de Shanghai)</span>
+          <span class="ranking-tag">#201-300 del mundo (según Ranking de Shanghai)</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-media">Evaluación Individual</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Maastricht (120.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('nl','map-nl');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value">2.601 €/año</div></div>
+      </div>
+      <div class="description">Todos tomamos decisiones a diario, desde las personas a las empresas y los gobiernos. La economía es la ciencia de la elección, desde la personal (¿por qué compras lo que compras?) hasta la pública (¿cómo afectan las políticas gubernamentales al comportamiento de los consumidores?). La economía empresarial, por su parte, trata de resolver problemas concretos dentro de las empresas (¿Cómo podemos conseguir que los consumidores elijan nuestro producto?). Comprender las decisiones que toman todos estos agentes es esencial en la sociedad globalizada actual, en la que las opciones de consumo y las oportunidades de negocio se multiplican por momentos.<br><br>No sólo aprenderás la teoría económica, sino que también desarrollarás las habilidades prácticas para analizar problemas específicos y las habilidades profesionales para presentar tus soluciones. Estarás bien cualificado para asesorar a empresas, consumidores e incluso responsables políticos sobre cuestiones económicas. Esto te abre un amplio abanico de oportunidades profesionales y te ayudará a tener éxito en cualquier camino que elijas.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Título de Bachiller con una nota media superior a 7,0 en el último año + Prueba de Acceso a la Universidad PAU, EBAU o EvAU, con calificación de APTO</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">Como has estudiado y vas a seguir estudiando inglés hasta el último año de tu formación secundaria en España, cumples automáticamente con los requisitos de inglés, y no necesitas entregar un certificado oficial de inglés</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>1 de mayo</strong> (aunque se recomienda aplicar antes del 15 de abril)</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="nl-tilburg">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.tilburguniversity.edu/education/bachelors-programs/entrepreneurship-and-business-innovation" target="_blank">
+          <span class="uni-name">Entrepreneurship and Business Innovation</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Tilburg University · Tilburg</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag gold">🏆 #51-75 en Business Administration (según Ranking de Shanghai)</span>
+          <span class="ranking-tag">#701-800 del mundo (según Ranking de Shanghai)</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-media">Evaluación Individual</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Tilburg (206.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('nl','map-nl');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value">2.601 €/año</div></div>
+      </div>
+      <div class="description">Un programa verdaderamente único para aquellos que no pueden esperar para crear nuevo valor a través del espíritu empresarial y la innovación empresarial. Aprende a impulsar una organización o a cambiar el mundo con una nueva start-up que escalará hasta convertirse en una gran empresa. Nuestro objetivo es formar a pensadores emprendedores, abiertos de mente y con formación académica, deseosos de adquirir nuevos conocimientos. Graduados con confianza en sí mismos, listos para pasar a la acción y crear nuevo valor económico, social y medioambiental.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Título de Bachiller y Prueba de Selectividad con al menos una puntuación de 6.0 en cada una de las 4 o 5 asignaturas de la fase obligatoria y un <a href="https://www.tilburguniversity.edu/education/bachelors-programs/entrepreneurship-and-business-innovation/admission/mathematics" target="_blank">nivel suficiente de matemáticas</a> (mínimo 6 en PAU)</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">TOEFL iBT nota mínima: 80 (y puntuaciones mínimas de 19 en Writing y 17 en Speaking)</div>
+          <div class="req-row">Cambridge CAE (C1) / CPE (C2) nota mínima: 169 (con una puntuación total mínima de 169 y una puntuación mínima de 162 en las secciones de Writing y Speaking)</div>
+          <div class="req-row">IELTS nota mínima: 6.0 (una puntuación mínima de 5.5 en la sección de Writing)</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>1 de mayo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="type-label">APPLIED SCIENCE UNIVERSITIES</div>
+
+  <div class="uni-card" id="nl-hanze">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.hanze.nl/en/education/economics/international-business" target="_blank">
+          <span class="uni-name">International Business</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Hanze University of Applied Sciences · Groningen</div>
+        <div class="ranking-tags"><span class="ranking-tag">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span></div>
+      </div>
+      <span class="difficulty-badge diff-directa">Admisión Directa</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Groningen (~240.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('nl','map-nl');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">4 años (240 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value">2.601 €/año</div></div>
+      </div>
+      <div class="description">Este grado forma líderes con visión global mediante una enseñanza en inglés que combina teoría, proyectos reales y experiencias internacionales desde el inicio. Incluye un año completo en el extranjero (intercambio académico y prácticas profesionales), y permite especializarse en áreas como marketing, finanzas o RRHH. Los estudiantes desarrollan liderazgo, comunicación intercultural y pensamiento crítico, mientras aprenden un segundo idioma. El plan de estudios abarca fundamentos empresariales, proyectos aplicados, consultoría y un proyecto final, con fuertes vínculos con empresas como Amazon o Philips, garantizando alta empleabilidad en un entorno global.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Bachillerato español</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">TOEFL iBT nota mínima: 80 (con ningún subscore por debajo de 17)</div>
+          <div class="req-row">Cambridge English (FCE / CAE): mínimo First Certificate Grade B (173–175) o Grade C (169–172)</div>
+          <div class="req-row">IELTS Academic nota mínima: 6.0 (mínimo 5.5 en todas las partes)</div>
+          <div class="req-row">Pearson Academic: mínimo 61</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">La admisión es directa siempre que el estudiante cumpla con los requisitos académicos y lingüísticos establecidos</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de agosto</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="nl-nhl">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.nhlstenden.com/en/study-programs/international-business" target="_blank">
+          <span class="uni-name">International Business</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">NHL Stenden University of Applied Sciences · Leeuwarden / Emmen</div>
+        <div class="ranking-tags"><span class="ranking-tag">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span></div>
+      </div>
+      <span class="difficulty-badge diff-directa">Admisión Directa</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Leeuwarden (~130.000 hab.) y Emmen (~110.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('nl','map-nl');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">4 años (240 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value">2.601 €/año</div></div>
+      </div>
+      <div class="description">Este grado combina teoría, práctica e innovación mediante el modelo Design-Based Education (DBE), donde los estudiantes trabajan desde el inicio en proyectos reales con empresas. Con un marcado enfoque internacional, ofrece más de 120 convenios de intercambio, el programa Grand Tour para estudiar en lugares como Sudáfrica o Bali, y prácticas profesionales remuneradas. Incluye asignaturas de gestión, marketing, finanzas y liderazgo con apoyo personalizado de un coach académico. Los alumnos pueden personalizar su formación con más de 100 minors, acceder a laboratorios de innovación y colaborar con incubadoras de startups. Acreditado por la NVAO y miembro de AACSB, prepara profesionales versátiles y globales.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Bachillerato español</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">TOEFL iBT: mínimo 80</div>
+          <div class="req-row">Cambridge FCE (B2): Grade B (173–175) o Grade C (169–172)</div>
+          <div class="req-row">IELTS académico: mínimo 6.0 (recomendado mínimo 5.0 en cada parte)</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">La admisión es directa si se cumplen los requisitos académicos y lingüísticos</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de agosto</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="nl-rotterdam">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.rotterdamuas.com/programmes/exchange/bachelor/international-business" target="_blank">
+          <span class="uni-name">International Business</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Rotterdam University of Applied Sciences · Rotterdam</div>
+        <div class="ranking-tags"><span class="ranking-tag">Según el Scimago Institutions Rankings de marzo de 2024, ocupa la posición 20 en los Países Bajos</span></div>
+      </div>
+      <span class="difficulty-badge diff-media">Evaluación Individual</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Rotterdam (~670.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('nl','map-nl');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">4 años (240 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value">2.601 €/año</div></div>
+      </div>
+      <div class="description">Este grado forma profesionales preparados para liderar en el ámbito empresarial global. Desde Rotterdam, uno de los principales centros logísticos y económicos de Europa, combina teoría y práctica con un enfoque multicultural e interdisciplinar en áreas como estrategia, marketing, finanzas, comercio internacional y logística. Desde el primer año se trabaja con casos reales de empresas, fomentando el aprendizaje práctico, el liderazgo y la comunicación intercultural. Incluye neerlandés obligatorio y un segundo idioma a elegir (como español o chino), además de especialización en comercio con Asia. A lo largo de la carrera se realizan prácticas profesionales internacionales, un semestre de intercambio y un trabajo final aplicado en colaboración con una empresa, asegurando así una excelente preparación para el mercado laboral.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Bachillerato español</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">TOEFL iBT nota mínima: 80</div>
+          <div class="req-row">Cambridge FCE (B2) / CAE (C1) / CPE (C2) nota mínima: 169</div>
+          <div class="req-row">IELTS Academic nota mínima: 6.0</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">El proceso es individual y sujeto a evaluación del expediente académico y del nivel de inglés</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>31 de julio</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="map-section">
+    <div class="map-section-header">🗺️ Universidades en Holanda</div>
+    <div class="map-container" id="map-nl"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════ TAB: BÉLGICA ═══════════ -->
+<div id="tab-be" class="tab-panel">
+<div class="container">
+  <div class="country-intro">
+    <div class="country-header">
+      <span class="flag-css" style="width:48px;height:32px;">
+        <span style="position:absolute;top:0;bottom:0;left:0;width:16px;background:#000;"></span>
+        <span style="position:absolute;top:0;bottom:0;left:16px;width:16px;background:#FDDA24;"></span>
+        <span style="position:absolute;top:0;bottom:0;right:0;width:16px;background:#EF3340;"></span>
+      </span>
+      <span class="country-name-text">Bélgica</span>
+    </div>
+    <div class="country-meta-row">
+      <span>💶 Coste matrícula: <strong>1.157 €/año</strong></span>
+      <span>🏠 Alojamiento medio: <strong>~550 €/mes</strong></span>
+    </div>
+    <div class="country-text">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <strong>1.157€/año</strong>.<br>El precio medio del alojamiento en Bélgica es de unos 550€.</div>
+  </div>
+
+  <div class="type-label">RESEARCH UNIVERSITIES</div>
+
+  <div class="uni-card" id="be-kuleuven">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.kuleuven.be/english/education/bachelor/business-administration" target="_blank">
+          <span class="uni-name">Business Administration</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">KU Leuven · Brussels</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag gold">#78 del mundo (según Ranking de Shanghai)</span>
+          <span class="ranking-tag">#76-100 en Business Administration (según Ranking de Shanghai)</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-media">Evaluación Individual</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Brussels (~195.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('be','map-be');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value">1.157 €/año</div></div>
+      </div>
+      <div class="description">Este grado prepara a los estudiantes para desenvolverse en un entorno empresarial cada vez más complejo y globalizado, donde los mercados trascienden fronteras y la tecnología mantiene el comercio activo las 24 horas. Durante tres años, combina un enfoque práctico con una sólida base académica para formar gestores capaces de tomar decisiones estratégicas informadas frente a retos económicos. Impartido en inglés y con marcado enfoque internacional, el programa ofrece intercambios con numerosas universidades y la posibilidad de obtener doble titulación con Kedge Business School (Marsella) o la University of Galway (Irlanda). Está dirigido a quienes se sienten atraídos por el mundo de los negocios, valoran el trabajo en equipos multiculturales, desean estudiar en Bruselas y aspiran a una carrera internacional con experiencia práctica y un grado académico.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Título de Bachiller y EVAU + prueba online de matemáticas</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">TOEFL: se exige una puntuación total mínima de 90, con al menos 20 puntos en cada subcomponente (Writing, Speaking, Reading y Listening)</div>
+          <div class="req-row">IELTS: se requiere una puntuación global mínima de 6.5, con un mínimo de 6.0 en cada parte (Writing, Speaking, Reading y Listening)</div>
+          <div class="req-row">Cambridge Advanced English y Cambridge Proficiency English (no especifican nota mínima)</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>1 de julio</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="type-label">APPLIED SCIENCE UNIVERSITIES</div>
+
+  <div class="uni-card" id="be-vives">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.vives.be/en/international-business" target="_blank">
+          <span class="uni-name">International Business</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">VIVES University of Applied Sciences · Kortijk</div>
+        <div class="ranking-tags"><span class="ranking-tag">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span></div>
+      </div>
+      <span class="difficulty-badge diff-media">Evaluación Individual</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Kortijk (~80.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('be','map-be');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value">1.157 €/año</div></div>
+      </div>
+      <div class="description">Si te apasiona el negocio internacional o sueñas con emprender, este programa te ofrece muchas posibilidades: desde marketing y emprendimiento hasta idiomas, desarrollarás habilidades clave como comunicación multilingüe, trabajo en equipo y capacidad para convencer con tus ideas, siempre con enfoque internacional. Estudiarás en grupos reducidos con atención personalizada, explorando el uso de IA y tecnologías emergentes gracias a The Flax, la Casa de la IA de VIVES. Podrás obtener certificaciones de Google en el curso de Digital Marketing Academy, aprender de compañeros de todo el mundo y enfocarte en un negocio sostenible con impacto positivo. Además, el programa incluye viajes de estudio a países como Francia, España, Alemania, China, Chile o Indonesia.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Bachillerato español</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">TOEFL iBT nota mínima: 79</div>
+          <div class="req-row">Cambridge: puntuación mínima global de 169 en los componentes de Reading, Use of English, Writing, Listening y Speaking (calificación A, B o C)</div>
+          <div class="req-row">IELTS Academic nota mínima: 6.0</div>
+          <div class="req-row">Duolingo English Test min. 105</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">El proceso es individual y sujeto a evaluación del expediente académico y del nivel de inglés</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>11 de julio</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="be-artevelde">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.arteveldehogeschool.be/en/programmes/international-business" target="_blank">
+          <span class="uni-name">International Business</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Artevelde University of Applied Sciences · Gent</div>
+        <div class="ranking-tags"><span class="ranking-tag">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span></div>
+      </div>
+      <span class="difficulty-badge diff-media">Evaluación Individual</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Gent (~267.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('be','map-be');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value">1.157 €/año</div></div>
+      </div>
+      <div class="description">Este grado ofrece una formación con profunda inmersión intercultural y cooperación transnacional, con estudiantes de más de 60 nacionalidades. Está pensado para personas con mentalidad abierta, actitud independiente y ganas de aprender sobre contabilidad, derecho, finanzas, marketing, comercio e informática, además de dominar un idioma extranjero como chino, alemán o español. Incluye un enfoque práctico con clases en grupos reducidos, visitas a empresas, conferencias de expertos y estudios de casos internacionales. Los estudiantes pueden realizar intercambios en más de 100 universidades asociadas en todo el mundo, con oportunidades de estudio en Taiwán o Brasil y prácticas en países como Perú, China o Nueva Zelanda. Además, ofrece opciones de doble titulación en Austria y Canadá, preparando a sus graduados para trabajar o emprender en sectores como banca, comercio, ONG o tecnologías de la información en cualquier parte del mundo.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Bachillerato español</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">TOEFL iBT nota mínima: 79</div>
+          <div class="req-row">Cambridge: puntuación mínima global de 169 en los componentes de Reading, Use of English, Writing, Listening y Speaking (calificación A, B o C)</div>
+          <div class="req-row">IELTS Academic nota mínima: 6.5</div>
+          <div class="req-row">Duolingo English Test min. 110</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">El proceso es individual y sujeto a evaluación del expediente académico y del nivel de inglés</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>31 de agosto</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="be-thomasmore">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.thomasmore.be/en/programmes/international-business-management" target="_blank">
+          <span class="uni-name">International Business Management con especialización en International Business and Trade</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Thomas More University of Applied Sciences · Mechelen</div>
+        <div class="ranking-tags"><span class="ranking-tag">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span></div>
+      </div>
+      <span class="difficulty-badge diff-media">Evaluación Individual</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Mechelen (~89.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('be','map-be');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value">1.157 €/año</div></div>
+      </div>
+      <div class="description">Este grado está diseñado para formar profesionales con visión global y habilidades prácticas en comercio internacional, logística, marketing y ventas. A través de clases interactivas, proyectos reales y simulaciones, los estudiantes desarrollan competencias en negociación internacional, finanzas, derecho comercial y gestión intercultural. Incluye aprendizaje de un segundo idioma (francés, alemán o español) y fuertes vínculos con el mundo empresarial, con prácticas obligatorias en el último semestre que pueden realizarse en Bélgica o en el extranjero. El enfoque práctico se refuerza con un proyecto de consultoría internacional y oportunidades de intercambio en universidades asociadas, preparando a los graduados para carreras en comercio global, logística, marketing y gestión empresarial internacional.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Bachillerato español</div>
+          <div class="req-section-title">Requisitos de inglés</div>
+          <div class="req-row">TOEFL iBT nota mínima: 79</div>
+          <div class="req-row">Cambridge: puntuación mínima global de 169 en los componentes de Reading, Use of English, Writing, Listening y Speaking (calificación A, B o C)</div>
+          <div class="req-row">IELTS Academic nota mínima: 6.0</div>
+          <div class="req-row">Duolingo English Test min. 110</div>
+          <div class="req-section-title">Proceso de selección</div>
+          <div class="req-row">El proceso es individual y sujeto a evaluación del expediente académico y del nivel de inglés</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>31 de agosto</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="map-section">
+    <div class="map-section-header">🗺️ Universidades en Bélgica</div>
+    <div class="map-container" id="map-be"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════ TAB: SUECIA ═══════════ -->
+<div id="tab-se" class="tab-panel">
+<div class="container">
+  <div class="country-intro">
+    <div class="country-header">
+      <span class="flag-css" style="width:48px;height:32px;background:#006AA7;">
+        <span style="position:absolute;top:0;bottom:0;left:14px;width:5px;background:#FECC02;"></span>
+        <span style="position:absolute;left:0;right:0;top:13px;height:5px;background:#FECC02;"></span>
+      </span>
+      <span class="country-name-text">Suecia</span>
+    </div>
+    <div class="country-meta-row">
+      <span>💶 Coste matrícula: <strong>0 €/año</strong></span>
+      <span>🏠 Alojamiento medio: <strong>~700 €/mes</strong></span>
+    </div>
+    <div class="country-text">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Suecia, siendo el coste anual que tenemos que pagar de <strong>0 €/año</strong>.<br>El coste del alojamiento en Suecia ronda los 700€ mensuales.</div>
+  </div>
+
+  <div class="type-label">RESEARCH UNIVERSITIES</div>
+
+  <div class="uni-card" id="se-gothenburg">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.gu.se/en/study-gothenburg/business-and-economics-bachelors-programme" target="_blank">
+          <span class="uni-name">Business and Economics</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">University of Gothenburg · Gotemburgo</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag">#101-150 del mundo (según Ranking de Shanghai)</span>
+          <span class="ranking-tag">#301-400 del mundo en la rama de Business Administration (según Ranking de Shanghai)</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-media">Evaluación Individual</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Gotemburgo (~600.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('se','map-se');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value free">0 € (100% subvencionado)</div></div>
+      </div>
+      <div class="description">Este grado ofrece una formación académica de alta calidad con un fuerte enfoque internacional y amplias salidas profesionales. Combina fundamentos clásicos en economía, administración de empresas y derecho comercial aplicados a problemas reales y desafíos sociales, con la posibilidad de cursar un semestre en el extranjero en universidades asociadas. El programa fomenta la sostenibilidad, el pensamiento crítico y el contacto directo con empresas y expertos, ofreciendo formación extracurricular en habilidades demandadas como presentaciones y trabajo en equipo. Incluye ocho especializaciones como marketing, gestión, contabilidad o sostenibilidad corporativa, permitiendo adaptar la carrera a intereses personales y objetivos profesionales en un entorno dinámico e internacionalmente acreditado.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Título de bachillerato español + Certificado de Calificaciones de 1º y 2º de Bachillerato</div>
+          <div class="req-section-title">Requisitos de inglés (nivel C1)</div>
+          <div class="req-row">TOEFL iBT nota mínima: 90 (con al menos 20 en writing)</div>
+          <div class="req-row">Cambridge: se aceptan certificados CAE (C1) mínimo 180 puntos o CPE (C2)</div>
+          <div class="req-row">IELTS Academic nota mínima: 6.5 (ninguna sección por debajo de 5.5)</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de abril</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="se-lund">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.lunduniversity.lu.se/lubas/i-uoh-lu-NAGIB" target="_blank">
+          <span class="uni-name">International Business</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Lund University · Jönköping</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag">#101-150 del mundo (según Ranking de Shanghai)</span>
+          <span class="ranking-tag">#201-300 del mundo en la rama de Business Administration (según Ranking de Shanghai)</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-alta">Dificultad: Alta</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Jönköping (~145.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('se','map-se');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value free">0 € (100% subvencionado)</div></div>
+      </div>
+      <div class="description">Este grado va dirigido a estudiantes con buen expediente académico y ambiciones internacionales. Forma profesionales con sólidas competencias en comercio internacional, derecho, economía y gestión intercultural. Incluye un plan de estudios amplio pero enfocado en negocios, economía, estadística, derecho empresarial e informática, con proyectos en equipo que potencian el aprendizaje multicultural. Ofrece oportunidades de prácticas o intercambios en universidades asociadas. Los estudiantes desarrollan habilidades avanzadas de análisis y estrategia aplicadas a problemas reales en contextos internacionales, culminando con un proyecto de investigación en equipo. El grado prepara para trabajar en comercio exterior, finanzas, desarrollo de negocios, marketing o para emprender una startup internacional, respondiendo a la demanda de empresas que buscan empleados con competencias globales y visión estratégica.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Título de bachillerato español + Certificado de Calificaciones de 1º y 2º de Bachillerato</div>
+          <div class="req-section-title">Requisitos de inglés (nivel C1)</div>
+          <div class="req-row">TOEFL iBT nota mínima: 90 (con al menos 20 en writing)</div>
+          <div class="req-row">Cambridge: se aceptan certificados CAE (C1) mínimo 180 puntos o CPE (C2)</div>
+          <div class="req-row">IELTS Academic nota mínima: 6.5 (ninguna sección por debajo de 5.5)</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de abril</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="uni-card" id="se-umea">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://www.umu.se/en/education/programmes/international-business-and-economics-bachelors-programme/" target="_blank">
+          <span class="uni-name">International Business and Economics</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Umea University · Jönköping</div>
+        <div class="ranking-tags">
+          <span class="ranking-tag">#501-600 del mundo (según Ranking de Shanghai)</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-media">Evaluación Individual</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Jönköping (~145.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('se','map-se');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value free">0 € (100% subvencionado)</div></div>
+      </div>
+      <div class="description">Este grado prepara para carreras internacionales en empresas y organizaciones con actividad transnacional. Ofrece una sólida formación en administración de empresas, economía, estadística, análisis de datos y derecho internacional, permitiendo especializarse en business administration o economics. Los estudiantes adquieren habilidades para afrontar retos globales, liderar en entornos multiculturales y adaptarse a la innovación tecnológica. Incluye asignaturas de gestión de proyectos, emprendimiento, contabilidad, economía financiera y modelos económicos, además de la posibilidad de cursar asignaturas optativas, estudiar un semestre en el extranjero o realizar prácticas en Suecia o internacionalmente. El programa culmina con un trabajo de fin de grado y da acceso a másteres en Suecia o en el extranjero.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Título de bachillerato español + Certificado de Calificaciones de 1º y 2º de Bachillerato</div>
+          <div class="req-section-title">Requisitos de inglés (nivel C1)</div>
+          <div class="req-row">TOEFL iBT nota mínima: 90 (con al menos 20 en writing)</div>
+          <div class="req-row">Cambridge: se aceptan certificados CAE (C1) mínimo 180 puntos o CPE (C2)</div>
+          <div class="req-row">IELTS Academic nota mínima: 6.5 (ninguna sección por debajo de 5.5)</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de abril</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="type-label">APPLIED SCIENCE UNIVERSITIES</div>
+
+  <div class="uni-card" id="se-jonkoping">
+    <div class="uni-card-header">
+      <div>
+        <a class="uni-title-link" href="https://ju.se/en/study-at-ju/programmes/bachelors/international-management.html" target="_blank">
+          <span class="uni-name">International Management</span>
+          <span class="click-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Jonkoping University · Jönköping</div>
+        <div class="ranking-tags"><span class="ranking-tag">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span></div>
+      </div>
+      <span class="difficulty-badge diff-media">Evaluación Individual</span>
+    </div>
+    <div class="uni-body">
+      <div class="meta-grid">
+        <div class="meta-item"><div class="label">Ciudad</div><div class="value">Jönköping (~145.000 hab.) <a class="map-scroll-btn" href="#" onclick="scrollToMap('se','map-se');return false;">🗺️ Ver mapa</a></div></div>
+        <div class="meta-item"><div class="label">Duración</div><div class="value">3 años (180 ECTS)</div></div>
+        <div class="meta-item"><div class="label">Coste</div><div class="value free">0 € (100% subvencionado)</div></div>
+      </div>
+      <div class="description">Este grado prepara a futuros líderes capaces de impulsar el crecimiento empresarial y aprovechar oportunidades en un contexto global. Ofrece una sólida base en economía y estudios empresariales con énfasis en trabajo en equipo directivo y renovación estratégica internacional. Incluye asignaturas como emprendimiento, micro y macroeconomía, gestión organizacional, estrategia y marketing internacional. En el quinto semestre, los estudiantes pueden especializarse mediante intercambios o asignaturas optativas, realizar prácticas en el extranjero o incluso obtener una doble titulación con Kedge Business School en Francia. El programa mantiene estrechos vínculos con empresas colaboradoras, permitiendo trabajar en desafíos reales y adquirir experiencia práctica. Al graduarse, los estudiantes estarán preparados para emprender o trabajar en roles como desarrollador de negocios, gestor de marca, coordinador de marketing o gerente de exportación, tanto en Suecia como internacionalmente, y podrán acceder a programas de máster en JIBS u otras universidades del mundo.</div>
+      <details>
+        <summary>📋 Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <div class="req-section-title">Requisitos académicos</div>
+          <div class="req-row">Título de bachillerato español + Certificado de Calificaciones de 1º y 2º de Bachillerato</div>
+          <div class="req-section-title">Requisitos de inglés (nivel C1)</div>
+          <div class="req-row">TOEFL iBT nota mínima: 90 (con al menos 20 en writing)</div>
+          <div class="req-row">Cambridge: se aceptan certificados CAE (C1) mínimo 180 puntos o CPE (C2)</div>
+          <div class="req-row">IELTS Academic nota mínima: 6.5 (ninguna sección por debajo de 5.5)</div>
+          <div class="deadline-row">📅 Fecha límite para presentar la matrícula: <strong>15 de abril</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="map-section">
+    <div class="map-section-header">🗺️ Universidades en Suecia</div>
+    <div class="map-container" id="map-se"></div>
+  </div>
+</div>
+</div>
+
+</div><!-- /tabs-content -->
+
+<footer>
+  <div class="footer-logo"><svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #36aadc;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        opacity: .8;
+      }
+
+      .cls-2 {
+        fill: #30ac71;
+      }
+
+      .cls-5 {
+        fill: #737373;
+      }
+
+      .cls-3 {
+        fill: #32abbb;
+      }
+
+      .cls-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="Capa_3" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="cls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="cls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="cls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="cls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="cls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="cls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+  Orientación universitaria en el extranjero &nbsp;·&nbsp; Informe personalizado para Jesús Domingo Segarra
+</footer>
+
+<script>
+// ── TAB NAVIGATION ──
+function showTab(id, btn) {
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById("tab-" + id).classList.add("active");
+  if (btn) btn.classList.add("active");
+  window.scrollTo({top: 0, behavior: "smooth"});
+  // Init map if needed
+  setTimeout(() => initMap(id), 100);
+}
+
+// Navigate from TOC: switch tab then scroll to anchor
+function goTo(tab, anchor) {
+  const tabBtn = document.querySelector(".tab-btn[onclick*='" + tab + "']");
+  showTab(tab, tabBtn);
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({behavior: "smooth", block: "start"});
+  }, 200);
+}
+
+// ── MAPS ──
+const mapsInitialized = {};
+
+const mapData = {
+  dk: {
+    center: [56.0, 10.5], zoom: 6,
+    unis: [
+      { id: "dk-cbs-ib", name: "BSc International Business", school: "CBS", lat: 55.686, lng: 12.571, webUrl: "https://www.cbs.dk/en/study/bachelor/bsc-in-international-business", mapsUrl: "https://maps.google.com/?q=Copenhagen+Business+School" },
+      { id: "dk-cbs-dm", name: "BSc Business Admin. in Digital Management", school: "CBS", lat: 55.690, lng: 12.565, webUrl: "https://www.cbs.dk/en/study/bachelor/bsc-in-business-administration-and-digital-management", mapsUrl: "https://maps.google.com/?q=Copenhagen+Business+School" },
+      { id: "dk-aarhus", name: "Economics and Business Administration", school: "Aarhus University", lat: 56.168, lng: 10.203, webUrl: "https://bachelor.au.dk/en/economicsandbusinessadministration", mapsUrl: "https://maps.google.com/?q=Aarhus+University+Business+School" },
+      { id: "dk-aalborg", name: "Economics and Business Administration", school: "Aalborg University", lat: 57.012, lng: 9.991, webUrl: "https://www.en.aau.dk/education/bachelor/economics-and-business-administration", mapsUrl: "https://maps.google.com/?q=Aalborg+University" },
+      { id: "dk-sdu", name: "BA Global Business Relationships", school: "University of Southern Denmark", lat: 54.909, lng: 9.793, webUrl: "https://www.sdu.dk/en/uddannelse/bachelor/oekonomi_virksomhedsledelse_globale_forretningsrelationer", mapsUrl: "https://maps.google.com/?q=University+of+Southern+Denmark+Sonderborg" }
+    ]
+  },
+  nl: {
+    center: [52.3, 5.2], zoom: 7,
+    unis: [
+      { id: "nl-maastricht", name: "Economics and Business Economics", school: "Maastricht University", lat: 50.847, lng: 5.694, webUrl: "https://www.maastrichtuniversity.nl/education/bachelor/economics-and-business-economics", mapsUrl: "https://maps.google.com/?q=Maastricht+University" },
+      { id: "nl-tilburg", name: "Entrepreneurship and Business Innovation", school: "Tilburg University", lat: 51.559, lng: 5.090, webUrl: "https://www.tilburguniversity.edu/education/bachelors-programs/entrepreneurship-and-business-innovation", mapsUrl: "https://maps.google.com/?q=Tilburg+University" },
+      { id: "nl-hanze", name: "International Business", school: "Hanze University", lat: 53.218, lng: 6.570, webUrl: "https://www.hanze.nl/en/education/economics/international-business", mapsUrl: "https://maps.google.com/?q=Hanze+University+Groningen" },
+      { id: "nl-nhl", name: "International Business", school: "NHL Stenden University", lat: 53.198, lng: 5.798, webUrl: "https://www.nhlstenden.com/en/study-programs/international-business", mapsUrl: "https://maps.google.com/?q=NHL+Stenden+University+Leeuwarden" },
+      { id: "nl-rotterdam", name: "International Business", school: "Rotterdam University of Applied Sciences", lat: 51.924, lng: 4.479, webUrl: "https://www.rotterdamuas.com/programmes/exchange/bachelor/international-business", mapsUrl: "https://maps.google.com/?q=Rotterdam+University+of+Applied+Sciences" }
+    ]
+  },
+  be: {
+    center: [50.85, 4.5], zoom: 7,
+    unis: [
+      { id: "be-kuleuven", name: "Business Administration", school: "KU Leuven", lat: 50.851, lng: 4.351, webUrl: "https://www.kuleuven.be/english/education/bachelor/business-administration", mapsUrl: "https://maps.google.com/?q=KU+Leuven+Brussels" },
+      { id: "be-vives", name: "International Business", school: "VIVES University", lat: 50.827, lng: 3.265, webUrl: "https://www.vives.be/en/international-business", mapsUrl: "https://maps.google.com/?q=VIVES+University+Kortrijk" },
+      { id: "be-artevelde", name: "International Business", school: "Artevelde University", lat: 51.054, lng: 3.720, webUrl: "https://www.arteveldehogeschool.be/en/programmes/international-business", mapsUrl: "https://maps.google.com/?q=Artevelde+University+Ghent" },
+      { id: "be-thomasmore", name: "International Business Management", school: "Thomas More University", lat: 51.028, lng: 4.480, webUrl: "https://www.thomasmore.be/en/programmes/international-business-management", mapsUrl: "https://maps.google.com/?q=Thomas+More+University+Mechelen" }
+    ]
+  },
+  se: {
+    center: [59.5, 16.0], zoom: 5,
+    unis: [
+      { id: "se-gothenburg", name: "Business and Economics", school: "University of Gothenburg", lat: 57.689, lng: 11.979, webUrl: "https://www.gu.se/en/study-gothenburg/business-and-economics-bachelors-programme", mapsUrl: "https://maps.google.com/?q=University+of+Gothenburg" },
+      { id: "se-lund", name: "International Business", school: "Lund University", lat: 57.781, lng: 14.161, webUrl: "https://www.lunduniversity.lu.se/lubas/i-uoh-lu-NAGIB", mapsUrl: "https://maps.google.com/?q=Jonkoping+University" },
+      { id: "se-umea", name: "International Business and Economics", school: "Umea University", lat: 57.778, lng: 14.155, webUrl: "https://www.umu.se/en/education/programmes/international-business-and-economics-bachelors-programme/", mapsUrl: "https://maps.google.com/?q=Jonkoping" },
+      { id: "se-jonkoping", name: "International Management", school: "Jonkoping University", lat: 57.784, lng: 14.167, webUrl: "https://ju.se/en/study-at-ju/programmes/bachelors/international-management.html", mapsUrl: "https://maps.google.com/?q=Jonkoping+University" }
+    ]
+  }
+};
+
+function initMap(countryId) {
+  const data = mapData[countryId];
+  if (!data) return;
+  const mapEl = document.getElementById("map-" + countryId);
+  if (!mapEl || mapsInitialized[countryId]) return;
+  mapsInitialized[countryId] = true;
+
+  const map = L.map("map-" + countryId).setView(data.center, data.zoom);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors", maxZoom: 18
+  }).addTo(map);
+
+  const uniIcon = (n) => L.divIcon({
+    className: "",
+    html: `<div style="background:#0a9baa;color:white;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.35);width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+      <span style="transform:rotate(45deg);font-size:17px;">🎓</span></div>`,
+    iconSize: [36, 36], iconAnchor: [18, 36]
+  });
+
+  data.unis.forEach(u => {
+    const marker = L.marker([u.lat, u.lng], { icon: uniIcon() }).addTo(map);
+    marker.bindPopup(`
+      <div class="popup-name">${u.name}</div>
+      <div class="popup-school">${u.school}</div>
+      <div class="popup-links">
+        <a class="popup-link" href="${u.webUrl}" target="_blank">🔗 Ver grado</a>
+        <a class="popup-link" onclick="scrollToCard('${u.id}');return false;" href="#">📋 Ver ficha</a>
+        <a class="popup-link map-link" href="${u.mapsUrl}" target="_blank">🗺️ Google Maps</a>
+      </div>
+    `);
+  });
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (el) { el.scrollIntoView({behavior:"smooth", block:"start"}); }
+}
+
+function scrollToMap(tab, anchor) {
+  // Make sure we're on the right tab first, then scroll to map
+  const isActive = document.getElementById("tab-" + tab).classList.contains("active");
+  if (!isActive) {
+    const btn = document.querySelector(".tab-btn[onclick*='" + tab + "']");
+    showTab(tab, btn);
+  }
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+    setTimeout(() => initMap(tab), 100);
+  }, isActive ? 0 : 250);
+}
+
+// Init map for the first active tab if it's a country
+window.addEventListener("load", () => {
+  // No map on intro/research tabs
+});
+</script>
+</body>
+</html>
