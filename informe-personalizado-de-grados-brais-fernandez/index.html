@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Educoway – Brais Fernández Rodríguez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root {
+  --teal: #0a9baa;
+  --teal-dark: #077a87;
+  --teal-light: #e0f5f7;
+  --navy: #0d2b3e;
+  --bg: #f4f8fa;
+  --border: #c8e0e5;
+  --gold: #c89a2e;
+  --gold-light: #fdf5e0;
+  --red: #d64045;
+  --red-light: #fdeaea;
+  --orange: #e07030;
+  --orange-light: #fef0e6;
+  --green: #2d9e6a;
+  --green-light: #e8f7ef;
+  --yellow: #fff3cd;
+  --yellow-border: #e6c100;
+  --text: #1a2e3a;
+  --muted: #6b8a9a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+}
+
+/* ===== HEADER ===== */
+#site-header {
+  background: linear-gradient(135deg, var(--navy) 0%, #0a3d52 60%, var(--teal-dark) 100%);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 14px 32px 10px;
+}
+
+.header-logo svg { height: 36px; width: auto; }
+.header-logo .cls-5 { fill: #ffffff !important; }
+
+.header-text { flex: 1; }
+.header-title {
+  font-family: 'Playfair Display', serif;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+.header-sub {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* ===== TABS NAV ===== */
+.tabs-nav {
+  display: flex;
+  gap: 2px;
+  padding: 0 32px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  background: rgba(0,0,0,0.2);
+}
+.tabs-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: rgba(255,255,255,0.65);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  letter-spacing: 0.02em;
+}
+.tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.tab-btn.active {
+  color: #fff;
+  border-bottom-color: var(--teal);
+  background: rgba(255,255,255,0.08);
+}
+
+/* ===== TABS CONTENT ===== */
+.tab-pane { display: none; padding: 36px 32px 60px; max-width: 960px; margin: 0 auto; }
+.tab-pane.active { display: block; }
+
+/* ===== INTRO ===== */
+.intro-welcome {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 32px;
+  line-height: 1.75;
+}
+.intro-welcome p { margin-bottom: 14px; }
+.intro-welcome p:last-child { margin-bottom: 0; }
+
+.index-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--teal-light);
+}
+.index-country {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal-dark);
+  margin: 22px 0 10px;
+}
+.index-list { list-style: none; }
+.index-list li {
+  border-left: 3px solid var(--border);
+  padding: 8px 14px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  border-radius: 0 6px 6px 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+.index-list li:hover { border-color: var(--teal); background: var(--teal-light); }
+.index-degree { font-size: 13.5px; font-weight: 400; color: var(--text); }
+.index-uni {
+  font-family: 'Playfair Display', serif;
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.next-steps {
+  background: linear-gradient(135deg, var(--teal-light), #f0fbfc);
+  border: 2px solid var(--teal);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-top: 32px;
+}
+.next-steps-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 14px;
+}
+
+/* ===== RESEARCH TAB ===== */
+.research-card {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+}
+.research-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+.research-links { margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap; }
+.research-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--teal-light);
+  border: 1.5px solid var(--teal);
+  border-radius: 8px;
+  color: var(--teal-dark);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s;
+}
+.research-link:hover { background: var(--teal); color: #fff; }
+
+/* ===== COUNTRY TABS ===== */
+.country-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 28px;
+}
+.country-flag-big { flex-shrink: 0; }
+.country-info { flex: 1; }
+.country-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+}
+.country-meta { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 12px; }
+.country-meta-item {
+  background: var(--teal-light);
+  border: 1.5px solid var(--teal);
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--teal-dark);
+}
+.country-meta-item span { font-weight: 400; color: var(--text); }
+.country-desc { line-height: 1.7; color: var(--text); }
+.country-warning {
+  background: var(--yellow);
+  border: 1.5px solid var(--yellow-border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-top: 12px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 32px 0 20px;
+}
+.section-divider-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--teal-dark);
+  white-space: nowrap;
+  background: var(--teal-light);
+  border: 1.5px solid var(--teal);
+  border-radius: 20px;
+  padding: 4px 14px;
+}
+.section-divider-line { flex: 1; height: 1.5px; background: var(--border); }
+
+/* ===== UNIVERSITY CARD ===== */
+.uni-card {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.uni-card:hover {
+  border-color: var(--teal);
+  box-shadow: 0 6px 24px rgba(10,155,170,0.13);
+}
+
+.uni-card-header {
+  padding: 20px 24px 14px;
+  border-bottom: 1.5px solid var(--teal-light);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.uni-card-header-left { flex: 1; }
+
+.uni-degree-link {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s;
+  line-height: 1.3;
+}
+.uni-degree-link:hover { color: var(--teal); }
+.uni-degree-link .link-icon {
+  font-size: 0.9rem;
+  transition: transform 0.2s;
+  display: inline-block;
+  opacity: 0.6;
+}
+.uni-degree-link:hover .link-icon { transform: scale(1.25); opacity: 1; }
+
+.uni-school {
+  font-size: 0.88rem;
+  color: var(--teal-dark);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.uni-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.badge-ranking { background: var(--teal-light); color: var(--teal-dark); border: 1px solid var(--teal); }
+.badge-ranking-gold { background: var(--gold-light); color: #8a6800; border: 1px solid var(--gold); }
+.badge-diff-high { background: var(--red-light); color: var(--red); border: 1.5px solid var(--red); }
+.badge-diff-medium { background: var(--orange-light); color: var(--orange); border: 1.5px solid var(--orange); }
+.badge-diff-low { background: var(--green-light); color: var(--green); border: 1.5px solid var(--green); }
+
+.difficulty-badge { flex-shrink: 0; align-self: flex-start; }
+
+.uni-card-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  padding: 16px 24px;
+  border-bottom: 1.5px solid var(--teal-light);
+}
+.meta-cell {
+  background: var(--teal-light);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.meta-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal-dark);
+  margin-bottom: 2px;
+}
+.meta-value { font-size: 0.88rem; font-weight: 500; color: var(--text); }
+.map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  padding: 3px 10px;
+  background: #fff;
+  border: 1.5px solid var(--teal);
+  border-radius: 6px;
+  color: var(--teal-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  letter-spacing: 0.02em;
+}
+.map-btn:hover { background: var(--teal); color: #fff; }
+
+.uni-card-desc {
+  padding: 16px 24px;
+  background: #f7fdfe;
+  border-left: 4px solid var(--teal);
+  margin: 14px 24px;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.uni-card-details {
+  padding: 0 24px 20px;
+}
+
+details.req-details {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+details.req-details summary {
+  padding: 11px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--teal-dark);
+  background: var(--teal-light);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+details.req-details summary::before {
+  content: '▶';
+  font-size: 0.65rem;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+details.req-details[open] summary::before { transform: rotate(90deg); }
+details.req-details .req-body {
+  padding: 16px;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+.req-body ul { list-style: none; padding-left: 0; }
+.req-body ul li { padding: 3px 0 3px 18px; position: relative; }
+.req-body ul li::before { content: '→'; position: absolute; left: 0; color: var(--teal); font-size: 0.8rem; }
+.req-body h4 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 12px 0 6px; font-weight: 700; }
+.req-body h4:first-child { margin-top: 0; }
+
+.deadline-box {
+  background: var(--yellow);
+  border: 1.5px solid var(--yellow-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 12px;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.fee-warning {
+  background: var(--red-light);
+  border: 1.5px solid var(--red);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-top: 10px;
+  font-size: 0.83rem;
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* ===== MAP ===== */
+.map-section { margin-top: 40px; }
+.map-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.map-container {
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  height: 420px;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+}
+.popup-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.95rem; color: var(--navy); margin-bottom: 3px; }
+.popup-school { font-size: 0.8rem; color: var(--teal-dark); font-weight: 600; margin-bottom: 10px; }
+.popup-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.popup-btn {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1.5px solid;
+  transition: background 0.2s, color 0.2s;
+  display: inline-block;
+}
+.popup-btn-primary { background: var(--teal); color: #fff; border-color: var(--teal); }
+.popup-btn-secondary { background: #fff; color: var(--teal-dark); border-color: var(--teal); }
+.popup-btn-secondary:hover { background: var(--teal-light); }
+.popup-btn-maps { background: #fff; color: #555; border-color: #ccc; }
+.popup-btn-maps:hover { background: #f5f5f5; }
+
+/* ===== FLAGS CSS ===== */
+/* Netherlands flag */
+.flag-nl {
+  display: inline-block;
+  width: 36px;
+  height: 24px;
+  border-radius: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+.flag-nl-r { background: #AE1C28; height: 8px; }
+.flag-nl-w { background: #fff; height: 8px; }
+.flag-nl-b { background: #21468B; height: 8px; }
+
+.flag-nl-big {
+  display: inline-block;
+  width: 64px;
+  height: 43px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1.5px solid rgba(0,0,0,0.12);
+  flex-shrink: 0;
+}
+.flag-nl-big .flag-nl-r { height: 14.3px; }
+.flag-nl-big .flag-nl-w { height: 14.3px; }
+.flag-nl-big .flag-nl-b { height: 14.3px; }
+
+/* Denmark flag */
+.flag-dk {
+  display: inline-block;
+  width: 36px;
+  height: 24px;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #C60C30;
+}
+.flag-dk::before {
+  content: '';
+  position: absolute;
+  left: 12px; top: 0; width: 4px; height: 100%;
+  background: #fff;
+}
+.flag-dk::after {
+  content: '';
+  position: absolute;
+  top: 10px; left: 0; height: 4px; width: 100%;
+  background: #fff;
+}
+.flag-dk-big {
+  display: inline-block;
+  width: 64px;
+  height: 43px;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  border: 1.5px solid rgba(0,0,0,0.12);
+  background: #C60C30;
+  flex-shrink: 0;
+}
+.flag-dk-big::before {
+  content: '';
+  position: absolute;
+  left: 22px; top: 0; width: 7px; height: 100%;
+  background: #fff;
+}
+.flag-dk-big::after {
+  content: '';
+  position: absolute;
+  top: 18px; left: 0; height: 7px; width: 100%;
+  background: #fff;
+}
+
+/* Sweden flag */
+.flag-se {
+  display: inline-block;
+  width: 36px;
+  height: 24px;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #006AA7;
+}
+.flag-se::before {
+  content: '';
+  position: absolute;
+  left: 12px; top: 0; width: 4px; height: 100%;
+  background: #FECC02;
+}
+.flag-se::after {
+  content: '';
+  position: absolute;
+  top: 10px; left: 0; height: 4px; width: 100%;
+  background: #FECC02;
+}
+.flag-se-big {
+  display: inline-block;
+  width: 64px;
+  height: 43px;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  border: 1.5px solid rgba(0,0,0,0.12);
+  background: #006AA7;
+  flex-shrink: 0;
+}
+.flag-se-big::before {
+  content: '';
+  position: absolute;
+  left: 22px; top: 0; width: 7px; height: 100%;
+  background: #FECC02;
+}
+.flag-se-big::after {
+  content: '';
+  position: absolute;
+  top: 18px; left: 0; height: 7px; width: 100%;
+  background: #FECC02;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  background: var(--navy);
+  padding: 28px 32px;
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.8rem;
+}
+footer .footer-logo { opacity: 0.35; display: inline-block; margin-bottom: 10px; }
+footer .footer-logo svg { height: 28px; }
+
+/* ===== UTIL ===== */
+p { margin-bottom: 10px; }
+p:last-child { margin-bottom: 0; }
+a { color: var(--teal-dark); }
+
+@media (max-width: 640px) {
+  .tab-pane { padding: 20px 14px 40px; }
+  .header-top { padding: 10px 14px 8px; gap: 12px; }
+  .tabs-nav { padding: 0 14px; }
+  .country-header { flex-direction: column; gap: 14px; }
+  .uni-card-meta { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header id="site-header">
+  <div class="header-top">
+    <div class="header-logo">
+      <!-- SVG logo inline, texto en blanco -->
+      <svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+        <defs>
+          <style>
+            .cls-1{fill:#36aadc;opacity:.8}
+            .cls-2{fill:#30ac71;opacity:.8}
+            .cls-3{fill:#32abbb;opacity:.8}
+            .cls-4{fill:#31ac9c;opacity:.8}
+            .cls-5{fill:#ffffff}
+          </style>
+        </defs>
+        <g id="Capa_3" data-name="Capa 3">
+          <g>
+            <g>
+              <path class="cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+              <path class="cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+              <path class="cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+              <rect class="cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+              <path class="cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+              <path class="cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+              <path class="cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+              <path class="cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+              <path class="cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+              <rect class="cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+              <path class="cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+              <path class="cls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+              <polygon class="cls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+              <path class="cls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+              <path class="cls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+              <path class="cls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+              <rect class="cls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+              <path class="cls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+              <polygon class="cls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+              <path class="cls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+              <path class="cls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+              <path class="cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+              <path class="cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+              <rect class="cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+              <path class="cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+              <path class="cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+              <path class="cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+              <rect class="cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+              <path class="cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+              <path class="cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+              <path class="cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+              <path class="cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+              <path class="cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+              <rect class="cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+              <path class="cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+              <polygon class="cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+              <path class="cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+              <path class="cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+              <path class="cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+              <path class="cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+              <path class="cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+              <path class="cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+              <path class="cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+              <path class="cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+              <path class="cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+            </g>
+            <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+            <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+            <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+            <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+            <g>
+              <path class="cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+              <path class="cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+              <path class="cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+              <path class="cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+              <path class="cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+              <path class="cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+              <polygon class="cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-title">Informe Personalizado de Opciones de Grado</div>
+      <div class="header-sub">Preparado para Brais Fernández Rodríguez</div>
+    </div>
+  </div>
+
+  <nav class="tabs-nav">
+    <button class="tab-btn active" onclick="showTab('intro', this)">Introducción</button>
+    <button class="tab-btn" onclick="showTab('research', this)">Research vs Applied</button>
+    <button class="tab-btn" onclick="showTab('nl', this)">
+      <span class="flag-nl"><div class="flag-nl-r"></div><div class="flag-nl-w"></div><div class="flag-nl-b"></div></span>
+      Holanda
+    </button>
+    <button class="tab-btn" onclick="showTab('dk', this)">
+      <span class="flag-dk"></span>
+      Dinamarca
+    </button>
+    <button class="tab-btn" onclick="showTab('se', this)">
+      <span class="flag-se"></span>
+      Suecia
+    </button>
+  </nav>
+</header>
+
+<!-- ===== INTRO TAB ===== -->
+<div id="tab-intro" class="tab-pane active">
+  <div class="intro-welcome">
+    <p>Hola Brais,</p>
+    <p>Espero que estés bien. Estos días he estado trabajando en la búsqueda de grados en Ingeniería Computer Science, Software Engineering, Data Science, IT y afines que, según lo que nos indicaste, más podrían interesarte.</p>
+    <p>Te dejo el listado de opciones a continuación, cualquier duda estaré encantada de ayudarte a resolverla.</p>
+  </div>
+
+  <div class="index-title">Índice de Opciones</div>
+
+  <div class="index-country">
+    <span class="flag-nl" style="margin-right:8px"><div class="flag-nl-r"></div><div class="flag-nl-w"></div><div class="flag-nl-b"></div></span>
+    Holanda — Research Universities
+  </div>
+  <ul class="index-list">
+    <li onclick="goTo('nl','tue')">
+      <div class="index-degree">BA Computer Science Engineering</div>
+      <div class="index-uni">Eindhoven University of Technology (TU/e)</div>
+    </li>
+    <li onclick="goTo('nl','maastricht')">
+      <div class="index-degree">BA Data Science and Artificial Intelligence</div>
+      <div class="index-uni">Maastricht University</div>
+    </li>
+    <li onclick="goTo('nl','tudelft')">
+      <div class="index-degree">Bachelor of Computer Science and Engineering</div>
+      <div class="index-uni">TU Delft</div>
+    </li>
+  </ul>
+
+  <div class="index-country">
+    <span class="flag-nl" style="margin-right:8px"><div class="flag-nl-r"></div><div class="flag-nl-w"></div><div class="flag-nl-b"></div></span>
+    Holanda — Applied Science Universities
+  </div>
+  <ul class="index-list">
+    <li onclick="goTo('nl','saxion')">
+      <div class="index-degree">BA Information and Communication Technology – Software Engineering</div>
+      <div class="index-uni">Saxion University of Applied Sciences</div>
+    </li>
+    <li onclick="goTo('nl','inholland')">
+      <div class="index-degree">BA in Information Technology</div>
+      <div class="index-uni">InHolland University of Applied Sciences</div>
+    </li>
+    <li onclick="goTo('nl','nhlstenden')">
+      <div class="index-degree">BA in Information Technology</div>
+      <div class="index-uni">NHL Stenden University of Applied Sciences</div>
+    </li>
+  </ul>
+
+  <div class="index-country" style="margin-top:18px">
+    <span class="flag-dk" style="margin-right:8px"></span>
+    Dinamarca
+  </div>
+  <ul class="index-list">
+    <li onclick="goTo('dk','via')">
+      <div class="index-degree">BA in Software Technology Engineering</div>
+      <div class="index-uni">VIA University College</div>
+    </li>
+    <li onclick="goTo('dk','sdu-se')">
+      <div class="index-degree">BA in Software Engineering</div>
+      <div class="index-uni">University of Southern Denmark (SDU)</div>
+    </li>
+    <li onclick="goTo('dk','sdu-ai')">
+      <div class="index-degree">BSc Artificial Intelligence</div>
+      <div class="index-uni">University of Southern Denmark (SDU)</div>
+    </li>
+    <li onclick="goTo('dk','sdu-cs')">
+      <div class="index-degree">BSc Computer Science</div>
+      <div class="index-uni">University of Southern Denmark (SDU)</div>
+    </li>
+    <li onclick="goTo('dk','sdu-ite')">
+      <div class="index-degree">BSc Interactive Technology Engineering</div>
+      <div class="index-uni">University of Southern Denmark (SDU)</div>
+    </li>
+  </ul>
+
+  <div class="index-country" style="margin-top:18px">
+    <span class="flag-se" style="margin-right:8px"></span>
+    Suecia
+  </div>
+  <ul class="index-list">
+    <li onclick="goTo('se','kristianstad-cs')">
+      <div class="index-degree">Bachelor in Computer Science and Engineering</div>
+      <div class="index-uni">Kristianstad University</div>
+    </li>
+    <li onclick="goTo('se','kristianstad-sd')">
+      <div class="index-degree">Bachelor in Software Development</div>
+      <div class="index-uni">Kristianstad University</div>
+    </li>
+    <li onclick="goTo('se','gothenburg')">
+      <div class="index-degree">Bachelor in Software Engineering &amp; Management</div>
+      <div class="index-uni">University of Gothenburg</div>
+    </li>
+  </ul>
+
+  <div class="next-steps">
+    <div class="next-steps-title">¿Qué tienes que hacer ahora?</div>
+    <p>Echa un vistazo a todas las opciones que hemos seleccionado, mira los vídeos, lee el contenido de las webs (asignaturas, especializaciones, etc.), ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+    <p style="margin-top:12px">Un saludo,<br><strong>Jenni</strong></p>
+  </div>
+</div>
+
+<!-- ===== RESEARCH TAB ===== -->
+<div id="tab-research" class="tab-pane">
+  <div class="research-card">
+    <h3>Universidades de Research vs Applied Science</h3>
+    <p>En la mayoría de países europeos existen dos tipos de universidades que es importante conocer y diferenciar, las universidades de Research y las de Applied Sciences. Los dos tipos de universidad comparten muchos puntos en común, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+  </div>
+
+  <div class="research-card">
+    <h3>Metodología teórica vs práctica</h3>
+    <p>Las universidades de Applied Sciences destacan por usar una metodología muy práctica llamada PBL (Project/Problem Based Learning). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre.</p>
+    <p>Las universidades de Research no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+  </div>
+
+  <div class="research-card">
+    <h3>Duración</h3>
+    <p>Las universidades de Applied Sciences duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster. Por otro lado, las de Research duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+  </div>
+
+  <div class="research-card">
+    <h3>Ranking / Prestigio</h3>
+    <p>El principal motivo por el cual se podría escoger una universidad de Research es por el mayor ranking y prestigio que estas universidades tienen.</p>
+    <p>Las universidades de Applied Sciences (Hogeschools, en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+  </div>
+
+  <div class="research-card">
+    <h3>Acceso a Másteres</h3>
+    <p>Aquí es importante diferenciar si tu máster será en uno de los países que diferencian entre las 2 universidades, o en un país que no lo hace. En España, por ejemplo, que no hace diferencia entre estas universidades, ambos títulos te dan las mismas oportunidades. Pero si se trata de Holanda, Bélgica o Alemania, por ejemplo, sí hay diferencias.</p>
+    <p>Con tu título de universidad de Research podrás acceder a másteres tanto en universidades de Research como Applied Sciences. Pero en cambio, con tu título de Applied Sciences podrás acceder a másteres en universidades de Applied Sciences, pero si quieres acceder a universidades de Research, te pedirán cursar un pre-máster (de 1 semestre o un año de duración) para ponerte al día con las habilidades de investigación que se supone no has desarrollado aún.</p>
+    <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de Research y otra de Applied Sciences):</p>
+    <div class="research-links">
+      <a href="https://www.amsterdamuas.com/practical-matters/faq/study-at-amsterdam-university-of-applied-sciences/bachelor/what-is-the-difference-between-a-university-of-applied-sciences-and-a-research-university/what-is-the-difference-between-a-university-of-applied-sciences-and-a-research-university.html" target="_blank" class="research-link">🔗 Applied Science vs. Research University</a>
+      <a href="https://www.studyinholland.nl/plan-your-studies/universities" target="_blank" class="research-link">🔗 Types of universities in the Netherlands</a>
+    </div>
+  </div>
+</div>
+
+<!-- ===== HOLANDA TAB ===== -->
+<div id="tab-nl" class="tab-pane">
+  <div class="country-header">
+    <div class="country-flag-big">
+      <div class="flag-nl-big"><div class="flag-nl-r"></div><div class="flag-nl-w"></div><div class="flag-nl-b"></div></div>
+    </div>
+    <div class="country-info">
+      <div class="country-name">Holanda</div>
+      <div class="country-meta">
+        <div class="country-meta-item">🎓 Matrícula: <span>2.601 €/año</span></div>
+        <div class="country-meta-item">🏠 Alojamiento: <span>variable por ciudad</span></div>
+      </div>
+      <div class="country-desc">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de 2.601€/año.</div>
+    </div>
+  </div>
+
+  <div class="section-divider">
+    <div class="section-divider-label">🔬 RESEARCH UNIVERSITIES</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- TU/e -->
+  <div class="uni-card" id="tue">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering" target="_blank" class="uni-degree-link">
+          BA Computer Science Engineering <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Eindhoven University of Technology (TU/e) — Eindhoven</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking-gold">🏆 Top 10-11 Holanda</span>
+          <span class="badge badge-ranking">301-400 Mundial (Shanghai)</span>
+          <span class="badge badge-ranking">Research University</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-high difficulty-badge">🔴 Dificultad Muy Alta</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Eindhoven (223.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">2.601 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">1 de mayo</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      En el programa de Ingeniería de la Computación, aprenderás los principios y métodos fundamentales para el desarrollo de sistemas de software y servicios web. Aprenderás a tener en cuenta la perspectiva del usuario. Podrás analizar de forma rigurosa la corrección y eficiencia de los programas, utilizando métodos matemáticos formales. Adquirirás los conocimientos y habilidades necesarios para comprender la tecnología que sustenta Internet. Además de ampliar tus conocimientos y habilidades, aprenderás a aplicarlos para resolver problemas específicos.
+      <br><br>
+      <strong>Posibilidad:</strong> realizar el doble grado de Computer Science and Engineering and Applied Mathematics así puedes obtener 2 diplomas con créditos extra (25% de trabajo añadido).
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de Bachiller científico y EVAU aprobado</li>
+            <li>Matemáticas aprobado en Bachillerato y EVAU</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>Cambridge CAE: mínimo 176 overall y 169 en cada subsección</li>
+            <li>IELTS: 6.5 overall (6.0 en cada subsección)</li>
+            <li>TOEFL: 90 (ningún apartado por debajo de 21)</li>
+          </ul>
+          <h4>Proceso de Selección</h4>
+          <ul>
+            <li>Numero Fixus (375 plazas en curso 25/26, pendiente nuevo número)</li>
+            <li>Evaluación de conocimientos: promedio de calificaciones + actividades de reflexión y análisis</li>
+            <li>3 pruebas de habilidades cognitivas: pensamiento matemático, lógico y algorítmico</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Muy alta — proceso de selección competitivo con Numero Fixus</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite para enviar matrícula: <strong>1 de mayo</strong></div>
+          <div class="fee-warning">⚠️ APPLICATION FEE: Esta universidad cobra una tasa de 100€ solo por presentar la matrícula (no reembolsable)</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Maastricht -->
+  <div class="uni-card" id="maastricht">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.maastrichtuniversity.nl/education/bachelor/bachelor-data-science-and-artificial-intelligence" target="_blank" class="uni-degree-link">
+          BA Data Science and Artificial Intelligence <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Maastricht University — Maastricht</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking-gold">🏆 Top 10 Holanda</span>
+          <span class="badge badge-ranking">301-400 Mundial (Shanghai)</span>
+          <span class="badge badge-ranking">Research University</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-medium difficulty-badge">🟠 Dificultad Alta</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Maastricht (122.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">2.601 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Nota media requerida</div>
+        <div class="meta-value">&gt;7.0 en 2º Bachiller</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      En este programa de licenciatura, estudiarás lógica, búsqueda inteligente y aprendizaje automático. Recopilarás y organizarás información relevante utilizando matemáticas y técnicas informáticas inteligentes. También utilizarás modelos y computadoras para el análisis de datos. El objetivo final es desarrollar software y sistemas inteligentes fáciles de usar para, entre otros, atención médica, TI, robótica y juegos comerciales. Al graduarse, puede esperar una carrera prometedora, ya que los científicos de datos y los ingenieros del conocimiento tienen una gran demanda.
+      <br><br>
+      <strong>Currículum del grado:</strong> <a href="https://www.maastrichtuniversity.nl/education/bachelor/bachelor-data-science-and-artificial-intelligence/curriculum" target="_blank">ver contenidos de las asignaturas</a>.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de Bachiller con media de &gt;7.0 en 2º Bachiller + EVAU apto</li>
+            <li>Maastricht evaluará tus resultados de Matemáticas para decidir si necesitas pasar un examen adicional</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>Maastricht acepta el inglés de 2º de bachiller aprobado como prueba de nivel suficiente</li>
+          </ul>
+          <h4>Proceso de Selección</h4>
+          <ul>
+            <li>Computer Science no es Numero Fixus</li>
+            <li>Fase 1: Completar información en student portal</li>
+            <li>Fase 2: Documentación</li>
+            <li>Fase 3 (opcional): Proceso de Matching — para asegurarse de que el programa se adapta a las necesidades del estudiante. No es obligatorio completarlo para acceder, siempre y cuando se cumplan los demás requisitos</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Alta — se requiere media superior a 7.0, posible examen adicional de Matemáticas</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite para enviar matrícula: <strong>1 de mayo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- TU Delft -->
+  <div class="uni-card" id="tudelft">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.tudelft.nl/en/education/programmes/bachelors/cse/bsc-computer-science-and-engineering" target="_blank" class="uni-degree-link">
+          Bachelor of Computer Science and Engineering <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">TU Delft — Delft</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking-gold">🏆 Top 7-9 Holanda</span>
+          <span class="badge badge-ranking-gold">🥇 151-200 Mundial (Shanghai)</span>
+          <span class="badge badge-ranking">Research University</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-high difficulty-badge">🔴 Dificultad Muy Alta</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Delft (101.030 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">2.601 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 de enero</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      Automóviles autónomos, navegación con teléfonos inteligentes, ofertas personalizadas basadas en el comportamiento del consumidor, robots de atención médica y búsqueda a través de películas e imágenes. Durante el programa de grado en Ciencias de la Computación e Ingeniería, aprenderás a desarrollar software y el funcionamiento del proceso de datos para los sistemas inteligentes de hoy y del futuro. Esto podría incluir sistemas médicos, seguridad y quizás incluso el nuevo YouTube. El análisis y el modelado matemático, el razonamiento lógico, los algoritmos de programación y el trabajo con conceptos de lenguajes de programación son todos importantes aquí, al igual que la colaboración. Es por eso que, al menos una vez al año, trabajarás en un proyecto con un grupo de compañeros de estudios, diseñando "cosas" como un bot inteligente en un juego de computadora.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de Bachiller + EVAU aprobado</li>
+            <li>Haber cursado Matemáticas avanzado en bachiller</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>IELTS (academic): mínimo 6.5 overall</li>
+            <li>TOEFL IBT: mínimo 90</li>
+            <li>Cambridge CAE C1 Advanced (sin requisito de puntuación mínima)</li>
+          </ul>
+          <h4>Proceso de Selección</h4>
+          <ul>
+            <li>Números FIXUS (590 plazas para 2026)</li>
+            <li>Después de la aplicación: proceso de "matching y selection" en dos partes:</li>
+            <li>— Completar un formulario para recibir un número de ranking (no influye en tu plaza)</li>
+            <li>— Examen de: Mathematics, Systematic Reasoning &amp; Logical Thinking, y Problem Solving</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Muy alta — Numero Fixus con examen de selección</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de enero</strong></div>
+          <div class="fee-warning">⚠️ APPLICATION FEE: Se requiere pago de una tasa de solicitud no reembolsable de 100€</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="section-divider">
+    <div class="section-divider-label">🔧 APPLIED SCIENCE UNIVERSITIES</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- Saxion -->
+  <div class="uni-card" id="saxion">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.saxion.edu/programmes/bachelor/ict/software-engineering" target="_blank" class="uni-degree-link">
+          BA Information and Communication Technology – Software Engineering <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Saxion University of Applied Sciences — Deventer</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking">Applied Science University</span>
+          <span class="badge badge-ranking">4 años · 240 ECTS</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low difficulty-badge">🟢 Admisión Directa</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Deventer (99.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">2.601 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 agosto</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      En este programa de cuatro años de Ingeniería de Software, aprenderás a diseñar y desarrollar software desde la idea hasta el resultado final. Aprenderás la artesanía del desarrollo de software. Aprenderás a diseñar software sólido y fácil de mantener. Aprenderás todo sobre temas como: orientación a objetos, algoritmos y estructuras de datos, diseño y desarrollo de métodos para software, aplicaciones web, aplicaciones móviles, software del lado del servidor, motores de búsqueda, arquitectura de sistemas, redes, bases de datos, seguridad, etc. Podrás especializarte en diferentes materias como Tecnologías Big Data, Desarrollo Avanzado Móvil e Híbrido o Internet de las Cosas.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>Academic IELTS: 6.0 (mínimo 5.0 en cada parte)</li>
+            <li>TOEFL: 80 (internet based)</li>
+            <li>Cambridge FCE-C (169 mínimo)</li>
+          </ul>
+          <h4>Proceso de Selección</h4>
+          <ul>
+            <li>Después de la aplicación, a partir del 1 de marzo recibirás un email para participar en un encuentro virtual informativo sobre tu programa de estudios</li>
+            <li>Durante este evento virtual informal, podrás conocer la universidad, así como a estudiantes y profesores actuales</li>
+            <li>Tendrás la oportunidad de conocer a futuros compañeros a través de las plataformas digitales, como intosaxion.nl</li>
+            <li>Para complementar la información, se invita a ver los vídeos sobre la metodología de enseñanza y las instalaciones de Saxion</li>
+            <li>Si después del encuentro aún no estás seguro de qué programa elegir, puedes solicitar una entrevista individual virtual</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Baja — admisión directa sin proceso de selección competitivo</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite de inscripción: <strong>15 de agosto</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- InHolland -->
+  <div class="uni-card" id="inholland">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.inholland.nl/en/programmes/bachelor-programmes/information-technology" target="_blank" class="uni-degree-link">
+          BA in Information Technology <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">InHolland University of Applied Sciences — Haarlem</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking">Applied Science University</span>
+          <span class="badge badge-ranking">4 años · 240 ECTS</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low difficulty-badge">🟢 Admisión Directa</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Haarlem (235.141 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">2.601 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">1 de agosto</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      El programa de Tecnologías de la Información ofrece una amplia gama de cursos impartidos por profesores expertos en diversas áreas, como desarrollo de software, diseño de experiencia de usuario, computación en la nube, ciberseguridad, ciencia de datos e inteligencia artificial, así como habilidades de comunicación e investigación. El objetivo es que el plan de estudios esté estrechamente vinculado a la práctica profesional, proporcionándoles a los estudiantes una sólida base para desempeñar diversos roles en el sector de las TIC.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>IELTS: 6.0</li>
+            <li>TOEFL internet-based: total de 80</li>
+            <li>Cambridge certificate: FCE overall score C (169-172)</li>
+            <li>Inglés aprobado en bachiller</li>
+          </ul>
+          <h4>Proceso de Selección</h4>
+          <ul>
+            <li>Después de la aplicación y formulario en el portal del estudiante, habrá un control obligatorio para asegurarse de que has escogido un programa que encaja con tus intereses y motivación y cumples los requisitos</li>
+            <li>Una vez pagada la matrícula la universidad mandará la tarjeta de estudiante</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Baja — admisión directa con verificación básica</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite de inscripción: <strong>1 de agosto</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- NHL Stenden -->
+  <div class="uni-card" id="nhlstenden">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.nhlstenden.com/en/programmes/information-technology" target="_blank" class="uni-degree-link">
+          BA in Information Technology <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">NHL Stenden University of Applied Sciences — Emmen</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking">Applied Science University</span>
+          <span class="badge badge-ranking">4 años · 240 ECTS</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low difficulty-badge">🟢 Admisión Directa</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Emmen (107.775 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">2.601 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 de agosto</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      El programa de grado en Information Technology ofrece un primer año muy completo que le permitirá explorar sus áreas de interés y descubrir sus fortalezas. En este programa, aprenderá a trabajar con diversos lenguajes de programación y adquirirá los conocimientos necesarios sobre bases de datos, sistemas operativos, arquitectura de TI, tecnologías web y mucho más. También desarrollará habilidades de comunicación esenciales para trabajar en un entorno profesional.
+      <ul style="margin-top:10px; padding-left:20px;">
+        <li>Aprender mediante la práctica, trabajando en casos reales del sector durante los estudios</li>
+        <li>Trabajar con los dispositivos más innovadores, como robots y dispositivos de realidad virtual</li>
+        <li>Especialización en Ciberseguridad Ética, única en Europa</li>
+        <li>Adquirir experiencia internacional mediante un período de estudios y prácticas remuneradas en el extranjero</li>
+        <li>Excelentes oportunidades laborales tras la graduación</li>
+      </ul>
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>Academic IELTS: 6.0 (mínimo 5.0 en cada parte)</li>
+            <li>TOEFL: 80 (internet based)</li>
+            <li>Cambridge FCE-C (169 mínimo)</li>
+          </ul>
+          <h4>Proceso de Selección</h4>
+          <ul>
+            <li>Todas las solicitudes son evaluadas individualmente por la Administración Central de Alumnos (CSA), incluso si su título aparece en la lista de títulos reconocidos</li>
+            <li>Si no recibes tu diploma oficial antes de la fecha límite y ya te has graduado, puedes presentar una constancia de graduación como documento provisional</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Baja — evaluación individual sin proceso de selección competitivo</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite de inscripción: <strong>15 de agosto</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Mapa Holanda -->
+  <div class="map-section" id="map-nl">
+    <div class="map-section-title">🗺️ Mapa de universidades en Holanda</div>
+    <div class="map-container" id="leaflet-map-nl"></div>
+  </div>
+</div>
+
+<!-- ===== DINAMARCA TAB ===== -->
+<div id="tab-dk" class="tab-pane">
+  <div class="country-header">
+    <div class="country-flag-big">
+      <div class="flag-dk-big"></div>
+    </div>
+    <div class="country-info">
+      <div class="country-name">Dinamarca</div>
+      <div class="country-meta">
+        <div class="country-meta-item">🎓 Matrícula: <span>0 €/año</span></div>
+        <div class="country-meta-item">🏠 Alojamiento: <span>variable por ciudad</span></div>
+      </div>
+      <div class="country-desc">Los estudiantes europeos tenemos los estudios totalmente subvencionados en Dinamarca, siendo el coste anual que tenemos que pagar de 0€/año.</div>
+    </div>
+  </div>
+
+  <!-- VIA -->
+  <div class="uni-card" id="via">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://en.via.dk/programmes/engineering/software-technology" target="_blank" class="uni-degree-link">
+          BA in Software Technology Engineering <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">VIA University College — Horsens</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking">University College (Applied Sciences)</span>
+          <span class="badge badge-ranking">3.5 años · 210 ECTS</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low difficulty-badge">🟢 Dificultad Media</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Horsens (64.418 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3.5 años (210 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">0 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 de marzo</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      Metodología "Applied Sciences", basado en la práctica. ¿Quieres trabajar con Internet de las Cosas, medios interactivos o ingeniería de datos? El programa de Licenciatura en Ingeniería de Tecnología de Software te brinda las habilidades y el conocimiento necesarios para desarrollar y administrar sistemas de software. Muchas posibilidades de trabajo y formación en empresas durante el programa. Los ingenieros de VIA están "hechos para hacer". Educamos a los ingenieros en estrecha cooperación con la comunidad empresarial y tenemos un ojo para el mundo, vamos a desarrollar, cuidar y hacer más inteligentes.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+            <li>Mínimo 375 horas en Matemáticas (en los últimos 3 años)</li>
+            <li>Mínimo 75 horas de Física (en los últimos 3 años)</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>Mínimo 210 horas en inglés con nota mínima de 6/10 (en los últimos 3 años)</li>
+          </ul>
+          <h4>Proceso de Selección</h4>
+          <ul>
+            <li>Una vez finalizado el plazo, se evaluarán todas las candidaturas</li>
+            <li>Tras enviar la solicitud a través del portal de admisión danés, se puede consultar el estado de la candidatura en nemStudie.dk</li>
+            <li>Es responsabilidad del solicitante mantenerse informado sobre el estado de su candidatura consultando nemStudie</li>
+            <li>Algunos programas de estudio pueden requerir pruebas de admisión — consultar la web de cada programa</li>
+            <li>Si quedan plazas disponibles tras el 28 de julio, se publicarán en la página de plazas disponibles</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Media — se evalúan candidaturas, sin proceso de selección especialmente competitivo</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong>. Decisión final comunicada el <strong>28 de julio</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- SDU Software Engineering -->
+  <div class="uni-card" id="sdu-se">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.sdu.dk/en/uddannelse/bachelor/softwareengineering" target="_blank" class="uni-degree-link">
+          BA in Software Engineering <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">University of Southern Denmark (SDU) — Sønderborg</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking-gold">🏆 Top 4-5 Dinamarca</span>
+          <span class="badge badge-ranking">301-400 Mundial (Shanghai)</span>
+          <span class="badge badge-ranking">Research University</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-medium difficulty-badge">🟠 Dificultad Alta</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Sønderborg</div>
+        <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">0 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">GPA mínimo</div>
+        <div class="meta-value">Equivalente a 7.0</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      Con un título en Ingeniería de Software, adquirirás las habilidades necesarias para desarrollar las soluciones de software del futuro. Podrás liderar el desarrollo e implementación de software, colaborar con diferentes grupos profesionales y culturas, resolver problemas en un contexto internacional, asesorar sobre la inversión en nuevas soluciones de software y mucho más.
+      <ul style="margin-top:10px; padding-left:20px;">
+        <li>Aprenderás cómo aprovechar al máximo la tecnología para desarrollar soluciones eficientes y revolucionarias</li>
+        <li>Aprenderás a crear software desde cero y a desarrollar software existente</li>
+        <li>Aprenderás a investigar la necesidad del software, a describir y analizar sus requisitos, y a diseñarlo, programarlo y probarlo</li>
+        <li>Tendrás la oportunidad de poner a prueba tus competencias en casos prácticos de empresas y en colaboración directa con la industria</li>
+      </ul>
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+            <li>Mínimo 375 horas en Matemáticas (en los últimos 3 años)</li>
+            <li>Mínimo 190 horas de Física (en los últimos 3 años)</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>Mínimo 210 horas en inglés con nota mínima de 6/10 (en los últimos 3 años)</li>
+          </ul>
+          <h4>Proceso de Admisión</h4>
+          <ul>
+            <li>Cupo 1: Se asigna según el promedio académico (GPA). Requiere un GPA mínimo equivalente a 7.0. Cuanto más alto sea el GPA, mayores serán las posibilidades. Cumplir el mínimo no garantiza la admisión si hay muchos candidatos</li>
+            <li>Cupo 2: Se asigna mediante un examen de admisión</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Alta — se compite por GPA y hay cupo limitado</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- SDU Artificial Intelligence -->
+  <div class="uni-card" id="sdu-ai">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.sdu.dk/en/uddannelse/bachelor/artificial-intelligence" target="_blank" class="uni-degree-link">
+          BSc Artificial Intelligence <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">University of Southern Denmark (SDU) — Vejle</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking-gold">🏆 Top 4-5 Dinamarca</span>
+          <span class="badge badge-ranking">301-400 Mundial (Shanghai)</span>
+          <span class="badge badge-ranking">Research University</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low difficulty-badge">🟢 Dificultad Media/Baja</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Vejle (60.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">0 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Proceso</div>
+        <div class="meta-value">uniTest + entrevista</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      Con una licenciatura en Inteligencia Artificial, adquirirás habilidades muy demandadas por empresas y organizaciones en Dinamarca y en el extranjero. La IA se está expandiendo rápidamente en todos los sectores, lo que garantiza una alta estabilidad laboral para sus graduados. En SDU Vejle, estudiarás en un entorno internacional con estudiantes con ideas afines de diversos programas de TI en el campus de TI más reciente de Dinamarca. Además, estarás muy cerca de algunos de los empleadores más importantes de especialistas en TI, lo que te facilitará encontrar un trabajo relevante durante tus estudios y te abrirá excelentes oportunidades profesionales después de graduarte.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+            <li>Mínimo 375 horas en Matemáticas (en los últimos 3 años)</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>Mínimo 210 horas en inglés con nota mínima de 6/10 (en los últimos 3 años)</li>
+          </ul>
+          <h4>Proceso de Admisión</h4>
+          <ul>
+            <li>Proceso de selección en 2 partes:</li>
+            <li>— Examen uniTest (razonamiento crítico, cuantitativo y lingüístico)</li>
+            <li>— Entrevista personal</li>
+            <li>La dificultad es media/baja — el % de admisión de estos últimos años es muy alto</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Media/Baja — alta tasa de admisión histórica</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- SDU Computer Science -->
+  <div class="uni-card" id="sdu-cs">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.sdu.dk/en/uddannelse/bachelor/computerscience" target="_blank" class="uni-degree-link">
+          BSc Computer Science <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">University of Southern Denmark (SDU) — Vejle</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking-gold">🏆 Top 4-5 Dinamarca</span>
+          <span class="badge badge-ranking">301-400 Mundial (Shanghai)</span>
+          <span class="badge badge-ranking">Research University</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low difficulty-badge">🟢 Dificultad Media/Baja</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Vejle (60.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">0 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Proceso</div>
+        <div class="meta-value">uniTest + entrevista</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      El Grado en Informática es ideal para quienes poseen un talento para el pensamiento lógico y un interés en explorar problemas complejos, desarrollando soluciones innovadoras y creativas. Al mismo tiempo, te gustará crear estructuras y trabajar de forma sistemática. No se requiere experiencia previa en programación al comenzar el programa.
+      <br><br>
+      La Informática es la base científica de las computadoras y el software, desarrollando los métodos que los hacen funcionar. El campo es amplio y abarca programación, algoritmos y estructuras de datos, computabilidad, inteligencia artificial, sistemas operativos, optimización, búsqueda web, bioinformática, bases de datos e incluso desarrollo de videojuegos.
+      <br><br>
+      Al estudiar Informática en SDU Vejle, te incorporas a un campus completamente nuevo con un entorno verdaderamente internacional de estudiantes y profesores, todos ellos especialistas en TI. El programa enfatiza la comprensión, el análisis y el trabajo intelectual, brindándote conocimientos altamente aplicables y duraderos. Aprenderás a desarrollar software que resuelva problemas del mundo real.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+            <li>Mínimo 375 horas en Matemáticas (en los últimos 3 años)</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>Mínimo 210 horas en inglés con nota mínima de 6/10 (en los últimos 3 años)</li>
+          </ul>
+          <h4>Proceso de Admisión</h4>
+          <ul>
+            <li>Proceso de selección en 2 partes:</li>
+            <li>— Examen uniTest (razonamiento crítico, cuantitativo y lingüístico)</li>
+            <li>— Entrevista personal</li>
+            <li>La dificultad es media/baja — el % de admisión de estos últimos años es muy alto</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Media/Baja — alta tasa de admisión histórica</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- SDU Interactive Technology Engineering -->
+  <div class="uni-card" id="sdu-ite">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.sdu.dk/en/uddannelse/bachelor/interactivetechnologyengineering" target="_blank" class="uni-degree-link">
+          BSc Interactive Technology Engineering <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">University of Southern Denmark (SDU) — Vejle</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking-gold">🏆 Top 4-5 Dinamarca</span>
+          <span class="badge badge-ranking">301-400 Mundial (Shanghai)</span>
+          <span class="badge badge-ranking">Research University</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low difficulty-badge">🟢 Dificultad Media/Baja</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Vejle (60.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">0 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Proceso</div>
+        <div class="meta-value">uniTest + entrevista</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      Ingeniería en Tecnologías Interactivas es un programa de grado que combina los fundamentos de la ingeniería de software con experiencia práctica en el diseño de productos digitales y sistemas interactivos. Aprenderás a crear soluciones que integran la tecnología y la experiencia del usuario, desde aplicaciones web hasta realidad virtual y dispositivos inteligentes.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+            <li>Mínimo 375 horas en Matemáticas (en los últimos 3 años)</li>
+            <li>Mínimo 190 horas de Física (en los últimos 3 años)</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>Mínimo 210 horas en inglés con nota mínima de 6/10 (en los últimos 3 años)</li>
+          </ul>
+          <h4>Proceso de Admisión</h4>
+          <ul>
+            <li>Proceso de selección en 2 partes:</li>
+            <li>— Examen uniTest (razonamiento crítico, cuantitativo y lingüístico)</li>
+            <li>— Entrevista personal</li>
+            <li>La dificultad es media/baja — el % de admisión de estos últimos años es muy alto</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Media/Baja — alta tasa de admisión histórica</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Mapa Dinamarca -->
+  <div class="map-section" id="map-dk">
+    <div class="map-section-title">🗺️ Mapa de universidades en Dinamarca</div>
+    <div class="map-container" id="leaflet-map-dk"></div>
+  </div>
+</div>
+
+<!-- ===== SUECIA TAB ===== -->
+<div id="tab-se" class="tab-pane">
+  <div class="country-header">
+    <div class="country-flag-big">
+      <div class="flag-se-big"></div>
+    </div>
+    <div class="country-info">
+      <div class="country-name">Suecia</div>
+      <div class="country-meta">
+        <div class="country-meta-item">🎓 Matrícula: <span>0 €/año</span></div>
+        <div class="country-meta-item">🏠 Alojamiento: <span>variable por ciudad</span></div>
+      </div>
+      <div class="country-desc">Los estudiantes europeos tenemos los estudios totalmente subvencionados en Suecia, siendo el coste anual que tenemos que pagar de 0€/año.</div>
+      <div class="country-warning">⚠️ <strong>Importante:</strong> El inconveniente que tiene Suecia es que no acepta matrículas si la documentación al completo no está lista. El acceso sería en segunda cuota y no sabrías de la aceptación hasta casi agosto, con lo cual el alojamiento se convierte en algo muy complicado.</div>
+    </div>
+  </div>
+
+  <!-- Kristianstad CS -->
+  <div class="uni-card" id="kristianstad-cs">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.hkr.se/en/education/programmes/bachelor/computer-science-and-engineering/" target="_blank" class="uni-degree-link">
+          Bachelor in Computer Science and Engineering <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Kristianstad University — Kristianstad</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking">No aparece en ranking Shanghai</span>
+          <span class="badge badge-ranking">3 años · 180 ECTS</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low difficulty-badge">🟢 Dificultad Media</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Kristianstad (40.145 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">0 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 de abril</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      Este programa de ingeniería es para aquellos estudiantes que deseen desarrollar la realidad digital del futuro. Aprenderás a desarrollar dispositivos controlados por ordenadores grandes y pequeños para comunicarse entre sí en redes a gran escala. Paralelamente al crecimiento de IoT, la programación y la comprensión técnica son habilidades importantes que están en demanda en el mercado laboral.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+            <li>Obligatorio haber cursado: Física, Química, Matemáticas avanzada</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>IELTS: 6.5</li>
+            <li>TOEFL internet-based</li>
+            <li>Cambridge CAE</li>
+          </ul>
+          <h4>Proceso de Selección</h4>
+          <ul>
+            <li>La solicitud se realiza a través de la plataforma nacional donde el estudiante debe crear una cuenta</li>
+            <li>Las solicitudes para el semestre de otoño suelen cerrar alrededor del 15 de enero</li>
+            <li>Tras la evaluación, la decisión de admisión se comunica también mediante la plataforma</li>
+            <li>Una vez aceptado, los estudiantes internacionales deben gestionar alojamiento, seguro médico y, si procede, solicitar permiso de residencia en Suecia</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Media — admisión por méritos académicos</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite de inscripción: <strong>15 de abril</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Kristianstad SD -->
+  <div class="uni-card" id="kristianstad-sd">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.hkr.se/en/education/programmes/bachelor/software-development/" target="_blank" class="uni-degree-link">
+          Bachelor in Software Development <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Kristianstad University — Kristianstad</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking">No aparece en ranking Shanghai</span>
+          <span class="badge badge-ranking">3 años · 180 ECTS</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low difficulty-badge">🟢 Dificultad Media</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Kristianstad (40.145 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">0 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 de abril</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      El programa de desarrollo de software te proporcionará tanto profundidad teórica como habilidades prácticas. Aprenderás a programar en Java y Python, pero también en otros lenguajes de programación. También aprenderás a desarrollar aplicaciones web, aplicaciones cliente/servidor, así como aplicaciones para plataformas móviles como Android. Además, el programa cubre nuevas tecnologías populares como Cloud, Big Data y aprendizaje automático. Todo con el fin de prepararte para una carrera en un campo en constante evolución.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+            <li>Obligatorio haber cursado: Matemáticas</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>IELTS: 6.5</li>
+            <li>TOEFL internet-based</li>
+            <li>Cambridge CAE</li>
+          </ul>
+          <h4>Proceso de Selección</h4>
+          <ul>
+            <li>La solicitud se realiza a través de la plataforma nacional donde el estudiante debe crear una cuenta</li>
+            <li>Las solicitudes para el semestre de otoño suelen cerrar alrededor del 15 de enero</li>
+            <li>Tras la evaluación, la decisión de admisión se comunica también mediante la plataforma</li>
+            <li>Una vez aceptado, los estudiantes internacionales deben gestionar alojamiento, seguro médico y, si procede, solicitar permiso de residencia en Suecia</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Media — admisión por méritos académicos</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite de inscripción: <strong>15 de abril</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Gothenburg -->
+  <div class="uni-card" id="gothenburg">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a href="https://www.gu.se/en/study-gothenburg/software-engineering-and-management-bachelors-programme-n1sof" target="_blank" class="uni-degree-link">
+          Bachelor in Software Engineering &amp; Management <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">University of Gothenburg — Gothenburg</div>
+        <div class="uni-badges">
+          <span class="badge badge-ranking">No aparece en ranking Shanghai</span>
+          <span class="badge badge-ranking">3 años · 180 ECTS</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low difficulty-badge">🟢 Dificultad Media</span>
+    </div>
+    <div class="uni-card-meta">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Gothenburg (579.281 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">0 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 de abril</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      Los ingenieros de software y los administradores de software tendrán un papel clave en todos los aspectos de la sociedad, desde el uso de la inteligencia artificial para brindar servicio al cliente y asesoramiento financiero, hasta el desarrollo de automóviles autónomos y la creación de aplicaciones en el ámbito de la salud y la biotecnología. Este programa te brinda la oportunidad de completar proyectos colaborativos, trabajar con socios en la industria, adquiriendo las habilidades necesarias para mejorar el mundo con software.
+    </div>
+    <div class="uni-card-details">
+      <details class="req-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="req-body">
+          <h4>Requisitos Académicos</h4>
+          <ul>
+            <li>Título de bachillerato aprobado</li>
+            <li>Obligatorio haber cursado: Matemáticas, Química, Física</li>
+          </ul>
+          <h4>Requisitos de Inglés</h4>
+          <ul>
+            <li>IELTS: 6.5</li>
+            <li>TOEFL internet-based</li>
+            <li>Cambridge CAE</li>
+          </ul>
+          <h4>Proceso de Selección</h4>
+          <ul>
+            <li>Las plazas se asignan en función del mérito de los solicitantes</li>
+            <li>Tras el proceso de selección, se le informará si ha sido admitido, si figura en la lista de espera o si ha sido excluido del curso o programa</li>
+          </ul>
+          <h4>Dificultad de Acceso</h4>
+          <ul>
+            <li>Media — admisión por méritos, ciudad grande con más competencia</li>
+          </ul>
+          <div class="deadline-box">📅 Fecha límite de inscripción: <strong>15 de abril</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Mapa Suecia -->
+  <div class="map-section" id="map-se">
+    <div class="map-section-title">🗺️ Mapa de universidades en Suecia</div>
+    <div class="map-container" id="leaflet-map-se"></div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+      <defs><style>.f1{fill:#36aadc;opacity:.8}.f2{fill:#30ac71;opacity:.8}.f3{fill:#32abbb;opacity:.8}.f4{fill:#31ac9c;opacity:.8}.f5{fill:#737373}</style></defs>
+      <path class="f2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="f4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="f1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="f3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <path class="f5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+      <path class="f5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+    </svg>
+  </div>
+  <div>Informe personalizado elaborado por Educoway · Brais Fernández Rodríguez · 2025</div>
+  <div style="margin-top:6px;opacity:0.5;">Para consultas o actualizaciones, contacta con tu asesora Jenni</div>
+</footer>
+
+<script>
+// ===== MAP DATA =====
+const mapData = {
+  nl: {
+    center: [52.3, 5.3],
+    zoom: 7,
+    unis: [
+      { id: 'tue', name: 'BA Computer Science Engineering', school: 'Eindhoven University of Technology (TU/e)', lat: 51.4484, lng: 5.4909, webUrl: 'https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering', mapsUrl: 'https://maps.google.com/?q=Eindhoven+University+of+Technology' },
+      { id: 'maastricht', name: 'BA Data Science and Artificial Intelligence', school: 'Maastricht University', lat: 50.8481, lng: 5.6897, webUrl: 'https://www.maastrichtuniversity.nl/education/bachelor/bachelor-data-science-and-artificial-intelligence', mapsUrl: 'https://maps.google.com/?q=Maastricht+University' },
+      { id: 'tudelft', name: 'Bachelor of Computer Science and Engineering', school: 'TU Delft', lat: 51.9993, lng: 4.3737, webUrl: 'https://www.tudelft.nl/en/education/programmes/bachelors/cse/bsc-computer-science-and-engineering', mapsUrl: 'https://maps.google.com/?q=TU+Delft' },
+      { id: 'saxion', name: 'BA ICT – Software Engineering', school: 'Saxion University of Applied Sciences', lat: 52.2590, lng: 6.1612, webUrl: 'https://www.saxion.edu/programmes/bachelor/ict/software-engineering', mapsUrl: 'https://maps.google.com/?q=Saxion+Deventer' },
+      { id: 'inholland', name: 'BA in Information Technology', school: 'InHolland University of Applied Sciences', lat: 52.3815, lng: 4.6362, webUrl: 'https://www.inholland.nl/en/programmes/bachelor-programmes/information-technology', mapsUrl: 'https://maps.google.com/?q=InHolland+Haarlem' },
+      { id: 'nhlstenden', name: 'BA in Information Technology', school: 'NHL Stenden UAS', lat: 52.7791, lng: 6.8987, webUrl: 'https://www.nhlstenden.com/en/programmes/information-technology', mapsUrl: 'https://maps.google.com/?q=NHL+Stenden+Emmen' }
+    ]
+  },
+  dk: {
+    center: [55.6, 10.0],
+    zoom: 6,
+    unis: [
+      { id: 'via', name: 'BA in Software Technology Engineering', school: 'VIA University College', lat: 55.8594, lng: 9.8512, webUrl: 'https://en.via.dk/programmes/engineering/software-technology', mapsUrl: 'https://maps.google.com/?q=VIA+University+College+Horsens' },
+      { id: 'sdu-se', name: 'BA in Software Engineering', school: 'SDU – University of Southern Denmark', lat: 54.9079, lng: 9.7923, webUrl: 'https://www.sdu.dk/en/uddannelse/bachelor/softwareengineering', mapsUrl: 'https://maps.google.com/?q=University+of+Southern+Denmark+Sonderborg' },
+      { id: 'sdu-ai', name: 'BSc Artificial Intelligence', school: 'SDU – University of Southern Denmark', lat: 55.7113, lng: 9.5362, webUrl: 'https://www.sdu.dk/en/uddannelse/bachelor/artificial-intelligence', mapsUrl: 'https://maps.google.com/?q=SDU+Vejle' },
+      { id: 'sdu-cs', name: 'BSc Computer Science', school: 'SDU – University of Southern Denmark', lat: 55.7113, lng: 9.5362, webUrl: 'https://www.sdu.dk/en/uddannelse/bachelor/computerscience', mapsUrl: 'https://maps.google.com/?q=SDU+Vejle' },
+      { id: 'sdu-ite', name: 'BSc Interactive Technology Engineering', school: 'SDU – University of Southern Denmark', lat: 55.7113, lng: 9.5362, webUrl: 'https://www.sdu.dk/en/uddannelse/bachelor/interactivetechnologyengineering', mapsUrl: 'https://maps.google.com/?q=SDU+Vejle' }
+    ]
+  },
+  se: {
+    center: [57.0, 14.5],
+    zoom: 6,
+    unis: [
+      { id: 'kristianstad-cs', name: 'Bachelor in Computer Science and Engineering', school: 'Kristianstad University', lat: 56.0294, lng: 14.1567, webUrl: 'https://www.hkr.se/en/education/programmes/bachelor/computer-science-and-engineering/', mapsUrl: 'https://maps.google.com/?q=Kristianstad+University' },
+      { id: 'kristianstad-sd', name: 'Bachelor in Software Development', school: 'Kristianstad University', lat: 56.0294, lng: 14.1567, webUrl: 'https://www.hkr.se/en/education/programmes/bachelor/software-development/', mapsUrl: 'https://maps.google.com/?q=Kristianstad+University' },
+      { id: 'gothenburg', name: 'Bachelor in Software Engineering & Management', school: 'University of Gothenburg', lat: 57.6887, lng: 11.9767, webUrl: 'https://www.gu.se/en/study-gothenburg/software-engineering-and-management-bachelors-programme-n1sof', mapsUrl: 'https://maps.google.com/?q=University+of+Gothenburg' }
+    ]
+  }
+};
+
+const mapsInitialized = {};
+
+// ===== NAVIGATION =====
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Init map if needed
+  if (['nl','dk','se'].includes(id) && !mapsInitialized[id]) {
+    setTimeout(() => initMap(id), 100);
+  }
+}
+
+function goTo(tab, anchor) {
+  const btnMap = { 'nl': 2, 'dk': 3, 'se': 4 };
+  const btns = document.querySelectorAll('.tab-btn');
+  const tabEl = document.getElementById('tab-' + tab);
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  tabEl.classList.add('active');
+  if (btns[btnMap[tab]]) btns[btnMap[tab]].classList.add('active');
+  if (['nl','dk','se'].includes(tab) && !mapsInitialized[tab]) {
+    setTimeout(() => {
+      initMap(tab);
+      scrollToCard(anchor);
+    }, 150);
+  } else {
+    setTimeout(() => scrollToCard(anchor), 80);
+  }
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function scrollToMap(tab, anchor) {
+  const activeTab = document.querySelector('.tab-pane.active');
+  const targetTab = document.getElementById('tab-' + tab);
+  if (activeTab !== targetTab) {
+    goTo(tab, anchor);
+  } else {
+    if (!mapsInitialized[tab]) {
+      initMap(tab);
+      setTimeout(() => scrollToCard(anchor), 300);
+    } else {
+      scrollToCard(anchor);
+    }
+  }
+}
+
+// ===== MAPS =====
+function initMap(countryId) {
+  if (mapsInitialized[countryId]) return;
+  mapsInitialized[countryId] = true;
+  const data = mapData[countryId];
+  const mapEl = document.getElementById('leaflet-map-' + countryId);
+  if (!mapEl) return;
+  const map = L.map(mapEl).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>'
+  }).addTo(map);
+
+  const icon = L.divIcon({
+    html: '<div style="font-size:24px;line-height:1">🎓</div>',
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    className: ''
+  });
+
+  data.unis.forEach(u => {
+    const marker = L.marker([u.lat, u.lng], { icon }).addTo(map);
+    marker.bindPopup(`
+      <div style="font-family:'DM Sans',sans-serif;min-width:220px;padding:4px 0">
+        <div class="popup-title">${u.name}</div>
+        <div class="popup-school">${u.school}</div>
+        <div class="popup-btns">
+          <a href="${u.webUrl}" target="_blank" class="popup-btn popup-btn-primary">🔗 Ver grado</a>
+          <a href="#" onclick="event.preventDefault();scrollToCard('${u.id}');return false;" class="popup-btn popup-btn-secondary">📋 Ver ficha</a>
+          <a href="${u.mapsUrl}" target="_blank" class="popup-btn popup-btn-maps">🗺️ Google Maps</a>
+        </div>
+      </div>
+    `);
+  });
+}
+
+// Init map when tab becomes visible via tab buttons
+document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+  const tabIds = ['intro','research','nl','dk','se'];
+  btn.addEventListener('click', () => {
+    const tid = tabIds[i];
+    if (['nl','dk','se'].includes(tid) && !mapsInitialized[tid]) {
+      setTimeout(() => initMap(tid), 150);
+    }
+  });
+});
+</script>
+</body>
+</html>
