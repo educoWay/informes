@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Opciones – Valeria Calvo González | Educoway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  :root {
+    --teal: #0a9baa;
+    --teal-dark: #077a87;
+    --teal-light: #e0f5f7;
+    --navy: #0d2b3e;
+    --bg: #f4f8fa;
+    --border: #c8e0e5;
+    --text: #1a2e38;
+    --muted: #6b8a96;
+    --gold: #c9953a;
+    --gold-light: #fdf3e3;
+    --warn-bg: #fffbeb;
+    --warn-border: #f0c040;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --orange: #d35400;
+    --orange-light: #fef0e7;
+    --green: #1e8449;
+    --green-light: #eafaf1;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  /* ─── STICKY HEADER ─── */
+  #site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--navy);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 32px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .header-logo { flex-shrink: 0; }
+  .header-logo svg { width: 160px; height: auto; display: block; }
+  .header-text { flex: 1; }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header-subtitle {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-top: 2px;
+  }
+
+  /* ─── TABS NAV ─── */
+  .tabs-bar {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    padding: 0 28px;
+    overflow-x: auto;
+    background: var(--navy);
+    scrollbar-width: none;
+  }
+  .tabs-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 18px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .tab-btn:hover { color: rgba(255,255,255,0.9); }
+  .tab-btn.active {
+    color: #fff;
+    border-bottom-color: var(--teal);
+    font-weight: 600;
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  .tab-content { display: none; padding: 40px 32px 80px; max-width: 1100px; margin: 0 auto; }
+  .tab-content.active { display: block; }
+
+  /* ─── INTRO TAB ─── */
+  .intro-welcome {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin-bottom: 36px;
+    line-height: 1.75;
+  }
+  .intro-welcome p { margin-bottom: 12px; }
+  .intro-welcome p:last-child { margin-bottom: 0; }
+
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .index-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .index-country-group { margin-bottom: 24px; }
+  .index-country-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .index-entry {
+    display: block;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+  .index-entry:hover {
+    border-color: var(--teal);
+    box-shadow: 0 2px 12px rgba(10,155,170,0.12);
+  }
+  .index-entry-degree {
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .index-entry-uni {
+    font-family: 'Playfair Display', serif;
+    font-size: 11.5px;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.3;
+  }
+
+  .next-steps {
+    background: var(--teal-light);
+    border: 2px solid var(--teal);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-top: 16px;
+  }
+  .next-steps-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--teal-dark);
+    margin-bottom: 12px;
+  }
+
+  /* ─── RESEARCH TAB ─── */
+  .research-content {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 36px 40px;
+    line-height: 1.8;
+  }
+  .research-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 24px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .research-content h3:first-child { margin-top: 0; }
+  .research-content p { margin-bottom: 14px; }
+  .research-content ul { padding-left: 20px; margin-bottom: 14px; }
+  .research-content li { margin-bottom: 6px; }
+  .research-content a { color: var(--teal); text-decoration: underline; }
+  .research-content a:hover { color: var(--teal-dark); }
+
+  /* ─── COUNTRY TAB ─── */
+  .country-hero {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 28px 36px;
+    margin-bottom: 32px;
+    color: #fff;
+  }
+  .country-flag-large { flex-shrink: 0; }
+  .country-hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .country-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .country-meta-pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+  }
+  .country-intro-text {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 30px;
+    line-height: 1.75;
+  }
+  .country-intro-text p { margin-bottom: 10px; }
+  .country-intro-text p:last-child { margin-bottom: 0; }
+  .country-intro-text a { color: var(--teal); }
+  .country-intro-text ul { padding-left: 20px; margin: 10px 0; }
+  .country-intro-text li { margin-bottom: 5px; }
+
+  .section-separator {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 36px 0 24px;
+  }
+  .section-separator-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .section-separator-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* ─── UNIVERSITY CARD ─── */
+  .uni-card {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 28px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+  }
+  .uni-card:hover {
+    border-color: var(--teal);
+    box-shadow: 0 6px 28px rgba(10,155,170,0.13);
+  }
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-header-left { flex: 1; }
+  .card-degree-link {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--navy);
+    text-decoration: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.3;
+    transition: color 0.18s;
+  }
+  .card-degree-link:hover { color: var(--teal); }
+  .card-degree-link .mouse-icon {
+    font-size: 0.9rem;
+    display: inline-block;
+    transition: transform 0.18s;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .card-degree-link:hover .mouse-icon { transform: scale(1.3); }
+  .card-school {
+    font-size: 0.9rem;
+    color: var(--teal);
+    font-weight: 500;
+    margin-top: 5px;
+  }
+  .card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .badge-rank {
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    border: 1px solid rgba(10,155,170,0.25);
+  }
+  .badge-rank-gold {
+    background: var(--gold-light);
+    color: var(--gold);
+    border: 1px solid rgba(201,149,58,0.3);
+  }
+  .badge-diff-red {
+    background: var(--red-light);
+    color: var(--red);
+    border: 1.5px solid var(--red);
+  }
+  .badge-diff-orange {
+    background: var(--orange-light);
+    color: var(--orange);
+    border: 1.5px solid var(--orange);
+  }
+  .badge-diff-green {
+    background: var(--green-light);
+    color: var(--green);
+    border: 1.5px solid var(--green);
+  }
+
+  .card-body { padding: 20px 24px; }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .meta-cell {
+    background: var(--teal-light);
+    border: 1px solid rgba(10,155,170,0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .meta-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    margin-bottom: 3px;
+  }
+  .meta-value {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+  .map-mini-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 3px 9px;
+    background: var(--teal-light);
+    border: 1.5px solid var(--teal);
+    border-radius: 5px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--teal-dark);
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: background 0.15s;
+  }
+  .map-mini-btn:hover { background: var(--teal); color: #fff; }
+
+  .card-description {
+    background: #f0fbfc;
+    border-left: 4px solid var(--teal);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    line-height: 1.75;
+    font-size: 0.93rem;
+  }
+
+  details.admissions-details {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  details.admissions-details summary {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--teal-dark);
+    background: var(--teal-light);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+  }
+  details.admissions-details summary::after {
+    content: '▸';
+    transition: transform 0.2s;
+    font-size: 0.8rem;
+  }
+  details.admissions-details[open] summary::after { transform: rotate(90deg); }
+  details.admissions-details summary::-webkit-details-marker { display: none; }
+  .admissions-body {
+    padding: 18px 20px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .admissions-body h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 14px 0 6px;
+  }
+  .admissions-body h4:first-child { margin-top: 0; }
+  .admissions-body ul { padding-left: 18px; margin-bottom: 8px; }
+  .admissions-body li { margin-bottom: 4px; }
+  .admissions-body a { color: var(--teal); }
+  .deadline-box {
+    background: var(--warn-bg);
+    border: 2px solid var(--warn-border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-weight: 600;
+    color: #7a5c00;
+    font-size: 0.9rem;
+  }
+  .deadline-box strong { display: block; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; color: #a07000; }
+
+  /* ─── MAP ─── */
+  .map-section { margin-top: 48px; }
+  .map-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .leaflet-map {
+    height: 380px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    overflow: hidden;
+  }
+
+  /* ─── FLAGS ─── */
+  .flag { display: inline-flex; align-items: stretch; border-radius: 3px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.25); flex-shrink: 0; }
+  /* Netherlands */
+  .flag-nl { width: 28px; height: 18px; flex-direction: column; }
+  .flag-nl-r { background: #AE1C28; flex: 1; }
+  .flag-nl-w { background: #FFFFFF; flex: 1; }
+  .flag-nl-b { background: #21468B; flex: 1; }
+  /* UK */
+  .flag-uk { width: 28px; height: 18px; position: relative; background: #012169; }
+  .flag-uk-cross-h { position: absolute; top: 50%; left: 0; right: 0; height: 5px; background: #fff; transform: translateY(-50%); }
+  .flag-uk-cross-v { position: absolute; left: 50%; top: 0; bottom: 0; width: 5px; background: #fff; transform: translateX(-50%); }
+  .flag-uk-cross-h-r { position: absolute; top: 50%; left: 0; right: 0; height: 3px; background: #C8102E; transform: translateY(-50%); }
+  .flag-uk-cross-v-r { position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; background: #C8102E; transform: translateX(-50%); }
+  .flag-uk-diag { position: absolute; inset: 0; overflow: hidden; }
+  .flag-uk-diag::before, .flag-uk-diag::after {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 4px;
+    background: #C8102E;
+    top: 50%;
+    left: -50%;
+    transform-origin: center;
+  }
+  .flag-uk-diag::before { transform: translateY(-50%) rotate(34deg); }
+  .flag-uk-diag::after { transform: translateY(-50%) rotate(-34deg); }
+  /* Ireland */
+  .flag-ie { width: 28px; height: 18px; flex-direction: row; }
+  .flag-ie-g { background: #169B62; flex: 1; }
+  .flag-ie-w { background: #FFFFFF; flex: 1; }
+  .flag-ie-o { background: #FF883E; flex: 1; }
+  /* Germany */
+  .flag-de { width: 28px; height: 18px; flex-direction: column; }
+  .flag-de-b { background: #000; flex: 1; }
+  .flag-de-r { background: #D00; flex: 1; }
+  .flag-de-y { background: #FFCE00; flex: 1; }
+
+  /* Large flags */
+  .flag-lg { border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+  .flag-nl.flag-lg { width: 68px; height: 44px; }
+  .flag-ie.flag-lg { width: 68px; height: 44px; }
+  .flag-de.flag-lg { width: 68px; height: 44px; }
+  .flag-uk.flag-lg { width: 68px; height: 44px; }
+
+  /* ─── MAP POPUP ─── */
+  .popup-degree { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 0.92rem; color: var(--navy); margin-bottom: 3px; }
+  .popup-school { font-size: 0.8rem; color: var(--teal); font-weight: 500; margin-bottom: 10px; }
+  .popup-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .popup-btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .popup-btn-primary { background: var(--teal); color: #fff; }
+  .popup-btn-secondary { background: var(--teal-light); color: var(--teal-dark); border: 1px solid var(--teal); }
+  .popup-btn-maps { background: #e8f4fd; color: #1a6ea8; border: 1px solid #b3d4f0; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    padding: 32px;
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.8rem;
+  }
+  .footer-logo { opacity: 0.35; margin: 0 auto 14px; display: block; }
+  .footer-logo svg { width: 120px; height: auto; }
+
+  /* ─── TABLE (CAO) ─── */
+  .info-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+    font-size: 0.88rem;
+  }
+  .info-table th {
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    font-weight: 700;
+    padding: 8px 14px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  .info-table td {
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    background: #fff;
+  }
+  .scholarship-box {
+    background: #f0fbfc;
+    border: 1.5px solid var(--teal);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+  .scholarship-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--teal-dark);
+    margin-bottom: 8px;
+  }
+  .scholarship-box ul { padding-left: 18px; }
+  .scholarship-box li { margin-bottom: 4px; }
+  .fins-box {
+    background: #fafff7;
+    border: 1.5px solid #48bb78;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+  .fins-box h4 { font-weight: 700; color: #276749; margin-bottom: 8px; font-size: 0.9rem; }
+  .fins-box ul { padding-left: 18px; }
+  .fins-box li { margin-bottom: 3px; }
+  .fins-box a { color: var(--teal); }
+
+  @media (max-width: 640px) {
+    .header-inner { padding: 12px 16px 10px; flex-wrap: wrap; }
+    .tab-content { padding: 24px 16px 60px; }
+    .meta-grid { grid-template-columns: 1fr 1fr; }
+    .country-hero { flex-direction: column; align-items: flex-start; padding: 20px; }
+    .research-content { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     STICKY HEADER
+════════════════════════════════════════════════════ -->
+<header id="site-header">
+  <div class="header-inner">
+    <div class="header-logo">
+      <!-- LOGO SVG INLINE – cls-5 fill changed to #fff for white version -->
+      <svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+        <defs>
+          <style>
+            .h-cls-1 { fill: #36aadc; opacity: .8; }
+            .h-cls-2 { fill: #30ac71; opacity: .8; }
+            .h-cls-3 { fill: #32abbb; opacity: .8; }
+            .h-cls-4 { fill: #31ac9c; opacity: .8; }
+            .h-cls-5 { fill: #ffffff; }
+          </style>
+        </defs>
+        <g>
+          <g>
+            <path class="h-cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+            <path class="h-cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <path class="h-cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+            <rect class="h-cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+            <path class="h-cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <path class="h-cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+            <path class="h-cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+            <path class="h-cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14,.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="h-cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+            <rect class="h-cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+            <path class="h-cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+            <path class="h-cls-5" d="M87.04,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <path class="h-cls-5" d="M97.64,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="h-cls-5" d="M107.31,77.57l-2.49,6.2-2.54-6.2h-1.1l3.1,7.51-.42,1.03c-.17,.41-.37,.7-.58,.85-.22,.15-.49,.23-.83,.23-.26,0-.52-.05-.78-.14l-.2-.07-.29,.92,.19,.07c.37,.13,.73,.19,1.08,.19,.54,0,1.01-.15,1.39-.45,.38-.3,.7-.77,.95-1.41l3.61-8.74h-1.09Z"/>
+            <path class="h-cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+            <path class="h-cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+            <rect class="h-cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+            <path class="h-cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+            <path class="h-cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="h-cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <rect class="h-cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+            <path class="h-cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+            <path class="h-cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="h-cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <path class="h-cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+            <path class="h-cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <rect class="h-cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+            <path class="h-cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <polygon class="h-cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+            <path class="h-cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+            <path class="h-cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <path class="h-cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="h-cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+            <path class="h-cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+            <path class="h-cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+            <path class="h-cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <path class="h-cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <path class="h-cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+          </g>
+          <path class="h-cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+          <path class="h-cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+          <path class="h-cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+          <path class="h-cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+          <g>
+            <path class="h-cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+            <path class="h-cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+            <path class="h-cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+            <path class="h-cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+            <path class="h-cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+            <path class="h-cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+            <polygon class="h-cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-title">Informe de Opciones de Grado · Audiovisual &amp; Cine</div>
+      <div class="header-subtitle">Preparado para Valeria Calvo González</div>
+    </div>
+  </div>
+
+  <!-- TABS BAR -->
+  <nav class="tabs-bar" role="tablist">
+    <button class="tab-btn active" onclick="showTab('intro',this)">Introducción</button>
+    <button class="tab-btn" onclick="showTab('research',this)">
+      Research vs Applied Sciences
+    </button>
+    <button class="tab-btn" onclick="showTab('nl',this)">
+      <span class="flag flag-nl" style="width:20px;height:13px">
+        <span class="flag-nl-r"></span><span class="flag-nl-w"></span><span class="flag-nl-b"></span>
+      </span>
+      Holanda
+    </button>
+    <button class="tab-btn" onclick="showTab('uk',this)">
+      <span class="flag flag-uk" style="width:20px;height:13px">
+        <span class="flag-uk-cross-h"></span><span class="flag-uk-cross-v"></span>
+        <span class="flag-uk-diag"></span>
+        <span class="flag-uk-cross-h-r"></span><span class="flag-uk-cross-v-r"></span>
+      </span>
+      Reino Unido
+    </button>
+    <button class="tab-btn" onclick="showTab('ie',this)">
+      <span class="flag flag-ie" style="width:20px;height:13px">
+        <span class="flag-ie-g"></span><span class="flag-ie-w"></span><span class="flag-ie-o"></span>
+      </span>
+      Irlanda
+    </button>
+    <button class="tab-btn" onclick="showTab('de',this)">
+      <span class="flag flag-de" style="width:20px;height:13px">
+        <span class="flag-de-b"></span><span class="flag-de-r"></span><span class="flag-de-y"></span>
+      </span>
+      Alemania
+    </button>
+  </nav>
+</header>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB: INTRODUCCIÓN
+════════════════════════════════════════════════════ -->
+<main>
+<div id="tab-intro" class="tab-content active">
+  <div class="intro-welcome">
+    <p>Hola Valeria,</p>
+    <p>Espero que estés bien. Estos días he estado trabajando en la búsqueda de grados en Audiovisual, cine y sus afines que, según lo que nos indicaste, más podrían interesarte.</p>
+    <p>Te dejo el listado de opciones a continuación, cualquier duda estaré encantada de ayudarte a resolverla.</p>
+  </div>
+
+  <h2 class="section-heading">Índice de opciones</h2>
+
+  <!-- HOLANDA -->
+  <div class="index-country-group">
+    <div class="index-country-label">
+      <span class="flag flag-nl"><span class="flag-nl-r"></span><span class="flag-nl-w"></span><span class="flag-nl-b"></span></span>
+      Holanda
+    </div>
+    <a class="index-entry" onclick="goTo('nl','card-wdka')">
+      <div class="index-entry-degree">BA Audiovisual Design</div>
+      <div class="index-entry-uni">Willem de Kooning Academy · Rotterdam</div>
+    </a>
+  </div>
+
+  <!-- REINO UNIDO -->
+  <div class="index-country-group">
+    <div class="index-country-label">
+      <span class="flag flag-uk" style="width:20px;height:13px;position:relative">
+        <span class="flag-uk-cross-h"></span><span class="flag-uk-cross-v"></span>
+        <span class="flag-uk-diag"></span>
+        <span class="flag-uk-cross-h-r"></span><span class="flag-uk-cross-v-r"></span>
+      </span>
+      Reino Unido
+    </div>
+    <a class="index-entry" onclick="goTo('uk','card-metfilm-content')">
+      <div class="index-entry-degree">BA (Hons) Content Media Film Production</div>
+      <div class="index-entry-uni">Metfilm School · Londres</div>
+    </a>
+    <a class="index-entry" onclick="goTo('uk','card-metfilm-filmmaking')">
+      <div class="index-entry-degree">BA (Hons) Filmmaking</div>
+      <div class="index-entry-uni">Metfilm School · Londres / Berlín</div>
+    </a>
+  </div>
+
+  <!-- IRLANDA -->
+  <div class="index-country-group">
+    <div class="index-country-label">
+      <span class="flag flag-ie"><span class="flag-ie-g"></span><span class="flag-ie-w"></span><span class="flag-ie-o"></span></span>
+      Irlanda
+    </div>
+    <a class="index-entry" onclick="goTo('ie','card-griffith')">
+      <div class="index-entry-degree">BA (Hons) in Film / TV and Screen Media Production</div>
+      <div class="index-entry-uni">Griffith College · Dublín</div>
+    </a>
+    <a class="index-entry" onclick="goTo('ie','card-tudublin')">
+      <div class="index-entry-degree">BA (Hons) in Film and Broadcasting</div>
+      <div class="index-entry-uni">TU Dublin · Dublín (Campus Grangegorman)</div>
+    </a>
+  </div>
+
+  <!-- ALEMANIA -->
+  <div class="index-country-group">
+    <div class="index-country-label">
+      <span class="flag flag-de"><span class="flag-de-b"></span><span class="flag-de-r"></span><span class="flag-de-y"></span></span>
+      Alemania
+    </div>
+    <a class="index-entry" onclick="goTo('de','card-srh')">
+      <div class="index-entry-degree">BA (Hons) in Film and Motion Design</div>
+      <div class="index-entry-uni">SRH Berlin University of Applied Sciences · Berlín</div>
+    </a>
+    <a class="index-entry" onclick="goTo('de','card-macromedia')">
+      <div class="index-entry-degree">BA (Hons) in Filmmaking</div>
+      <div class="index-entry-uni">Macromedia University of Applied Sciences · Berlín</div>
+    </a>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="next-steps">
+    <div class="next-steps-title">¿Qué tienes que hacer ahora?</div>
+    <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc) y ves apuntando cualquier duda que te surja y pensando en que opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+    <p style="margin-top:10px;">¡Un saludo!</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB: RESEARCH VS APPLIED SCIENCES
+════════════════════════════════════════════════════ -->
+<div id="tab-research" class="tab-content">
+  <div class="research-content">
+    <p>Dentro de Holanda tenemos que diferenciar entre 2 tipos de universidades: <strong>"Research"</strong> y <strong>"Applied Sciences"</strong>. Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+
+    <h3>Metodología teórica vs práctica</h3>
+    <p>Las universidades de <strong>Applied Sciences</strong> destacan por usar una metodología muy práctica llamada <strong>PBL (Project / Problem Based Learning)</strong>. Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre.</p>
+    <p>Las universidades de <strong>Research</strong> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un master en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+
+    <h3>Duración</h3>
+    <p>Las universidades de <strong>Applied Sciences</strong> duran un año más (<strong>4 años = 240 ECTS</strong>) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un master.</p>
+    <p>Las de <strong>Research</strong> duran solo <strong>3 años (= 180 ECTS)</strong> porque no tienen prácticas y se suelen complementar con un master de 1 o 2 años.</p>
+
+    <h3>Ranking / Prestigio</h3>
+    <p>El principal motivo por el cual se podría escoger una universidad de Research es por el mayor ranking y prestigio que estas universidades tienen.</p>
+    <p>Las universidades de Applied Sciences (Hogeschools en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+
+    <h3>Acceso a Másteres</h3>
+    <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de Research podrás acceder a masters tanto en universidades de Research como Applied Sciences. En cambio, con tu título de Applied Sciences podrás acceder a masters en universidades de Applied Sciences, pero si quieres acceder a universidades de Research, te pedirán cursar un pre-master (de 1 semestre o un año de duración).</p>
+
+    <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de Research y otra de Applied Sciences):</p>
+    <ul>
+      <li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-andinformation/choose-a-study/" target="_blank">Universidad de Research – Universidad de Groninga (RUG)</a></li>
+      <li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank">Universidad de Applied Sciences – InHolland</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB: HOLANDA
+════════════════════════════════════════════════════ -->
+<div id="tab-nl" class="tab-content">
+  <!-- Country hero -->
+  <div class="country-hero">
+    <div class="country-flag-large">
+      <span class="flag flag-nl flag-lg" style="flex-direction:column">
+        <span class="flag-nl-r"></span><span class="flag-nl-w"></span><span class="flag-nl-b"></span>
+      </span>
+    </div>
+    <div>
+      <div class="country-hero-name">Holanda</div>
+      <div class="country-meta">
+        <span class="country-meta-pill">Matrícula: 2.696 €/año (estudiantes EU)</span>
+        <span class="country-meta-pill">Alojamiento: 650–1.300 €/mes (grandes ciudades)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="country-intro-text">
+    <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <strong>2.696€/año</strong>.</p>
+    <p>Dentro de Holanda tenemos que diferenciar entre 2 tipos de universidades: <strong>"Research"</strong> y <strong>"Applied Sciences"</strong>. Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias. Puedes consultar la pestaña <button onclick="showTab('research', document.querySelector('[onclick=\'showTab(\\\'research\\\',this)\']'))" style="background:none;border:none;color:var(--teal);text-decoration:underline;cursor:pointer;font-size:inherit;font-family:inherit;padding:0;">Research vs Applied Sciences</button> para más información.</p>
+    <p>El precio (approx) de alojamiento en Holanda varía dependiendo de la zona/ciudad, pero en las grandes ciudades es alta: <strong>650 – 1.300 €</strong>.</p>
+  </div>
+
+  <div class="section-separator">
+    <div class="section-separator-line"></div>
+    <div class="section-separator-label">University of Applied Sciences</div>
+    <div class="section-separator-line"></div>
+  </div>
+
+  <!-- CARD: WDKA -->
+  <div class="uni-card" id="card-wdka">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.wdka.nl/programmes/bachelors/audiovisual-design" target="_blank">
+          <span class="mouse-icon">🖱️</span>
+          BA Audiovisual Design
+        </a>
+        <div class="card-school">Willem de Kooning Academy · Rotterdam</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences</span>
+          <span class="badge badge-rank">Rotterdam · 660.000–670.000 hab.</span>
+        </div>
+      </div>
+      <div>
+        <span class="badge badge-diff-orange">Dificultad: Alta</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-label">Ciudad</div>
+          <div class="meta-value">Rotterdam</div>
+          <button class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Duración</div>
+          <div class="meta-value">4 años / 240 ECTS</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Coste</div>
+          <div class="meta-value">2.696 €/año (EU)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Alojamiento</div>
+          <div class="meta-value">600–1.300 €/mes</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Aeropuerto</div>
+          <div class="meta-value">Rotterdam The Hague Airport</div>
+        </div>
+      </div>
+
+      <div class="card-description">
+        <p>El programa de Licenciatura en Diseño Audiovisual abarca una amplia gama de formas, técnicas, estilos y aplicaciones de los medios audiovisuales.</p>
+        <p>Los estudiantes crean películas, videos, podcasts, instalaciones, obras interactivas e inmersivas, así como performances. Exploran diversos géneros, desde el documental y el ensayo hasta la ficción y todo lo que hay entre medias. El hilo conductor de todas estas obras es el enfoque en la narración significativa y cautivadora, transmitida a través de imágenes y sonido.</p>
+        <p>En el centro de este curso se encuentra el proceso creativo. Enseñamos a nuestros estudiantes cómo se desarrollan los procesos creativos y cómo pueden desarrollar los suyos propios. La investigación, la experimentación y la reflexión son componentes esenciales, que se llevan a cabo tanto de forma individual como en colaboración con otros estudiantes. Este enfoque permite a los estudiantes crecer y evolucionar como creadores, apoyándose mutuamente a lo largo de su trayectoria de aprendizaje.</p>
+        <p>Dada la naturaleza amplia y dinámica del campo, esperamos que nuestros estudiantes demuestren independencia y espíritu emprendedor. Además del currículo estructurado, los estudiantes tienen la oportunidad de adaptar sus estudios a sus intereses y aspiraciones personales.</p>
+        <p>Forman a creadores que están en el corazón de la sociedad y que quieren contribuir o cambiar, utilizando su propia voz y habilidades: emprendedores, críticos y comprometidos.</p>
+        <p>La mayoría de las actividades de estudio se realizan en las Estaciones (Espacios de Trabajo). Todos los estudiantes, independientemente de su programa de grado o año de estudio, son bienvenidos a trabajar en las Estaciones. Estos son espacios donde los estudiantes pueden poner a prueba sus ideas y descubrir cómo convertirlas en creaciones completamente funcionales. Pueden experimentar con herramientas, técnicas, materiales y equipos, y recibir apoyo e inspiración trabajando con otros estudiantes, tutores e instructores.</p>
+      </div>
+
+      <details class="admissions-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admissions-body">
+          <h4>Requisitos académicos</h4>
+          <ul>
+            <li>Título de Bachiller</li>
+          </ul>
+          <h4>Nivel de inglés</h4>
+          <ul>
+            <li>IELTS Academic: 6.0</li>
+            <li>TOEFL iBT: 80</li>
+            <li>Cambridge FCE, CAE o CPE: puntuación mínima de 169</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Una parte fundamental del proceso de admisión es el <strong>examen de admisión</strong>, que consta de cuatro partes. Debes completar y subir todas las partes a tu página de admisión antes de la fecha límite. Recibirás los resultados en un plazo de cinco semanas después de la fecha límite.</p>
+          <p>Las cuatro partes del examen de admisión son:</p>
+          <ul>
+            <li><strong>A)</strong> Portafolio</li>
+            <li><strong>B)</strong> Dos tareas para casa</li>
+            <li><strong>C)</strong> Cuestionario</li>
+            <li><strong>D)</strong> Video</li>
+          </ul>
+          <h4>Fecha de respuesta</h4>
+          <p>5 semanas después de la fecha límite.</p>
+          <div class="deadline-box">
+            <strong>Fecha límite de matrícula</strong>
+            1 de mayo
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Map NL -->
+  <div class="map-section" id="map-nl">
+    <h3>📍 Universidades en Holanda</h3>
+    <div id="leaflet-nl" class="leaflet-map"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB: REINO UNIDO
+════════════════════════════════════════════════════ -->
+<div id="tab-uk" class="tab-content">
+  <div class="country-hero">
+    <div class="country-flag-large">
+      <span class="flag flag-uk flag-lg" style="position:relative">
+        <span class="flag-uk-cross-h" style="height:8px"></span>
+        <span class="flag-uk-cross-v" style="width:8px"></span>
+        <span class="flag-uk-diag"></span>
+        <span class="flag-uk-cross-h-r" style="height:5px"></span>
+        <span class="flag-uk-cross-v-r" style="width:5px"></span>
+      </span>
+    </div>
+    <div>
+      <div class="country-hero-name">Reino Unido</div>
+      <div class="country-meta">
+        <span class="country-meta-pill">International fees: ~21.000–25.000 £/año</span>
+        <span class="country-meta-pill">Residencias: 900–1.800 €/mes</span>
+        <span class="country-meta-pill">Piso compartido: 700–1.200 €/mes</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="country-intro-text">
+    <p>Desde el Brexit, los estudiantes europeos somos considerados estudiantes internacionales y tenemos que pagar las <strong>"international fees"</strong> de la universidad, que están en torno a las <strong>21.000 £ – 25.000 £ anuales</strong> (unos 24.500€ – 29.000€).</p>
+    <p>El precio (approx) de <strong>alojamiento en Londres</strong> es: <strong>900 € – 1.800 €/mes</strong> (residencias universitarias) / <strong>1.400 € – 2.200 €/mes</strong> (privadas) / <strong>700 € – 1.200 €</strong> (piso compartido).</p>
+    <p><em>Nota: Metfilm School aplica un descuento automático de <strong>£6.000 por año</strong> a todos los solicitantes con pasaporte de la UE/EEA/Suiza. Los estudiantes internacionales de fuera de la UE/EEA pueden ahorrar <strong>£2.000 adicionales</strong> aceptando su oferta y pagando el depósito antes del 15 de junio de 2026.</em></p>
+  </div>
+
+  <div class="section-separator">
+    <div class="section-separator-line"></div>
+    <div class="section-separator-label">Applied Science Universities</div>
+    <div class="section-separator-line"></div>
+  </div>
+
+  <!-- CARD: METFILM CONTENT -->
+  <div class="uni-card" id="card-metfilm-content">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://metfilmschool.ac.uk/courses/ba-content-media-film-production/" target="_blank">
+          <span class="mouse-icon">🖱️</span>
+          BA (Hons) Content Media Film Production
+        </a>
+        <div class="card-school">Metfilm School · Londres</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences</span>
+          <span class="badge badge-rank">Título: Universidad BIMM</span>
+        </div>
+      </div>
+      <div>
+        <span class="badge badge-diff-green">Dificultad: Media</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-label">Ciudad</div>
+          <div class="meta-value">Londres</div>
+          <button class="map-mini-btn" onclick="scrollToMap('uk','map-uk')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Duración</div>
+          <div class="meta-value">3 años / 180 ECTS</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Coste</div>
+          <div class="meta-value">9.950 £/año ≈ <strong>11.467 €</strong> CONFIRMADO</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Costes extra</div>
+          <div class="meta-value">~£500 durante el programa</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Aeropuerto</div>
+          <div class="meta-value">London Gatwick / London Heathrow</div>
+        </div>
+      </div>
+
+      <div class="card-description">
+        <p>El objetivo de la Licenciatura en Contenido, Medios y Producción Cinematográfica es inspirar a la próxima generación de emprendedores creativos del sector audiovisual, brindándoles el conocimiento, el pensamiento crítico, las habilidades profesionales y la mentalidad necesarios para desarrollar una variedad de proyectos audiovisuales dirigidos a sus audiencias objetivo.</p>
+        <p>Este curso te reta a crear contenido en múltiples contextos audiovisuales. Trabajarás con diversos formatos multimedia, incluyendo cine, televisión, narración de historias con impacto social, contenido de marca, podcasts, sitios web y un proyecto de fin de carrera a tu elección.</p>
+        <p>Este programa prepara a los estudiantes para pensar de forma integral en diferentes formatos multimedia, establecer conexiones interesantes y, en definitiva, convertirse en emprendedores y profesionales altamente empleables al graduarse.</p>
+        <p>Este curso se ofrece en colaboración con la <strong>Universidad BIMM</strong>. Los estudiantes del Reino Unido que cursen este programa pueden optar al préstamo máximo para la matrícula, que cubre la totalidad de los gastos.</p>
+        <p><strong>Entidad que otorga el título:</strong> Universidad BIMM.</p>
+      </div>
+
+      <details class="admissions-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admissions-body">
+          <h4>Requisitos académicos</h4>
+          <ul>
+            <li>Título de Bachiller</li>
+          </ul>
+          <h4>Nivel de inglés</h4>
+          <ul>
+            <li>IELTS: 6.0 con mínimo de 5.5 en cada banda</li>
+            <li>TOEFL iBT: 80</li>
+            <li>Cambridge FCE, CAE o CPE: puntuación mínima de 169</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Una vez enviada su solicitud, un miembro del equipo de admisiones se pondrá en contacto contigo para hablar sobre los siguientes pasos. Si su solicitud es aceptada, se le contactará para programar una <strong>entrevista formal</strong>, que podrá realizarse en persona o en línea. MetFilm School le comunicará la decisión de admisión en un plazo razonable.</p>
+          <p>Si es admitido, recibirá una oferta directamente de nuestro equipo de admisiones. En ese caso, es su responsabilidad aceptar esta oferta en la institución de su preferencia.</p>
+          <p>Los solicitantes admitidos en el programa de pregrado deberán completar su matrícula, asegurándose de haber pagado el depósito y las tasas de matrícula.</p>
+          <div class="deadline-box">
+            <strong>Fecha límite de matrícula</strong>
+            31 de junio
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CARD: METFILM FILMMAKING -->
+  <div class="uni-card" id="card-metfilm-filmmaking">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://metfilmschool.ac.uk/courses/ba-filmmaking/" target="_blank">
+          <span class="mouse-icon">🖱️</span>
+          BA (Hons) Filmmaking
+        </a>
+        <div class="card-school">Metfilm School · Londres / Berlín</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences</span>
+          <span class="badge badge-rank">Título: Universidad BIMM</span>
+        </div>
+      </div>
+      <div>
+        <span class="badge badge-diff-green">Dificultad: Media</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-label">Ciudad</div>
+          <div class="meta-value">Londres o Berlín</div>
+          <button class="map-mini-btn" onclick="scrollToMap('uk','map-uk')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Duración</div>
+          <div class="meta-value">3 años / 180 ECTS</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Coste Londres</div>
+          <div class="meta-value">9.950 £/año ≈ <strong>11.467 €</strong> CONFIRMADO</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Coste Berlín</div>
+          <div class="meta-value"><strong>11.950 €/año</strong> CONFIRMADO</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Costes extra</div>
+          <div class="meta-value">~£500 durante el programa</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Aeropuerto</div>
+          <div class="meta-value">London Gatwick / Heathrow / Berlín</div>
+        </div>
+      </div>
+
+      <div class="card-description">
+        <p>Este curso te sumergirá en una comunidad de práctica creativa y colaborativa donde el arte cinematográfico es el eje central. Aprenderás a desenvolverte en la industria, lo que reforzará las habilidades técnicas y creativas que desarrollarás a lo largo de tus estudios. La producción cinematográfica está en constante evolución, y adaptamos continuamente nuestros cursos para satisfacer las necesidades del sector.</p>
+        <p>El programa intensivo de este curso te desafiará a desarrollar tus habilidades y te preparará para el mundo de la producción actual. Además, adquirirás experiencia rodando tus proyectos con los últimos avances en equipos HD, de cine y digitales —desde Canon 6D hasta Red Raven— y cámaras clásicas como Panavision y Arriflex en formato 8 mm, Super 16 mm y 35 mm.</p>
+        <p>A lo largo del curso, crearás un <strong>demo reel profesional</strong> que servirá como carta de presentación de tus habilidades cinematográficas. Al graduarte, serás un cineasta profesional listo para incorporarte al mundo laboral de la industria del cine y la televisión, así como a otras áreas apasionantes como los medios digitales, el marketing y la distribución.</p>
+        <p>Este curso se ofrece gracias a nuestra colaboración con la <strong>Universidad BIMM</strong>.</p>
+        <p><strong>Entidad que otorga el título:</strong> Universidad BIMM.</p>
+      </div>
+
+      <details class="admissions-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admissions-body">
+          <h4>Requisitos académicos</h4>
+          <ul>
+            <li>Título de Bachiller</li>
+          </ul>
+          <h4>Nivel de inglés</h4>
+          <ul>
+            <li>IELTS: 6.0 con mínimo de 5.5 en cada banda</li>
+            <li>TOEFL iBT: 80</li>
+            <li>Cambridge FCE, CAE o CPE: puntuación mínima de 169</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Una vez enviada su solicitud, un miembro del equipo de admisiones se pondrá en contacto contigo para hablar sobre los siguientes pasos. Si su solicitud es aceptada, se le contactará para programar una <strong>entrevista formal</strong>, que podrá realizarse en persona o en línea. MetFilm School le comunicará la decisión de admisión en un plazo razonable.</p>
+          <p>Si es admitido, recibirá una oferta directamente de nuestro equipo de admisiones. En ese caso, es su responsabilidad aceptar esta oferta en la institución de su preferencia.</p>
+          <p>Los solicitantes admitidos en el programa de pregrado deberán completar su matrícula, asegurándose de haber pagado el depósito y las tasas de matrícula.</p>
+          <div class="deadline-box">
+            <strong>Fecha límite de matrícula</strong>
+            31 de junio
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Map UK -->
+  <div class="map-section" id="map-uk">
+    <h3>📍 Universidades en Reino Unido</h3>
+    <div id="leaflet-uk" class="leaflet-map"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB: IRLANDA
+════════════════════════════════════════════════════ -->
+<div id="tab-ie" class="tab-content">
+  <div class="country-hero">
+    <div class="country-flag-large">
+      <span class="flag flag-ie flag-lg">
+        <span class="flag-ie-g"></span><span class="flag-ie-w"></span><span class="flag-ie-o"></span>
+      </span>
+    </div>
+    <div>
+      <div class="country-hero-name">Irlanda</div>
+      <div class="country-meta">
+        <span class="country-meta-pill">Universidades públicas: ~6.000–7.000 €/año (EU)</span>
+        <span class="country-meta-pill">Posibilidad de beca: -50%</span>
+        <span class="country-meta-pill">Residencias: 600–1.500 €/mes</span>
+        <span class="country-meta-pill">Piso compartido: 400–900 €/mes</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="country-intro-text">
+    <p>En Irlanda la educación en universidades públicas tiene un coste aproximado de unos <strong>6.000€/7.000€ al año</strong> para los estudiantes europeos. Si se estudia en una universidad pública, se tiene además la posibilidad de recibir una <strong>beca</strong> y que este importe se reduzca un 50%.</p>
+    <p>El acceso a universidades en Europa está estipulado por <strong>puntos CAO</strong>. La equivalencia entre el título de bachiller y puntos CAO es la siguiente:</p>
+    <table class="info-table">
+      <thead>
+        <tr><th>Media Título (Bachillerato)</th><th>Puntos CAO (IPS)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>10</td><td>600</td></tr>
+        <tr><td>9</td><td>555</td></tr>
+        <tr><td>8</td><td>526</td></tr>
+        <tr><td>7</td><td>493</td></tr>
+        <tr><td>6</td><td>395</td></tr>
+        <tr><td>5</td><td>285</td></tr>
+      </tbody>
+    </table>
+    <p><em>La equivalencia se calcula basada en la media del Título de Bachiller, asumiendo ningún intento repetido.</em></p>
+    <p>El precio (approx) de alojamiento en Irlanda es: <strong>600 € – 1.500 €/mes</strong> (residencias universitarias) / <strong>1.200 €/mes</strong> (privadas) / <strong>400 € – 900 €</strong> (piso compartido).</p>
+  </div>
+
+  <div class="section-separator">
+    <div class="section-separator-line"></div>
+    <div class="section-separator-label">Applied Science Universities</div>
+    <div class="section-separator-line"></div>
+  </div>
+
+  <!-- CARD: GRIFFITH -->
+  <div class="uni-card" id="card-griffith">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.griffith.ie/school-media/ba-hons-film-tv-screen-media-production" target="_blank">
+          <span class="mouse-icon">🖱️</span>
+          BA (Hons) in Film / TV and Screen Media Production
+        </a>
+        <div class="card-school">Griffith College · Dublín</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences</span>
+          <span class="badge badge-rank-gold">EU Scholarships Available</span>
+        </div>
+      </div>
+      <div>
+        <span class="badge badge-diff-green">Acceso: Directo (CAO points)</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-label">Ciudad</div>
+          <div class="meta-value">Dublín</div>
+          <button class="map-mini-btn" onclick="scrollToMap('ie','map-ie')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Duración</div>
+          <div class="meta-value">3 años / 180 ECTS</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Coste</div>
+          <div class="meta-value"><strong>8.000 €</strong></div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Nota de corte (CAO)</div>
+          <div class="meta-value">243–275 pts (≈ media 5 bachillerato)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Aeropuerto</div>
+          <div class="meta-value">Dublin Airport</div>
+        </div>
+      </div>
+
+      <div class="scholarship-box">
+        <h4>EU Scholarships Available</h4>
+        <p>Una beca de <strong>€1.000</strong> (solo Año 1) está disponible para programas de grado impartidos en el campus de Dublín de Griffith College para estudiantes que paguen un depósito antes del <strong>30 de junio de 2026</strong>. *No hay becas disponibles para programas de la Facultad Pulse.</p>
+      </div>
+
+      <div class="fins-box">
+        <h4>EU Funding Opportunity – FINS Scheme (Préstamo Educativo para Estudiantes EU)</h4>
+        <p>El esquema FINS ofrece préstamos de estudio diseñados para satisfacer las necesidades reales de los estudiantes. Fue introducido en Griffith en 2021 y está abierto a estudiantes de la UE que hayan recibido una oferta para estudiar un curso de pregrado o posgrado a tiempo completo.</p>
+        <p><strong>El préstamo puede usarse para:</strong></p>
+        <ul>
+          <li>Tasas de matrícula</li>
+          <li>Gastos mensuales de vida, comidas y alquiler (incluyendo depósito)</li>
+          <li>Libros y otros materiales de estudio</li>
+          <li>Portátil</li>
+          <li>Seguro médico</li>
+          <li>Transporte</li>
+          <li>Gastos urgentes</li>
+        </ul>
+        <p><strong>Elegibilidad:</strong> Ciudadanos de la UE que cursen sus estudios en un país distinto al de su educación previa, sin deudas pendientes de préstamos anteriores.</p>
+        <p>Contacto: <a href="mailto:info@hellofins.com">info@hellofins.com</a></p>
+      </div>
+
+      <div class="card-description">
+        <p>La Licenciatura (con honores) en Producción de Cine, Televisión y Medios Audiovisuales se imparte a tiempo completo durante tres años. Este programa ayudará a los estudiantes entusiastas a desarrollar las habilidades prácticas y los conocimientos esenciales necesarios para trabajar en el dinámico sector de la producción cinematográfica, televisiva y audiovisual.</p>
+        <p>El programa está diseñado para abarcar el ciclo completo del proceso de producción cinematográfica y mantiene vínculos directos con la industria del cine.</p>
+        <p>Los estudiantes adquirirán habilidades en generación y desarrollo de ideas, guion cinematográfico y narración visual, financiación de proyectos, cinematografía, dirección, producción, grabación de sonido, edición (online y offline), efectos visuales (VFX) y ventas y distribución. El programa se compone de un <strong>80% de módulos prácticos</strong>, mientras que el 20% restante se centra en la teoría.</p>
+        <p>Durante todo el programa, los estudiantes tendrán acceso a: equipos e instalaciones de última generación incluyendo un estudio de televisión totalmente equipado, equipos de cinematografía digital, espacios de producción y equipos de grabación de sonido en exteriores; herramientas estándar de la industria como Avid Media Composer, Pro Tools y Adobe Suite; estudio de cine totalmente equipado con fondo de rieles en blanco, negro y verde, y sistema de iluminación de 3x8; amplia selección de cámaras incluyendo cámaras de estudio Blackmagic y Sony; equipo de edición completo para Apple Mac; objetivos zoom y fijos de fotograma completo; mezclador de vídeo multiformato NewTek Tricaster 8000 con entorno de estudio virtual; y amplia gama de equipos disponibles para alquilar para estudiantes.</p>
+      </div>
+
+      <details class="admissions-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admissions-body">
+          <h4>Requisitos académicos</h4>
+          <ul>
+            <li>Título de Bachiller aprobado</li>
+            <li>El requisito mínimo de acceso es tener el título de bachillerato, habiendo cursado al menos 6 asignaturas relevantes como matemáticas, economía, inglés, historia, otros idiomas, con una nota mínima de 7 en dos de ellas.</li>
+          </ul>
+          <h4>Nivel de inglés</h4>
+          <ul>
+            <li>IELTS: 6.5 con mínimo de 6.0 en cada banda</li>
+            <li>TOEFL: 4.5 overall (Reading 4.0, Writing 4.0, Listening 4.5, Speaking 4.5)</li>
+            <li>Cambridge: 176 overall (no component below 169)</li>
+            <li>Duolingo: 120–125 overall (no component below 105)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p><strong>No hay proceso de selección</strong>: acceso por puntos CAO 243–275 (equivalente a media 5 de bachillerato).</p>
+          <div class="deadline-box">
+            <strong>Fecha límite de matrícula</strong>
+            1 de mayo (admisión tarde, pero hay posibilidades si aplicamos pronto)
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CARD: TU DUBLIN -->
+  <div class="uni-card" id="card-tudublin">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.tudublin.ie/study/undergraduate/courses/film-and-broadcasting-tu856/" target="_blank">
+          <span class="mouse-icon">🖱️</span>
+          BA (Hons) in Film and Broadcasting
+        </a>
+        <div class="card-school">TU Dublin · Dublín (Campus Grangegorman)</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences</span>
+          <span class="badge badge-rank">36 plazas en total</span>
+        </div>
+      </div>
+      <div>
+        <span class="badge badge-diff-red">Dificultad: Muy alta</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-label">Ciudad</div>
+          <div class="meta-value">Dublín (Grangegorman)</div>
+          <button class="map-mini-btn" onclick="scrollToMap('ie','map-ie')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Duración</div>
+          <div class="meta-value">4 años / 240 ECTS</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Coste</div>
+          <div class="meta-value"><strong>3.000 €</strong></div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Nota de corte (CAO)</div>
+          <div class="meta-value">430–581 pts (≈ media 7–9.5 bachillerato)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Aeropuerto</div>
+          <div class="meta-value">Dublin Airport</div>
+        </div>
+      </div>
+
+      <div class="card-description">
+        <p>Cine y Radiodifusión se centra en <strong>contar historias</strong>, ya sean de ficción o reales. Este curso combina una formación de alto nivel en técnicas de producción para la creación de cursos, obras de teatro y documentales para radio, televisión y cine, con una sólida base académica en teoría de los medios y estudios contextuales.</p>
+        <p>Cine y Radiodifusión requiere pasión y disciplina. Las mejores películas, documentales y programas de radio surgen de estudiantes interesados en el mundo que les rodea, conscientes de la actualidad y de las fuerzas sociopolíticas que dan forma a la sociedad. Los aspirantes deben ser curiosos y abiertos, mostrando un gran interés por aprender y comprender a las personas, los sistemas de todo tipo y sus contextos históricos.</p>
+        <p>Si bien el enfoque principal está en los medios tradicionales, también se estudiarán las nuevas formas de medios, que requieren todas las habilidades tradicionales y se centran en contar historias en diferentes formatos o en complementar la narración tradicional (por ejemplo, un programa de televisión) de diversas maneras.</p>
+        <p>La fortaleza de este curso reside en su <strong>enfoque integrado de teoría y práctica</strong>. Desarrollarás una comprensión crítica y reflexiva de una amplia gama de áreas temáticas que informan y sustentan el desarrollo de contenidos. Esta combinación es la que sigue atrayendo a potenciales empleadores a nuestros graduados. Además, les brinda una amplia gama de oportunidades profesionales.</p>
+        <p>El objetivo es formar profesionales creativos y con conciencia social, con profundos conocimientos disciplinares, capacidad de pensamiento crítico, flexibilidad y una sólida ética profesional.</p>
+        <p>Los módulos incluyen: Teoría de los Medios, Estudios Cinematográficos, Estudios Culturales, Televisión, Producción Online, Teatro, Documental, Producción Radiofónica, Gestión de Medios y Audio.</p>
+      </div>
+
+      <details class="admissions-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admissions-body">
+          <h4>Requisitos académicos</h4>
+          <ul>
+            <li>Título de Bachiller aprobado con Inglés y Matemáticas como asignaturas</li>
+            <li>El requisito mínimo de acceso es tener el título de bachillerato, habiendo cursado al menos 6 asignaturas relevantes como matemáticas, economía, inglés, historia, otros idiomas, con una nota mínima de 7 en dos de ellas.</li>
+          </ul>
+          <h4>Nivel de inglés</h4>
+          <ul>
+            <li>IELTS Academic: mínimo 6.0 con no menos de 6 en cada componente</li>
+            <li>TOEFL iBT: mínimo 80</li>
+            <li>Duolingo: mínimo 120, con al menos 110 en cada subscore</li>
+            <li>Cambridge First Certificate in English (FCE): Grade A (Nivel CEFR C1)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p><strong>No hay proceso de selección</strong>: 36 plazas en total. Acceso por puntos CAO 430–581 (equivalente a media 7–9.5 de bachillerato).</p>
+          <div class="deadline-box">
+            <strong>Fecha límite de matrícula</strong>
+            1 de mayo (admisión tarde – si hay plazas)
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Map IE -->
+  <div class="map-section" id="map-ie">
+    <h3>📍 Universidades en Irlanda</h3>
+    <div id="leaflet-ie" class="leaflet-map"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB: ALEMANIA
+════════════════════════════════════════════════════ -->
+<div id="tab-de" class="tab-content">
+  <div class="country-hero">
+    <div class="country-flag-large">
+      <span class="flag flag-de flag-lg" style="flex-direction:column">
+        <span class="flag-de-b"></span><span class="flag-de-r"></span><span class="flag-de-y"></span>
+      </span>
+    </div>
+    <div>
+      <div class="country-hero-name">Alemania</div>
+      <div class="country-meta">
+        <span class="country-meta-pill">SRH Berlin: 750 €/mes</span>
+        <span class="country-meta-pill">Macromedia: 11.000 €/año + 700 € depósito</span>
+        <span class="country-meta-pill">Alojamiento: 600–1.300 €/mes</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-separator">
+    <div class="section-separator-line"></div>
+    <div class="section-separator-label">Applied Science Universities</div>
+    <div class="section-separator-line"></div>
+  </div>
+
+  <!-- CARD: SRH -->
+  <div class="uni-card" id="card-srh">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.srh-berlin.de/en/study-programmes/bachelor/film-motion-design/" target="_blank">
+          <span class="mouse-icon">🖱️</span>
+          BA (Hons) in Film and Motion Design
+        </a>
+        <div class="card-school">SRH Berlin University of Applied Sciences · Berlín</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences</span>
+          <span class="badge badge-rank">240 ECTS · 3.5 años</span>
+        </div>
+      </div>
+      <div>
+        <span class="badge badge-diff-orange">Dificultad: Alta (portafolio)</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-label">Ciudad</div>
+          <div class="meta-value">Berlín</div>
+          <button class="map-mini-btn" onclick="scrollToMap('de','map-de')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Duración</div>
+          <div class="meta-value">3.5 años / 240 ECTS</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Coste</div>
+          <div class="meta-value"><strong>750 €/mes</strong></div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Matrícula</div>
+          <div class="meta-value">Rolling (inscripción continua)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Aeropuerto</div>
+          <div class="meta-value">Berlín</div>
+        </div>
+      </div>
+
+      <div class="card-description">
+        <p>El programa de Licenciatura en Cine y Animación es tu puerta de entrada a la industria cinematográfica. Aprende a escribir guiones y a producir películas, desde la idea inicial hasta la proyección final. Perfeccionarás tus habilidades de cámara y edición, narrativa, dirección, postproducción y técnicas digitales, así como visualización 2D y 3D.</p>
+        <p>Además de teoría cinematográfica, dramaturgia, iluminación y tecnología de sonido, tu plan de estudios incluirá enfoques narrativos innovadores, así como campañas interactivas, cortometrajes, videoclips y anuncios para la gran pantalla.</p>
+        <p>El <strong>diseño de movimiento</strong> es el campo más innovador de la industria cinematográfica. Combinado con los formatos cinematográficos tradicionales, conforma un programa de estudios único que enseña habilidades profesionales en dirección, técnicas de cámara, edición y postproducción.</p>
+        <p>La oferta de programas de estudio en Cine, Diseño y Diseño Audiovisual es muy diversa. ¡Déjate inspirar!</p>
+        <p>La licenciatura en Diseño Cinematográfico y de Animación se centra en la industria del cine y la cinematografía. Nuestra universidad te proporciona el <strong>hardware y software más avanzados</strong> para todos tus proyectos. Estudios de grabación profesionales, un estudio de cine y animación, la última tecnología en cámaras, estaciones de trabajo de edición y postproducción, iluminación y sonido te ayudarán a materializar tus ideas cinematográficas.</p>
+        <p>Como experto en diseño audiovisual, serás un profesional muy solicitado en productoras de cine, agencias de publicidad, agencias de comunicación y cadenas de televisión.</p>
+        <p><strong>Algunas posibles carreras incluyen:</strong> Diseñador de animación, Director, Productor creativo, Director de fotografía, Editor, Diseñador de televisión.</p>
+        <p>Además, la licenciatura en Artes, reconocida internacionalmente, te da acceso a numerosos programas de posgrado y máster, tanto en Alemania como en el extranjero.</p>
+      </div>
+
+      <details class="admissions-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admissions-body">
+          <h4>Requisitos académicos</h4>
+          <ul>
+            <li>Título de Bachillerato</li>
+            <li>Portafolio con entre 3 y 5 trabajos del ámbito cinematográfico (por ejemplo, guion, bocetos escénicos, storyboard o enlaces a trabajos terminados en Vimeo o YouTube)</li>
+            <li>Currículum vitae</li>
+          </ul>
+          <h4>Nivel de inglés</h4>
+          <ul>
+            <li>IELTS Academic: 6.5</li>
+            <li>TOEFL iBT: 87 puntos</li>
+            <li>TOEIC Listening/Reading 785, Speaking 160, Writing 150</li>
+            <li>Duolingo Certificate: 110 puntos</li>
+            <li>Cambridge CAE o CPE (grade A, B o C)</li>
+            <li>Pearson English Test Academic (PTE-A): 59 puntos</li>
+            <li>Linguaskill: 176–184 (CES) – las cuatro habilidades requeridas</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Proceso de admisión con revisión de portafolio.</p>
+          <div class="deadline-box">
+            <strong>Fecha de matrícula</strong>
+            Rolling (inscripción continua — aplica cuanto antes)
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CARD: MACROMEDIA -->
+  <div class="uni-card" id="card-macromedia">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.macromedia.de/en/study-programs/film/" target="_blank">
+          <span class="mouse-icon">🖱️</span>
+          BA (Hons) in Filmmaking
+        </a>
+        <div class="card-school">Macromedia University of Applied Sciences · Berlín</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences</span>
+          <span class="badge badge-rank">Clases reducidas</span>
+          <span class="badge badge-rank">Título reconocido por el Estado</span>
+        </div>
+      </div>
+      <div>
+        <span class="badge badge-diff-orange">Dificultad: Alta (carta motivación)</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-label">Ciudad</div>
+          <div class="meta-value">Berlín</div>
+          <button class="map-mini-btn" onclick="scrollToMap('de','map-de')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Duración</div>
+          <div class="meta-value">3 años / 180 ECTS</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Coste</div>
+          <div class="meta-value"><strong>11.000 €/año</strong> + 700 € depósito</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Fecha límite</div>
+          <div class="meta-value">1 de octubre</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Aeropuerto</div>
+          <div class="meta-value">Berlín</div>
+        </div>
+      </div>
+
+      <div class="card-description">
+        <p>De la ficción a la realidad, del documental al drama: durante tu programa de estudios, te presentamos las tareas y habilidades clave necesarias en la industria del cine y la televisión. Nos enfocamos en brindarte <strong>experiencia práctica</strong>, con proyectos de estudio, profesores y docentes experimentados, y colaboraciones con socios de primer nivel.</p>
+        <p>El programa de estudios de Cinematografía te familiariza con el amplio espectro de tareas y habilidades necesarias en la industria del cine y la televisión. Aprenderás a escribir guiones y plasmarlos en pantalla, a desarrollar la narrativa, el trabajo de cámara, la edición, así como el sonido, la iluminación y la tecnología de video. Incluye temas artísticos y técnicos, y desarrolla tus habilidades interpersonales, como la comunicación, la organización y el trabajo en equipo.</p>
+        <p>Además de numerosos proyectos prácticos, el programa de Cinematografía incluye un <strong>semestre de prácticas</strong>. En él podrás aplicar directamente lo aprendido en la práctica.</p>
+        <p>La Universidad de Ciencias Aplicadas Macromedia te apoya en la búsqueda de prácticas donde adquirirás valiosa experiencia laboral y conocimientos para tu tesis de grado.</p>
+        <p>Además del semestre práctico, y para prepararte a la perfección para él, en Macromedia University se da especial importancia al contenido práctico de los cursos. Nuestros instructores, con experiencia directa en el sector, te brindarán una visión profunda de las prácticas habituales y las estrategias empresariales más innovadoras.</p>
+        <p>Desde el primer día, aplicarás tus conocimientos especializados en proyectos prácticos y estimulantes, beneficiándote de la experiencia de nuestros expertos y de la colaboración con tus compañeros.</p>
+        <p><strong>Características destacadas:</strong> Título reconocido por el Estado · Clases reducidas · Experiencia real · Amplia red de socios (de colaboración) · Instructores con experiencia en la industria · Profesores prácticos.</p>
+      </div>
+
+      <details class="admissions-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admissions-body">
+          <h4>Requisitos académicos</h4>
+          <ul>
+            <li>Título de Bachillerato</li>
+            <li>Carta de motivación: cuenta exactamente por qué quieres estudiar en la Universidad Macromedia</li>
+            <li>Currículum vitae</li>
+          </ul>
+          <h4>Nivel de inglés</h4>
+          <ul>
+            <li>IELTS Academic: 6.5</li>
+            <li>TOEFL iBT: 87 puntos</li>
+            <li>TOEIC Listening/Reading 785, Speaking 160, Writing 150</li>
+            <li>Duolingo Certificate: 110 puntos</li>
+            <li>Cambridge CAE o CPE (grade A, B o C)</li>
+            <li>Pearson English Test Academic (PTE-A): 59 puntos</li>
+            <li>Linguaskill: 176–184 (CES) – las cuatro habilidades requeridas</li>
+          </ul>
+          <div class="deadline-box">
+            <strong>Fecha límite de matrícula</strong>
+            1 de octubre
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Map DE -->
+  <div class="map-section" id="map-de">
+    <h3>📍 Universidades en Alemania</h3>
+    <div id="leaflet-de" class="leaflet-map"></div>
+  </div>
+</div>
+</main>
+
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-logo">
+    <!-- LOGO ORIGINAL COLORS, reduced opacity via parent -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+      <defs>
+        <style>
+          .f-cls-1 { fill: #36aadc; opacity: .8; }
+          .f-cls-2 { fill: #30ac71; opacity: .8; }
+          .f-cls-3 { fill: #32abbb; opacity: .8; }
+          .f-cls-4 { fill: #31ac9c; opacity: .8; }
+          .f-cls-5 { fill: #737373; }
+        </style>
+      </defs>
+      <g>
+        <path class="f-cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+        <path class="f-cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+        <path class="f-cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+        <path class="f-cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+        <path class="f-cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="f-cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="f-cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </svg>
+  </div>
+  <div>Informe personalizado preparado por Educoway · Valeria Calvo González · Audiovisual &amp; Cine</div>
+  <div style="margin-top:6px;">Toda la información refleja los datos del documento original. Verifica siempre los detalles con cada universidad antes de presentar tu solicitud.</div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════════ -->
+<script>
+// ── Tab management ──────────────────────────────────
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+
+  // If btn is not passed, find it
+  if (!btn) {
+    btn = document.querySelector('[onclick*="showTab(\'' + id + '\'"]');
+  }
+  if (btn) btn.classList.add('active');
+
+  // Lazy init map
+  setTimeout(() => initMap(id), 150);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goTo(tab, anchor) {
+  showTab(tab);
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 300);
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function scrollToMap(tab, anchor) {
+  const activeTab = document.querySelector('.tab-content.active');
+  if (activeTab && activeTab.id === 'tab-' + tab) {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    showTab(tab);
+    setTimeout(() => {
+      const el = document.getElementById(anchor);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 400);
+  }
+}
+
+// ── Map data ─────────────────────────────────────────
+const mapData = {
+  nl: {
+    center: [51.9225, 4.4792],
+    zoom: 12,
+    unis: [
+      {
+        id: 'card-wdka',
+        name: 'BA Audiovisual Design',
+        school: 'Willem de Kooning Academy',
+        lat: 51.9175,
+        lng: 4.4826,
+        webUrl: 'https://www.wdka.nl/programmes/bachelors/audiovisual-design',
+        mapsUrl: 'https://maps.google.com/?q=Willem+de+Kooning+Academy+Rotterdam'
+      }
+    ]
+  },
+  uk: {
+    center: [51.508, -0.128],
+    zoom: 11,
+    unis: [
+      {
+        id: 'card-metfilm-content',
+        name: 'BA (Hons) Content Media Film Production',
+        school: 'Metfilm School London',
+        lat: 51.5238,
+        lng: -0.2756,
+        webUrl: 'https://metfilmschool.ac.uk/courses/ba-content-media-film-production/',
+        mapsUrl: 'https://maps.google.com/?q=Metfilm+School+London+Ealing'
+      },
+      {
+        id: 'card-metfilm-filmmaking',
+        name: 'BA (Hons) Filmmaking',
+        school: 'Metfilm School London',
+        lat: 51.5208,
+        lng: -0.2786,
+        webUrl: 'https://metfilmschool.ac.uk/courses/ba-filmmaking/',
+        mapsUrl: 'https://maps.google.com/?q=Metfilm+School+London+Ealing'
+      }
+    ]
+  },
+  ie: {
+    center: [53.338, -6.265],
+    zoom: 13,
+    unis: [
+      {
+        id: 'card-griffith',
+        name: 'BA (Hons) Film / TV and Screen Media Production',
+        school: 'Griffith College Dublin',
+        lat: 53.3360,
+        lng: -6.2761,
+        webUrl: 'https://www.griffith.ie/school-media/ba-hons-film-tv-screen-media-production',
+        mapsUrl: 'https://maps.google.com/?q=Griffith+College+Dublin'
+      },
+      {
+        id: 'card-tudublin',
+        name: 'BA (Hons) in Film and Broadcasting',
+        school: 'TU Dublin – Grangegorman',
+        lat: 53.3550,
+        lng: -6.2810,
+        webUrl: 'https://www.tudublin.ie/study/undergraduate/courses/film-and-broadcasting-tu856/',
+        mapsUrl: 'https://maps.google.com/?q=TU+Dublin+Grangegorman'
+      }
+    ]
+  },
+  de: {
+    center: [52.505, 13.385],
+    zoom: 12,
+    unis: [
+      {
+        id: 'card-srh',
+        name: 'BA (Hons) in Film and Motion Design',
+        school: 'SRH Berlin University',
+        lat: 52.5150,
+        lng: 13.3890,
+        webUrl: 'https://www.srh-berlin.de/en/study-programmes/bachelor/film-motion-design/',
+        mapsUrl: 'https://maps.google.com/?q=SRH+Berlin+University+of+Applied+Sciences'
+      },
+      {
+        id: 'card-macromedia',
+        name: 'BA (Hons) in Filmmaking',
+        school: 'Macromedia University Berlin',
+        lat: 52.5037,
+        lng: 13.3362,
+        webUrl: 'https://www.macromedia.de/en/study-programs/film/',
+        mapsUrl: 'https://maps.google.com/?q=Macromedia+University+Berlin'
+      }
+    ]
+  }
+};
+
+const mapsInitialized = {};
+
+function initMap(countryId) {
+  const data = mapData[countryId];
+  if (!data || mapsInitialized[countryId]) return;
+
+  const containerId = 'leaflet-' + countryId;
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  mapsInitialized[countryId] = true;
+
+  const map = L.map(containerId).setView(data.center, data.zoom);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  const customIcon = L.divIcon({
+    html: '<div style="font-size:22px;line-height:1;">🎓</div>',
+    className: '',
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+    popupAnchor: [0, -28]
+  });
+
+  data.unis.forEach(uni => {
+    const marker = L.marker([uni.lat, uni.lng], { icon: customIcon }).addTo(map);
+
+    const popupHtml = `
+      <div style="min-width:220px;font-family:'DM Sans',sans-serif;">
+        <div class="popup-degree">${uni.name}</div>
+        <div class="popup-school">${uni.school}</div>
+        <div class="popup-btns">
+          <a href="${uni.webUrl}" target="_blank" class="popup-btn popup-btn-primary">Ver grado</a>
+          <button onclick="scrollToCard('${uni.id}');this.closest('.leaflet-popup').querySelector('.leaflet-popup-close-button').click();" class="popup-btn popup-btn-secondary">Ver ficha</button>
+          <a href="${uni.mapsUrl}" target="_blank" class="popup-btn popup-btn-maps">Google Maps</a>
+        </div>
+      </div>`;
+
+    marker.bindPopup(popupHtml, { maxWidth: 280 });
+  });
+}
+
+// Init first map on load
+window.addEventListener('DOMContentLoaded', () => {
+  // no map init on intro tab
+});
+</script>
+</body>
+</html>
