@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Opciones – Elena Zhang | Educoway</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root {
+  --teal: #0a9baa;
+  --teal-dark: #077a87;
+  --teal-light: #e0f5f7;
+  --navy: #0d2b3e;
+  --bg: #f4f8fa;
+  --border: #c8e0e5;
+  --gold: #c9880a;
+  --gold-bg: #fef9e7;
+  --red: #dc2626;
+  --red-bg: #fef2f2;
+  --orange: #ea580c;
+  --orange-bg: #fff7ed;
+  --green: #16a34a;
+  --green-bg: #f0fdf4;
+  --text: #1a2e3a;
+  --muted: #6b8899;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+}
+
+/* ====== STICKY HEADER ====== */
+#site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--navy);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 32px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.header-logo svg { height: 36px; width: auto; }
+.header-logo svg .cls-5 { fill: #ffffff !important; }
+
+.header-text { flex: 1; }
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: #ffffff;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.header-subtitle {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: 2px;
+}
+
+/* ====== TAB NAV ====== */
+.tab-nav {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 24px;
+  background: rgba(0,0,0,0.15);
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: rgba(255,255,255,0.6);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: rgba(255,255,255,0.9); border-bottom-color: rgba(255,255,255,0.3); }
+.tab-btn.active { color: #ffffff; border-bottom-color: var(--teal); }
+
+/* ====== CONTENT ====== */
+.tab-content { display: none; padding: 32px; max-width: 1100px; margin: 0 auto; }
+.tab-content.active { display: block; }
+
+/* ====== INTRO TAB ====== */
+.intro-welcome {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 32px;
+}
+.intro-welcome h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: var(--navy);
+  margin-bottom: 16px;
+}
+.intro-welcome p { margin-bottom: 12px; color: var(--text); }
+
+.index-section {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 32px;
+}
+.index-section h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--navy);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--teal-light);
+}
+.index-country { margin-bottom: 24px; }
+.index-country-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--navy);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.index-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+}
+.index-entry {
+  cursor: pointer;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.index-entry:hover { border-color: var(--teal); background: var(--teal-light); }
+.index-entry-degree { font-size: 13.5px; font-weight: 500; color: var(--navy); display: block; }
+.index-entry-school {
+  font-family: 'Playfair Display', serif;
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.what-now {
+  background: linear-gradient(135deg, var(--teal-light), #f0fbfc);
+  border: 2px solid var(--teal);
+  border-radius: 12px;
+  padding: 28px 32px;
+}
+.what-now h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--teal-dark);
+  margin-bottom: 12px;
+}
+
+/* ====== RESEARCH TAB ====== */
+.research-content {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+}
+.research-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: var(--navy);
+  margin-bottom: 24px;
+}
+.research-content h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--teal-dark);
+  margin: 20px 0 8px;
+  padding: 8px 12px;
+  background: var(--teal-light);
+  border-left: 4px solid var(--teal);
+  border-radius: 0 6px 6px 0;
+}
+.research-content p { margin-bottom: 12px; }
+.research-links { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+.research-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--teal);
+  color: #ffffff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.research-link:hover { background: var(--teal-dark); }
+
+/* ====== COUNTRY TAB ====== */
+.country-hero {
+  background: linear-gradient(135deg, var(--navy), #1a4a6b);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  color: #fff;
+}
+.country-hero-flag { flex-shrink: 0; }
+.country-hero-info h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+.country-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.country-meta-item {
+  background: rgba(255,255,255,0.12);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.country-meta-item span { opacity: 0.7; font-weight: 400; }
+
+.country-intro {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 28px;
+}
+.country-intro p { margin-bottom: 10px; }
+.country-intro ul { margin: 10px 0 10px 20px; }
+.country-intro li { margin-bottom: 6px; }
+
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0 20px;
+}
+.section-divider-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--teal-dark);
+  text-transform: uppercase;
+  background: var(--teal-light);
+  border: 1px solid var(--teal);
+  padding: 5px 14px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.section-divider-line { flex: 1; height: 1px; background: var(--border); }
+
+/* ====== UNIVERSITY CARD ====== */
+.uni-card {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.uni-card:hover { border-color: var(--teal); box-shadow: 0 6px 24px rgba(10,155,170,0.12); }
+
+.card-header {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--teal-light);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.card-header-left { flex: 1; min-width: 0; }
+.card-degree-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+  line-height: 1.3;
+}
+.card-degree-link:hover { color: var(--teal); }
+.card-degree-link:hover .link-icon { transform: scale(1.3); }
+.link-icon { font-size: 0.85rem; transition: transform 0.2s; display: inline-block; }
+.card-school {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  color: var(--teal);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.card-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.badge-rank { background: var(--teal-light); color: var(--teal-dark); border: 1px solid var(--teal); }
+.badge-rank-gold { background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold); }
+.badge-diff-muy-alta { background: var(--red-bg); color: var(--red); border: 1px solid var(--red); }
+.badge-diff-alta { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange); }
+.badge-diff-media, .badge-diff-directa { background: var(--green-bg); color: var(--green); border: 1px solid var(--green); }
+
+.diff-badge { flex-shrink: 0; }
+
+.card-body { padding: 18px 22px; }
+
+.card-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.meta-cell {
+  background: var(--teal-light);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+.meta-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 700; }
+.meta-value { font-size: 0.88rem; font-weight: 600; color: var(--navy); margin-top: 2px; }
+
+.map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 5px;
+  background: var(--teal-light);
+  border: 1px solid var(--teal);
+  color: var(--teal-dark);
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.map-btn:hover { background: var(--teal); color: #fff; }
+
+.card-desc {
+  background: #f0fbfc;
+  border-left: 4px solid var(--teal);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.card-details {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.card-details summary {
+  padding: 11px 16px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--teal-dark);
+  background: var(--teal-light);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-details summary::-webkit-details-marker { display: none; }
+.card-details summary::before {
+  content: '▶';
+  font-size: 0.6rem;
+  transition: transform 0.2s;
+}
+.card-details[open] summary::before { transform: rotate(90deg); }
+.card-details-body { padding: 16px; font-size: 0.88rem; }
+.card-details-body ul { margin: 6px 0 10px 18px; }
+.card-details-body li { margin-bottom: 4px; }
+.card-details-body h4 { font-size: 0.82rem; font-weight: 700; color: var(--navy); margin: 12px 0 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+.deadline-box {
+  background: #fefce8;
+  border: 2px solid #eab308;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #713f12;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ====== MAP ====== */
+.map-container {
+  background: #ffffff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 32px;
+}
+.map-header {
+  padding: 14px 20px;
+  background: var(--teal-light);
+  border-bottom: 1px solid var(--border);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--teal-dark);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.leaflet-map { height: 400px; width: 100%; }
+
+/* ====== FLAGS CSS ====== */
+.flag { display: inline-flex; overflow: hidden; border-radius: 3px; border: 1px solid rgba(0,0,0,0.1); }
+.flag-nl { width: 30px; height: 20px; background: #AE1C28; position: relative; }
+.flag-nl::before { content:''; position:absolute; top:33.3%; left:0; right:0; height:33.4%; background:#fff; }
+.flag-nl::after { content:''; position:absolute; bottom:0; left:0; right:0; height:33.3%; background:#21468B; }
+.flag-dk { width: 30px; height: 20px; background: #C60C30; position: relative; }
+.flag-dk::before { content:''; position:absolute; top:0; left:40%; width:20%; height:100%; background:#fff; }
+.flag-dk::after { content:''; position:absolute; top:40%; left:0; right:0; height:20%; background:#fff; }
+.flag-se { width: 30px; height: 20px; background: #006AA7; position: relative; }
+.flag-se::before { content:''; position:absolute; top:0; left:30%; width:15%; height:100%; background:#FECC02; }
+.flag-se::after { content:''; position:absolute; top:37%; left:0; right:0; height:26%; background:#FECC02; }
+.flag-be { width: 30px; height: 20px; display: flex; }
+.flag-be::before,.flag-be::after { content:''; flex:1; }
+.flag-be { background: #FDDA25; }
+.flag-nl-large,.flag-dk-large,.flag-se-large,.flag-be-large { width: 60px; height: 40px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.2); }
+.flag-nl-large { background: #AE1C28; position: relative; }
+.flag-nl-large::before { content:''; position:absolute; top:33.3%; left:0; right:0; height:33.4%; background:#fff; }
+.flag-nl-large::after { content:''; position:absolute; bottom:0; left:0; right:0; height:33.3%; background:#21468B; }
+.flag-dk-large { background: #C60C30; position: relative; }
+.flag-dk-large::before { content:''; position:absolute; top:0; left:40%; width:20%; height:100%; background:#fff; }
+.flag-dk-large::after { content:''; position:absolute; top:40%; left:0; right:0; height:20%; background:#fff; }
+.flag-se-large { background: #006AA7; position: relative; }
+.flag-se-large::before { content:''; position:absolute; top:0; left:30%; width:15%; height:100%; background:#FECC02; }
+.flag-se-large::after { content:''; position:absolute; top:37%; left:0; right:0; height:26%; background:#FECC02; }
+.flag-be-large { display: flex; border-radius:5px; overflow:hidden; border:1px solid rgba(255,255,255,0.2); }
+.flag-be-black { flex:1; background:#000; }
+.flag-be-yellow { flex:1; background:#FDDA25; }
+.flag-be-red { flex:1; background:#EF3340; }
+
+/* ====== FOOTER ====== */
+footer {
+  margin-top: 60px;
+  background: var(--navy);
+  padding: 32px;
+  text-align: center;
+}
+.footer-logo { display: flex; justify-content: center; margin-bottom: 12px; opacity: 0.5; }
+.footer-logo svg { height: 28px; width: auto; }
+footer p { color: rgba(255,255,255,0.5); font-size: 0.8rem; }
+
+/* ====== LEAFLET POPUP ====== */
+.popup-title { font-family:'Playfair Display',serif; font-size:0.95rem; font-weight:600; color:var(--navy); margin-bottom:3px; }
+.popup-school { font-size:0.8rem; color:var(--teal); margin-bottom:10px; }
+.popup-btns { display:flex; gap:6px; flex-wrap:wrap; }
+.popup-btn {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s;
+}
+.popup-btn:hover { opacity: 0.85; }
+.pb-web { background: var(--teal); color: #fff; }
+.pb-card { background: var(--navy); color: #fff; }
+.pb-maps { background: #ea580c; color: #fff; }
+
+@media (max-width:700px) {
+  .tab-content { padding: 16px; }
+  .header-top { padding: 12px 16px; }
+  .country-hero { flex-direction: column; gap: 14px; }
+  .card-meta-grid { grid-template-columns: 1fr 1fr; }
+  .index-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== STICKY HEADER ===== -->
+<header id="site-header">
+  <div class="header-top">
+    <div class="header-logo">
+      <!-- LOGO SVG INLINE – versión blanca (cls-5 → fill:#fff) -->
+      <svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18" style="height:40px;width:auto;">
+        <defs><style>.lw{fill:#ffffff;opacity:1}.lc1{fill:#36aadc;opacity:.8}.lc2{fill:#30ac71;opacity:.8}.lc3{fill:#32abbb;opacity:.8}.lc4{fill:#31ac9c;opacity:.8}</style></defs>
+        <g>
+          <path class="lc2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+          <path class="lc4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+          <path class="lc1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+          <path class="lc3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+          <path class="lw" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+          <path class="lw" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+          <path class="lw" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+          <path class="lw" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+          <path class="lw" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+          <path class="lw" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+          <polygon class="lw" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+          <!-- small text paths omitted from header for cleanliness – tagline text below -->
+        </g>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-title">Informe de Opciones de Grado — Business Economics y afines</div>
+      <div class="header-subtitle">Preparado para Elena Zhang &nbsp;·&nbsp; Educoway</div>
+    </div>
+  </div>
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('intro',this)">📋 Introducción</button>
+    <button class="tab-btn" onclick="showTab('research',this)">🔬 Research vs Applied Sciences</button>
+    <button class="tab-btn" onclick="showTab('nl',this)">
+      <span class="flag flag-nl"></span> Holanda
+    </button>
+    <button class="tab-btn" onclick="showTab('dk',this)">
+      <span class="flag flag-dk"></span> Dinamarca
+    </button>
+    <button class="tab-btn" onclick="showTab('se',this)">
+      <span class="flag flag-se"></span> Suecia
+    </button>
+    <button class="tab-btn" onclick="showTab('be',this)">
+      <span class="flag"><span class="flag-be-black" style="display:inline-block;width:10px;height:20px;"></span><span class="flag-be-yellow" style="display:inline-block;width:10px;height:20px;"></span><span class="flag-be-red" style="display:inline-block;width:10px;height:20px;"></span></span> Bélgica
+    </button>
+  </nav>
+</header>
+
+<!-- ============================== INTRO TAB ============================== -->
+<div id="tab-intro" class="tab-content active">
+  <div class="intro-welcome">
+    <h2>Hola Elena,</h2>
+    <p>Te dejo una lista de opciones de negocios.</p>
+    <p>Importante, la información está basada en estudiantes con <strong>nacionalidad EU</strong>, por lo que puede haber ligeros cambios en plazos, y habrá una diferencia importante en el coste de cada una de ellas.</p>
+    <p>Pero te servirá para ver opciones y pensar un posible cambio.</p>
+    <p>Empiezo a continuación el listado, diferenciando los diferentes países entre los que podrías escoger.</p>
+  </div>
+
+  <div class="index-section">
+    <h3>Índice de opciones por país</h3>
+
+    <!-- HOLANDA -->
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-nl"></span> Holanda
+        <small style="font-weight:400;font-size:0.75rem;color:var(--muted);">Matrícula: 2.601 €/año</small>
+      </div>
+      <div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;">🎓 Research Universities</div>
+      <div class="index-grid">
+        <a class="index-entry" onclick="goTo('nl','card-utrecht')"><span class="index-entry-degree">Economics and Business Economics</span><span class="index-entry-school">Utrecht University</span></a>
+        <a class="index-entry" onclick="goTo('nl','card-groningen')"><span class="index-entry-degree">International Business</span><span class="index-entry-school">Groningen University</span></a>
+        <a class="index-entry" onclick="goTo('nl','card-eur-ebe')"><span class="index-entry-degree">International Bachelor Economics and Business Economics</span><span class="index-entry-school">Erasmus University Rotterdam (EUR)</span></a>
+        <a class="index-entry" onclick="goTo('nl','card-eur-iba')"><span class="index-entry-degree">International Business Administration</span><span class="index-entry-school">Erasmus University Rotterdam (EUR)</span></a>
+        <a class="index-entry" onclick="goTo('nl','card-uva')"><span class="index-entry-degree">Business Administration</span><span class="index-entry-school">Amsterdam University (UvA)</span></a>
+        <a class="index-entry" onclick="goTo('nl','card-vu')"><span class="index-entry-degree">International Business Administration</span><span class="index-entry-school">Vrije Universiteit Amsterdam</span></a>
+        <a class="index-entry" onclick="goTo('nl','card-maastricht')"><span class="index-entry-degree">International Business</span><span class="index-entry-school">Maastricht University</span></a>
+        <a class="index-entry" onclick="goTo('nl','card-tilburg')"><span class="index-entry-degree">International Business Administration</span><span class="index-entry-school">Tilburg University</span></a>
+      </div>
+      <div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.08em;">⚗️ Applied Sciences Universities</div>
+      <div class="index-grid">
+        <a class="index-entry" onclick="goTo('nl','card-avans')"><span class="index-entry-degree">International Business</span><span class="index-entry-school">AVANS University of Applied Sciences</span></a>
+        <a class="index-entry" onclick="goTo('nl','card-rotuas')"><span class="index-entry-degree">International Business</span><span class="index-entry-school">Rotterdam University of Applied Sciences</span></a>
+        <a class="index-entry" onclick="goTo('nl','card-nhl')"><span class="index-entry-degree">Business Administration</span><span class="index-entry-school">NHL Stenden University of Applied Sciences</span></a>
+      </div>
+    </div>
+
+    <!-- DINAMARCA -->
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-dk"></span> Dinamarca
+        <small style="font-weight:400;font-size:0.75rem;color:var(--muted);">Matrícula: 0 €/año</small>
+      </div>
+      <div class="index-grid">
+        <a class="index-entry" onclick="goTo('dk','card-aarhus')"><span class="index-entry-degree">BA Economics and Business Administration</span><span class="index-entry-school">Aarhus University</span></a>
+        <a class="index-entry" onclick="goTo('dk','card-sdu')"><span class="index-entry-degree">Economics and Business Administration: Global Business Relationships</span><span class="index-entry-school">SDU – University of Southern Denmark</span></a>
+        <a class="index-entry" onclick="goTo('dk','card-cbs')"><span class="index-entry-degree">BSc in International Business</span><span class="index-entry-school">CBS – Copenhagen Business School</span></a>
+      </div>
+    </div>
+
+    <!-- SUECIA -->
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-se"></span> Suecia
+        <small style="font-weight:400;font-size:0.75rem;color:var(--muted);">Matrícula: 0 €/año</small>
+      </div>
+      <div class="index-grid">
+        <a class="index-entry" onclick="goTo('se','card-gothenburg')"><span class="index-entry-degree">Business and Economics</span><span class="index-entry-school">Gothenburg University</span></a>
+        <a class="index-entry" onclick="goTo('se','card-lund')"><span class="index-entry-degree">International Business</span><span class="index-entry-school">Lund University</span></a>
+        <a class="index-entry" onclick="goTo('se','card-sse')"><span class="index-entry-degree">Business and Economics</span><span class="index-entry-school">Stockholm School of Economics</span></a>
+        <a class="index-entry" onclick="goTo('se','card-umea')"><span class="index-entry-degree">International Business and Economics</span><span class="index-entry-school">Umeå University</span></a>
+        <a class="index-entry" onclick="goTo('se','card-linnaeus')"><span class="index-entry-degree">International Business</span><span class="index-entry-school">Linnaeus University</span></a>
+        <a class="index-entry" onclick="goTo('se','card-jonkoping')"><span class="index-entry-degree">International Management</span><span class="index-entry-school">Jönköping University</span></a>
+      </div>
+    </div>
+
+    <!-- BÉLGICA -->
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag"><span class="flag-be-black" style="display:inline-block;width:10px;height:20px;"></span><span class="flag-be-yellow" style="display:inline-block;width:10px;height:20px;"></span><span class="flag-be-red" style="display:inline-block;width:10px;height:20px;"></span></span> Bélgica
+        <small style="font-weight:400;font-size:0.75rem;color:var(--muted);">Matrícula: 1.116 €/año</small>
+      </div>
+      <div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;">🎓 Research Universities</div>
+      <div class="index-grid">
+        <a class="index-entry" onclick="goTo('be','card-kuleuven')"><span class="index-entry-degree">Bachelor in Business Administration</span><span class="index-entry-school">KU Leuven</span></a>
+      </div>
+      <div style="font-size:0.78rem;font-weight:700;color:var(--teal-dark);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.08em;">⚗️ Applied Sciences Universities</div>
+      <div class="index-grid">
+        <a class="index-entry" onclick="goTo('be','card-thomasmore')"><span class="index-entry-degree">International Business and Trade</span><span class="index-entry-school">Thomas More University</span></a>
+        <a class="index-entry" onclick="goTo('be','card-vives')"><span class="index-entry-degree">Business Management</span><span class="index-entry-school">Vives University of Applied Sciences</span></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="what-now">
+    <h3>¿Qué tienes que hacer ahora?</h3>
+    <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+    <p style="margin-top:12px;"><strong>¡Un saludo!</strong></p>
+  </div>
+</div>
+
+<!-- ============================== RESEARCH TAB ============================== -->
+<div id="tab-research" class="tab-content">
+  <div class="research-content">
+    <h2>Research vs. Applied Sciences: ¿Cuál es la diferencia?</h2>
+    <p>Dentro de Holanda (y la mayoría de países europeos) tenemos que diferenciar entre 2 tipos de universidades: <strong>"Research"</strong> y <strong>"Applied Sciences"</strong>. Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+
+    <h3>Metodología teórica vs práctica</h3>
+    <p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada <strong>PBL (Project/Problem Based Learning)</strong>. Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre.</p>
+    <p>Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+
+    <h3>Duración</h3>
+    <p>Las universidades de <em>Applied Sciences</em> duran un año más (<strong>4 años, 240 ECTS</strong>) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+    <p>Las de <em>Research</em> duran solo <strong>3 años (180 ECTS)</strong> porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+
+    <h3>Ranking / Prestigio</h3>
+    <p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.</p>
+    <p>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+
+    <h3>Acceso a Másteres</h3>
+    <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. En cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research</em>, te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p>
+
+    <p style="margin-top:20px;">Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de <em>Research</em> y otra de <em>Applied Sciences</em>):</p>
+    <div class="research-links">
+      <a class="research-link" href="https://www.hanze.nl/en/education/research-vs-applied-science-university" target="_blank">🔗 Applied Science vs. Research University</a>
+      <a class="research-link" href="https://www.studyinholland.nl/plan-your-studies/types-of-higher-education" target="_blank">🔗 Types of universities in the Netherlands</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== HOLANDA TAB ============================== -->
+<div id="tab-nl" class="tab-content">
+  <div class="country-hero">
+    <div class="country-hero-flag"><span class="flag-nl-large" style="display:inline-block;"></span></div>
+    <div class="country-hero-info">
+      <h2>Holanda</h2>
+      <div class="country-meta">
+        <div class="country-meta-item">💶 Matrícula <span>2.601 €/año</span></div>
+        <div class="country-meta-item">🏠 Alojamiento <span>600–900 €/mes</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="country-intro">
+    <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <strong>2.601 €/año</strong>.</p>
+    <p>Dentro de Holanda tenemos que diferenciar entre 2 tipos de universidades: <strong>"Research"</strong> y <strong>"Applied Sciences"</strong>. Los dos tipos comparten muchos puntos atractivos — consulta la pestaña <a href="#" onclick="showTab('research', document.querySelectorAll('.tab-btn')[1]);" style="color:var(--teal);">Research vs Applied Sciences</a> para entender bien las diferencias.</p>
+  </div>
+
+  <!-- RESEARCH -->
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">🎓 Research Universities</div><div class="section-divider-line"></div></div>
+
+  <!-- Utrecht -->
+  <div class="uni-card" id="card-utrecht">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.uu.nl/en/bachelors/economics-and-business-economics" target="_blank">Economics and Business Economics <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Utrecht University &nbsp;·&nbsp; Utrecht</div>
+        <div class="card-badges">
+          <span class="badge badge-rank-gold">🏆 #1 de NL (Shanghai)</span>
+          <span class="badge badge-rank">#55 del mundo (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-media">Admisión directa</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Utrecht<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de mayo</div></div>
+      </div>
+      <div class="card-desc">Si eliges estudiar Economía y Economía Empresarial en Utrecht, estás eligiendo tener una visión amplia de los problemas económicos: la perspectiva del mundo real. ¿Cuáles son las necesidades y objetivos de las personas y organizaciones en nuestra compleja sociedad? ¿Qué decisiones toman para satisfacer esas necesidades y lograr esos objetivos? Para encontrar respuestas a estas preguntas, analizamos cuestiones económicas utilizando conocimientos extraídos de otros campos como la geografía, el derecho, las ciencias sociales y la ciencia de datos aplicada. Tus conocimientos se verán enriquecidos por el entorno de aprendizaje internacional que ofrece la Facultad de Economía de la Universidad de Utrecht. Nuestros estudiantes provienen de más de 50 países diferentes. Y este programa cruza múltiples fronteras: lingüísticas, geográficas y disciplinarias.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB superado con Maths A&amp;A SL o Maths A&amp;I HL.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>TOEFL iBT: nota mínima 83</li>
+            <li>Cambridge Certificate CAE C1: mínimo 169 total, 162 writing</li>
+            <li>IELTS 6.0</li>
+            <li>IB Diploma con English como asignatura (cualquier variante)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>No hay proceso de selección. Revisan la documentación y responden aproximadamente 3 semanas después de haber enviado tu documentación. Te invitarán también a realizar el proceso de <em>Matching</em> (unas actividades de orientación online), pero no afecta a la decisión de admisión, es un proceso que busca ayudarte a confirmar que este es un buen programa para ti.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 1 de mayo</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Groningen -->
+  <div class="uni-card" id="card-groningen">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.rug.nl/bachelors/international-business/" target="_blank">International Business <span class="link-icon">🖱️</span></a>
+        <div class="card-school">University of Groningen &nbsp;·&nbsp; Groningen</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#2 de NL (Shanghai)</span>
+          <span class="badge badge-rank">#69 del mundo (Shanghai)</span>
+          <span class="badge badge-rank-gold">🏆 #15 del mundo en Business Admin (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Groningen (200.000 hab.)<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año + 100€ application fee</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de enero (Numerus Fixus)</div></div>
+      </div>
+      <div class="card-desc">En este grado estudiarás los mercados internacionales, la gestión intercultural y las estrategias empresariales innovadoras, todas ellas esenciales en el mundo interconectado de hoy. El programa trata de vincular las teorías de gestión con situaciones de la vida real a las que se enfrentan las organizaciones internacionales de todo el mundo. Se incorporan múltiples perspectivas de la sociología, la ética y la gestión sostenible, el marketing, la innovación tecnológica, la psicología, la economía, la política y las finanzas en las asignaturas troncales.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB superado con Maths A&amp;A SL o Maths A&amp;I HL.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5 (ninguna parte por debajo del 6.5)</li>
+            <li>TOEFL iBT 90 (Writing mínimo 24, otras partes mínimo 21)</li>
+            <li>Cambridge CAE resultado mínimo 180</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección (Numerus Fixus — plazas limitadas). La prueba consta de cuestionarios online y una Motivation Letter específica. Estas dos cosas, junto con tus notas de años anteriores, sirven a la universidad para asignarte una posición en la lista de candidatos. Los primeros <strong>550 estudiantes</strong> de la lista recibirán una plaza. <a href="https://www.rug.nl/bachelors/international-business/admission-and-application/" target="_blank" style="color:var(--teal);">Aquí todos los detalles.</a></p>
+          <p>Para presentar la matrícula se requiere el pago de <strong>100 € de application fee</strong>.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de enero</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- EUR EBE -->
+  <div class="uni-card" id="card-eur-ebe">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.eur.nl/en/ese/bachelor/international-bachelor-economics-and-business-economics-ibebe" target="_blank">International Bachelor Economics and Business Economics <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Erasmus University Rotterdam (EUR) &nbsp;·&nbsp; Rotterdam</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#3-6 de NL (Shanghai)</span>
+          <span class="badge badge-rank">#101-150 del mundo (Shanghai)</span>
+          <span class="badge badge-rank-gold">🏆 #4 del mundo en Business Admin (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Rotterdam (623.000 hab.)<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de mayo</div></div>
+      </div>
+      <div class="card-desc">¿Sientes curiosidad por la economía y los negocios? ¿Te interesan temas como la crisis financiera y el crecimiento de la economía china? El Bachelor Internacional en Economía y Empresa es un apasionante programa de tres años que se sumerge en temas globales, desde la expansión de los mercados hasta los efectos de las crisis financieras. En este programa desarrollarás tu capacidad analítica y de resolución de problemas, y mejorarás tus habilidades de redacción, lectura, expresión oral y presentación.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB diploma con un mínimo resultado general de <strong>30</strong>, y además un mínimo en las siguientes asignaturas:</p>
+          <ul>
+            <li>English A HL (4), English A SL (5), English B HL (5)</li>
+            <li>Mathematics: A&amp;A HL mínimo 4, A&amp;I SL mínimo 5, o A&amp;I HL mínimo 5</li>
+          </ul>
+          <h4>Requisitos de inglés <em>(importante antes del 1 de abril)</em></h4>
+          <ul>
+            <li>Cambridge FCE mínimo 170 (ningún apartado por debajo de 170)</li>
+            <li>IELTS 6.5 overall (ningún apartado por debajo del 6.0)</li>
+            <li>TOEFL 80 (ningún apartado por debajo de 21)</li>
+            <li>IB: English B HL 5 / A SL 5 / A HL 4</li>
+          </ul>
+          <h4>Proceso de selección — 4 criterios</h4>
+          <ul>
+            <li>Tus notas de High School (de 1º)</li>
+            <li>Tu motivación (3 preguntas del proceso de matriculación)</li>
+            <li>Tu CV, especialmente actividades extraescolares o experiencias internacionales</li>
+            <li>Tu "background" (país/sistema educativo — buscan reparto de nacionalidades)</li>
+          </ul>
+          <p>Se reparten <strong>440 plazas</strong> anuales.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 1 de mayo &nbsp;|&nbsp; Inglés: 1 de abril</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- EUR IBA -->
+  <div class="uni-card" id="card-eur-iba">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.eur.nl/en/esb/bachelor/international-business-administration" target="_blank">International Business Administration <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Erasmus University Rotterdam (EUR) &nbsp;·&nbsp; Rotterdam</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#3-6 de NL (Shanghai)</span>
+          <span class="badge badge-rank">#101-150 del mundo (Shanghai)</span>
+          <span class="badge badge-rank-gold">🏆 #4 del mundo en Business Admin (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Rotterdam (623.000 hab.)<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de enero (Numerus Fixus)</div></div>
+      </div>
+      <div class="card-desc">En el grado en Administración de Empresas Internacionales (IBA), aprenderás todos los aspectos de los negocios internacionales, incluidas las ventas, la gestión de operaciones, el marketing, las finanzas, la gestión de recursos humanos, las TIC y la gestión estratégica. Es un grado además con un fuerte enfoque internacional y prueba de ello es que coincidirás con estudiantes de 60 nacionalidades en el aula intercultural del Year 1 de la IBA.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB diploma con un mínimo resultado general de <strong>30</strong>, y además:</p>
+          <ul>
+            <li>English A HL (4), English A SL (5), English B HL (5)</li>
+            <li>Mathematics: A&amp;A HL mínimo 4, A&amp;I SL mínimo 5, o A&amp;I HL mínimo 5</li>
+          </ul>
+          <h4>Requisitos de inglés <em>(antes del 1 de abril)</em></h4>
+          <ul>
+            <li>Cambridge FCE mínimo 170 (ningún apartado por debajo de 170)</li>
+            <li>IELTS 6.5 overall (ningún apartado por debajo del 6.0)</li>
+            <li>TOEFL 80 (ningún apartado por debajo de 21)</li>
+          </ul>
+          <h4>Proceso de selección (Numerus Fixus)</h4>
+          <p>La universidad usará tus notas del curso anterior (75%) y la información de tu CV y Motivation Letter (25%) para asignarte una posición en la lista de candidatos. Los primeros <strong>750 estudiantes</strong> recibirán plaza. <a href="https://www.eur.nl/en/esb/bachelor/international-business-administration/admission-and-application" target="_blank" style="color:var(--teal);">Aquí todos los detalles.</a></p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de enero &nbsp;|&nbsp; Inglés: 1 de abril</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- UvA -->
+  <div class="uni-card" id="card-uva">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.uva.nl/en/programmes/bachelors/business-administration/business-administration.html" target="_blank">Business Administration <span class="link-icon">🖱️</span></a>
+        <div class="card-school">University of Amsterdam (UvA) &nbsp;·&nbsp; Amsterdam</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#3-6 de NL (Shanghai)</span>
+          <span class="badge badge-rank">#101-150 del mundo (Shanghai)</span>
+          <span class="badge badge-rank-gold">🏆 #76-100 del mundo en Business Admin (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Amsterdam (821.752 hab.)<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de enero (Numerus Fixus)</div></div>
+      </div>
+      <div class="card-desc">La administración de empresas es una disciplina amplia. Estudiarás cursos de finanzas, marketing, contabilidad, estrategia, negocios internacionales, ética empresarial y gestión de la innovación: todos aspectos esenciales para administrar una empresa de manera eficiente.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB superado con Maths A&amp;A (SL o HL) o Maths A&amp;I HL, con resultado 4 o superior.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>Cambridge CAE (ningún apartado por debajo de 180)</li>
+            <li>IELTS 6.5 overall (ningún apartado por debajo del 6.0)</li>
+            <li>TOEFL 92 (ningún apartado por debajo de 22)</li>
+            <li>IB con English como asignatura final (cualquiera de ellas)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>La prueba de selección medirá, mediante un examen online, tu capacidad académica en las asignaturas de Matemáticas, Economía y Estrategia y Organización. No se requiere ningún conocimiento previo. Se darán materiales de preparación online y se estima que necesitas unas <strong>20-25 horas de estudio</strong> para superar la prueba con buenos resultados. Este examen será el 22 de febrero o el 8 de marzo (a priori se puede escoger la fecha).</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de enero</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- VU -->
+  <div class="uni-card" id="card-vu">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://vu.nl/en/education/bachelor/international-business-administration" target="_blank">International Business Administration <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Vrije Universiteit Amsterdam &nbsp;·&nbsp; Amsterdam</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#7-9 de NL (Shanghai)</span>
+          <span class="badge badge-rank">#151-200 del mundo (Shanghai)</span>
+          <span class="badge badge-rank-gold">🏆 #51-75 del mundo en Business Admin (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-media">Admisión directa</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Amsterdam (821.000 hab.)<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año + 100 € application fee</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de mayo</div></div>
+      </div>
+      <div class="card-desc">La tecnología ha hecho nuestro mundo más pequeño que nunca. Empresas de todo el mundo se conectan con un simple clic. Las diferencias culturales y los valores desempeñan un papel crucial en el éxito de una empresa. Con el Grado en Administración de Empresas Internacionales (IBA) en la VU de Ámsterdam, no sólo explorarás los principios y normas de la buena empresa, sino también los matices culturales y comportamientos que pueden tener un gran impacto. El grado también te ofrecerá la oportunidad de trabajar con algunas de las empresas internacionales más respetadas. Se te pedirá que resuelvas problemas actuales del mundo real en entornos empresariales internacionales y que aprendas por qué operar en un entorno europeo es tan diferente de hacerlo en uno asiático o sudamericano. Desde la gestión de la cadena de suministro global hasta el marketing intercultural, desde la economía global hasta la estrategia internacional, un Grado en IBA de la VU de Ámsterdam cubre todas las bases.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB superado con Maths A&amp;A (SL o HL) o Maths A&amp;I HL.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>Cambridge CAE (ningún apartado por debajo de 180)</li>
+            <li>IELTS 6.5 overall (ningún apartado por debajo del 6.0)</li>
+            <li>TOEFL 92 (ningún apartado por debajo de 22)</li>
+            <li>IB Diploma cursado en inglés</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>No hay proceso de selección (acceso garantizado si cumples requisitos). La universidad pide un pago de <strong>100 € de application fee</strong>.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 1 de mayo</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Maastricht -->
+  <div class="uni-card" id="card-maastricht">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.maastrichtuniversity.nl/education/bachelor/international-business" target="_blank">International Business <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Maastricht University &nbsp;·&nbsp; Maastricht</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#10 de NL (Shanghai)</span>
+          <span class="badge badge-rank">#201-300 del mundo (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Maastricht (122.000 hab.)<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de enero</div></div>
+      </div>
+      <div class="card-desc">En el programa de Negocios Internacionales aprenderás sobre la estrategia, los recursos y la gestión necesarios para dirigir una empresa. Y también desarrollarás las habilidades profesionales necesarias para poner en práctica las ideas empresariales, como el trabajo en equipo, la resolución de conflictos, el liderazgo y las habilidades de presentación. Además, adquirirás experiencia práctica e internacional pasando un semestre estudiando en el extranjero, entrando en contacto con empresas reales en "jornadas empresariales", realizando proyectos de investigación o haciendo prácticas. El programa te preparará para una carrera en diversas áreas de los negocios internacionales, como marketing, gestión, recursos humanos o incluso espíritu empresarial.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB superado con Maths A&amp;A (SL o HL) o Maths A&amp;I HL.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>Cambridge CAE (ningún apartado por debajo de 180)</li>
+            <li>IELTS 6.5 overall (ningún apartado por debajo del 6.0)</li>
+            <li>TOEFL 92 (ningún apartado por debajo de 22)</li>
+            <li>IB con English como asignatura (cualquiera de ellas)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección. Hay que competir con otros estudiantes para conseguir ser admitido. <a href="https://www.maastrichtuniversity.nl/education/bachelor/international-business/admission" target="_blank" style="color:var(--teal);">Aquí los detalles del proceso de selección.</a></p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de enero</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Tilburg -->
+  <div class="uni-card" id="card-tilburg">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.tilburguniversity.edu/education/bachelors-programs/international-business-administration" target="_blank">International Business Administration <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Tilburg University &nbsp;·&nbsp; Tilburg</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#13 de NL (Shanghai)</span>
+          <span class="badge badge-rank">#701-800 del mundo (Shanghai)</span>
+          <span class="badge badge-rank-gold">🏆 #36 del mundo en Business Admin (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-media">Admisión directa</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Tilburg (201.000 hab.)<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de mayo</div></div>
+      </div>
+      <div class="card-desc">Junto con estudiantes de todo el mundo, aprenderás a convertirte en un profesional de los negocios internacionales que sabe lo que hace falta para prosperar en el mercado global. El núcleo del programa Administración de Negocios Internacionales se centra en todos los aspectos funcionales de los negocios e integra cursos de orientación social. A través de conferencias y trabajo en equipo, adquirirás todas las habilidades profesionales y prácticas necesarias para prepararte para una carrera directiva en un entorno internacional. Administración de Empresas Internacionales refleja la creciente internacionalización de los negocios. El programa se centra en todos los aspectos de la gestión de una gran organización global, así como en su relación con el mundo exterior.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB Diploma.</p>
+          <h4>Requisitos de inglés <em>(obligatorio antes del 1 de mayo)</em></h4>
+          <ul>
+            <li>IELTS 6.0 (ningún apartado por debajo de 5.5)</li>
+            <li>TOEFL iBT 80</li>
+            <li>Cambridge CAE</li>
+            <li>IB con English como asignatura (cualquiera de ellas)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>No hay proceso de selección. Si cumples los requisitos tienes el acceso garantizado.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 1 de mayo</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- APPLIED SCIENCES -->
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">⚗️ Applied Sciences Universities</div><div class="section-divider-line"></div></div>
+
+  <!-- AVANS -->
+  <div class="uni-card" id="card-avans">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.avans.nl/opleidingen/avans-hogeschool/international-business/voltijd" target="_blank">International Business <span class="link-icon">🖱️</span></a>
+        <div class="card-school">AVANS University of Applied Sciences &nbsp;·&nbsp; Breda</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-media">Admisión directa</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Breda (180.000 hab.)<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años / 240 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de agosto</div></div>
+      </div>
+      <div class="card-desc">
+        <strong>Estructura del programa:</strong><br>
+        <strong>1er año</strong> — Estudios en Breda ("Foundation Phase")<br>
+        <strong>2º año</strong> — 1er semestre: estudios en Breda; 2º semestre: prácticas profesionales<br>
+        <strong>3er año</strong> — 1er semestre: estudios en Breda; 2º semestre: "minor" o intercambio (universidad holandesa o del mundo)<br>
+        <strong>4º año</strong> — 1er semestre: estudios en Breda; 2º semestre: TFG o "graduation internship" (orientado a empresa, como unas 2ªs prácticas profesionales)
+      </div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB aprobado.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS Academic 6.5</li>
+            <li>TOEFL iBT 80</li>
+            <li>Cambridge: mínimo 169</li>
+            <li>IB en inglés o con English como asignatura</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>No hay proceso de selección. Si cumples los requisitos tienes el acceso garantizado.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 1 de agosto</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Rotterdam UAS -->
+  <div class="uni-card" id="card-rotuas">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.rotterdamuas.com/programmes/exchanges/international-business/" target="_blank">International Business <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Rotterdam University of Applied Sciences &nbsp;·&nbsp; Rotterdam</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-media">Admisión directa</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Rotterdam (623.000 hab.)<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años / 240 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de agosto</div></div>
+      </div>
+      <div class="card-desc">Programa de Negocios Internacionales con fuerte enfoque práctico y metodología PBL. Incluye prácticas obligatorias e intercambio internacional durante los 4 años del grado.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB aprobado.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS Academic 6.5</li>
+            <li>TOEFL iBT 80</li>
+            <li>Cambridge: mínimo 169</li>
+            <li>IB en inglés o con English como asignatura</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>No hay proceso de selección. Si cumples los requisitos tienes el acceso garantizado.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 1 de agosto</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- NHL Stenden -->
+  <div class="uni-card" id="card-nhl">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.nhlstenden.com/en/study-programmes/business-administration" target="_blank">Business Administration <span class="link-icon">🖱️</span></a>
+        <div class="card-school">NHL Stenden University of Applied Sciences &nbsp;·&nbsp; Leeuwarden</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-media">Admisión directa</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Leeuwarden (107.000 hab.)<br><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años / 240 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.601 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de agosto</div></div>
+      </div>
+      <div class="card-desc">Programa de Administración de Empresas con enfoque en negocios internacionales. Metodología práctica, prácticas en empresa e intercambio internacional incluidos en el plan de estudios de 4 años.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB aprobado.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS Academic 6.5</li>
+            <li>TOEFL iBT 80</li>
+            <li>Cambridge: mínimo 169</li>
+            <li>IB en inglés o con English como asignatura</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>No hay proceso de selección.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de agosto</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- MAP NL -->
+  <div class="map-container" id="map-nl">
+    <div class="map-header">🗺️ Universidades en Holanda</div>
+    <div id="leaflet-nl" class="leaflet-map"></div>
+  </div>
+</div>
+
+<!-- ============================== DINAMARCA TAB ============================== -->
+<div id="tab-dk" class="tab-content">
+  <div class="country-hero">
+    <div class="country-hero-flag"><span class="flag-dk-large" style="display:inline-block;"></span></div>
+    <div class="country-hero-info">
+      <h2>Dinamarca</h2>
+      <div class="country-meta">
+        <div class="country-meta-item">💶 Matrícula <span>0 €/año</span></div>
+        <div class="country-meta-item">🏠 Alojamiento <span>700–1.100 €/mes</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="country-intro">
+    <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Dinamarca, siendo el coste anual que tenemos que pagar de <strong>0 €/año</strong>.</p>
+    <p>Dinamarca tiene multitud de ventajas y atractivos, aunque debo destacar un detalle importante que hay que tener en cuenta:</p>
+    <ul>
+      <li>El resultado de las admisiones no se da a conocer hasta el día <strong>28 de julio</strong>, haciendo complicado compaginar estas opciones con otras en países como Holanda o Bélgica donde los alojamientos deben ser reservados cuanto antes.</li>
+    </ul>
+  </div>
+
+  <!-- Aarhus -->
+  <div class="uni-card" id="card-aarhus">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://bachelor.au.dk/en/economicsandbusinessadministration" target="_blank">BA Economics and Business Administration <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Aarhus University &nbsp;·&nbsp; Aarhus</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#2 de Dinamarca (Shanghai)</span>
+          <span class="badge badge-rank">#80 del mundo (Shanghai)</span>
+          <span class="badge badge-rank-gold">🏆 #76-100 del mundo en Business Admin (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Aarhus (300.000 hab.)<br><button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3,5 años / 210 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de marzo</div></div>
+      </div>
+      <div class="card-desc">En este grado aprenderás sobre la gestión y el funcionamiento de las empresas. Estudiarás logística, contabilidad, financiación, gestión financiera, así como gestión organizativa, desarrollo de productos, ventas, gestión de proyectos e innovación.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB Diploma con Mathematics (cualquier variante), English (cualquier variante) y una de las siguientes: History; Global Politics + Economics (se cree que Business también será aceptado como Economics).</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>TOEFL 80</li>
+            <li>Cambridge CAE</li>
+            <li>IB con English como asignatura (cualquier variante)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección. La universidad usará las notas de años anteriores y la información de tu Motivation Letter y resto de documentos para seleccionar a los mejores candidatos. Es posible que seas invitado a una entrevista de selección para conocerte mejor.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de marzo</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- SDU -->
+  <div class="uni-card" id="card-sdu">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.sdu.dk/en/uddannelse/bachelor/globalebusinessrelationships" target="_blank">Economics and Business Administration: Global Business Relationships <span class="link-icon">🖱️</span></a>
+        <div class="card-school">SDU – University of Southern Denmark &nbsp;·&nbsp; Sonderborg</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#4 de Dinamarca (Shanghai)</span>
+          <span class="badge badge-rank">#301-400 del mundo (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Sonderborg (27.500 hab.)<br><button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de marzo</div></div>
+      </div>
+      <div class="card-desc">Este programa de grado en Economía y Administración de Empresas contiene asignaturas obligatorias en las áreas de Marketing, Contabilidad, Finanzas, Organización de la Empresa, Emprendimiento, Microeconomía, Macroeconomía. <strong>En el primer semestre</strong> se imparten las asignaturas de Matemáticas y Estadística, Organización y Filosofía de la Ciencia, Negocios y Emprendimiento. <strong>En el segundo semestre</strong> se imparten Matemáticas y Estadística, Microeconomía, Marketing, Negocios y hay dos asignaturas más de especialización: Digitalización &amp; Empresas y Metodología Cualitativa. <strong>En el tercer semestre</strong> cursarás Redes y Estrategias Regionales (emprendimiento social, sostenibilidad y creación de redes), Macroeconomía, Contabilidad y Finanzas. <strong>En el cuarto semestre</strong>: Técnicas Cuantitativas Avanzadas, Derecho Empresarial y Gestión Multi-cultural, Macroeconomía y Contabilidad. <strong>En el quinto semestre</strong>: Regulaciones y responsabilidad Empresarial, Marketing Global &amp; Negocios y una asignatura optativa (en la SDU o en el extranjero — más de 200 universidades asociadas). También podrás participar en un proyecto real en una empresa real. <strong>En el sexto semestre</strong>: proyecto de fin de grado.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB Diploma con Mathematics (cualquier variante), English (cualquier variante) y una de las siguientes: History; Global Politics + Economics (se cree que Business también será aceptado como Economics).</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>TOEFL 80</li>
+            <li>Cambridge CAE</li>
+            <li>IB con English como asignatura (cualquier variante)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección. Se trata de un examen de entrada que se compone de una carta de motivación, una entrevista personal (en inglés y online) y un <strong>uniTEST</strong>. Los estudiantes con la nota más alta en el uniTEST también serán entrevistados. <a href="https://www.sdu.dk/en/uddannelse/bachelor/globalebusinessrelationships/admission" target="_blank" style="color:var(--teal);">Más detalles sobre el proceso de admisión aquí.</a></p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de marzo</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CBS -->
+  <div class="uni-card" id="card-cbs">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.cbs.dk/en/study/bachelor/bsc-in-international-business" target="_blank">BSc in International Business <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Copenhagen Business School (CBS) &nbsp;·&nbsp; Copenhague</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#6 de Dinamarca (Shanghai)</span>
+          <span class="badge badge-rank">#701-800 del mundo (Shanghai)</span>
+          <span class="badge badge-rank-gold">🏆 #2 del mundo en Business Admin (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-muy-alta">Dificultad Muy Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Copenhague (570.000 hab.)<br><button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de marzo</div></div>
+      </div>
+      <div class="card-desc">Este programa de grado en International Business tiene: 45% Economía y Matemáticas, 30% Relaciones Empresariales Internacionales, 15% Organización Empresarial y de Personas y 10% Comunicación Empresarial. <strong>1er semestre:</strong> Statistics, Microeconomics, International Business Environment y Business Research Methodology. <strong>2º semestre:</strong> Macroeconomics, Industrial Organisational Analysis, Principles of International Marketing y Corporate Governance. <strong>3er semestre:</strong> International Economics, Financial Accounting, Organizational Behaviour, Founder's Dilemmas: Anticipate and Avoid Startup Pitfalls. <strong>4º semestre:</strong> Corporate Finance, Global Strategy, Technology and Innovation, Global Supply Chain, Risk management of Multinational Enterprise. <strong>5º semestre:</strong> "electives" en CBS o en otras universidades, intercambio o prácticas en empresa. <strong>6º semestre:</strong> proyecto de fin de grado con objetivos claros, adoptando métodos de investigación, formulando y aplicando conceptos relevantes. Además, Contemporary Issues in International Business e International Business Strategy.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB Diploma con Mathematics (cualquier variante), English (cualquier variante) y una de las siguientes: History; Global Politics + Economics (se cree que Business también será aceptado).</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>TOEFL 80</li>
+            <li>Cambridge CAE</li>
+            <li>IB con English como asignatura (cualquier variante)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección. La universidad usa como principal criterio de admisión la <strong>nota media de los candidatos</strong>. Dificultad <strong>MUY ALTA</strong>.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de marzo</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="map-container" id="map-dk">
+    <div class="map-header">🗺️ Universidades en Dinamarca</div>
+    <div id="leaflet-dk" class="leaflet-map"></div>
+  </div>
+</div>
+
+<!-- ============================== SUECIA TAB ============================== -->
+<div id="tab-se" class="tab-content">
+  <div class="country-hero">
+    <div class="country-hero-flag"><span class="flag-se-large" style="display:inline-block;"></span></div>
+    <div class="country-hero-info">
+      <h2>Suecia</h2>
+      <div class="country-meta">
+        <div class="country-meta-item">💶 Matrícula <span>0 €/año</span></div>
+        <div class="country-meta-item">🏠 Alojamiento <span>500–900 €/mes</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="country-intro">
+    <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Suecia, siendo el coste anual que tenemos que pagar de <strong>0 €/año</strong>.</p>
+    <p>Suecia tiene multitud de ventajas y atractivos, aunque debo destacar 2 cosas generales para todas las universidades que hay que tener en cuenta:</p>
+    <ul>
+      <li>El nivel de dificultad de acceso es <strong>alto en general</strong>, ya que los estudiantes internacionales en su último año de estudios son obligados a aplicar en una <strong>2ª ronda de admisiones</strong> (entre marzo y abril), y no en la 1ª. Esto reduce el número de plazas a las que se aspira, y aumenta la dificultad de acceso.</li>
+      <li>El resultado de las admisiones no se da a conocer hasta el día <strong>12 de julio</strong>, haciendo complicado compaginar estas opciones con otras en países como Holanda o Bélgica donde los alojamientos deben ser reservados cuanto antes.</li>
+    </ul>
+  </div>
+
+  <!-- Gothenburg -->
+  <div class="uni-card" id="card-gothenburg">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.gu.se/en/study-gothenburg/business-and-economics-n1fek" target="_blank">Business and Economics <span class="link-icon">🖱️</span></a>
+        <div class="card-school">University of Gothenburg &nbsp;·&nbsp; Gotenburgo</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#3-5 de Suecia (Shanghai)</span>
+          <span class="badge badge-rank">#101-150 del mundo (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-muy-alta">Dificultad Muy Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Gotenburgo (579.000 hab.)<br><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de abril (2ª ronda)</div></div>
+      </div>
+      <div class="card-desc">¿Te interesa una formación académica de alta calidad, con un fuerte enfoque internacional y excelentes oportunidades profesionales? ¿Te gustaría ayudar a las empresas a ser más sostenibles? Personaliza tu titulación mediante cursos de especialización y optativos, estudia un semestre en el extranjero y sumérgete en las actividades extracurriculares de la Escuela. La combinación de amplitud y profundidad del Programa de Licenciatura en Economía y Empresa te proporciona los conocimientos y habilidades necesarios para trabajar en diferentes industrias y funciones profesionales.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB Diploma con Mathematics (cualquier variante), English (cualquier variante) y una de las siguientes: Economics SL/HL o Global politics SL/HL.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>TOEFL 80</li>
+            <li>Cambridge CAE</li>
+            <li>IB con English como asignatura (cualquier variante)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección. El número de plazas es limitado y la selección se realiza en base a las notas de bachillerato y la carta de motivación. <strong>Acceso muy complicado.</strong></p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de abril (2ª ronda — estudiantes internacionales en último año)</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Lund -->
+  <div class="uni-card" id="card-lund">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.lu.se/lubas/i-uoh-lu-NEKGM" target="_blank">International Business <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Lund University &nbsp;·&nbsp; Lund</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#3-5 de Suecia (Shanghai)</span>
+          <span class="badge badge-rank">#101-150 del mundo (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-muy-alta">Dificultad Muy Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Lund (91.000 hab.)<br><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de abril (2ª ronda)</div></div>
+      </div>
+      <div class="card-desc">Las empresas y organizaciones que operan en un contexto internacional necesitan empleados con competencias y habilidades internacionales, incluida una sólida comprensión de los negocios, el comercio, el derecho y la economía internacionales, transfronterizos e interculturales. El programa está dirigido a licenciados recientes con una sólida formación académica, ambiciones profesionales internacionales y ganas de adquirir conocimientos y habilidades en el campo de los negocios internacionales. El programa tiene un enfoque internacional, y combina cursos de negocios con cursos de economía, historia económica, estadística, informática y derecho empresarial.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB Diploma con Mathematics (cualquier variante), English (cualquier variante) y una de las siguientes: Economics SL/HL o Global politics SL/HL.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>TOEFL 80</li>
+            <li>Cambridge CAE</li>
+            <li>IB con English como asignatura (cualquier variante)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección. El número de plazas es limitado y la selección se realiza en base a las notas de bachillerato y la carta de motivación. <strong>Acceso muy complicado</strong> — en 2023 presentaron matrícula <strong>3.245 candidatos/as</strong> y solo <strong>74 fueron seleccionados</strong>.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de abril (2ª ronda)</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- SSE -->
+  <div class="uni-card" id="card-sse">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.hhs.se/en/education/bsc/bsc-program-in-business-and-economics/" target="_blank">Business and Economics <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Stockholm School of Economics &nbsp;·&nbsp; Estocolmo</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#11-12 de Suecia (Shanghai)</span>
+          <span class="badge badge-rank">#701-800 del mundo (Shanghai)</span>
+          <span class="badge badge-rank-gold">🏆 #76-100 del mundo en Business Admin (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Estocolmo (975.000 hab.)<br><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 enero (1ª ronda con predicted) / 3 feb docs</div></div>
+      </div>
+      <div class="card-desc">El programa de Licenciatura en Ciencias Empresariales y Económicas es un programa amplio y profundo de 3 años para estudiantes con mentalidad empresarial y grandes ambiciones profesionales en los ámbitos de los negocios, las finanzas, la economía, la innovación y el espíritu empresarial. Comprenderás en profundidad los factores económicos que afectan tanto a la sociedad como a las organizaciones. También desarrollarás habilidades estratégicas y analíticas sobre cómo se puede influir en los factores económicos para alcanzar los objetivos deseados.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB Diploma con Mathematics (cualquier variante), English (cualquier variante) y una de las siguientes: Economics SL/HL o Global politics SL/HL.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>TOEFL 80</li>
+            <li>Cambridge CAE</li>
+            <li>IB con English como asignatura (cualquier variante)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección. En esta universidad son flexibles y sí permiten aplicar a la 1ª ronda con las <em>predicted grades</em>. La selección se realiza en base a las predicted grades y a una entrevista de admisión a la que se invita solo a los mejores candidatos, entre el 23 y 28 de febrero. Las admisiones se comunican pronto, el <strong>3 de abril</strong>. <strong>Acceso complicado.</strong></p>
+          <div class="deadline-box">📅 Fecha límite: 15 de enero (predicted grades) — hasta el 3 de febrero para documentos de apoyo</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Umea -->
+  <div class="uni-card" id="card-umea">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.umu.se/en/education/bachelor/international-business-and-economics/" target="_blank">International Business and Economics <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Umeå University &nbsp;·&nbsp; Umeå</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#10 de Suecia (Shanghai)</span>
+          <span class="badge badge-rank">#501-600 del mundo (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Umeå (109.000 hab.)<br><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de abril (2ª ronda)</div></div>
+      </div>
+      <div class="card-desc">El programa te prepara para una carrera internacional y para tareas cualificadas en empresas y organizaciones que trabajan más allá de las fronteras nacionales. El programa permite comprender los retos mundiales y el funcionamiento de las organizaciones internacionales y la economía global. Tienes buenas oportunidades para estudiar en el extranjero o hacer prácticas. Podrás acceder a nuestros programas de máster en empresariales o economía y también a otros programas de máster en Suecia o en el extranjero.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB Diploma con Mathematics (cualquier variante), English (cualquier variante) y una de las siguientes: Economics SL/HL o Global politics SL/HL.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>TOEFL 80</li>
+            <li>Cambridge CAE</li>
+            <li>IB con English como asignatura (cualquier variante)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección. El número de plazas es limitado y la selección se realiza en base a las notas de bachillerato y la carta de motivación. (Nota: la 1ª ronda ya cerró en enero.)</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de abril (2ª ronda)</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Linnaeus -->
+  <div class="uni-card" id="card-linnaeus">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://lnu.se/en/programme/international-business/" target="_blank">International Business <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Linnaeus University &nbsp;·&nbsp; Kalmar</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">#13 de Suecia (Shanghai)</span>
+          <span class="badge badge-rank">#901-1000 del mundo (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Kalmar (36.000 hab.)<br><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">15 de abril (2ª ronda)</div></div>
+      </div>
+      <div class="card-desc">¿Quieres trabajar con empresas internacionales, en Suecia o en el extranjero? En el programa de negocios internacionales aprenderás a establecer, mantener y desarrollar relaciones comerciales en un contexto internacional. Este dinámico programa te ofrece una sólida licenciatura en administración de empresas con especialización en negocios internacionales. También ofrece un enfoque especial en las áreas de crecimiento más interesantes del mundo, como China, India, América Latina y el continente africano. El principal campo de estudio es la administración de empresas, y los cursos de organización, marketing, espíritu empresarial y control de gestión se combinan con la asignatura de perfil "estudios de negocios internacionales", que trata aspectos históricos, económicos y políticos relacionados con las actividades empresariales internacionales. También hay cursos de economía internacional, estadística y derecho mercantil. El aprendizaje basado en la experiencia tiene lugar en un entorno de estudio internacional emocionante y estimulante, ya que en el programa se admite una mezcla de estudiantes suecos e internacionales.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB Diploma con Mathematics (cualquier variante), English (cualquier variante) y una de las siguientes: Economics SL/HL o Global politics SL/HL.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>TOEFL 80</li>
+            <li>Cambridge CAE</li>
+            <li>IB con English como asignatura (cualquier variante)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección. El número de plazas es limitado y la selección se realiza en base a las notas de bachillerato y la carta de motivación.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 15 de abril (2ª ronda)</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Jonkoping -->
+  <div class="uni-card" id="card-jonkoping">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://ju.se/study-at-ju/programmes-and-courses/programmes/international-management.html" target="_blank">International Management <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Jönköping University (JIBS) &nbsp;·&nbsp; Jönköping</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-alta">Dificultad Alta</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Jönköping (93.000 hab.)<br><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">2 de mayo (proceso especial directo)</div></div>
+      </div>
+      <div class="card-desc">El programa de Gestión Internacional comprende cursos básicos de economía y estudios empresariales y se especializa en gestión empresarial y renovación de empresas en un contexto internacional. El quinto semestre ofrece muchas opciones para concretar: ya sea estudiando en el extranjero en una de las escuelas asociadas recomendadas por JIBS, o cursando asignaturas optativas en JIBS, que también permiten realizar prácticas en otro país. El programa también incluye la oportunidad de solicitar un intercambio de doble titulación con <strong>Kedge Business School (Francia)</strong> y <strong>EBS Business School (Alemania)</strong>.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB Diploma con Mathematics (cualquier variante), English (cualquier variante) y una de las siguientes: Economics SL/HL o Global politics SL/HL.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>TOEFL 80</li>
+            <li>Cambridge CAE</li>
+            <li>IB con English como asignatura (cualquier variante)</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>Sí hay proceso de selección. El número de plazas es limitado y la selección se realiza en base a las notas de bachillerato y la carta de motivación. Se puede hacer la matrícula directamente con Jönköping, tienen un proceso especial.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 2 de mayo (proceso especial directo con Jönköping)</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="map-container" id="map-se">
+    <div class="map-header">🗺️ Universidades en Suecia</div>
+    <div id="leaflet-se" class="leaflet-map"></div>
+  </div>
+</div>
+
+<!-- ============================== BÉLGICA TAB ============================== -->
+<div id="tab-be" class="tab-content">
+  <div class="country-hero">
+    <div class="country-hero-flag">
+      <div class="flag-be-large">
+        <span class="flag-be-black"></span><span class="flag-be-yellow"></span><span class="flag-be-red"></span>
+      </div>
+    </div>
+    <div class="country-hero-info">
+      <h2>Bélgica</h2>
+      <div class="country-meta">
+        <div class="country-meta-item">💶 Matrícula <span>1.116 €/año</span></div>
+        <div class="country-meta-item">🏠 Alojamiento <span>500–900 €/mes</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="country-intro">
+    <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <strong>1.116 €/año</strong>.</p>
+    <p>Estas son las mejores opciones del país:</p>
+  </div>
+
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">🎓 Research Universities</div><div class="section-divider-line"></div></div>
+
+  <!-- KU Leuven -->
+  <div class="uni-card" id="card-kuleuven">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.kuleuven.be/programmes/bachelor-of-business-administration" target="_blank">Bachelor in Business Administration <span class="link-icon">🖱️</span></a>
+        <div class="card-school">KU Leuven &nbsp;·&nbsp; Bruselas</div>
+        <div class="card-badges">
+          <span class="badge badge-rank-gold">🏆 #1 de Bélgica (Shanghai)</span>
+          <span class="badge badge-rank">#78 del mundo (Shanghai)</span>
+          <span class="badge badge-rank-gold">🏆 #40 del mundo en Business Admin (Shanghai)</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-media">Admisión directa</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Bruselas (179.000 hab.)<br><button class="map-btn" onclick="scrollToMap('be','map-be')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">1.116 €/año + 90 € application fee</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de junio</div></div>
+      </div>
+      <div class="card-desc">En este programa adquirirás las habilidades necesarias para resolver problemas comerciales desafiantes y obtendrás una visión completa de los desafíos específicos que enfrenta la vida empresarial. Estarás preparad@ para una carrera prometedora (internacional) gracias a tus conocimientos económicos actuales, tus capacidades de gestión y tus habilidades lingüísticas. Las características clave de este grado son: Management of Business Domains; Economic Analysis and International Orientation; Entrepreneurship and innovation, Professional skills and Employability; Mathematical and Statistical Techniques - Research skills; Behaviour, Society and Law.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB aprobado + un examen internacional de matemáticas a elegir entre: SAT, ACT, AP Calculus AB o SOWISO OMPTA-test results.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5 (ningún subscore por debajo del 5.5)</li>
+            <li>TOEFL 90 (ningún subscore por debajo de 20)</li>
+            <li>Cambridge CAE (C1)</li>
+            <li><strong>Los estudiantes de IB (en inglés) están exentos de presentar ningún certificado</strong></li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>No hay proceso de selección: si se cumplen los requisitos, se recibirá una admisión condicional. Existe un <strong>application fee de 90 €</strong> para presentar la matrícula.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 1 de junio</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">⚗️ Applied Sciences Universities</div><div class="section-divider-line"></div></div>
+
+  <!-- Thomas More -->
+  <div class="uni-card" id="card-thomasmore">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.thomasmore.be/en/programmes/international-business-and-trade" target="_blank">International Business and Trade <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Thomas More University &nbsp;·&nbsp; Mechelen</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-media">Admisión directa</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Mechelen (86.000 hab.)<br><small style="color:var(--muted)">Área metropolitana de Bruselas</small><br><button class="map-btn" onclick="scrollToMap('be','map-be')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">1.116 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+      </div>
+      <div class="card-desc">En tu primer año de estudios adquirirás conocimientos básicos y fundamentales sobre economía, comercio internacional, marketing, emprendimiento, gestión financiera y digitalización. En el segundo curso ampliarás y profundizarás tus conocimientos aplicándolos a casuísticas y proyectos reales que te plantearán tus profesores — situaciones que ellos han tenido o tendrán en ese momento en sus empresas o instituciones. Además, te inmiscuirás en un proyecto internacional y harás un intercambio de estudios fuera de Bélgica, donde mejorarás tus habilidades interculturales. Por último, llevarás a cabo tu propio proyecto profesional/empresarial, apoyado por tus profesores, y realizarás prácticas internacionales en un país que no podrá ser ni Bélgica ni España, donde tendrás una verdadera experiencia profesional.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB aprobado.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>Cambridge FCE</li>
+            <li>TOEFL 85</li>
+            <li>Duolingo 110</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>No hay proceso de selección. Si cumples los requisitos tienes el acceso garantizado.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 1 de septiembre</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Vives -->
+  <div class="uni-card" id="card-vives">
+    <div class="card-header">
+      <div class="card-header-left">
+        <a class="card-degree-link" href="https://www.vives.be/en/business-management" target="_blank">Business Management <span class="link-icon">🖱️</span></a>
+        <div class="card-school">Vives University of Applied Sciences &nbsp;·&nbsp; Kortrijk</div>
+        <div class="card-badges">
+          <span class="badge badge-rank">Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <div class="diff-badge"><span class="badge badge-diff-media">Admisión directa</span></div>
+    </div>
+    <div class="card-body">
+      <div class="card-meta-grid">
+        <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Kortrijk (76.000 hab.)<br><small style="color:var(--muted)">Región flamenca — situación lingüística similar al País Vasco</small><br><button class="map-btn" onclick="scrollToMap('be','map-be')">🗺️ Ver mapa</button></div></div>
+        <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div>
+        <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">1.116 €/año</div></div>
+        <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+      </div>
+      <div class="card-desc">El Grado en Administración de Empresas está diseñado para estudiantes belgas e internacionales que deseen obtener un conocimiento profundo de los diferentes campos de gestión y administración, así como obtener un título en negocios internacionales dentro del contexto intercultural de un mundo globalizado. Además de la formación, eminentemente práctica, y las habilidades que adquirirás, también es importante destacar las oportunidades académicas y profesionales que se generarán a través de los compañeros, los intercambios internacionales, las prácticas y los profesores.</div>
+      <details class="card-details">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="card-details-body">
+          <h4>Requisitos académicos</h4>
+          <p>IB aprobado.</p>
+          <h4>Requisitos de inglés</h4>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>Cambridge FCE</li>
+            <li>TOEFL 85</li>
+            <li>Duolingo 110</li>
+          </ul>
+          <h4>Proceso de selección</h4>
+          <p>No hay proceso de selección. Si cumples los requisitos tienes el acceso garantizado.</p>
+          <div class="deadline-box">📅 Fecha límite de matrícula: 1 de septiembre</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="map-container" id="map-be">
+    <div class="map-header">🗺️ Universidades en Bélgica</div>
+    <div id="leaflet-be" class="leaflet-map"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18" style="height:32px;">
+      <defs><style>.fw{fill:#ffffff;}.fc1{fill:#36aadc;opacity:.8}.fc2{fill:#30ac71;opacity:.8}.fc3{fill:#32abbb;opacity:.8}.fc4{fill:#31ac9c;opacity:.8}</style></defs>
+      <path class="fc2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="fc4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="fc1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="fc3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <path class="fw" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+      <path class="fw" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+      <path class="fw" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+      <path class="fw" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+      <path class="fw" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+      <path class="fw" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+      <polygon class="fw" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+    </svg>
+  </div>
+  <p>Informe personalizado preparado por Educoway &nbsp;·&nbsp; experiencias educativas en el extranjero</p>
+  <p style="margin-top:6px;">© 2024 Educoway — Todos los derechos reservados</p>
+</footer>
+
+<script>
+// ====== MAP DATA ======
+const mapData = {
+  nl: {
+    center: [52.3, 5.3], zoom: 7,
+    unis: [
+      { id:'card-utrecht', name:'Economics and Business Economics', school:'Utrecht University', lat:52.0907, lng:5.1214, webUrl:'https://www.uu.nl/en/bachelors/economics-and-business-economics', mapsUrl:'https://maps.google.com/?q=Utrecht+University,Utrecht' },
+      { id:'card-groningen', name:'International Business', school:'University of Groningen', lat:53.2194, lng:6.5665, webUrl:'https://www.rug.nl/bachelors/international-business/', mapsUrl:'https://maps.google.com/?q=University+of+Groningen,Groningen' },
+      { id:'card-eur-ebe', name:'International Bachelor Economics & Business Economics', school:'Erasmus University Rotterdam', lat:51.9178, lng:4.5222, webUrl:'https://www.eur.nl/en/ese/bachelor/international-bachelor-economics-and-business-economics-ibebe', mapsUrl:'https://maps.google.com/?q=Erasmus+University,Rotterdam' },
+      { id:'card-eur-iba', name:'International Business Administration', school:'Erasmus University Rotterdam (EUR)', lat:51.9180, lng:4.5230, webUrl:'https://www.eur.nl/en/esb/bachelor/international-business-administration', mapsUrl:'https://maps.google.com/?q=Erasmus+University+Rotterdam' },
+      { id:'card-uva', name:'Business Administration', school:'University of Amsterdam', lat:52.3667, lng:4.9000, webUrl:'https://www.uva.nl/en/programmes/bachelors/business-administration/business-administration.html', mapsUrl:'https://maps.google.com/?q=University+of+Amsterdam' },
+      { id:'card-vu', name:'International Business Administration', school:'Vrije Universiteit Amsterdam', lat:52.3342, lng:4.8654, webUrl:'https://vu.nl/en/education/bachelor/international-business-administration', mapsUrl:'https://maps.google.com/?q=Vrije+Universiteit+Amsterdam' },
+      { id:'card-maastricht', name:'International Business', school:'Maastricht University', lat:50.8503, lng:5.6919, webUrl:'https://www.maastrichtuniversity.nl/education/bachelor/international-business', mapsUrl:'https://maps.google.com/?q=Maastricht+University' },
+      { id:'card-tilburg', name:'International Business Administration', school:'Tilburg University', lat:51.5590, lng:5.0396, webUrl:'https://www.tilburguniversity.edu/education/bachelors-programs/international-business-administration', mapsUrl:'https://maps.google.com/?q=Tilburg+University' },
+      { id:'card-avans', name:'International Business', school:'AVANS University of Applied Sciences', lat:51.5888, lng:4.7759, webUrl:'https://www.avans.nl', mapsUrl:'https://maps.google.com/?q=Avans+Hogeschool,Breda' },
+      { id:'card-rotuas', name:'International Business', school:'Rotterdam University of Applied Sciences', lat:51.9225, lng:4.4792, webUrl:'https://www.rotterdamuas.com', mapsUrl:'https://maps.google.com/?q=Rotterdam+University+of+Applied+Sciences' },
+      { id:'card-nhl', name:'Business Administration', school:'NHL Stenden University', lat:53.2012, lng:5.7999, webUrl:'https://www.nhlstenden.com', mapsUrl:'https://maps.google.com/?q=NHL+Stenden,Leeuwarden' },
+    ]
+  },
+  dk: {
+    center: [56.0, 10.0], zoom: 6,
+    unis: [
+      { id:'card-aarhus', name:'BA Economics and Business Administration', school:'Aarhus University', lat:56.1629, lng:10.2039, webUrl:'https://bachelor.au.dk/en/economicsandbusinessadministration', mapsUrl:'https://maps.google.com/?q=Aarhus+University' },
+      { id:'card-sdu', name:'Economics and Business Administration: GBR', school:'SDU – University of Southern Denmark', lat:54.9139, lng:9.7924, webUrl:'https://www.sdu.dk/en/uddannelse/bachelor/globalebusinessrelationships', mapsUrl:'https://maps.google.com/?q=University+of+Southern+Denmark,Sonderborg' },
+      { id:'card-cbs', name:'BSc in International Business', school:'Copenhagen Business School', lat:55.6867, lng:12.5118, webUrl:'https://www.cbs.dk/en/study/bachelor/bsc-in-international-business', mapsUrl:'https://maps.google.com/?q=Copenhagen+Business+School' },
+    ]
+  },
+  se: {
+    center: [59.0, 16.0], zoom: 5,
+    unis: [
+      { id:'card-gothenburg', name:'Business and Economics', school:'University of Gothenburg', lat:57.6878, lng:11.9795, webUrl:'https://www.gu.se/en/study-gothenburg/business-and-economics-n1fek', mapsUrl:'https://maps.google.com/?q=University+of+Gothenburg' },
+      { id:'card-lund', name:'International Business', school:'Lund University', lat:55.7122, lng:13.2107, webUrl:'https://www.lu.se/lubas/i-uoh-lu-NEKGM', mapsUrl:'https://maps.google.com/?q=Lund+University' },
+      { id:'card-sse', name:'Business and Economics', school:'Stockholm School of Economics', lat:59.3379, lng:18.0717, webUrl:'https://www.hhs.se/en/education/bsc/', mapsUrl:'https://maps.google.com/?q=Stockholm+School+of+Economics' },
+      { id:'card-umea', name:'International Business and Economics', school:'Umeå University', lat:63.8204, lng:20.3063, webUrl:'https://www.umu.se/en/education/bachelor/international-business-and-economics/', mapsUrl:'https://maps.google.com/?q=Umea+University' },
+      { id:'card-linnaeus', name:'International Business', school:'Linnaeus University', lat:56.6634, lng:16.3670, webUrl:'https://lnu.se/en/programme/international-business/', mapsUrl:'https://maps.google.com/?q=Linnaeus+University,Kalmar' },
+      { id:'card-jonkoping', name:'International Management', school:'Jönköping University (JIBS)', lat:57.7815, lng:14.1562, webUrl:'https://ju.se/study-at-ju/programmes-and-courses/programmes/international-management.html', mapsUrl:'https://maps.google.com/?q=Jonkoping+University' },
+    ]
+  },
+  be: {
+    center: [50.85, 4.35], zoom: 7,
+    unis: [
+      { id:'card-kuleuven', name:'Bachelor in Business Administration', school:'KU Leuven', lat:50.8798, lng:4.7005, webUrl:'https://www.kuleuven.be/programmes/bachelor-of-business-administration', mapsUrl:'https://maps.google.com/?q=KU+Leuven' },
+      { id:'card-thomasmore', name:'International Business and Trade', school:'Thomas More University', lat:51.0259, lng:4.4777, webUrl:'https://www.thomasmore.be/en/programmes/international-business-and-trade', mapsUrl:'https://maps.google.com/?q=Thomas+More+Hogeschool,Mechelen' },
+      { id:'card-vives', name:'Business Management', school:'Vives University of Applied Sciences', lat:50.8283, lng:3.2656, webUrl:'https://www.vives.be/en/business-management', mapsUrl:'https://maps.google.com/?q=Vives+Hogeschool,Kortrijk' },
+    ]
+  }
+};
+
+const mapsInitialized = {};
+
+function initMap(countryId) {
+  if (mapsInitialized[countryId]) return;
+  mapsInitialized[countryId] = true;
+  const data = mapData[countryId];
+  const map = L.map('leaflet-' + countryId).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  const icon = L.divIcon({ html: '🎓', className: '', iconSize: [28, 28], iconAnchor: [14, 14] });
+
+  data.unis.forEach(u => {
+    const marker = L.marker([u.lat, u.lng], { icon }).addTo(map);
+    marker.bindPopup(`
+      <div class="popup-title">${u.name}</div>
+      <div class="popup-school">${u.school}</div>
+      <div class="popup-btns">
+        <a class="popup-btn pb-web" href="${u.webUrl}" target="_blank">🌐 Ver grado</a>
+        <button class="popup-btn pb-card" onclick="scrollToCard('${u.id}')">📋 Ver ficha</button>
+        <a class="popup-btn pb-maps" href="${u.mapsUrl}" target="_blank">📍 Google Maps</a>
+      </div>
+    `, { maxWidth: 260 });
+  });
+}
+
+// ====== TAB NAVIGATION ======
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  else {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('active');
+    });
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (['nl','dk','se','be'].includes(id)) {
+    setTimeout(() => initMap(id), 150);
+  }
+}
+
+function goTo(tab, anchor) {
+  const tabs = { nl: 2, dk: 3, se: 4, be: 5 };
+  const btns = document.querySelectorAll('.tab-btn');
+  const tabMap = { intro: 0, research: 1, nl: 2, dk: 3, se: 4, be: 5 };
+  showTab(tab, btns[tabMap[tab]]);
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 180);
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    el.style.borderColor = 'var(--teal)';
+    el.style.boxShadow = '0 0 0 4px rgba(10,155,170,0.2)';
+    setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2000);
+  }
+}
+
+function scrollToMap(tab, anchor) {
+  const currentActive = document.querySelector('.tab-content.active');
+  const targetTab = document.getElementById('tab-' + tab);
+  if (currentActive !== targetTab) {
+    const tabMap = { nl: 2, dk: 3, se: 4, be: 5 };
+    const btns = document.querySelectorAll('.tab-btn');
+    showTab(tab, btns[tabMap[tab]]);
+    setTimeout(() => {
+      initMap(tab);
+      const el = document.getElementById(anchor);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
+  } else {
+    initMap(tab);
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+</script>
+</body>
+</html>
