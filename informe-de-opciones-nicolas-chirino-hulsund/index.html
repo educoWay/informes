@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Opciones – Nicolás Chirino Hulsund | Educoway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root {
+  --teal: #0a9baa;
+  --teal-dark: #077a87;
+  --teal-light: #e0f5f7;
+  --navy: #0d2b3e;
+  --bg: #f4f8fa;
+  --border: #c8e0e5;
+  --text: #1a2e38;
+  --muted: #6b8a96;
+  --red: #e53e3e;
+  --gold: #c8960c;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;font-size:16px;background:var(--bg);color:var(--text);line-height:1.65}
+
+/* ── HEADER ── */
+#site-header{
+  position:sticky;top:0;z-index:1000;
+  background:var(--navy);
+  box-shadow:0 4px 20px rgba(0,0,0,.35);
+}
+.header-top{
+  display:flex;align-items:center;gap:20px;
+  padding:14px 28px;
+}
+.header-logo svg{height:34px;width:auto}
+.header-logo svg .cls-5{fill:#ffffff!important}
+.header-titles{flex:1}
+.header-titles h1{
+  font-family:'Playfair Display',serif;font-size:1.25rem;
+  color:#fff;font-weight:700;line-height:1.2;
+}
+.header-subtitle{
+  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.6);margin-top:3px;
+}
+
+/* ── TABS ── */
+#tab-bar{
+  display:flex;overflow-x:auto;
+  background:rgba(255,255,255,.06);
+  border-top:1px solid rgba(255,255,255,.1);
+  scrollbar-width:none;
+}
+#tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{
+  flex-shrink:0;
+  padding:11px 18px;
+  border:none;background:transparent;cursor:pointer;
+  color:rgba(255,255,255,.65);font-family:'DM Sans',sans-serif;
+  font-size:.82rem;font-weight:500;
+  display:flex;align-items:center;gap:8px;
+  border-bottom:3px solid transparent;
+  transition:color .2s,border-color .2s,background .2s;
+  white-space:nowrap;
+}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.07)}
+.tab-btn.active{color:#fff;border-bottom-color:var(--teal);}
+
+/* ── CONTENT ── */
+.tab-content{display:none;padding:36px 28px;max-width:1100px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* ── CARDS ── */
+.card{
+  background:#fff;border:2px solid var(--border);border-radius:12px;
+  margin-bottom:28px;overflow:hidden;
+  transition:border-color .25s,box-shadow .25s;
+}
+.card:hover{border-color:var(--teal);box-shadow:0 8px 32px rgba(10,155,170,.13)}
+.card-header{
+  padding:20px 24px 14px;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+}
+.card-title-block{flex:1}
+.card-title{
+  font-family:'Playfair Display',serif;font-size:1.18rem;font-weight:700;
+  color:var(--navy);
+}
+.card-title a{
+  color:inherit;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:color .2s;
+}
+.card-title a:hover{color:var(--teal)}
+.card-title .link-icon{display:inline-block;font-size:.95rem;transition:transform .2s}
+.card-title a:hover .link-icon{transform:scale(1.35)}
+.card-school{font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--teal);margin-top:4px;font-weight:600}
+
+/* Badges */
+.badge{
+  display:inline-block;padding:3px 10px;border-radius:20px;
+  font-size:.72rem;font-weight:600;margin-right:5px;margin-bottom:4px;letter-spacing:.03em;
+}
+.badge-teal{background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal)}
+.badge-gold{background:#fff8e1;color:var(--gold);border:1px solid #f5c542}
+.ranking-label{font-size:.72rem;color:var(--muted);font-weight:600;margin:8px 0 4px;text-transform:uppercase;letter-spacing:.05em}
+
+.badge-diff{
+  padding:5px 13px;border-radius:20px;font-size:.75rem;font-weight:700;
+  white-space:nowrap;flex-shrink:0;margin-top:2px;
+}
+.diff-green{background:#f0fff4;color:#276749;border:1.5px solid #48bb78}
+.diff-orange{background:#fffaf0;color:#c05621;border:1.5px solid #ed8936}
+.diff-red{background:#fff5f5;color:#c53030;border:1.5px solid #fc8181}
+
+/* Grid meta */
+.meta-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;
+  padding:0 24px 16px;
+}
+.meta-cell{
+  background:var(--teal-light);border:1px solid var(--border);border-radius:8px;
+  padding:10px 13px;
+}
+.meta-label{font-size:.68rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.meta-value{font-size:.88rem;font-weight:600;color:var(--navy)}
+.map-mini-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:.72rem;font-weight:600;color:var(--teal-dark);
+  background:var(--teal-light);border:1px solid var(--teal);border-radius:6px;
+  padding:3px 8px;cursor:pointer;margin-top:5px;
+  text-decoration:none;transition:background .2s;
+}
+.map-mini-btn:hover{background:#b2e8ed}
+
+/* Description */
+.card-desc{
+  margin:0 24px 16px;
+  padding:14px 18px;
+  background:#f7fbfc;
+  border-left:4px solid var(--teal);
+  border-radius:0 8px 8px 0;
+  font-size:.92rem;line-height:1.72;
+}
+
+/* Collapsible requirements */
+.card details{
+  margin:0 24px 20px;
+  border:1.5px solid var(--border);border-radius:8px;overflow:hidden;
+}
+.card details summary{
+  padding:12px 18px;cursor:pointer;
+  font-size:.85rem;font-weight:600;color:var(--teal-dark);
+  background:var(--teal-light);list-style:none;
+  display:flex;align-items:center;gap:8px;
+  user-select:none;
+}
+.card details summary::before{content:"▶";font-size:.7rem;transition:transform .2s}
+.card details[open] summary::before{transform:rotate(90deg)}
+.card details .req-body{padding:16px 18px;font-size:.88rem;line-height:1.7}
+.req-body ul{padding-left:20px;margin:6px 0}
+.req-body li{margin-bottom:4px}
+.deadline-box{
+  background:#fffbea;border:1.5px solid #f6c23e;border-radius:8px;
+  padding:10px 14px;margin:10px 0;font-weight:600;font-size:.88rem;
+}
+.text-red{color:var(--red)!important;font-weight:600}
+.text-green{color:#276749!important;font-weight:600}
+
+/* Section dividers */
+.section-divider{
+  display:flex;align-items:center;gap:14px;margin:32px 0 20px;
+  font-size:.72rem;font-weight:700;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;
+}
+.section-divider::before,.section-divider::after{
+  content:"";flex:1;height:1px;background:var(--border);
+}
+
+/* Country header */
+.country-header{
+  display:flex;align-items:center;gap:20px;margin-bottom:28px;
+  padding:24px;background:#fff;border:2px solid var(--border);border-radius:12px;
+}
+.country-meta p{font-size:.92rem;color:var(--muted);line-height:1.7;margin-top:8px}
+
+/* Intro */
+.intro-welcome{
+  background:#fff;border:2px solid var(--border);border-radius:12px;
+  padding:28px 32px;margin-bottom:28px;line-height:1.8;font-size:.97rem;
+}
+.intro-welcome h2{
+  font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:14px;
+}
+.index-section{
+  background:#fff;border:2px solid var(--border);border-radius:12px;
+  padding:24px 28px;margin-bottom:28px;
+}
+.index-section h3{
+  font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:18px;
+}
+.index-country{margin-bottom:18px}
+.index-country h4{
+  font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--teal-dark);border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.index-entry{
+  display:flex;flex-direction:column;padding:8px 0;border-bottom:1px solid #f0f6f8;cursor:pointer;
+  text-decoration:none;
+}
+.index-entry:last-child{border-bottom:none}
+.index-entry:hover .idx-grade{color:var(--teal)}
+.idx-grade{font-size:.865rem;color:var(--text);font-weight:400;transition:color .2s}
+.idx-uni{font-family:'Playfair Display',serif;font-style:italic;font-size:.72rem;color:var(--muted);margin-top:1px}
+
+.next-steps{
+  background:#fff;border:2px solid var(--border);border-radius:12px;
+  padding:24px 28px;
+}
+.next-steps h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:12px}
+.next-steps p{font-size:.95rem;line-height:1.8}
+
+/* Research vs Applied */
+.rvsa-content{
+  background:#fff;border:2px solid var(--border);border-radius:12px;padding:28px 32px;
+}
+.rvsa-content h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:20px}
+.rvsa-content h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--teal-dark);margin:22px 0 10px}
+.rvsa-content p{font-size:.95rem;line-height:1.8;margin-bottom:14px}
+.rvsa-content ul{padding-left:20px;margin-bottom:14px}
+.rvsa-content li{font-size:.95rem;line-height:1.75;margin-bottom:6px}
+.rvsa-link-box{
+  background:var(--teal-light);border:1.5px solid var(--teal);border-radius:8px;
+  padding:12px 16px;margin-top:16px;
+}
+.rvsa-link-box a{color:var(--teal-dark);font-weight:600;word-break:break-all}
+
+/* MAP */
+.map-container{
+  height:400px;border-radius:12px;overflow:hidden;
+  border:2px solid var(--border);margin-top:28px;
+}
+.leaflet-popup-content-wrapper{border-radius:10px!important}
+.popup-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:3px}
+.popup-school{font-size:.82rem;color:var(--teal-dark);font-weight:600;margin-bottom:10px}
+.popup-btns{display:flex;gap:8px;flex-wrap:wrap}
+.popup-btn{
+  font-size:.75rem;font-weight:600;padding:5px 11px;border-radius:6px;
+  text-decoration:none;cursor:pointer;border:none;
+  transition:opacity .2s;
+}
+.popup-btn:hover{opacity:.8}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-outline{background:#fff;color:var(--teal-dark);border:1.5px solid var(--teal)}
+
+/* FLAGS – CSS only */
+.flag{display:inline-flex;overflow:hidden;border-radius:3px;line-height:0;flex-shrink:0}
+.flag-sm{width:22px;height:15px}
+.flag-lg{width:52px;height:35px;border-radius:5px}
+
+/* Netherlands */
+.flag-nl{display:flex;flex-direction:column}
+.flag-nl .s1{background:#AE1C28;flex:1}
+.flag-nl .s2{background:#fff;flex:1}
+.flag-nl .s3{background:#21468B;flex:1}
+
+/* Belgium */
+.flag-be{display:flex;flex-direction:row}
+.flag-be .s1{background:#000;flex:1}
+.flag-be .s2{background:#FFD90C;flex:1}
+.flag-be .s3{background:#EF3340;flex:1}
+
+/* Germany */
+.flag-de{display:flex;flex-direction:column}
+.flag-de .s1{background:#000;flex:1}
+.flag-de .s2{background:#D00;flex:1}
+.flag-de .s3{background:#FFCE00;flex:1}
+
+/* FOOTER */
+footer{
+  text-align:center;padding:40px 28px;
+  background:var(--navy);color:rgba(255,255,255,.45);
+  font-size:.8rem;margin-top:48px;
+}
+footer svg{height:28px;width:auto;opacity:.35;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto}
+
+/* Responsive */
+@media(max-width:600px){
+  .header-top{padding:10px 14px;gap:12px}
+  .header-titles h1{font-size:1rem}
+  .tab-content{padding:20px 14px}
+  .card-header{flex-direction:column}
+  .meta-grid{grid-template-columns:1fr 1fr}
+  .country-header{flex-direction:column;gap:12px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     STICKY HEADER
+═══════════════════════════════════════════════════════ -->
+<header id="site-header">
+  <div class="header-top">
+    <div class="header-logo">
+      <!-- SVG logo inline – cls-5 overridden to white via CSS -->
+      <svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+        <defs><style>.cls-1{fill:#36aadc;}.cls-1,.cls-2,.cls-3,.cls-4{opacity:.8;}.cls-2{fill:#30ac71;}.cls-5{fill:#ffffff;}.cls-3{fill:#32abbb;}.cls-4{fill:#31ac9c;}</style></defs>
+        <g id="Capa_3" data-name="Capa 3"><g><g>
+        <path class="cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="cls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="cls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="cls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="cls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="cls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="cls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        </g>
+        <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+        <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+        <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+        <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+        <g>
+        <path class="cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+        </g></g></g>
+      </svg>
+    </div>
+    <div class="header-titles">
+      <h1>Informe Personalizado de Opciones de Grado</h1>
+      <div class="header-subtitle">Preparado para Nicolás Chirino Hulsund</div>
+    </div>
+  </div>
+
+  <nav id="tab-bar">
+    <button class="tab-btn active" onclick="showTab('intro',this)">📋 Introducción</button>
+    <button class="tab-btn" onclick="showTab('rvsa',this)">🔬 Research vs Applied Sciences</button>
+    <button class="tab-btn" onclick="showTab('nl',this)">
+      <span class="flag flag-sm flag-nl"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      Holanda
+    </button>
+    <button class="tab-btn" onclick="showTab('be',this)">
+      <span class="flag flag-sm flag-be"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      Bélgica
+    </button>
+    <button class="tab-btn" onclick="showTab('de',this)">
+      <span class="flag flag-sm flag-de"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      Alemania
+    </button>
+  </nav>
+</header>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB: INTRODUCCIÓN
+═══════════════════════════════════════════════════════ -->
+<div id="tab-intro" class="tab-content active">
+
+  <div class="intro-welcome">
+    <h2>Hola Nicolás,</h2>
+    <p>Espero que estés bien. Estos días he estado trabajando en la búsqueda de grados que, según lo que nos indicaste, más podrían interesarte.</p>
+    <p style="margin-top:12px">Te dejo el listado de opciones a continuación, cualquier duda estaré encantado de ayudarte a resolverla.</p>
+  </div>
+
+  <div class="index-section">
+    <h3>Índice de opciones</h3>
+
+    <div class="index-country">
+      <h4>
+        <span class="flag flag-sm flag-nl"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+        Holanda — Universities of Applied Sciences
+      </h4>
+      <a class="index-entry" onclick="goTo('nl','card-rotterdam')">
+        <span class="idx-grade">International Business</span>
+        <span class="idx-uni">Rotterdam University of Applied Sciences</span>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','card-hanze')">
+        <span class="idx-grade">International Business</span>
+        <span class="idx-uni">HANZE University of Applied Sciences</span>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','card-fontys')">
+        <span class="idx-grade">International Business</span>
+        <span class="idx-uni">FONTYS University of Applied Sciences</span>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','card-avans')">
+        <span class="idx-grade">International Business</span>
+        <span class="idx-uni">AVANS University of Applied Sciences</span>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','card-saxion')">
+        <span class="idx-grade">International Business</span>
+        <span class="idx-uni">SAXION UAS</span>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','card-nhl')">
+        <span class="idx-grade">International Business</span>
+        <span class="idx-uni">NHL-Stenden UAS</span>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','card-thuas')">
+        <span class="idx-grade">International Business</span>
+        <span class="idx-uni">THU – The Hague University of Applied Sciences</span>
+      </a>
+    </div>
+
+    <div class="index-country">
+      <h4>
+        <span class="flag flag-sm flag-be"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+        Bélgica
+      </h4>
+      <a class="index-entry" onclick="goTo('be','card-vives')">
+        <span class="idx-grade">Business Management</span>
+        <span class="idx-uni">VIVES University of Applied Sciences</span>
+      </a>
+      <a class="index-entry" onclick="goTo('be','card-thomas')">
+        <span class="idx-grade">International Business and Trade</span>
+        <span class="idx-uni">Thomas More University</span>
+      </a>
+    </div>
+
+    <div class="index-country">
+      <h4>
+        <span class="flag flag-sm flag-de"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+        Alemania
+      </h4>
+      <a class="index-entry" onclick="goTo('de','card-rhine')">
+        <span class="idx-grade">Bachelor International Business and Management</span>
+        <span class="idx-uni">Rhine-Waal University of Applied Sciences</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="next-steps">
+    <h3>¿Qué tienes que hacer ahora?</h3>
+    <p>Echa un vistazo a todas las opciones, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+    <p style="margin-top:12px">¡Un saludo!</p>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB: RESEARCH VS APPLIED SCIENCES
+═══════════════════════════════════════════════════════ -->
+<div id="tab-rvsa" class="tab-content">
+  <div class="rvsa-content">
+    <h2>Research vs Applied Sciences</h2>
+    <p>Dentro de Holanda tenemos que diferenciar entre 2 tipos de universidades: "Research" y "Applied Sciences". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+
+    <h3>🧪 Metodología teórica vs práctica</h3>
+    <p>Las universidades de Applied Science destacan por usar una metodología <strong>PBL (Project / Problem Based Learning)</strong> que quiere decir que se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Las universidades de research no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral).</p>
+
+    <h3>⏱️ Duración</h3>
+    <p>Las universidades de Applied Science duran un año más (<strong>4 años = 240 ECTS</strong>) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster. Las de research duran solo <strong>3 años (= 180 ECTS)</strong> porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+
+    <h3>🏆 Ranking / Prestigio</h3>
+    <p>El principal motivo por el cual se podría escoger una universidad de <strong>RESEARCH</strong> es por el mayor ranking y prestigio que estas universidades tienen. Las universidades de Applied Sciences (Hogeschols en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+
+    <h3>🎓 Acceso a Másteres</h3>
+    <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. <strong>Si es fuera de Holanda</strong>, ambos títulos te dan las mismas oportunidades. <strong>Si se trata de Holanda</strong>, con tu título de universidad de Research podrás acceder a másteres tanto en universidades de research como applied science. En cambio, con tu título de applied science podrás acceder a másteres en universidades de applied science, pero si quieres acceder a universidades de research te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB: HOLANDA
+═══════════════════════════════════════════════════════ -->
+<div id="tab-nl" class="tab-content">
+
+  <div class="country-header">
+    <span class="flag flag-lg flag-nl"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+    <div class="country-meta">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy)">Holanda</h2>
+      <p>Dentro de Holanda tenemos que diferenciar entre 2 tipos de universidades: "Research" y "Applied Sciences". Todas las opciones listadas aquí son <strong>Universities of Applied Sciences</strong>, con metodología PBL, 4 años de duración y acceso directo al mercado laboral.<br>
+      <strong>Matrícula universitaria:</strong> ~2.530 €/año (ciudadanos UE) | <strong>Alojamiento:</strong> ~500–900 €/mes aprox. según ciudad</p>
+    </div>
+  </div>
+
+  <div class="section-divider">Universities of Applied Sciences</div>
+
+  <!-- ── ROTTERDAM ── -->
+  <div class="card" id="card-rotterdam">
+    <div class="card-header">
+      <div class="card-title-block">
+        <div class="card-title">
+          <a href="https://www.rotterdamuas.com/programmes/bachelor/international-business/" target="_blank">
+            International Business <span class="link-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="card-school">Rotterdam University of Applied Sciences · Rotterdam</div>
+        <div class="ranking-label">Ranking de la universidad:</div>
+        <span class="badge badge-teal">#1 UAS Holanda (Keuzegids)</span>
+        <span class="badge badge-teal">Top UAS Business Holanda</span>
+      </div>
+      <span class="badge-diff diff-green">✅ Admisión directa</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Rotterdam (623.000 hab.)</div>
+        <a class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</a>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">~2.530 €/año (UE)</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      <p>La Escuela de Negocios de Rotterdam está centrada en el estudiante, es contextual y ética y socialmente responsable. El programa es inclusivo y el apoyo que ofrecen los profesores se basa en tus necesidades personales y estilo de aprendizaje individual. Tendrás la oportunidad de seguir tu propia ruta de aprendizaje, eligiendo una de las cuatro especializaciones dentro del plan de estudios. Además de esas especializaciones, te ofrecen más opciones. Decisiones que puedes tomar en función de tus antecedentes, ambiciones y talentos. Opciones que te ayudarán a alcanzar tus objetivos durante el programa. A lo largo de los cuatro años del programa de Negocios Internacionales, estas tres líneas de aprendizaje son centrales: Negocios, Idiomas y Habilidades Profesionales y Académicas.</p>
+      <p style="margin-top:10px"><strong>Estructura:</strong></p>
+      <ul style="margin-top:6px;padding-left:18px">
+        <li><strong>1º año:</strong> Fase de introducción – estudios en Rotterdam</li>
+        <li><strong>2º año:</strong> Elige tu especialización entre: Organisation &amp; Change · Supply Chain · Commerce · Marketing</li>
+        <li><strong>3º y 4º año:</strong> Libertad para decidir el orden de los 4 semestres siguientes (el último siempre es el TFG): semestre de intercambio o MINOR, semestre de prácticas profesionales, semestre de asignaturas avanzadas, y Proyecto Final del Grado orientado a empresa.</li>
+      </ul>
+      <p style="margin-top:10px">🎬 <a href="https://www.youtube.com/watch?v=QkK4qWD-W2g&feature=emb_logo" target="_blank" style="color:var(--teal-dark);font-weight:600">Ver vídeo del programa</a></p>
+    </div>
+    <details>
+      <summary>📋 Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Requisitos académicos:</strong></p>
+        <ul>
+          <li>A Levels: 2 A Levels + 4 (I)GCSE con notas (A*–C), en 6 asignaturas distintas en total</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Nivel de inglés:</strong></p>
+        <ul>
+          <li>IELTS 6.5</li>
+          <li>Cambridge FCE: Grade C score 169 or higher</li>
+          <li>TOEFL iBT 80</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Proceso de selección:</strong> <span class="text-green">No hay proceso de selección</span> – si cumples los requisitos tienes el acceso garantizado.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <strong>31 de julio</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── HANZE ── -->
+  <div class="card" id="card-hanze">
+    <div class="card-header">
+      <div class="card-title-block">
+        <div class="card-title">
+          <a href="https://www.hanze.nl/eng/education/economy/international-business-school/programmes/bachelor/international-business-(4-year-programme)" target="_blank">
+            International Business <span class="link-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="card-school">HANZE University of Applied Sciences · Groningen</div>
+        <div class="ranking-label">Ranking de la universidad:</div>
+        <span class="badge badge-teal">Top UAS Holanda</span>
+        <span class="badge badge-teal">Reconocida internacionalmente</span>
+      </div>
+      <span class="badge-diff diff-green">✅ Admisión directa</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Groningen (200.000 hab.)</div>
+        <a class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</a>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      El programa en Negocios Internacionales te prepara para convertirte en un profesional de negocios internacionales capaz de ayudar a las empresas que operan internacionalmente a alcanzar sus objetivos. Además de aprender sobre funciones comerciales claves como Marketing, Finanzas, Operaciones y Recursos Humanos, también trabajarás en tus habilidades profesionales, incluida la sensibilidad intercultural, la gestión de la información y la comunicación. Para profundizar en tu conciencia cultural y ampliar tu horizonte internacional, aprenderás un idioma adicional, como español, francés, alemán, holandés o chino mandarín. Agrega a esto la aventura de un año en el extranjero que incluye un semestre en una universidad asociada y prácticas laborales internacionales. Esta combinación garantiza que el programa de Negocios Internacionales proporcione el entorno de estudio perfecto para un estudiante de licenciatura en negocios que tiene fuertes ambiciones internacionales.
+      <p style="margin-top:10px">🎬 <a href="https://www.youtube.com/watch?v=1KL5AWtTRwg&t=1s" target="_blank" style="color:var(--teal-dark);font-weight:600">Ver vídeo del programa</a></p>
+    </div>
+    <details>
+      <summary>📋 Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Requisitos académicos:</strong></p>
+        <ul>
+          <li>2 A Levels (recomendado que se incluya Mathematics o Business) con nota A*–D + 4 IGCSE (con nota A*–C también), en otras 3 asignaturas diferentes</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Nivel de inglés:</strong></p>
+        <ul>
+          <li>IELTS 6.0</li>
+          <li>Cambridge FCE mínimo 169</li>
+          <li>TOEFL 80</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Proceso de selección:</strong> <span class="text-green">No hay proceso de selección</span> – si cumples los requisitos tienes el acceso garantizado.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <strong>15 de agosto</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── FONTYS ── -->
+  <div class="card" id="card-fontys">
+    <div class="card-header">
+      <div class="card-title-block">
+        <div class="card-title">
+          <a href="https://www.fontys.nl/en/Study-at-Fontys/Programmes/International-Business.htm" target="_blank">
+            International Business <span class="link-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="card-school">FONTYS University of Applied Sciences · Eindhoven</div>
+        <div class="ranking-label">Ranking de la universidad:</div>
+        <span class="badge badge-teal">Gran UAS Holanda</span>
+        <span class="badge badge-teal">Hub tecnológico (Brainport)</span>
+      </div>
+      <span class="badge-diff diff-green">✅ Admisión directa</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Eindhoven (223.000 hab.)</div>
+        <a class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</a>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      En el IB, los alumnos trabajan tanto en el aula con estudios de casos, talleres, tareas y exámenes, como en proyectos de equipo de 4 a 8 alumnos supervisados por un entrenador de proyectos. Para sus proyectos, los estudiantes aprenden a analizar problemas, recopilar información, utilizar esta información en la resolución de problemas y consultar empresas reales. Se desarrollarán varias habilidades, incluida la aplicación de habilidades de investigación, resolución de problemas y consultoría en situaciones de la vida real. En los años 3 y 4, los estudiantes profundizan aún más sus conocimientos a través de las prácticas, un minor y una selección de asignaturas optativas. Con esta variedad de enfoques, el programa fortalece el trabajo en equipo y el desarrollo individual.
+      <p style="margin-top:10px">Durante el transcurso del programa, tendrán en cuenta todos los aspectos de los negocios internacionales. En particular, aprenderás habilidades que son muy relevantes para tu futura carrera. El programa de estudio tiene como objetivo prepararte para un puesto directivo dentro de un entorno empresarial internacional.</p>
+    </div>
+    <details>
+      <summary>📋 Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Requisitos académicos:</strong></p>
+        <ul>
+          <li>2 A Levels (recomendado que se incluya Mathematics o Business) con nota A*–D + 4 IGCSE (con nota A*–C también), en otras 3 asignaturas diferentes</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Nivel de inglés:</strong></p>
+        <ul>
+          <li>IELTS 6.0 (ninguna sección por debajo de 5.5)</li>
+          <li>Cambridge 169</li>
+          <li>TOEFL: 80</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Proceso de selección:</strong> <span class="text-green">No hay proceso de selección</span> – si cumples los requisitos tienes el acceso garantizado.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <strong>1 de agosto</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── AVANS ── -->
+  <div class="card" id="card-avans">
+    <div class="card-header">
+      <div class="card-title-block">
+        <div class="card-title">
+          <a href="https://www.avans.nl/international/studying/programmes/international-business/fulltime" target="_blank">
+            International Business <span class="link-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="card-school">AVANS University of Applied Sciences · Breda</div>
+        <div class="ranking-label">Ranking de la universidad:</div>
+        <span class="badge badge-teal">Top 5 UAS Holanda</span>
+      </div>
+      <span class="badge-diff diff-green">✅ Admisión directa</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Breda (180.000 hab.)</div>
+        <a class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</a>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      Te convertirás en un experto en hacer negocios en un entorno intercultural y aprenderás cómo las empresas pueden crecer internacionalmente. Adquirirás un amplio conocimiento de gestión internacional, marketing, organizaciones, finanzas y sostenibilidad. Y desarrollarás habilidades profesionales relevantes, como el trabajo en equipo intercultural, el liderazgo, los idiomas y la comunicación empresarial. Trabajarás en estudios de casos reales que involucran a empresas reales.
+      <p style="margin-top:10px">Dependiendo de tus talentos y de las áreas en las que elijas especializarte durante tus estudios, puedes continuar una carrera en los campos de Ventas y Marketing, Gestión de Organizaciones, Finanzas u Operaciones y Gestión de la Cadena de Suministro. Puedes trabajar en una empresa existente o iniciar un negocio propio.</p>
+      <p style="margin-top:10px">Al reclutar, las empresas internacionales a menudo prefieren candidatos con experiencia en el extranjero. Tu sólida base en Negocios Internacionales, combinada con la experiencia que adquirirás en el extranjero durante tus estudios, te ayudará a destacar como candidato.</p>
+    </div>
+    <details>
+      <summary>📋 Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Requisitos académicos:</strong></p>
+        <ul>
+          <li>A Levels: 2 A Levels + 3 (I)GCSE con notas (A*–C), en 6 asignaturas distintas en total</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Nivel de inglés:</strong></p>
+        <ul>
+          <li>IELTS 6.0, Cambridge 169, TOEFL: 80</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Proceso de selección:</strong> <span class="text-green">No hay proceso de selección indicado explícitamente.</span></p>
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <strong>1 de agosto</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── SAXION ── -->
+  <div class="card" id="card-saxion">
+    <div class="card-header">
+      <div class="card-title-block">
+        <div class="card-title">
+          <a href="https://www.saxion.edu/programmes/bachelor/international-business" target="_blank">
+            International Business <span class="link-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="card-school">SAXION UAS · Enschede</div>
+        <div class="ranking-label">Ranking de la universidad:</div>
+        <span class="badge badge-teal">UAS reconocida en el este de Holanda</span>
+      </div>
+      <span class="badge-diff diff-green">✅ Admisión directa</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Enschede (158.000 hab.)</div>
+        <a class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</a>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      El programa de licenciatura cubre los cuatro dominios esenciales de la Administración de Empresas, tanto teóricos como prácticos: Marketing y Ventas · Finanzas y Contabilidad · Operaciones y gestión de la cadena de suministro · Personas y Organización.
+      <p style="margin-top:10px">Durante el curso de cuatro años, adquirirás un conocimiento teórico profundo y experiencia práctica en los cuatro dominios comerciales, y te convertirás en el experto en conectar y equilibrar los diferentes intereses y roles dentro de las empresas en casos prácticos.</p>
+      <p style="margin-top:10px">Durante los años tres y cuatro, elegirás uno de los cuatro dominios comerciales con el objetivo de graduarte a nivel de especialista en el dominio comercial de tu elección. Los casos de negocios de la vida real en estrecha cooperación con empresas reales forman el corazón del programa desde el primer día. Los negocios internacionales en Saxion son únicos debido a tu experiencia laboral práctica y la posibilidad de adaptar tu especialización a tu propio talento e intereses; la preparación perfecta para tu carrera internacional.</p>
+    </div>
+    <details>
+      <summary>📋 Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Requisitos académicos:</strong></p>
+        <ul>
+          <li>2 A Levels (recomendado que se incluya Mathematics o Business) con nota A*–D + 4 IGCSE (con nota A*–C también), en otras 3 asignaturas diferentes</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Nivel de inglés:</strong></p>
+        <ul>
+          <li>IELTS Academic 6.0</li>
+          <li>Cambridge FCE Grade C (mínimo 169)</li>
+          <li>TOEFL 80</li>
+        </ul>
+        <p style="margin-top:10px">La Universidad puede eximir al alumno de presentar el certificado de inglés si después de valorar el nivel de inglés del alumno y/o su diploma de High School, lo considera oportuno.</p>
+        <p style="margin-top:10px"><strong>Proceso de selección:</strong> <span class="text-green">No hay proceso de selección indicado.</span></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── NHL-STENDEN ── -->
+  <div class="card" id="card-nhl">
+    <div class="card-header">
+      <div class="card-title-block">
+        <div class="card-title">
+          <a href="https://www.nhlstenden.com/en/courses/international-business" target="_blank">
+            International Business <span class="link-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="card-school">NHL-Stenden UAS · Leeuwarden / Emmen</div>
+        <div class="ranking-label">Ranking de la universidad:</div>
+        <span class="badge badge-teal">Miembro RUN-EU</span>
+        <span class="badge badge-teal">Sedes internacionales (Sudáfrica, Bali, Tailandia)</span>
+      </div>
+      <span class="badge-diff diff-green">✅ Admisión directa</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Leeuwarden o Emmen (≈107.000 hab.)</div>
+        <a class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</a>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      Estudiar negocios internacionales en NHL Stenden significa combinar las habilidades empresariales y de gestión con los idiomas, de modo que adquieras un sólido sentido de las habilidades empresariales e interculturales necesarias para los mercados mundiales de hoy en día. Los estudiantes y profesores proceden de todo el mundo, por lo que podrás estudiar en un entorno verdaderamente multicultural. También puedes pasar parte de tu carrera estudiando comercio internacional en el extranjero. Nuestra participación en RUN-EU significa que puedes unirte a Programas Cortos Avanzados y llevar a cabo proyectos con instituciones asociadas en Europa. También puedes ir a una de las sedes del Grand Tour de la NHL Stenden University of Applied Sciences en Sudáfrica, Bali o Tailandia. O puedes irte de intercambio a una institución asociada y adentrarte en una forma de estudiar totalmente nueva. Con más de 100 especializaciones diferentes ofrecidas por NHL Stenden en todo el mundo, seguro que encuentras la especialización perfecta, desde Innovación Empresarial y Marketing hasta Pensamiento Crítico y Toma de Decisiones Basada en Datos o Estrategia Empresarial Internacional.
+    </div>
+    <details>
+      <summary>📋 Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Requisitos académicos:</strong></p>
+        <ul>
+          <li>2 A Levels (recomendado que se incluya Mathematics o Business) con nota A*–D + 4 IGCSE (con nota A*–C también), en otras 3 asignaturas diferentes</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Nivel de inglés:</strong></p>
+        <ul>
+          <li>IELTS 6.0</li>
+          <li>Cambridge FCE: Grade C score 169 or higher</li>
+          <li>TOEFL 80</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Proceso de selección:</strong> <span class="text-green">No hay proceso de selección indicado explícitamente.</span></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── THUAS ── -->
+  <div class="card" id="card-thuas">
+    <div class="card-header">
+      <div class="card-title-block">
+        <div class="card-title">
+          <a href="https://www.thuas.com/programmes/bachelors/international-business-4-years" target="_blank">
+            International Business <span class="link-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="card-school">THU – The Hague University of Applied Sciences · La Haya</div>
+        <div class="ranking-label">Ranking de la universidad:</div>
+        <span class="badge badge-teal">UAS capitalina – sede ONU y organismos internacionales</span>
+      </div>
+      <span class="badge-diff diff-green">✅ Admisión directa (con posibles entrevista y carta)</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">La Haya (515.000 hab.)</div>
+        <a class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</a>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      ¿Cómo obtienen beneficios las empresas internacionales, los bancos, los organismos de la ONU y las multinacionales? ¿Cómo puede una organización contribuir a una comunidad verdaderamente global? Cursando el grado en Negocios Internacionales (IB) puedes marcar la diferencia en el mundo y ganarte la vida.
+      <p style="margin-top:10px">Lo llamamos negocio + impacto. Ábrete camino en la gestión de negocios internacionales en un aula en la que tus compañeros y profesores proceden de más de 40 países. Aprovecha nuestros contactos en el sector que te prepararán para acceder a puestos de consultoría y gestión empresarial de alto nivel como "gestor del cambio".</p>
+      <p style="margin-top:10px">El programa de IB te preparará para una exitosa carrera empresarial internacional. En cualquier parte del mundo. Construirás bases sólidas en economía, marketing, ventas, finanzas y gestión. Las clases y talleres de los distintos módulos te proporcionarán conocimientos profundos y experiencia de trabajo en un equipo global. Podrás poner en práctica tus conocimientos durante un semestre de prácticas en una empresa internacional.</p>
+      <p style="margin-top:10px">🎬 <a href="https://youtu.be/xkxZjYj_wBE" target="_blank" style="color:var(--teal-dark);font-weight:600">Ver vídeo del programa</a></p>
+    </div>
+    <details>
+      <summary>📋 Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Requisitos académicos:</strong></p>
+        <ul>
+          <li>2 A Levels (recomendado que se incluya Mathematics o Business) con nota A*–D + 4 IGCSE (con nota A*–C también), en otras 3 asignaturas diferentes</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Nivel de inglés:</strong></p>
+        <ul>
+          <li>IELTS 6.0</li>
+          <li>Cambridge FCE: Grade C score 169 or higher</li>
+          <li>TOEFL iBT 80</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Proceso de selección:</strong> No hay proceso de selección formal, aunque la universidad puede realizar exámenes para valorar el nivel de matemáticas e inglés. Además, también puede solicitar una entrevista y una carta de motivación donde tendrás que exponer lo que te mueve a estudiar International Business.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <span class="text-red">1 de mayo</span> (¡el más temprano de todos!)</div>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP NL -->
+  <div id="map-nl" class="map-container"></div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB: BÉLGICA
+═══════════════════════════════════════════════════════ -->
+<div id="tab-be" class="tab-content">
+
+  <div class="country-header">
+    <span class="flag flag-lg flag-be"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+    <div class="country-meta">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy)">Bélgica</h2>
+      <p>Bélgica ofrece universidades de aplicación de ciencias con programas en inglés de alta calidad y de 3 años de duración (180 ECTS). Los programas incluyen intercambio internacional y prácticas obligatorias en el extranjero.<br>
+      <strong>Matrícula universitaria:</strong> ~1.200–1.500 €/año | <strong>Alojamiento:</strong> ~450–700 €/mes aprox.</p>
+    </div>
+  </div>
+
+  <div class="section-divider">Universities of Applied Sciences</div>
+
+  <!-- ── VIVES ── -->
+  <div class="card" id="card-vives">
+    <div class="card-header">
+      <div class="card-title-block">
+        <div class="card-title">
+          <a href="https://www.vives.be/en/commercial-sciences-business-management-and-informatics/business-management-english-programme" target="_blank">
+            Business Management <span class="link-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="card-school">VIVES University of Applied Sciences · Kortrijk</div>
+        <div class="ranking-label">Ranking de la universidad:</div>
+        <span class="badge badge-teal">UAS acreditada Bélgica</span>
+        <span class="badge badge-teal">Doble titulación disponible</span>
+      </div>
+      <span class="badge-diff diff-green">✅ Admisión directa</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Kortrijk (75.506 hab.)</div>
+        <a class="map-mini-btn" onclick="scrollToMap('be','map-be')">🗺️ Ver mapa</a>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      El programa de Licenciatura en Administración de Empresas está diseñado para estudiantes que deseen obtener un conocimiento profundo de diferentes dominios de administración y obtener un título en negocios internacionales dentro del contexto intercultural de un mundo globalizado. Los compañeros de estudios internacionales, los profesores extranjeros, los viajes de estudio y las posibilidades de intercambio mejorarán la conciencia y la comunicación intercultural.
+      <p style="margin-top:10px">Este programa te ofrecerá un profundo conocimiento de la vida corporativa y una educación orientada a la práctica para obtener las habilidades requeridas en responsabilidades gerenciales clave en un entorno internacional. Los objetivos adicionales son: desarrollar habilidades en TIC, conciencia de sostenibilidad, habilidades de comunicación y lenguaje, la capacidad de trabajo en equipo, el liderazgo y el talento personal.</p>
+      <p style="margin-top:10px"><strong>¿Qué idiomas forman parte del plan de estudios?</strong><br>
+      Dentro del programa eliges cada año dos idiomas extranjeros. Para hablantes no nativos, el inglés como primera lengua extranjera es obligatorio. La segunda lengua extranjera se puede elegir libremente (francés, español o alemán) pero tiene que ser diferente de la lengua materna.</p>
+      <p style="margin-top:10px"><strong>Programas de doble titulación:</strong> Dentro del programa es posible obtener una doble titulación en una de sus universidades asociadas. Si dominas el francés, puedes obtener una doble titulación en una universidad asociada de ciencias aplicadas de Bélgica o estudiar un año en Francia. También puedes obtener una segunda titulación en asociadas en Finlandia, Alemania o Indonesia.</p>
+    </div>
+    <details>
+      <summary>📋 Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Requisitos académicos:</strong></p>
+        <ul>
+          <li>2 A Levels (recomendado que se incluya Mathematics o Business) con nota A*–D + 4 IGCSE (con nota A*–C también), en otras 3 asignaturas diferentes</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Nivel de inglés:</strong></p>
+        <ul>
+          <li>IELTS Academic 6.0</li>
+          <li>Cambridge CAE: C1</li>
+          <li>TOEFL iBT mín. 79</li>
+          <li>Duolingo test 105</li>
+        </ul>
+        <div class="deadline-box">📅 Fecha límite de matrícula: <strong>junio 2024</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── THOMAS MORE ── -->
+  <div class="card" id="card-thomas">
+    <div class="card-header">
+      <div class="card-title-block">
+        <div class="card-title">
+          <a href="https://www.thomasmore.be/en/degree-students/business-management-english/international-business-and-trade-english" target="_blank">
+            International Business and Trade <span class="link-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="card-school">Thomas More University · Mechelen</div>
+        <p style="font-size:.78rem;color:var(--muted);margin-top:4px">(Major of the English <a href="https://thomasmore.be/en/educations/degree-students/business-management" target="_blank" style="color:var(--teal-dark)">Bachelor's Degree International Business Management</a>)</p>
+        <div class="ranking-label">Ranking de la universidad:</div>
+        <span class="badge badge-teal">Reconocida UAS Bélgica</span>
+        <span class="badge badge-teal">Prácticas internacionales obligatorias</span>
+      </div>
+      <span class="badge-diff diff-green">✅ Admisión directa</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Mechelen (≈86.304 hab.)</div>
+        <a class="map-mini-btn" onclick="scrollToMap('be','map-be')">🗺️ Ver mapa</a>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      Durante el programa adquirirás conocimientos de los conceptos, modelos y marcos comerciales claves para mejorar tus habilidades en los entornos comerciales dinámicos de hoy. Desarrollarás confianza en el análisis y la planificación de estrategias comerciales en áreas de gestión, finanzas y sistemas de información. Aprenderás habilidades clave para la resolución de problemas que te permitirán clasificar e interpretar datos, lo que te permitirá planificar, diseñar e implementar procesos comerciales efectivos. Mejorarás tus técnicas de comunicación para poder comunicarte de manera competente, segura e informativa con tus compañeros y gerentes comerciales.
+      <p style="margin-top:10px">Al final del programa estarás preparado para participar de manera efectiva en los entornos multidisciplinarios de cualquier organización debido al trabajo en grupo y las asignaciones. Te inmiscuirás en un proyecto internacional y harás un intercambio de estudios, fuera de Bélgica, donde mejorarás tus habilidades interculturales. Por último, llevarás a cabo tu propio proyecto profesional / empresarial, apoyado y dirigido por tus profesores, y realizarás prácticas internacionales <strong>en un país que no podrá ser ni Bélgica ni España</strong>, donde tendrás una verdadera experiencia profesional.</p>
+    </div>
+    <details>
+      <summary>📋 Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Requisitos académicos:</strong></p>
+        <ul>
+          <li>2 A Levels (recomendado que se incluya Mathematics o Business) con nota A*–D + 4 IGCSE (con nota A*–C también), en otras 3 asignaturas diferentes</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Nivel de inglés:</strong></p>
+        <ul>
+          <li>IELTS 6.0</li>
+          <li>B2 de Cambridge (FCE 160)</li>
+          <li>TOEFL 79</li>
+          <li>Duolingo (nota mínima 110)</li>
+        </ul>
+        <div class="deadline-box">📅 Fecha límite de matrícula: <strong>junio 2024</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP BE -->
+  <div id="map-be" class="map-container"></div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB: ALEMANIA
+═══════════════════════════════════════════════════════ -->
+<div id="tab-de" class="tab-content">
+
+  <div class="country-header">
+    <span class="flag flag-lg flag-de"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+    <div class="country-meta">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy)">Alemania</h2>
+      <p>Alemania ofrece educación universitaria de alta calidad con un enfoque muy práctico e internacional, en inglés. Las universidades de ciencias aplicadas (Fachhochschulen) tienen gran reconocimiento en el sector empresarial.<br>
+      <strong>Matrícula universitaria:</strong> Muy baja (≈300–500 €/semestre en tasas administrativas) | <strong>Alojamiento:</strong> ~450–700 €/mes aprox.</p>
+    </div>
+  </div>
+
+  <div class="section-divider">University of Applied Sciences</div>
+
+  <!-- ── RHINE-WAAL ── -->
+  <div class="card" id="card-rhine">
+    <div class="card-header">
+      <div class="card-title-block">
+        <div class="card-title">
+          <a href="https://www.hochschule-rhein-waal.de/en/faculties/society-and-economics/degree-programmes/international-business-and-management-ba" target="_blank">
+            Bachelor International Business and Management <span class="link-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="card-school">Rhine-Waal University of Applied Sciences · Kleve</div>
+        <div class="ranking-label">Ranking de la universidad:</div>
+        <span class="badge badge-teal">Universidad internacional Alemania</span>
+        <span class="badge badge-teal">Entorno 100% en inglés</span>
+      </div>
+      <span class="badge-diff diff-green">✅ Admisión directa</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Kleve (83.274 hab.)</div>
+        <a class="map-mini-btn" onclick="scrollToMap('de','map-de')">🗺️ Ver mapa</a>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3,5 años (210 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Prácticas</div>
+        <div class="meta-value">8 semanas obligatorias (antes del 3er semestre)</div>
+      </div>
+    </div>
+    <div class="card-desc">
+      El programa de grado se basa en una metodología de enseñanza y su aplicación orientada a la práctica. A lo largo de tus estudios, construirás una base teórica sólida en administración de empresas, economía y gestión, al mismo tiempo que aprenderás cómo aplicar de manera efectiva tus conocimientos y habilidades con fines prácticos a través de numerosos proyectos con empresas regionales, en universidades en Alemania y en el extranjero. Te guiarán a lo largo del camino profesores accesibles con amplia experiencia en la industria.
+      <p style="margin-top:10px">Durante tus estudios, desarrollarás una variedad de habilidades clave, desde cómo realizar investigaciones hasta el pensamiento empresarial y las habilidades interpersonales que son indispensables en el lugar de trabajo moderno. A través de diversas formas de exámenes, por ejemplo presentaciones grupales, tendrás numerosas oportunidades para mejorar no solo tus habilidades para hablar en público, tu confianza y tus habilidades de comunicación profesional, sino también tus habilidades para el trabajo en equipo y la gestión de conflictos.</p>
+      <p style="margin-top:10px">En la Universidad de Ciencias Aplicadas de Rhine-Waal, trabajarás, estudiarás e interactuarás con colegas en inglés en un entorno profundamente internacional, lo que te permitirá mejorar tu dominio del idioma y experimentar otras culturas.</p>
+      <p style="margin-top:10px"><strong>Pasantía/práctica de 8 semanas.</strong> Esto debe completarse a más tardar en la fecha límite de inscripción del tercer semestre.</p>
+      <p style="margin-top:10px">
+        📄 <a href="https://www.hochschule-rhein-waal.de/sites/default/files/documents/2021/06/17/freigabe_2106_ibm_en.pdf" target="_blank" style="color:var(--teal-dark);font-weight:600">PDF informativo del programa</a> &nbsp;|&nbsp;
+        🌐 <a href="https://www.hochschule-rhein-waal.de/en" target="_blank" style="color:var(--teal-dark);font-weight:600">Enlace a la web de la Universidad</a>
+      </p>
+    </div>
+    <details>
+      <summary>📋 Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Requisitos académicos:</strong></p>
+        <ul>
+          <li>2 A Levels (recomendado que se incluya Mathematics o Business) con nota A*–D + 4 IGCSE (con nota A*–C también), en otras 3 asignaturas diferentes</li>
+        </ul>
+        <p style="margin-top:10px"><strong>Nivel de inglés:</strong></p>
+        <ul>
+          <li>Se debe demostrar un nivel mínimo B2</li>
+        </ul>
+        <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de julio</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP DE -->
+  <div id="map-de" class="map-container"></div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════ -->
+<footer>
+  <!-- Logo en colores originales, opacidad reducida -->
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+    <defs><style>.fc1{fill:#36aadc;}.fc1,.fc2,.fc3,.fc4{opacity:.8;}.fc2{fill:#30ac71;}.fc5{fill:#737373;}.fc3{fill:#32abbb;}.fc4{fill:#31ac9c;}</style></defs>
+    <g><g>
+    <path class="fc2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+    <path class="fc4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+    <path class="fc1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+    <path class="fc3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+    </g></g>
+  </svg>
+  <p>Informe de Opciones · Nicolás Chirino Hulsund · Preparado por Educoway</p>
+  <p style="margin-top:6px;font-size:.72rem">Este documento es confidencial y ha sido elaborado de forma personalizada.</p>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════ -->
+<script>
+// ── Tab navigation ──────────────────────────────────────
+const mapsInitialized = {};
+
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  // Lazy-init map
+  if (id === 'nl' && !mapsInitialized.nl) initMap('nl');
+  if (id === 'be' && !mapsInitialized.be) initMap('be');
+  if (id === 'de' && !mapsInitialized.de) initMap('de');
+}
+
+function goTo(tab, anchor) {
+  // Find tab button
+  const btns = document.querySelectorAll('.tab-btn');
+  let targetBtn = null;
+  btns.forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + tab + "'")) targetBtn = b;
+  });
+  showTab(tab, targetBtn);
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }, 150);
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+
+function scrollToMap(tab, anchor) {
+  const current = document.querySelector('.tab-content.active');
+  if (current && current.id === 'tab-' + tab) {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'});
+  } else {
+    goTo(tab, anchor);
+  }
+}
+
+// ── Map data ────────────────────────────────────────────
+const mapData = {
+  nl: {
+    center: [52.3, 5.1], zoom: 7,
+    universities: [
+      { id: 'card-rotterdam', name: 'International Business', school: 'Rotterdam UAS', lat: 51.9225, lng: 4.4792,
+        webUrl: 'https://www.rotterdamuas.com/programmes/bachelor/international-business/',
+        mapsUrl: 'https://maps.google.com/?q=Rotterdam+University+of+Applied+Sciences' },
+      { id: 'card-hanze', name: 'International Business', school: 'HANZE UAS', lat: 53.2194, lng: 6.5665,
+        webUrl: 'https://www.hanze.nl/eng/education/economy/international-business-school/programmes/bachelor/international-business-(4-year-programme)',
+        mapsUrl: 'https://maps.google.com/?q=Hanze+University+of+Applied+Sciences+Groningen' },
+      { id: 'card-fontys', name: 'International Business', school: 'FONTYS UAS', lat: 51.4416, lng: 5.4697,
+        webUrl: 'https://www.fontys.nl/en/Study-at-Fontys/Programmes/International-Business.htm',
+        mapsUrl: 'https://maps.google.com/?q=Fontys+University+Applied+Sciences+Eindhoven' },
+      { id: 'card-avans', name: 'International Business', school: 'AVANS UAS', lat: 51.5719, lng: 4.7683,
+        webUrl: 'https://www.avans.nl/international/studying/programmes/international-business/fulltime',
+        mapsUrl: 'https://maps.google.com/?q=Avans+University+Applied+Sciences+Breda' },
+      { id: 'card-saxion', name: 'International Business', school: 'SAXION UAS', lat: 52.2215, lng: 6.8937,
+        webUrl: 'https://www.saxion.edu/programmes/bachelor/international-business',
+        mapsUrl: 'https://maps.google.com/?q=Saxion+University+Applied+Sciences+Enschede' },
+      { id: 'card-nhl', name: 'International Business', school: 'NHL-Stenden UAS', lat: 53.2012, lng: 5.7999,
+        webUrl: 'https://www.nhlstenden.com/en/courses/international-business',
+        mapsUrl: 'https://maps.google.com/?q=NHL+Stenden+University+Applied+Sciences+Leeuwarden' },
+      { id: 'card-thuas', name: 'International Business', school: 'The Hague UAS', lat: 52.0705, lng: 4.3007,
+        webUrl: 'https://www.thuas.com/programmes/bachelors/international-business-4-years',
+        mapsUrl: 'https://maps.google.com/?q=The+Hague+University+Applied+Sciences' }
+    ]
+  },
+  be: {
+    center: [50.85, 4.35], zoom: 8,
+    universities: [
+      { id: 'card-vives', name: 'Business Management', school: 'VIVES UAS', lat: 50.8272, lng: 3.2526,
+        webUrl: 'https://www.vives.be/en/commercial-sciences-business-management-and-informatics/business-management-english-programme',
+        mapsUrl: 'https://maps.google.com/?q=VIVES+University+Applied+Sciences+Kortrijk' },
+      { id: 'card-thomas', name: 'International Business and Trade', school: 'Thomas More University', lat: 51.0260, lng: 4.4777,
+        webUrl: 'https://www.thomasmore.be/en/degree-students/business-management-english/international-business-and-trade-english',
+        mapsUrl: 'https://maps.google.com/?q=Thomas+More+University+Mechelen' }
+    ]
+  },
+  de: {
+    center: [51.79, 6.15], zoom: 9,
+    universities: [
+      { id: 'card-rhine', name: 'Bachelor International Business and Management', school: 'Rhine-Waal UAS', lat: 51.7889, lng: 6.1361,
+        webUrl: 'https://www.hochschule-rhein-waal.de/en/faculties/society-and-economics/degree-programmes/international-business-and-management-ba',
+        mapsUrl: 'https://maps.google.com/?q=Rhine-Waal+University+Applied+Sciences+Kleve' }
+    ]
+  }
+};
+
+function initMap(countryId) {
+  if (mapsInitialized[countryId]) return;
+  mapsInitialized[countryId] = true;
+  const data = mapData[countryId];
+  const mapEl = document.getElementById('map-' + countryId);
+  const map = L.map(mapEl).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  const icon = L.divIcon({className:'', html:'<div style="font-size:22px;line-height:1">🎓</div>', iconSize:[28,28], iconAnchor:[14,28]});
+
+  data.universities.forEach(u => {
+    const marker = L.marker([u.lat, u.lng], {icon}).addTo(map);
+    marker.bindPopup(`
+      <div style="min-width:210px">
+        <div class="popup-title">${u.name}</div>
+        <div class="popup-school">${u.school}</div>
+        <div class="popup-btns">
+          <a href="${u.webUrl}" target="_blank" class="popup-btn btn-teal">🌐 Ver grado</a>
+          <button onclick="scrollToCard('${u.id}')" class="popup-btn btn-navy">📋 Ver ficha</button>
+          <a href="${u.mapsUrl}" target="_blank" class="popup-btn btn-outline">📍 Google Maps</a>
+        </div>
+      </div>
+    `);
+  });
+}
+
+// Init NL map immediately since it's the default active tab for country content
+// (NL tab is not active by default, so we wait for user click)
+</script>
+</body>
+</html>
