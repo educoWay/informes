@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Opciones de Grado – Álvaro Beltrán Ruiz | Educoway</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  :root {
+    --teal: #0a9baa;
+    --teal-dark: #077a87;
+    --teal-light: #e0f5f7;
+    --navy: #0d2b3e;
+    --bg: #f4f8fa;
+    --border: #c8e0e5;
+    --text: #1a2e38;
+    --muted: #7a9aaa;
+    --red: #e03e3e;
+    --orange: #e07a3e;
+    --green: #2a9d5c;
+    --gold: #c49a1a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  #header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: linear-gradient(135deg, var(--navy) 0%, #0d3d52 100%);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  #header-top {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 32px;
+  }
+  #header-logo { flex-shrink: 0; height: 36px; }
+  #header-logo svg { height: 36px; width: auto; }
+  #header-title-block { flex: 1; }
+  #header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  #header-sub {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  /* ── TABS ── */
+  #tab-bar {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    background: rgba(0,0,0,0.25);
+    scrollbar-width: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  #tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 18px;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.65);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 2px solid transparent;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .tab-btn.active {
+    color: #fff;
+    border-bottom-color: var(--teal);
+    background: rgba(10,155,170,0.12);
+  }
+
+  /* ── TAB CONTENT ── */
+  .tab-pane { display: none; padding: 36px 32px 60px; max-width: 980px; margin: 0 auto; }
+  .tab-pane.active { display: block; }
+
+  /* ── INTRO ── */
+  .intro-greeting {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    font-size: 1.02rem;
+  }
+  .intro-greeting p + p { margin-top: 14px; }
+
+  /* ── INDEX ── */
+  .index-box {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+  }
+  .index-box h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--navy);
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .index-country { margin-bottom: 16px; }
+  .index-country-name {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    margin-bottom: 6px;
+  }
+  .index-entry {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .index-entry:hover { background: var(--teal-light); }
+  .index-entry-degree {
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .index-entry-school {
+    font-family: 'Playfair Display', serif;
+    font-size: 11.5px;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ── WHAT NOW ── */
+  .what-now {
+    background: linear-gradient(135deg, var(--navy) 0%, #0d3d52 100%);
+    border-radius: 12px;
+    padding: 28px 32px;
+    color: #fff;
+    margin-top: 8px;
+  }
+  .what-now h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+    color: #fff;
+  }
+  .what-now p { color: rgba(255,255,255,0.88); }
+
+  /* ── RESEARCH VS APPLIED ── */
+  .section-title {
+    background: var(--teal);
+    color: #fff;
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .content-block {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .content-block:hover {
+    border-color: var(--teal);
+    box-shadow: 0 4px 20px rgba(10,155,170,0.1);
+  }
+  .content-block h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 10px;
+    padding-left: 12px;
+    border-left: 3px solid var(--teal);
+  }
+  .content-block p { margin-bottom: 10px; }
+  .content-block p:last-child { margin-bottom: 0; }
+  .content-links { margin-top: 16px; }
+  .content-links a {
+    display: inline-block;
+    color: var(--teal-dark);
+    font-weight: 500;
+    text-decoration: none;
+    padding: 4px 0;
+    transition: color 0.15s;
+  }
+  .content-links a:hover { color: var(--navy); text-decoration: underline; }
+  .content-links a::before { content: '→ '; }
+
+  /* ── COUNTRY TAB ── */
+  .country-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+  }
+  .country-flag-large { flex-shrink: 0; }
+  .country-info h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .country-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .country-meta-item {
+    background: var(--teal-light);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--teal-dark);
+  }
+  .country-text { font-size: 0.95rem; color: #3a5060; }
+
+  .section-divider {
+    margin: 28px 0 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── UNIVERSITY CARD ── */
+  .uni-card {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    scroll-margin-top: 120px;
+  }
+  .uni-card:hover {
+    border-color: var(--teal);
+    box-shadow: 0 6px 24px rgba(10,155,170,0.12);
+  }
+  .uni-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 24px 14px;
+    border-bottom: 1px solid var(--teal-light);
+  }
+  .uni-card-header-left { flex: 1; }
+  .uni-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+  .uni-card-title a {
+    color: var(--navy);
+    text-decoration: none;
+    transition: color 0.15s;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .uni-card-title a:hover { color: var(--teal-dark); }
+  .uni-card-title a:hover .cursor-icon { transform: scale(1.3); }
+  .cursor-icon {
+    display: inline-block;
+    font-size: 0.75em;
+    transition: transform 0.2s;
+  }
+  .uni-card-school {
+    color: var(--teal);
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .ranking-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 4px;
+  }
+  .ranking-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-weight: 400;
+    margin-right: 2px;
+  }
+  .badge-ranking {
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+  .badge-ranking.gold {
+    background: #fef9e7;
+    color: #9a7000;
+    border-color: #e8d07a;
+  }
+  .badge-difficulty {
+    flex-shrink: 0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border: 1.5px solid;
+  }
+  .diff-alta { background: #fff3e0; color: #b85f00; border-color: #e07a3e; }
+  .diff-muy-alta { background: #fdeaea; color: #b00000; border-color: #e03e3e; }
+  .diff-media { background: #e6f7ee; color: #1b6e3e; border-color: #2a9d5c; }
+  .diff-directa { background: #e6f7ee; color: #1b6e3e; border-color: #2a9d5c; }
+
+  .uni-card-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 8px;
+    padding: 14px 24px;
+    background: var(--teal-light);
+    border-bottom: 1px solid var(--border);
+  }
+  .meta-cell { }
+  .meta-cell-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--teal-dark);
+    margin-bottom: 2px;
+  }
+  .meta-cell-val {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--navy);
+  }
+  .map-mini-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: 'DM Sans', sans-serif;
+    margin-top: 2px;
+  }
+  .map-mini-btn:hover { background: var(--teal-dark); }
+
+  .uni-card-desc {
+    padding: 18px 24px;
+    background: #f8fcfd;
+    border-left: 4px solid var(--teal);
+    margin: 0 24px 18px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.92rem;
+    line-height: 1.72;
+    color: #2a4050;
+  }
+  .uni-card-desc p + p { margin-top: 10px; }
+
+  details.req-details {
+    margin: 0 24px 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  details.req-details summary {
+    padding: 11px 16px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--teal-dark);
+    background: var(--teal-light);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  details.req-details summary::-webkit-details-marker { display: none; }
+  details.req-details summary::before {
+    content: '▶';
+    font-size: 0.6em;
+    transition: transform 0.2s;
+  }
+  details.req-details[open] summary { background: #cdeef1; }
+  details.req-details[open] summary::before { transform: rotate(90deg); }
+  .req-body {
+    padding: 16px 18px;
+    font-size: 0.88rem;
+    line-height: 1.68;
+  }
+  .req-body p + p { margin-top: 10px; }
+  .deadline-box {
+    background: #fffbeb;
+    border: 1px solid #f5c518;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #7a5500;
+  }
+  .deadline-box::before { content: '📅 Fecha límite: '; }
+  .red-text { color: var(--red); font-weight: 600; }
+  .green-text { color: var(--green); font-weight: 600; }
+
+  /* ── MAP ── */
+  .map-section {
+    margin-top: 36px;
+    scroll-margin-top: 110px;
+  }
+  .map-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--navy);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .leaflet-map {
+    height: 420px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    overflow: hidden;
+  }
+
+  /* ── FLAGS CSS ── */
+  /* Netherlands */
+  .flag-nl {
+    display: inline-flex;
+    flex-direction: column;
+    width: 48px;
+    height: 32px;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .flag-nl span:nth-child(1) { flex: 1; background: #AE1C28; }
+  .flag-nl span:nth-child(2) { flex: 1; background: #fff; }
+  .flag-nl span:nth-child(3) { flex: 1; background: #21468B; }
+  /* Netherlands large */
+  .flag-nl-lg {
+    display: inline-flex;
+    flex-direction: column;
+    width: 72px;
+    height: 48px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  .flag-nl-lg span:nth-child(1) { flex: 1; background: #AE1C28; }
+  .flag-nl-lg span:nth-child(2) { flex: 1; background: #fff; }
+  .flag-nl-lg span:nth-child(3) { flex: 1; background: #21468B; }
+  /* Belgium */
+  .flag-be {
+    display: inline-flex;
+    flex-direction: row;
+    width: 48px;
+    height: 32px;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .flag-be span:nth-child(1) { flex: 1; background: #000; }
+  .flag-be span:nth-child(2) { flex: 1; background: #FAE042; }
+  .flag-be span:nth-child(3) { flex: 1; background: #ED2939; }
+  .flag-be-lg {
+    display: inline-flex;
+    flex-direction: row;
+    width: 72px;
+    height: 48px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  .flag-be-lg span:nth-child(1) { flex: 1; background: #000; }
+  .flag-be-lg span:nth-child(2) { flex: 1; background: #FAE042; }
+  .flag-be-lg span:nth-child(3) { flex: 1; background: #ED2939; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 24px 32px;
+    font-size: 0.78rem;
+  }
+  footer svg { opacity: 0.35; height: 24px; width: auto; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; }
+
+  /* ── LEAFLET POPUP ── */
+  .popup-inner { font-family: 'DM Sans', sans-serif; min-width: 200px; }
+  .popup-inner h4 { font-size: 0.9rem; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+  .popup-inner p { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; }
+  .popup-btns { display: flex; flex-direction: column; gap: 5px; }
+  .popup-btn {
+    display: block;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .popup-btn-teal { background: var(--teal); color: #fff; }
+  .popup-btn-outline { background: #fff; color: var(--teal-dark); border: 1.5px solid var(--teal); }
+  .popup-btn-maps { background: #4285F4; color: #fff; }
+
+  @media (max-width: 640px) {
+    #header-top { padding: 10px 16px; }
+    .tab-pane { padding: 20px 16px 48px; }
+    .uni-card-header { flex-direction: column; }
+    .badge-difficulty { align-self: flex-start; }
+    .country-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ HEADER ══════════ -->
+<div id="header">
+  <div id="header-top">
+    <div id="header-logo">
+      <!-- SVG logo INLINE – white version (cls-5 fill changed to #ffffff) -->
+      <svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18" style="height:36px;width:auto;">
+        <defs>
+          <style>
+            .hcls-1{fill:#36aadc;opacity:.8;}
+            .hcls-2{fill:#30ac71;opacity:.8;}
+            .hcls-3{fill:#32abbb;opacity:.8;}
+            .hcls-4{fill:#31ac9c;opacity:.8;}
+            .hcls-5{fill:#ffffff;}
+          </style>
+        </defs>
+        <g>
+          <g>
+            <path class="hcls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+            <path class="hcls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <path class="hcls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+            <rect class="hcls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+            <path class="hcls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <path class="hcls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+            <path class="hcls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+            <path class="hcls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="hcls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+            <!-- (remaining small text paths omitted for brevity – all cls-5 white) -->
+            <path class="hcls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+            <path class="hcls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+            <path class="hcls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+            <path class="hcls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+            <g>
+              <path class="hcls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+              <path class="hcls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+              <path class="hcls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+              <path class="hcls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+              <path class="hcls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+              <path class="hcls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+              <polygon class="hcls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div id="header-title-block">
+      <div id="header-title">Informe Personalizado de Opciones de Grado</div>
+      <div id="header-sub">Preparado para Álvaro Beltrán Ruiz</div>
+    </div>
+  </div>
+  <!-- TABS -->
+  <div id="tab-bar">
+    <button class="tab-btn active" onclick="showTab('intro',this)">Introducción</button>
+    <button class="tab-btn" onclick="showTab('research',this)">Research vs Applied Sciences</button>
+    <button class="tab-btn" onclick="showTab('nl',this)">
+      <span class="flag-nl" style="height:14px;width:22px;border-radius:2px;">
+        <span></span><span></span><span></span>
+      </span>
+      Países Bajos
+    </button>
+    <button class="tab-btn" onclick="showTab('be',this)">
+      <span class="flag-be" style="height:14px;width:22px;border-radius:2px;">
+        <span></span><span></span><span></span>
+      </span>
+      Bélgica
+    </button>
+  </div>
+</div>
+
+<!-- ══════════ TAB: INTRODUCCIÓN ══════════ -->
+<div id="tab-intro" class="tab-pane active">
+
+  <div class="intro-greeting">
+    <p>Hola, Álvaro:</p>
+    <p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencido de que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+    <p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p>
+  </div>
+
+  <div class="index-box">
+    <h2>Índice de opciones</h2>
+    <div class="index-country">
+      <div class="index-country-name">
+        <span class="flag-nl" style="height:12px;width:20px;vertical-align:middle;margin-right:6px;border-radius:2px;display:inline-flex;">
+          <span></span><span></span><span></span>
+        </span>
+        Países Bajos — Applied Sciences Universities
+      </div>
+      <a class="index-entry" onclick="goTo('nl','buas')">
+        <div class="index-entry-degree">Tourism</div>
+        <div class="index-entry-school">Breda University of Applied Sciences (BUAS)</div>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','hz')">
+        <div class="index-entry-degree">Tourism Management</div>
+        <div class="index-entry-school">HZ University of Applied Sciences</div>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','nhl-tourism')">
+        <div class="index-entry-degree">Tourism Management</div>
+        <div class="index-entry-school">NHL Stenden University of Applied Sciences</div>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','nhl-leisure')">
+        <div class="index-entry-degree">Leisure and Events Management</div>
+        <div class="index-entry-school">NHL Stenden University of Applied Sciences</div>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','inholland')">
+        <div class="index-entry-degree">Tourism Management</div>
+        <div class="index-entry-school">Inholland University of Applied Sciences</div>
+      </a>
+      <a class="index-entry" onclick="goTo('nl','saxion')">
+        <div class="index-entry-degree">Tourism Management</div>
+        <div class="index-entry-school">Saxion University of Applied Sciences</div>
+      </a>
+    </div>
+    <div class="index-country">
+      <div class="index-country-name">
+        <span class="flag-be" style="height:12px;width:20px;vertical-align:middle;margin-right:6px;border-radius:2px;display:inline-flex;">
+          <span></span><span></span><span></span>
+        </span>
+        Bélgica — Applied Science Universities
+      </div>
+      <a class="index-entry" onclick="goTo('be','thomasmore')">
+        <div class="index-entry-degree">International Tourism and Leisure</div>
+        <div class="index-entry-school">Thomas More University of Applied Sciences</div>
+      </a>
+      <a class="index-entry" onclick="goTo('be','vives')">
+        <div class="index-entry-degree">Hotel Management – Hospitality Management</div>
+        <div class="index-entry-school">VIVES University of Applied Sciences</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="what-now">
+    <h2>¿Qué tienes que hacer ahora?</h2>
+    <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+    <p style="margin-top:12px;color:rgba(255,255,255,0.7);">¡Un saludo!</p>
+  </div>
+</div>
+
+<!-- ══════════ TAB: RESEARCH VS APPLIED ══════════ -->
+<div id="tab-research" class="tab-pane">
+
+  <div class="section-title">Universidades de "Research" vs "Applied Sciences"</div>
+
+  <div class="content-block">
+    <p>Como creo que ya te hemos explicado, en la mayoría de países europeos tenemos que diferenciar entre 2 tipos de universidades: "<em>Research</em>" y "<em>Applied Sciences</em>". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+  </div>
+
+  <div class="content-block">
+    <h3>· Metodología teórica vs práctica</h3>
+    <p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project/Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre.</p>
+    <p>Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+  </div>
+
+  <div class="content-block">
+    <h3>· Duración</h3>
+    <p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+    <p>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+  </div>
+
+  <div class="content-block">
+    <h3>· Ranking / Prestigio</h3>
+    <p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.</p>
+    <p>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+  </div>
+
+  <div class="content-block">
+    <h3>· Acceso a Másteres</h3>
+    <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. En cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research</em>, te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p>
+    <div class="content-links">
+      <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de <em>Research</em> y otra de <em>Applied Sciences</em>):</p>
+      <a href="https://www.tue.nl/en/education/study-at-tue/information-and-advice/practical-information/did-you-know/applied-science-vs-research-university" target="_blank">Applied Science vs. Research University</a><br>
+      <a href="https://www.hva.nl/en/study/why-amsterdam-university-of-applied-sciences/education-in-the-netherlands/types-of-universities-in-the-netherlands" target="_blank">Types of universities in the Netherlands</a>
+    </div>
+  </div>
+
+  <div class="content-block" style="margin-top:24px;">
+    <p>Ahora sí, habiendo comentado estos detalles, te paso las opciones de estudio más interesantes para tu caso particular:</p>
+  </div>
+</div>
+
+<!-- ══════════ TAB: PAÍSES BAJOS ══════════ -->
+<div id="tab-nl" class="tab-pane">
+
+  <div class="country-header">
+    <div class="country-flag-large">
+      <span class="flag-nl-lg"><span></span><span></span><span></span></span>
+    </div>
+    <div class="country-info">
+      <h2>Países Bajos</h2>
+      <div class="country-meta">
+        <span class="country-meta-item">💶 Matrícula: 2.692 €/año</span>
+        <span class="country-meta-item">🏠 Alojamiento: ~600–900 €/mes</span>
+      </div>
+      <div class="country-text">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <strong>2.692 €/año</strong>.</div>
+    </div>
+  </div>
+
+  <div class="section-divider">Applied Sciences Universities</div>
+
+  <!-- ── BUAS ── -->
+  <div class="uni-card" id="buas">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <div class="uni-card-title">
+          <a href="https://www.buas.nl/programmes/tourism" target="_blank">
+            Tourism <span class="cursor-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="uni-card-school">Breda University of Applied Sciences (BUAS) · Breda</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-ranking">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span>
+        </div>
+      </div>
+      <span class="badge-difficulty diff-media">Admisión directa</span>
+    </div>
+    <div class="uni-card-meta-grid">
+      <div class="meta-cell">
+        <div class="meta-cell-label">Ciudad</div>
+        <div class="meta-cell-val">Breda
+          <br><button class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Duración</div>
+        <div class="meta-cell-val">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Coste</div>
+        <div class="meta-cell-val">2.692 €/año</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      <p>El grado en Tourism de Breda University of Applied Sciences destaca por su enfoque académico y multidisciplinar, combinando áreas como economía, sociología y ciencias medioambientales aplicadas al turismo. A lo largo del programa, el estudiante adquiere una visión global del sector, entendiendo el turismo como un sistema complejo en constante evolución. Se trabajan asignaturas como Tourism Principles &amp; Practice, Environment &amp; Tourism o Sociology &amp; Tourism, que permiten analizar el impacto del turismo en la sociedad, la economía y el entorno natural, además de desarrollar una base sólida en investigación científica.</p>
+      <p>A medida que avanza el grado, el contenido se orienta hacia el desarrollo sostenible del turismo y la gestión estratégica de destinos. El estudiante profundiza en áreas como planificación turística, políticas públicas, governance, gestión de destinos y estudios interculturales, integrando también aspectos de ética, filosofía de la ciencia y análisis crítico. El programa incluye proyectos de investigación reales, incluso en destinos internacionales, donde se analizan retos actuales del sector y se plantean soluciones innovadoras para mejorar la calidad de vida en los destinos turísticos.</p>
+      <p>El componente académico se refuerza con la especialización en el último año, donde el alumno puede elegir un minor en áreas como business, desarrollo internacional o medioambiente, y finalizar con una tesis. Todo ello prepara para roles estratégicos y analíticos dentro del sector, con una clara orientación hacia la sostenibilidad, la innovación y la toma de decisiones basada en datos.</p>
+      <p>En cuanto a salidas profesionales, este grado abre oportunidades tanto en el sector turístico como en ámbitos relacionados con la consultoría, el marketing o la gestión de destinos. Algunos ejemplos incluyen: consultor turístico, gestor de destinos, analista de políticas turísticas, especialista en sostenibilidad, marketing turístico, revenue/yield manager, account manager o asesor de viajes. También permite acceder a másteres en áreas como turismo, economía, ciencias sociales o sostenibilidad, ampliando las opciones hacia perfiles más especializados o académicos.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+        <p><strong>Dificultad de acceso:</strong> <span class="green-text">Admisión directa</span> para estudiantes europeos con título de bachillerato válido.</p>
+        <p><strong>Requisitos de inglés:</strong> IELTS 6.0 o equivalente (TOEFL iBT 80).</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── HZ ── -->
+  <div class="uni-card" id="hz">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <div class="uni-card-title">
+          <a href="https://www.hz.nl/en/programmes/bachelor/tourism-management" target="_blank">
+            Tourism Management <span class="cursor-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="uni-card-school">HZ University of Applied Sciences · Vlissingen / Edisonweg</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-ranking">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span>
+        </div>
+      </div>
+      <span class="badge-difficulty diff-media">Admisión directa</span>
+    </div>
+    <div class="uni-card-meta-grid">
+      <div class="meta-cell">
+        <div class="meta-cell-label">Ciudad</div>
+        <div class="meta-cell-val">Edisonweg (Vlissingen)
+          <br><button class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Duración</div>
+        <div class="meta-cell-val">3 o 4 años (180–240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Coste</div>
+        <div class="meta-cell-val">2.692 €/año</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      <p>El grado en Tourism Management de HZ University of Applied Sciences se caracteriza por un enfoque práctico y orientado al mundo empresarial del turismo, con una fuerte base en gestión, emprendimiento e innovación. A lo largo del programa, los estudiantes trabajan contenidos como marketing, gestión de recursos humanos, análisis empresarial y comunicación intercultural, integrando también áreas como e-tourism y tendencias tecnológicas. Todo ello permite entender cómo funcionan las organizaciones turísticas desde dentro y cómo adaptarse a un sector en constante cambio.</p>
+      <p>El programa pone especial énfasis en el desarrollo de competencias de liderazgo y mentalidad emprendedora, preparando al estudiante para diseñar y gestionar experiencias turísticas completas. Se abordan ámbitos como el desarrollo de destinos, la creación de experiencias, la sostenibilidad y el bienestar (wellness), respondiendo a tendencias actuales del sector como la búsqueda de calidad de vida y turismo responsable. Además, el aprendizaje está muy vinculado a la práctica, con proyectos reales, análisis de empresas y orientación directa al entorno profesional.</p>
+      <p>Otro aspecto diferencial es la posibilidad de especializarse en áreas concretas según intereses, como gastronomía, turismo de bienestar o innovación en experiencias, lo que permite al estudiante perfilar su trayectoria profesional desde etapas tempranas. El programa tiene un enfoque internacional y aplicado, facilitando el desarrollo de habilidades clave como la toma de decisiones, la resolución de problemas y la adaptación a contextos multiculturales.</p>
+      <p>En cuanto a salidas profesionales, este grado ofrece un abanico amplio dentro del sector turístico y empresarial: gestor de hospitality, consultor de ventas, marketing manager, responsable de atención al cliente, operations manager, HR manager, destination marketer o emprendedor en turismo. También permite continuar con estudios de máster en áreas como gestión estratégica, marketing o destination management, ampliando las opciones hacia posiciones más especializadas o de mayor responsabilidad.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+        <p><strong>Dificultad de acceso:</strong> <span class="green-text">Admisión directa</span> para estudiantes europeos con título de bachillerato válido.</p>
+        <p><strong>Requisitos de inglés:</strong> IELTS 6.0 o equivalente.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── NHL STENDEN TOURISM ── -->
+  <div class="uni-card" id="nhl-tourism">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <div class="uni-card-title">
+          <a href="https://www.nhlstenden.com/en/study/bachelor/tourism-management" target="_blank">
+            Tourism Management <span class="cursor-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="uni-card-school">NHL Stenden University of Applied Sciences · Leeuwarden</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-ranking">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span>
+        </div>
+      </div>
+      <span class="badge-difficulty diff-media">Admisión directa</span>
+    </div>
+    <div class="uni-card-meta-grid">
+      <div class="meta-cell">
+        <div class="meta-cell-label">Ciudad</div>
+        <div class="meta-cell-val">Leeuwarden
+          <br><button class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Duración</div>
+        <div class="meta-cell-val">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Coste</div>
+        <div class="meta-cell-val">2.692 €/año</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      <p>El grado en Tourism Management de NHL Stenden University of Applied Sciences se centra en ofrecer una formación completa y aplicada al sector turístico, con especial énfasis en la sostenibilidad y la innovación. A lo largo del programa, el estudiante trabaja contenidos como desarrollo de destinos, marketing turístico, emprendimiento, análisis de tendencias y sistemas de gestión, combinando conocimientos empresariales con una comprensión profunda del impacto cultural, económico y medioambiental del turismo.</p>
+      <p>Uno de los aspectos clave del grado es su metodología práctica basada en proyectos reales (Design-Based Education), donde los alumnos colaboran con empresas del sector para resolver retos actuales, como el diseño de experiencias turísticas, la promoción de destinos o la creación de productos innovadores. Desde el primer año se trabaja en equipo, desarrollando habilidades de liderazgo, comunicación y resolución de problemas, mientras se construye un perfil profesional adaptado a la industria.</p>
+      <p>El programa también permite una alta personalización mediante minors y especializaciones en el tercer año, en áreas como heritage management, turismo de aventura, destinos sostenibles o experiencias turísticas. Además, incluye viajes académicos, intercambios y prácticas internacionales, lo que refuerza la dimensión global del grado y la conexión directa con el mercado laboral.</p>
+      <p>En cuanto a salidas profesionales, este grado prepara para posiciones en múltiples áreas del turismo y la gestión: gestor de destinos, consultor turístico, product manager, marketing turístico, project manager, especialista en sostenibilidad, gestor de experiencias o emprendedor en turismo. También abre la puerta a roles en consultoría y desarrollo estratégico dentro de la industria, así como a estudios de posgrado en turismo, leisure o gestión internacional.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+        <p><strong>Dificultad de acceso:</strong> <span class="green-text">Admisión directa</span> para estudiantes europeos con título de bachillerato válido.</p>
+        <p><strong>Requisitos de inglés:</strong> IELTS 6.0 o equivalente.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── NHL STENDEN LEISURE ── -->
+  <div class="uni-card" id="nhl-leisure">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <div class="uni-card-title">
+          <a href="https://www.nhlstenden.com/en/study/bachelor/leisure-and-events-management" target="_blank">
+            Leisure and Events Management <span class="cursor-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="uni-card-school">NHL Stenden University of Applied Sciences · Leeuwarden</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-ranking">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span>
+        </div>
+      </div>
+      <span class="badge-difficulty diff-media">Admisión directa</span>
+    </div>
+    <div class="uni-card-meta-grid">
+      <div class="meta-cell">
+        <div class="meta-cell-label">Ciudad</div>
+        <div class="meta-cell-val">Leeuwarden
+          <br><button class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Duración</div>
+        <div class="meta-cell-val">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Coste</div>
+        <div class="meta-cell-val">2.692 €/año</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      <p>El grado en Leisure and Events Management de NHL Stenden University of Applied Sciences está orientado a la creación y gestión de experiencias en el ámbito del ocio, los eventos, la cultura y el entretenimiento. A lo largo del programa, el estudiante combina contenidos de gestión empresarial con creatividad, trabajando áreas como marketing, business economics, project management, comunicación y análisis de tendencias del sector. El objetivo es entender cómo diseñar experiencias relevantes que generen impacto tanto económico como social y cultural.</p>
+      <p>El aprendizaje se basa en una metodología práctica, donde los estudiantes trabajan desde el inicio con empresas reales en proyectos vinculados al sector del leisure &amp; events. Se desarrollan competencias clave como liderazgo, trabajo en equipo y resolución de problemas, mientras se aprende a diseñar eventos, experiencias y estrategias innovadoras. Además, el programa incorpora una fuerte orientación hacia la sostenibilidad y el impacto social, abordando cómo el ocio puede mejorar la calidad de vida y contribuir al desarrollo de comunidades.</p>
+      <p>Durante el grado, también existe la posibilidad de especializarse mediante minors en áreas como event management, sport management o arts &amp; culture, así como adquirir experiencia internacional y realizar prácticas de larga duración en empresas del sector. Esta combinación de especialización y práctica permite al estudiante construir un perfil versátil y alineado con las necesidades reales de la industria.</p>
+      <p>En cuanto a salidas profesionales: event manager, project manager, festival organizer, marketing &amp; communications specialist, leisure facility manager, sports event coordinator, concept developer, policy officer en ocio y cultura, booking/entertainment manager, emprendedor en la industria del leisure &amp; events.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+        <p><strong>Dificultad de acceso:</strong> <span class="green-text">Admisión directa</span> para estudiantes europeos con título de bachillerato válido.</p>
+        <p><strong>Requisitos de inglés:</strong> IELTS 6.0 o equivalente.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── INHOLLAND ── -->
+  <div class="uni-card" id="inholland">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <div class="uni-card-title">
+          <a href="https://www.inholland.nl/en/study/bachelor-degree-programmes/tourism-management/" target="_blank">
+            Tourism Management <span class="cursor-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="uni-card-school">Inholland University of Applied Sciences · Amsterdam</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-ranking">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span>
+        </div>
+      </div>
+      <span class="badge-difficulty diff-media">Admisión directa</span>
+    </div>
+    <div class="uni-card-meta-grid">
+      <div class="meta-cell">
+        <div class="meta-cell-label">Ciudad</div>
+        <div class="meta-cell-val">Amsterdam
+          <br><button class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Duración</div>
+        <div class="meta-cell-val">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Coste</div>
+        <div class="meta-cell-val">2.692 €/año</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      <p>El grado en Tourism Management de Inholland University of Applied Sciences ofrece una formación práctica orientada a la gestión del turismo desde una perspectiva empresarial e internacional. A lo largo del programa, el estudiante trabaja contenidos como marketing turístico, gestión de destinos, economía, comunicación intercultural y comportamiento del consumidor, entendiendo cómo funciona el sector en un contexto global y dinámico. Al tratarse de una universidad de applied sciences, el enfoque está claramente centrado en la aplicación real de los conocimientos y en la preparación directa para el mercado laboral.</p>
+      <p>El programa combina teoría con proyectos prácticos en colaboración con empresas del sector, donde los alumnos desarrollan soluciones para retos reales del turismo. Se abordan áreas clave como la digitalización (e-tourism), sostenibilidad, desarrollo de experiencias y estrategia empresarial, permitiendo al estudiante adquirir habilidades en análisis, toma de decisiones y gestión. Además, el carácter internacional del grado favorece el trabajo en entornos multiculturales y el desarrollo de competencias lingüísticas y profesionales adaptadas a la industria global.</p>
+      <p>Otro aspecto relevante es la orientación hacia la empleabilidad, con prácticas obligatorias y proyectos aplicados que conectan directamente con empresas turísticas. El estudiante puede especializarse en diferentes áreas del sector, como gestión de destinos, marketing o desarrollo de productos turísticos, construyendo un perfil versátil y adaptado a distintos ámbitos profesionales dentro del turismo.</p>
+      <p>En cuanto a salidas profesionales: destination manager, marketing turístico, product manager, event manager, consultor turístico, account manager, hospitality manager, travel manager, gestor de proyectos turísticos.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+        <p><strong>Dificultad de acceso:</strong> <span class="green-text">Admisión directa</span> para estudiantes europeos con título de bachillerato válido.</p>
+        <p><strong>Requisitos de inglés:</strong> IELTS 6.0 o equivalente.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── SAXION ── -->
+  <div class="uni-card" id="saxion">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <div class="uni-card-title">
+          <a href="https://www.saxion.edu/programmes/bachelor/tourism-management" target="_blank">
+            Tourism Management <span class="cursor-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="uni-card-school">Saxion University of Applied Sciences · Deventer</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-ranking">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span>
+        </div>
+      </div>
+      <span class="badge-difficulty diff-media">Admisión directa</span>
+    </div>
+    <div class="uni-card-meta-grid">
+      <div class="meta-cell">
+        <div class="meta-cell-label">Ciudad</div>
+        <div class="meta-cell-val">Deventer
+          <br><button class="map-mini-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Duración</div>
+        <div class="meta-cell-val">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Coste</div>
+        <div class="meta-cell-val">2.692 €/año</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      <p>El grado en Tourism Management de Saxion University of Applied Sciences está diseñado con un enfoque práctico y directamente conectado con la industria turística, combinando gestión empresarial, hospitalidad e innovación. A lo largo del programa, el estudiante trabaja contenidos como destination marketing, hospitality, organización de eventos, economía y comunicación, desarrollando una visión global del sector. Desde el inicio se abordan retos reales del turismo, aprendiendo a identificar oportunidades y a diseñar productos y servicios adaptados a las necesidades del viajero.</p>
+      <p>El programa destaca por su metodología aplicada basada en proyectos con empresas y casos reales, lo que permite al estudiante trabajar sobre situaciones actuales del sector. Durante el grado se profundiza en áreas como smart tourism, uso de tecnología (apps, chatbots, experiencias digitales), sostenibilidad y desarrollo de destinos, integrando siempre la perspectiva del cliente y el impacto en el entorno. Además, incluye prácticas (internships), aprendizaje de idiomas y experiencias internacionales que refuerzan el perfil global del estudiante.</p>
+      <p>Otro aspecto clave es el desarrollo de competencias emprendedoras y creativas, orientadas a la creación de experiencias turísticas innovadoras. El estudiante aprende a transformar destinos en productos atractivos, gestionar proyectos turísticos y trabajar con distintos stakeholders del sector, combinando pensamiento estratégico con habilidades prácticas como liderazgo, comunicación y resolución de problemas.</p>
+      <p>En cuanto a salidas profesionales, este grado permite acceder a diferentes áreas dentro del turismo y la gestión: destination manager, product manager, marketing turístico, event manager, hotel manager, tour operator, consultor turístico, travel manager, gestor de experiencias, desarrollo de destinos.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+        <p><strong>Dificultad de acceso:</strong> <span class="green-text">Admisión directa</span> para estudiantes europeos con título de bachillerato válido.</p>
+        <p><strong>Requisitos de inglés:</strong> IELTS 6.0 o equivalente.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP NL -->
+  <div class="map-section" id="map-nl">
+    <h3>🎓 Universidades en el mapa</h3>
+    <div id="leaflet-nl" class="leaflet-map"></div>
+  </div>
+
+</div>
+
+<!-- ══════════ TAB: BÉLGICA ══════════ -->
+<div id="tab-be" class="tab-pane">
+
+  <div class="country-header">
+    <div class="country-flag-large">
+      <span class="flag-be-lg"><span></span><span></span><span></span></span>
+    </div>
+    <div class="country-info">
+      <h2>Bélgica</h2>
+      <div class="country-meta">
+        <span class="country-meta-item">💶 Matrícula: 1.180 €/año</span>
+        <span class="country-meta-item">🏠 Alojamiento: ~450–750 €/mes</span>
+      </div>
+      <div class="country-text">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <strong>1.180 €/año</strong>.</div>
+    </div>
+  </div>
+
+  <div class="section-divider">Applied Science Universities</div>
+
+  <!-- ── THOMAS MORE ── -->
+  <div class="uni-card" id="thomasmore">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <div class="uni-card-title">
+          <a href="https://www.thomasmore.be/en/programmes/international-tourism-and-leisure" target="_blank">
+            International Tourism and Leisure <span class="cursor-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="uni-card-school">Thomas More University of Applied Sciences · Mechelen</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-ranking">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span>
+        </div>
+      </div>
+      <span class="badge-difficulty diff-media">Admisión directa</span>
+    </div>
+    <div class="uni-card-meta-grid">
+      <div class="meta-cell">
+        <div class="meta-cell-label">Ciudad</div>
+        <div class="meta-cell-val">Mechelen
+          <br><button class="map-mini-btn" onclick="scrollToMap('be','map-be')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Duración</div>
+        <div class="meta-cell-val">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Coste</div>
+        <div class="meta-cell-val">1.180 €/año</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      <p>El grado en International Tourism and Leisure de Thomas More University of Applied Sciences combina una sólida base en gestión turística con una visión amplia del ocio y las experiencias internacionales. A lo largo del programa, el estudiante trabaja contenidos como tourism management, marketing, economía, comunicación intercultural y desarrollo de productos turísticos, entendiendo cómo diseñar y gestionar experiencias en un contexto global. El enfoque es práctico y orientado al mercado, integrando desde el inicio la realidad del sector y sus constantes cambios.</p>
+      <p>El programa pone un fuerte énfasis en la internacionalización y la experiencia práctica, con proyectos reales, colaboración con empresas y la posibilidad de estudiar o realizar prácticas en el extranjero. Se abordan áreas clave como destination development, digital tourism, sostenibilidad y experiencia del cliente, permitiendo al estudiante adquirir competencias en análisis, innovación y toma de decisiones. Además, el trabajo en entornos multiculturales es un elemento central, preparando al alumno para desenvolverse en un sector globalizado.</p>
+      <p>A lo largo del grado, el estudiante puede perfilar su trayectoria mediante especializaciones y proyectos enfocados en distintos ámbitos del turismo y el leisure. La combinación de teoría, práctica y experiencia internacional permite desarrollar un perfil versátil, con habilidades en gestión, creatividad y estrategia, adaptado a diferentes áreas dentro de la industria turística y del ocio.</p>
+      <p>En cuanto a salidas profesionales: destination manager, product manager, travel consultant, marketing turístico, event coordinator, leisure manager, account manager, hospitality manager, consultor turístico, gestor de proyectos en turismo y ocio.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+        <p><strong>Dificultad de acceso:</strong> <span class="green-text">Admisión directa</span> para estudiantes europeos con título de bachillerato válido.</p>
+        <p><strong>Requisitos de inglés:</strong> IELTS 6.0 o equivalente.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ── VIVES ── -->
+  <div class="uni-card" id="vives">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <div class="uni-card-title">
+          <a href="https://www.vives.be/en/programmes/hotel-management-hospitality-management" target="_blank">
+            Hotel Management – Hospitality Management <span class="cursor-icon">🖱️</span>
+          </a>
+        </div>
+        <div class="uni-card-school">VIVES University of Applied Sciences · Brujas</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-ranking">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio</span>
+        </div>
+      </div>
+      <span class="badge-difficulty diff-media">Admisión directa</span>
+    </div>
+    <div class="uni-card-meta-grid">
+      <div class="meta-cell">
+        <div class="meta-cell-label">Ciudad</div>
+        <div class="meta-cell-val">Brujas
+          <br><button class="map-mini-btn" onclick="scrollToMap('be','map-be')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Duración</div>
+        <div class="meta-cell-val">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Coste</div>
+        <div class="meta-cell-val">1.180 €/año</div>
+      </div>
+    </div>
+    <div class="uni-card-desc">
+      <p>El grado en Hotel Management – Hospitality Management de VIVES University of Applied Sciences está enfocado en la gestión integral de empresas del sector hospitality, combinando una sólida base en business con una orientación práctica hacia hoteles, restauración y servicios turísticos. A lo largo del programa, el estudiante trabaja áreas como operaciones hoteleras, food &amp; beverage, marketing, finanzas y gestión de recursos humanos, adquiriendo una visión completa de cómo funcionan este tipo de organizaciones a nivel estratégico y operativo.</p>
+      <p>El aprendizaje tiene un marcado enfoque práctico, con formación en entornos reales como restaurantes escuela y proyectos vinculados a la industria. Se desarrollan competencias clave como atención al cliente, liderazgo, gestión de equipos y toma de decisiones, esenciales en un sector donde la experiencia del cliente es central. Además, el programa incorpora una dimensión internacional, con asignaturas en inglés, contacto con empresas globales y oportunidades de movilidad o prácticas en el extranjero.</p>
+      <p>Otro aspecto relevante es la combinación entre gestión y servicio, donde el estudiante no solo aprende a dirigir operaciones, sino también a entender los estándares de calidad, innovación y experiencia que demanda el sector hospitality actual. Esto incluye tendencias como digitalización, sostenibilidad y personalización del servicio, preparando al alumno para adaptarse a un entorno competitivo y en constante evolución.</p>
+      <p>En cuanto a salidas profesionales: hotel manager, front office manager, food &amp; beverage manager, event manager, hospitality consultant, operations manager, revenue manager, guest relations manager, emprendedor en hostelería.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+        <p><strong>Dificultad de acceso:</strong> <span class="green-text">Admisión directa</span> para estudiantes europeos con título de bachillerato válido.</p>
+        <p><strong>Requisitos de inglés:</strong> IELTS 6.0 o equivalente.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP BE -->
+  <div class="map-section" id="map-be">
+    <h3>🎓 Universidades en el mapa</h3>
+    <div id="leaflet-be" class="leaflet-map"></div>
+  </div>
+
+</div>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <!-- Original logo colors, reduced opacity -->
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+    <defs>
+      <style>
+        .fcls-1{fill:#36aadc;opacity:.8;}
+        .fcls-2{fill:#30ac71;opacity:.8;}
+        .fcls-3{fill:#32abbb;opacity:.8;}
+        .fcls-4{fill:#31ac9c;opacity:.8;}
+        .fcls-5{fill:#737373;}
+      </style>
+    </defs>
+    <g>
+      <path class="fcls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="fcls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="fcls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="fcls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <path class="fcls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+      <path class="fcls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+      <path class="fcls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+      <path class="fcls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+      <path class="fcls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+      <path class="fcls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+      <polygon class="fcls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+    </g>
+  </svg>
+  <div style="margin-top:8px;">Informe Personalizado de Opciones de Grado · Álvaro Beltrán Ruiz · Educoway</div>
+  <div style="margin-top:4px;font-size:0.7rem;opacity:0.6;">orientación universitaria en el extranjero · educoway.es</div>
+</footer>
+
+<script>
+// ── MAP DATA ──
+var mapData = {
+  nl: {
+    center: [52.3, 5.3],
+    zoom: 7,
+    universities: [
+      {
+        id: 'buas',
+        name: 'Tourism',
+        school: 'Breda University of Applied Sciences (BUAS)',
+        lat: 51.5825,
+        lng: 4.7972,
+        webUrl: 'https://www.buas.nl/programmes/tourism',
+        mapsUrl: 'https://maps.google.com/?q=Breda+University+of+Applied+Sciences+Breda+Netherlands'
+      },
+      {
+        id: 'hz',
+        name: 'Tourism Management',
+        school: 'HZ University of Applied Sciences',
+        lat: 51.4485,
+        lng: 3.5760,
+        webUrl: 'https://www.hz.nl/en/programmes/bachelor/tourism-management',
+        mapsUrl: 'https://maps.google.com/?q=HZ+University+of+Applied+Sciences+Vlissingen+Netherlands'
+      },
+      {
+        id: 'nhl-tourism',
+        name: 'Tourism Management',
+        school: 'NHL Stenden University of Applied Sciences',
+        lat: 53.2012,
+        lng: 5.7999,
+        webUrl: 'https://www.nhlstenden.com/en/study/bachelor/tourism-management',
+        mapsUrl: 'https://maps.google.com/?q=NHL+Stenden+University+Leeuwarden+Netherlands'
+      },
+      {
+        id: 'nhl-leisure',
+        name: 'Leisure and Events Management',
+        school: 'NHL Stenden University of Applied Sciences',
+        lat: 53.2042,
+        lng: 5.8020,
+        webUrl: 'https://www.nhlstenden.com/en/study/bachelor/leisure-and-events-management',
+        mapsUrl: 'https://maps.google.com/?q=NHL+Stenden+University+Leeuwarden+Netherlands'
+      },
+      {
+        id: 'inholland',
+        name: 'Tourism Management',
+        school: 'Inholland University of Applied Sciences',
+        lat: 52.3676,
+        lng: 4.9041,
+        webUrl: 'https://www.inholland.nl/en/study/bachelor-degree-programmes/tourism-management/',
+        mapsUrl: 'https://maps.google.com/?q=Inholland+University+Amsterdam+Netherlands'
+      },
+      {
+        id: 'saxion',
+        name: 'Tourism Management',
+        school: 'Saxion University of Applied Sciences',
+        lat: 52.2538,
+        lng: 6.1567,
+        webUrl: 'https://www.saxion.edu/programmes/bachelor/tourism-management',
+        mapsUrl: 'https://maps.google.com/?q=Saxion+University+Deventer+Netherlands'
+      }
+    ]
+  },
+  be: {
+    center: [50.9, 4.3],
+    zoom: 8,
+    universities: [
+      {
+        id: 'thomasmore',
+        name: 'International Tourism and Leisure',
+        school: 'Thomas More University of Applied Sciences',
+        lat: 51.0259,
+        lng: 4.4776,
+        webUrl: 'https://www.thomasmore.be/en/programmes/international-tourism-and-leisure',
+        mapsUrl: 'https://maps.google.com/?q=Thomas+More+University+Mechelen+Belgium'
+      },
+      {
+        id: 'vives',
+        name: 'Hotel Management – Hospitality Management',
+        school: 'VIVES University of Applied Sciences',
+        lat: 51.2093,
+        lng: 3.2247,
+        webUrl: 'https://www.vives.be/en/programmes/hotel-management-hospitality-management',
+        mapsUrl: 'https://maps.google.com/?q=VIVES+University+Bruges+Belgium'
+      }
+    ]
+  }
+};
+
+var mapsInitialized = {};
+
+function initMap(countryId) {
+  if (mapsInitialized[countryId]) return;
+  mapsInitialized[countryId] = true;
+
+  var data = mapData[countryId];
+  var mapEl = document.getElementById('leaflet-' + countryId);
+  if (!mapEl) return;
+
+  var map = L.map(mapEl).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 19
+  }).addTo(map);
+
+  var icon = L.divIcon({
+    html: '<div style="font-size:22px;line-height:1;">🎓</div>',
+    className: '',
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+    popupAnchor: [0, -30]
+  });
+
+  data.universities.forEach(function(uni) {
+    var marker = L.marker([uni.lat, uni.lng], {icon: icon}).addTo(map);
+    marker.bindPopup(
+      '<div class="popup-inner">' +
+        '<h4>' + uni.name + '</h4>' +
+        '<p>' + uni.school + '</p>' +
+        '<div class="popup-btns">' +
+          '<a class="popup-btn popup-btn-teal" href="' + uni.webUrl + '" target="_blank">🌐 Ver grado</a>' +
+          '<button class="popup-btn popup-btn-outline" onclick="scrollToCard(\'' + uni.id + '\')">📋 Ver ficha</button>' +
+          '<a class="popup-btn popup-btn-maps" href="' + uni.mapsUrl + '" target="_blank">🗺️ Google Maps</a>' +
+        '</div>' +
+      '</div>'
+    , {minWidth: 210});
+  });
+}
+
+// ── NAV FUNCTIONS ──
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  if (id === 'nl') setTimeout(function(){ initMap('nl'); }, 100);
+  if (id === 'be') setTimeout(function(){ initMap('be'); }, 100);
+}
+
+function goTo(tab, anchor) {
+  // Find the button for this tab
+  var btnMap = {intro:'Introducción', research:'Research vs Applied Sciences', nl:'Países Bajos', be:'Bélgica'};
+  var btns = document.querySelectorAll('.tab-btn');
+  var targetBtn = null;
+  btns.forEach(function(b){
+    if (b.textContent.trim().includes(btnMap[tab])) targetBtn = b;
+  });
+  // If not on this tab, switch first
+  if (!document.getElementById('tab-'+tab).classList.contains('active')) {
+    showTab(tab, targetBtn);
+    setTimeout(function(){
+      var el = document.getElementById(anchor);
+      if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 350);
+  } else {
+    var el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+function scrollToCard(id) {
+  // close popup first
+  var el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+    // highlight briefly
+    el.style.boxShadow = '0 0 0 3px var(--teal)';
+    setTimeout(function(){ el.style.boxShadow = ''; }, 1800);
+  }
+}
+
+function scrollToMap(tab, anchor) {
+  if (!document.getElementById('tab-'+tab).classList.contains('active')) {
+    var btns = document.querySelectorAll('.tab-btn');
+    var btnMap = {nl:'Países Bajos', be:'Bélgica'};
+    var targetBtn = null;
+    btns.forEach(function(b){
+      if (b.textContent.trim().includes(btnMap[tab])) targetBtn = b;
+    });
+    showTab(tab, targetBtn);
+    setTimeout(function(){
+      var el = document.getElementById(anchor);
+      if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 400);
+  } else {
+    var el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+</script>
+</body>
+</html>
