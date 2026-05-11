@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Informe de Opciones de Grado – Héctor Beltrán Ruiz | Educoway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root {
+  --teal: #0a9baa;
+  --teal-dark: #077a87;
+  --teal-light: #e0f5f7;
+  --navy: #0d2b3e;
+  --bg: #f4f8fa;
+  --border: #c8e0e5;
+  --text: #1a2e3b;
+  --muted: #7a9aa8;
+  --red: #c0392b;
+  --orange: #e67e22;
+  --green: #27ae60;
+  --gold: #c9942a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+}
+
+/* ── STICKY HEADER ── */
+#site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, var(--navy) 0%, #0d4a5c 100%);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 32px 10px;
+}
+
+.header-logo { flex-shrink: 0; }
+.header-logo svg { height: 38px; width: auto; display: block; }
+
+.header-text { flex: 1; }
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+}
+.header-sub {
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  margin-top: 2px;
+}
+
+/* ── NAV TABS ── */
+#tab-bar {
+  display: flex;
+  gap: 0;
+  padding: 0 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+#tab-bar::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: rgba(255,255,255,0.65);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .2s, border-color .2s, background .2s;
+  letter-spacing: 0.02em;
+}
+.tab-btn:hover { color: #fff; background: rgba(255,255,255,0.07); }
+.tab-btn.active {
+  color: #fff;
+  border-bottom-color: var(--teal);
+  background: rgba(255,255,255,0.1);
+}
+
+/* ── TAB PANELS ── */
+.tab-panel { display: none; padding: 36px 32px 60px; max-width: 1100px; margin: 0 auto; }
+.tab-panel.active { display: block; }
+
+/* ── INTRO ── */
+.intro-welcome {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 32px;
+  line-height: 1.8;
+}
+.intro-welcome p { margin-bottom: 1em; }
+.intro-welcome p:last-child { margin-bottom: 0; }
+
+.intro-index {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin-bottom: 32px;
+}
+.intro-index h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--teal-dark);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--teal-light);
+}
+.index-country {
+  margin-bottom: 22px;
+}
+.index-country-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.index-entry {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background .2s;
+  margin-bottom: 4px;
+}
+.index-entry:hover { background: var(--teal-light); }
+.index-entry .degree-name {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.4;
+}
+.index-entry .uni-name {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-size: 11.5px;
+  font-style: italic;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.what-now-box {
+  background: linear-gradient(135deg, var(--teal-light) 0%, #c5edf0 100%);
+  border: 2px solid var(--teal);
+  border-radius: 12px;
+  padding: 28px 32px;
+}
+.what-now-box h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  color: var(--navy);
+  margin-bottom: 14px;
+}
+.what-now-box p { line-height: 1.75; }
+
+/* ── RESEARCH VS APPLIED ── */
+.research-content {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+}
+.research-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: var(--teal-dark);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--teal-light);
+}
+.research-section { margin-bottom: 28px; }
+.research-section h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.research-section h3::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 18px;
+  background: var(--teal);
+  border-radius: 2px;
+}
+.research-section p { margin-bottom: 0.8em; line-height: 1.75; }
+.research-links { margin-top: 20px; }
+.research-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--teal-dark);
+  font-weight: 500;
+  text-decoration: none;
+  margin-right: 20px;
+  border-bottom: 1px dashed var(--teal);
+  padding-bottom: 1px;
+}
+.research-links a:hover { color: var(--navy); }
+
+/* ── COUNTRY HEADER ── */
+.country-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(135deg, var(--navy) 0%, #0d4a5c 100%);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  color: #fff;
+}
+.country-flag-big { flex-shrink: 0; }
+.country-info h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.country-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+.country-meta-badge {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+.country-intro-text {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  line-height: 1.75;
+}
+
+/* ── SECTION DIVIDERS ── */
+.section-divider {
+  text-align: center;
+  position: relative;
+  margin: 30px 0 22px;
+}
+.section-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--teal-light) 20%, var(--teal-light) 80%, transparent);
+}
+.section-divider span {
+  position: relative;
+  background: var(--bg);
+  padding: 0 16px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal-dark);
+}
+
+/* ── UNIVERSITY CARD ── */
+.uni-card {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  transition: border-color .2s, box-shadow .2s;
+  scroll-margin-top: 120px;
+}
+.uni-card:hover {
+  border-color: var(--teal);
+  box-shadow: 0 4px 24px rgba(10,155,170,0.12);
+}
+
+.uni-card-header {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--teal-light);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.uni-card-header-left { flex: 1; }
+
+.uni-grade-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--navy);
+  text-decoration: none;
+  transition: color .2s;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.uni-grade-title:hover { color: var(--teal-dark); }
+.uni-grade-title:hover .link-icon { transform: scale(1.25); }
+.link-icon {
+  font-size: 0.75em;
+  display: inline-block;
+  transition: transform .2s;
+}
+
+.uni-school {
+  font-size: 0.88rem;
+  color: var(--teal-dark);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.ranking-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+.ranking-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+.badge-rank {
+  background: var(--teal-light);
+  border: 1px solid var(--teal);
+  color: var(--teal-dark);
+  border-radius: 20px;
+  padding: 2px 9px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.badge-rank.gold {
+  background: #fdf3d7;
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.difficulty-badge {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-width: 1px;
+  border-style: solid;
+  white-space: nowrap;
+}
+.diff-red { background: #fdecea; border-color: #e57373; color: var(--red); }
+.diff-orange { background: #fef3e2; border-color: #f0a500; color: #b36a00; }
+.diff-green { background: #edf7ed; border-color: #66bb6a; color: #2e7d32; }
+
+/* ── METADATA GRID ── */
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px;
+  padding: 16px 22px;
+  background: var(--teal-light);
+  border-bottom: 1px solid var(--border);
+}
+.meta-cell { }
+.meta-label {
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+.meta-value {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.map-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 3px 8px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background .2s;
+}
+.map-btn:hover { background: var(--teal-dark); }
+
+/* ── DESCRIPTION ── */
+.uni-desc {
+  padding: 18px 22px;
+  background: #fafeff;
+  border-left: 4px solid var(--teal);
+  margin: 16px 22px;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+  line-height: 1.75;
+}
+.uni-desc p { margin-bottom: 0.7em; }
+.uni-desc p:last-child { margin-bottom: 0; }
+
+/* ── COLLAPSIBLE REQUIREMENTS ── */
+.uni-requirements {
+  margin: 0 22px 18px;
+}
+details {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+summary {
+  padding: 11px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--teal-dark);
+  cursor: pointer;
+  background: var(--teal-light);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  user-select: none;
+  transition: background .2s;
+}
+summary:hover { background: #c5edf0; }
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: '▶';
+  font-size: 0.65rem;
+  transition: transform .2s;
+}
+details[open] summary::before { transform: rotate(90deg); }
+.requirements-inner {
+  padding: 16px 18px;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+.requirements-inner ul { margin: 6px 0 10px 20px; }
+.requirements-inner li { margin-bottom: 4px; }
+.requirements-inner p { margin-bottom: 0.6em; }
+.requirements-inner strong { font-weight: 600; }
+
+.deadline-box {
+  background: #fffae0;
+  border: 1px solid #f0c000;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #7a5900;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.deadline-box::before { content: '📅'; }
+
+.text-red { color: var(--red); font-weight: 500; }
+.text-green { color: var(--green); }
+
+/* ── MAP ── */
+.map-container {
+  margin-top: 36px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  scroll-margin-top: 120px;
+}
+.map-title {
+  background: var(--navy);
+  color: #fff;
+  padding: 12px 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.leaflet-map { height: 380px; width: 100%; }
+
+/* ── FLAGS CSS ── */
+.flag { display: inline-flex; border-radius: 3px; overflow: hidden; width: 26px; height: 18px; flex-shrink: 0; }
+.flag-big { width: 56px; height: 38px; border-radius: 5px; }
+
+/* Denmark flag */
+.flag-dk { background: #c60c30; position: relative; }
+.flag-dk::before, .flag-dk::after {
+  content: '';
+  position: absolute;
+  background: #fff;
+}
+.flag-dk::before { left: 33%; top: 0; width: 12%; height: 100%; }
+.flag-dk::after { top: 44%; left: 0; width: 100%; height: 12%; }
+
+/* Sweden flag */
+.flag-se { background: #006aa7; position: relative; }
+.flag-se::before, .flag-se::after {
+  content: '';
+  position: absolute;
+  background: #fecc02;
+}
+.flag-se::before { left: 30%; top: 0; width: 12%; height: 100%; }
+.flag-se::after { top: 40%; left: 0; width: 100%; height: 20%; }
+
+/* Netherlands flag */
+.flag-nl { display: flex; flex-direction: column; width: 26px; height: 18px; border-radius: 3px; overflow: hidden; }
+.flag-nl-big { width: 56px; height: 38px; border-radius: 5px; }
+.flag-nl-r { background: #ae1c28; flex: 1; }
+.flag-nl-w { background: #fff; flex: 1; }
+.flag-nl-b { background: #21468b; flex: 1; }
+
+/* Germany flag */
+.flag-de { display: flex; flex-direction: column; width: 26px; height: 18px; border-radius: 3px; overflow: hidden; }
+.flag-de-big { width: 56px; height: 38px; border-radius: 5px; }
+.flag-de-b { background: #000; flex: 1; }
+.flag-de-r { background: #dd0000; flex: 1; }
+.flag-de-g { background: #ffce00; flex: 1; }
+
+/* Belgium flag */
+.flag-be { display: flex; flex-direction: row; width: 26px; height: 18px; border-radius: 3px; overflow: hidden; }
+.flag-be-big { width: 56px; height: 38px; border-radius: 5px; }
+.flag-be-b { background: #000; flex: 1; }
+.flag-be-y { background: #FFD90C; flex: 1; }
+.flag-be-r { background: #ef3340; flex: 1; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--navy);
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  padding: 28px 20px;
+  font-size: 0.8rem;
+}
+footer svg { height: 28px; width: auto; opacity: 0.35; display: block; margin: 0 auto 10px; }
+
+/* ── UTILITIES ── */
+a { color: var(--teal-dark); }
+a:hover { color: var(--navy); }
+em { font-style: italic; }
+strong { font-weight: 600; }
+
+@media (max-width: 700px) {
+  .header-top { padding: 10px 16px 8px; }
+  #tab-bar { padding: 0 8px; }
+  .tab-btn { padding: 8px 10px; font-size: 0.72rem; }
+  .tab-panel { padding: 20px 14px 40px; }
+  .meta-grid { grid-template-columns: repeat(2, 1fr); }
+  .uni-card-header { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ STICKY HEADER ══════════════ -->
+<header id="site-header">
+  <div class="header-top">
+    <div class="header-logo">
+      <!-- SVG LOGO INLINE – versión blanca (cls-5 → fill:#ffffff) -->
+      <svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18" aria-label="Educoway">
+        <defs><style>
+          .hcls-1{fill:#36aadc;opacity:.8}
+          .hcls-2{fill:#30ac71;opacity:.8}
+          .hcls-3{fill:#fff}
+          .hcls-4{fill:#32abbb;opacity:.8}
+          .hcls-5{fill:#31ac9c;opacity:.8}
+        </style></defs>
+        <g>
+          <g>
+            <path class="hcls-3" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+            <path class="hcls-3" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <path class="hcls-3" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+            <rect class="hcls-3" x="20.46" y="77.57" width="1.03" height="7.81"/>
+            <path class="hcls-3" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <path class="hcls-3" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+            <path class="hcls-3" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+            <path class="hcls-3" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14,.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="hcls-3" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+            <rect class="hcls-3" x="76.5" y="77.57" width="1.03" height="7.81"/>
+          </g>
+          <path class="hcls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+          <path class="hcls-5" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+          <path class="hcls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+          <path class="hcls-4" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+          <g>
+            <path class="hcls-3" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+            <path class="hcls-3" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+            <path class="hcls-3" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+            <path class="hcls-3" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+            <path class="hcls-3" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+            <path class="hcls-3" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+            <polygon class="hcls-3" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-title">Informe Personalizado de Opciones de Grado</div>
+      <div class="header-sub">Preparado para Héctor Beltrán Ruiz</div>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div id="tab-bar">
+    <button class="tab-btn active" onclick="showTab('intro',this)">📋 Introducción</button>
+    <button class="tab-btn" onclick="showTab('research',this)">🔬 Research vs Applied</button>
+    <button class="tab-btn" onclick="showTab('dinamarca',this)">
+      <span class="flag flag-dk"></span> Dinamarca
+    </button>
+    <button class="tab-btn" onclick="showTab('suecia',this)">
+      <span class="flag flag-se"></span> Suecia
+    </button>
+    <button class="tab-btn" onclick="showTab('holanda',this)">
+      <span class="flag flag-nl"><span class="flag-nl-r"></span><span class="flag-nl-w"></span><span class="flag-nl-b"></span></span> Holanda
+    </button>
+    <button class="tab-btn" onclick="showTab('alemania',this)">
+      <span class="flag flag-de"><span class="flag-de-b"></span><span class="flag-de-r"></span><span class="flag-de-g"></span></span> Alemania
+    </button>
+    <button class="tab-btn" onclick="showTab('belgica',this)">
+      <span class="flag flag-be"><span class="flag-be-b"></span><span class="flag-be-y"></span><span class="flag-be-r"></span></span> Bélgica
+    </button>
+  </div>
+</header>
+
+<!-- ══════════════ TAB: INTRODUCCIÓN ══════════════ -->
+<div id="tab-intro" class="tab-panel active">
+  <div class="intro-welcome">
+    <p>Hola, Héctor:</p>
+    <p>Enhorabuena de nueva por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estamos convencidos que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+    <p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p>
+  </div>
+
+  <div class="intro-index">
+    <h2>Índice de opciones</h2>
+
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-dk"></span> Dinamarca
+      </div>
+      <a class="index-entry" href="#" onclick="goTo('dinamarca','card-aarhus');return false;">
+        <span class="degree-name">Bachelor in Computer Sciences</span>
+        <span class="uni-name">Aarhus University · Aarhus</span>
+      </a>
+      <a class="index-entry" href="#" onclick="goTo('dinamarca','card-via');return false;">
+        <span class="degree-name">Bachelor in Computer Graphic Arts</span>
+        <span class="uni-name">VIA University College · Viborg</span>
+      </a>
+    </div>
+
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-se"></span> Suecia
+      </div>
+      <a class="index-entry" href="#" onclick="goTo('suecia','card-gothenburg');return false;">
+        <span class="degree-name">Bachelor in Software Engineering &amp; Management</span>
+        <span class="uni-name">University of Gothenburg · Gothenburg</span>
+      </a>
+    </div>
+
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-nl"><span class="flag-nl-r"></span><span class="flag-nl-w"></span><span class="flag-nl-b"></span></span> Holanda
+      </div>
+      <a class="index-entry" href="#" onclick="goTo('holanda','card-tue');return false;">
+        <span class="degree-name">BA Bachelor Computer Science and Engineering</span>
+        <span class="uni-name">TU/e – Eindhoven University of Technology · Eindhoven</span>
+      </a>
+      <a class="index-entry" href="#" onclick="goTo('holanda','card-twente');return false;">
+        <span class="degree-name">Bachelor in Advanced Technology</span>
+        <span class="uni-name">Twente University · Enschede</span>
+      </a>
+      <a class="index-entry" href="#" onclick="goTo('holanda','card-maastricht');return false;">
+        <span class="degree-name">BA Data Science and Artificial Intelligence</span>
+        <span class="uni-name">Maastricht University · Maastricht</span>
+      </a>
+      <a class="index-entry" href="#" onclick="goTo('holanda','card-fontys');return false;">
+        <span class="degree-name">Information &amp; Communication Technology</span>
+        <span class="uni-name">FONTYS UAS · Eindhoven</span>
+      </a>
+    </div>
+
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-de"><span class="flag-de-b"></span><span class="flag-de-r"></span><span class="flag-de-g"></span></span> Alemania
+      </div>
+      <a class="index-entry" href="#" onclick="goTo('alemania','card-thi');return false;">
+        <span class="degree-name">Computer Science &amp; Artificial Intelligence</span>
+        <span class="uni-name">Technische Hochschule Ingolstadt · Ingolstadt</span>
+      </a>
+    </div>
+
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-be"><span class="flag-be-b"></span><span class="flag-be-y"></span><span class="flag-be-r"></span></span> Bélgica
+      </div>
+      <a class="index-entry" href="#" onclick="goTo('belgica','card-howest-cyber');return false;">
+        <span class="degree-name">Bachelor Cybersecurity</span>
+        <span class="uni-name">Howest University of Applied Sciences · Brujas</span>
+      </a>
+      <a class="index-entry" href="#" onclick="goTo('belgica','card-howest-creative');return false;">
+        <span class="degree-name">Bachelor Creative Technologies and Artificial Intelligence</span>
+        <span class="uni-name">Howest University of Applied Sciences · Kortrijk</span>
+      </a>
+      <a class="index-entry" href="#" onclick="goTo('belgica','card-thomas-tic');return false;">
+        <span class="degree-name">Grado en TIC: Tecnologías de la Información &amp; la Comunicación</span>
+        <span class="uni-name">Thomas More University of Applied Sciences · Mechelen</span>
+      </a>
+      <a class="index-entry" href="#" onclick="goTo('belgica','card-thomas-data');return false;">
+        <span class="degree-name">Grado en Ciencia de Datos, Protección y Seguridad</span>
+        <span class="uni-name">Thomas More University of Applied Sciences · Mechelen</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="what-now-box">
+    <h2>¿Qué tienes que hacer ahora?</h2>
+    <p>Echa un vistazo a todas las opciones que hemos seleccionado, mira los vídeos, lee el contenido de las webs (asignaturas, especializaciones, etc.), ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════ TAB: RESEARCH VS APPLIED ══════════════ -->
+<div id="tab-research" class="tab-panel">
+  <div class="research-content">
+    <h2>Universidades de Research vs Applied Science</h2>
+    <p>En la mayoría de países europeos existen tipos de universidades que es importante conocer y diferenciar, las universidades de "<em>Research</em>" y de "<em>Applied Sciences</em>". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+
+    <div class="research-section">
+      <h3>Metodología teórica vs práctica</h3>
+      <p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project/Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre.</p>
+      <p>Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+    </div>
+
+    <div class="research-section">
+      <h3>Duración</h3>
+      <p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+      <p>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+    </div>
+
+    <div class="research-section">
+      <h3>Ranking / Prestigio</h3>
+      <p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.</p>
+      <p>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+    </div>
+
+    <div class="research-section">
+      <h3>Acceso a Másteres</h3>
+      <p>Aquí es importante diferenciar si tu máster será en uno de los países que diferencian las 2 universidades, o en un país que no lo hace. En España por ejemplo, que no diferencia estas universidades, ambos títulos te dan las mismas oportunidades. Pero si se trata de Holanda, Bélgica o Alemania, por ejemplo, sí hay diferencias. Con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. Pero en cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research</em>, te pedirán cursar un pre-máster (de 1 semestre o un año de duración) para ponerte al día con las habilidades de investigación que se supone no has desarrollado aún.</p>
+    </div>
+
+    <div class="research-links">
+      <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de Research y otra de Applied Sciences):</p>
+      <br/>
+      <a href="https://www.hanze.nl/en/education/bachelor/international-business/applied-science-vs-research-university" target="_blank">- Applied Science vs. Research University</a><br/><br/>
+      <a href="https://www.studyinholland.nl/plan-your-stay/types-of-universities" target="_blank">- Types of universities in the Netherlands</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════ TAB: DINAMARCA ══════════════ -->
+<div id="tab-dinamarca" class="tab-panel">
+  <div class="country-header">
+    <div class="country-flag-big">
+      <div class="flag flag-big flag-dk"></div>
+    </div>
+    <div class="country-info">
+      <h2>Dinamarca</h2>
+      <div class="country-meta">
+        <span class="country-meta-badge">🎓 Matrícula: <strong>0 €/año</strong></span>
+        <span class="country-meta-badge">2 universidades seleccionadas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="country-intro-text">
+    <p>Los estudiantes europeos tenemos los estudios totalmente subvencionados en Dinamarca, siendo el coste anual que tenemos que pagar de <strong style="color:var(--green)">0€/año</strong>.</p>
+    <p>Estas son las opciones más interesantes del país:</p>
+  </div>
+
+  <div class="section-divider"><span>Research Universities</span></div>
+
+  <!-- CARD: Aarhus -->
+  <div class="uni-card" id="card-aarhus">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.au.dk/en/education/bachelor-of-science-bsc/computer-science" target="_blank">
+          Bachelor in Computer Sciences <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Aarhus University · Aarhus</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank gold">2ª de Dinamarca</span>
+          <span class="badge-rank gold">80ª del mundo – Shanghai</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-orange">Dificultad alta</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Aarhus (352.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('dinamarca','map-dinamarca')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value" style="color:var(--green)">0 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value text-red">15 de marzo</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>El grado en <strong>Computer Science (BSc)</strong> en Aarhus University proporciona una formación rigurosa y orientada tanto a la teoría como a la práctica en ciencias de la computación. Los estudiantes aprenderán a programar desde cero, desarrollando las competencias necesarias para diseñar software, construir sistemas informáticos seguros y eficientes, y trabajar con grandes volúmenes de datos. Se cubren áreas clave como algoritmos, estructuras de datos, inteligencia artificial, aprendizaje automático (machine learning), Big Data, ciberseguridad y métodos de modelado para resolver problemas complejos mediante algoritmos matemáticos. Además, también se incluyen conocimientos en arquitectura de computadores, sistemas operativos, redes y teoría de lenguajes de programación. A lo largo de los semestres, los estudiantes realizan proyectos aplicados, trabajos grupales y, finalmente, un proyecto de grado (tesis) que permite especializarse en el área de su interés.</p>
+      <p>En cuanto a la estructura del programa y metodología docente, las clases combinan conferencias magistrales, sesiones prácticas y trabajo en grupos pequeños con tutores o asistentes. En el primer año, se dedica una parte considerable del tiempo a cursos introductorios —por ejemplo, Introducción a la Programación, Matemáticas y Optimización, Algoritmos y Estructuras de Datos— para asentar las bases. A medida que el estudiante avanza, puede escoger asignaturas optativas dentro de áreas especializadas (por ejemplo, interacción humano-computadora, sistemas distribuidos, compiladores, seguridad informática, computación física) que permiten adaptar el perfil profesional. La enseñanza se ofrece completamente en inglés, lo que facilita la movilidad internacional y la integración en un entorno académico global.</p>
+      <p>Las salidas profesionales de este grado son muy amplias y demandadas. Los graduados pueden trabajar como desarrolladores de software, ingenieros de sistemas, especialistas en ciberseguridad, analistas de datos, arquitectos de soluciones, consultores tecnológicos o gestores de proyectos en prácticamente cualquier sector (finanzas, salud, administración pública, tecnología, energías, etc.). Muchos optan también por continuar con estudios de Máster o Doctorado en ciencias de la computación o especializaciones afines, lo que les abre puertas hacia roles de investigación o docencia universitaria. En Dinamarca, los egresados gozan de una alta empleabilidad, y a menudo consiguen ofertas laborales incluso antes de terminar el programa. Además, gracias a un entorno tecnológico dinámico en Aarhus (con muchas empresas IT alrededor del campus), los estudiantes tienen oportunidades de colaborar en proyectos reales, hacer prácticas o participar en iniciativas de emprendimiento durante sus estudios.</p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato y demostrar haber completado cierto número de horas en estas asignaturas:</p>
+          <ul>
+            <li>Matemáticas "A" = 375 H + nota de 6/10 en 2º</li>
+            <li>Inglés "B" = 210 H</li>
+          </ul>
+          <p><strong>De nivel de inglés:</strong></p>
+          <ul>
+            <li>Un mínimo de 6 en inglés en 2º de bachillerato</li>
+            <li>IELTS 6,5</li>
+            <li>TOEFL 85</li>
+            <li>Cambridge CAE (mínimo 180)</li>
+          </ul>
+          <div class="deadline-box">Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+          <p><strong>Proceso de selección:</strong> Es un grado nuevo, no tenemos datos, pero creemos que habrá <span style="color:var(--teal-dark);font-weight:600">competencia alta</span> por entrar. La universidad valorará sobre todo las notas para elegir a los admitidos.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>Applied Science Universities</span></div>
+
+  <!-- CARD: VIA -->
+  <div class="uni-card" id="card-via">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://en.via.dk/programmes/computer-graphic-arts" target="_blank">
+          Bachelor in Computer Graphic Arts <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">VIA University College · Viborg</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank">University College – enfocada en la práctica</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-orange">Proceso competitivo</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Viborg (43.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('dinamarca','map-dinamarca')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3,5 años (210 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value" style="color:var(--green)">0 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value text-red">15 de marzo</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>Este grado te permitirá desarrollar tus habilidades creativas y técnicas para crear imágenes digitales impactantes y visualmente sorprendentes. Aprenderás a trabajar con modelado 3D, animación, efectos visuales y diseño gráfico, preparándote para destacar en industrias como el cine, los videojuegos y la publicidad. Este programa combina práctica intensiva y teoría para que puedas llevar tus ideas a la realidad con profesionalidad y creatividad.</p>
+      <p>Además, formarás parte de un entorno creativo e innovador, rodeado de profesionales y compañeros apasionados por el arte digital. Si quieres convertir tu talento artístico en una carrera sólida y emocionante, este programa te brinda las herramientas y la experiencia necesarias para lograrlo y abrirte puertas en el mundo profesional.</p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong></p>
+          <ul><li>Título de Bachillerato</li></ul>
+          <p><strong>De nivel de inglés:</strong></p>
+          <ul><li>Sacar un mínimo de 6 en inglés en 2º de Bachiller</li></ul>
+          <div class="deadline-box">Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+          <p><strong>Proceso de selección:</strong> El proceso de admisión es competitivo y consta de dos fases principales:</p>
+          <ul>
+            <li><strong>1. Envío de solicitud y portafolio artístico:</strong> Debes presentar una solicitud online acompañada de un portafolio que muestre tus habilidades creativas y artísticas. Este portafolio es fundamental, ya que refleja tu capacidad para trabajar con gráficos digitales y creatividad.</li>
+            <li><strong>2. Entrevista y prueba práctica:</strong> Si tu portafolio cumple con los requisitos, serás invitado a una entrevista y a realizar una prueba práctica, ya sea presencial o en línea. Durante esta fase, se evaluarán tus habilidades técnicas, creatividad y motivación para estudiar en el programa.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- MAP DINAMARCA -->
+  <div class="map-container" id="map-dinamarca">
+    <div class="map-title">🗺️ Universidades en Dinamarca</div>
+    <div id="leaflet-dinamarca" class="leaflet-map"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════ TAB: SUECIA ══════════════ -->
+<div id="tab-suecia" class="tab-panel">
+  <div class="country-header">
+    <div class="country-flag-big">
+      <div class="flag flag-big flag-se"></div>
+    </div>
+    <div class="country-info">
+      <h2>Suecia</h2>
+      <div class="country-meta">
+        <span class="country-meta-badge">🎓 Matrícula: <strong>0 €/año</strong></span>
+        <span class="country-meta-badge">1 universidad seleccionada</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="country-intro-text">
+    <p>Los estudiantes europeos tenemos los estudios totalmente subvencionados en Suecia, siendo el coste anual que tenemos que pagar de <strong style="color:var(--green)">0€ año</strong>.</p>
+  </div>
+
+  <!-- CARD: Gothenburg -->
+  <div class="uni-card" id="card-gothenburg">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.gu.se/en/study-gothenburg/software-engineering-and-management-bachelors-programme-n1sof" target="_blank">
+          Bachelor in Software Engineering &amp; Management <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">University of Gothenburg · Gothenburg</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank gold">3–5ª de Suecia</span>
+          <span class="badge-rank gold">101–150ª del mundo – Shanghai</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-orange">Dificultad alta</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Gothenburg (579.281 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('suecia','map-suecia')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value" style="color:var(--green)">0 €/curso</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value text-red">15 de abril</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>El <strong>Bachelor in Software Engineering and Management</strong> de la Universidad de Gotemburgo ofrece una formación integral que combina los aspectos técnicos del desarrollo de software con la gestión de proyectos y el liderazgo en entornos tecnológicos. El programa se imparte íntegramente en inglés y desde el primer semestre los estudiantes trabajan en equipo, asumiendo roles como desarrolladores, gestores o arquitectos de software en proyectos inspirados en casos reales de la industria. Este enfoque práctico se complementa con una sólida base teórica en programación, matemáticas discretas, algoritmos, arquitectura de software, sistemas distribuidos, interacción humano–computadora y pruebas de calidad.</p>
+      <p>El plan de estudios se desarrolla a lo largo de seis semestres. Los cuatro primeros están centrados en asignaturas obligatorias, que incluyen programación fundamental y orientada a objetos, gestión de requisitos, estructuras de datos, desarrollo de sistemas, sistemas embebidos y de tiempo real, calidad de software y programación avanzada. En el quinto semestre los estudiantes pueden elegir asignaturas optativas o realizar un intercambio en una universidad asociada en Europa, Asia o Estados Unidos, mientras que el sexto semestre se dedica a métodos de investigación, liderazgo y a la tesis de fin de grado en ingeniería de software y gestión. Esta combinación permite adquirir tanto competencias técnicas como habilidades de comunicación, liderazgo y organización.</p>
+      <p>En cuanto a las <strong>salidas profesionales</strong>, los egresados están preparados para trabajar en una amplia gama de puestos dentro del sector tecnológico, como desarrolladores de software, arquitectos de sistemas, ingenieros de pruebas y calidad, gestores de proyectos, consultores o líderes de equipos. Gracias a la estrecha vinculación del programa con la industria, muchos estudiantes tienen la oportunidad de colaborar en proyectos reales durante sus estudios, lo que incrementa su empleabilidad en el mercado laboral sueco e internacional. Además, el grado constituye una sólida base para continuar estudios de máster en áreas avanzadas como inteligencia artificial, sistemas distribuidos o ingeniería de software.</p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong></p>
+          <ul>
+            <li>Título de bachillerato</li>
+            <li>Matemáticas II</li>
+          </ul>
+          <p><strong>De nivel de inglés:</strong></p>
+          <ul>
+            <li>IELTS: 6.5</li>
+            <li>TOEFL internet-based</li>
+            <li>Cambridge certificate: CAE</li>
+          </ul>
+          <div class="deadline-box">Fecha límite de inscripción: <strong>15 de abril</strong></div>
+          <p><strong>Proceso de selección:</strong> Sí hay proceso de selección; la universidad valorará tu nota media (GPA) para dar las admisiones. <span class="text-red">Dificultad alta</span> (en Suecia estamos obligados a aplicar a la 2ª ronda de admisiones, donde hay menos plazas y más competencia).</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- MAP SUECIA -->
+  <div class="map-container" id="map-suecia">
+    <div class="map-title">🗺️ Universidades en Suecia</div>
+    <div id="leaflet-suecia" class="leaflet-map"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════ TAB: HOLANDA ══════════════ -->
+<div id="tab-holanda" class="tab-panel">
+  <div class="country-header">
+    <div class="country-flag-big">
+      <div class="flag flag-nl-big" style="display:flex;flex-direction:column;overflow:hidden;border-radius:5px;">
+        <div class="flag-nl-r" style="flex:1"></div>
+        <div class="flag-nl-w" style="flex:1"></div>
+        <div class="flag-nl-b" style="flex:1"></div>
+      </div>
+    </div>
+    <div class="country-info">
+      <h2>Holanda</h2>
+      <div class="country-meta">
+        <span class="country-meta-badge">🎓 Matrícula: <strong>2.692 €/año</strong></span>
+        <span class="country-meta-badge">4 universidades seleccionadas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="country-intro-text">
+    <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <strong style="color:var(--teal-dark)">2.692€/año</strong>.</p>
+  </div>
+
+  <div class="section-divider"><span>Research Universities</span></div>
+
+  <!-- CARD: TU/e -->
+  <div class="uni-card" id="card-tue">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering" target="_blank">
+          BA Bachelor Computer Science and Engineering – TU/e <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Eindhoven University of Technology (TU/e) · Eindhoven</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank">11–12ª de Holanda</span>
+          <span class="badge-rank">401–500ª del mundo – Shanghai</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-orange">Dificultad alta</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Eindhoven (223.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">2.692 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value text-red">15 de enero</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>Como estudiante de ingeniería computacional, aprenderás los principios y métodos básicos para desarrollar sistemas de software y servicios web, y cómo tener en cuenta la perspectiva del usuario. Serás capaz de razonar científicamente sobre la corrección y eficiencia de los programas, utilizando métodos matemáticos formales. Sabrás cómo desarrollar y mejorar la tecnología y el software que sustenta Internet. Además de ampliar conocimientos y habilidades, también aprenderás a aplicarlos para resolver problemas específicos.</p>
+      <p class="text-red"><strong>APPLICATION FEE:</strong> esta Universidad cobra <span class="text-red">una tasa de 100€</span> solo por presentar la matrícula (no reembolsable).</p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato + EVAU (con nota media mínima de 6) + Matemáticas II en Bachiller además de aprobar el examen de Matemáticas II en la EVAU.</p>
+          <p><strong>De nivel de inglés:</strong></p>
+          <ul>
+            <li>Cambridge CAE (mínimo 176 overall y 169 en cada subsección)</li>
+            <li>IELTS 6.5 overall (6.0 en cada subsección)</li>
+            <li>TOEFL 90 (ningún apartado por debajo de 21)</li>
+          </ul>
+          <div class="deadline-box">Fecha límite para enviar matrícula: <strong>15 de enero</strong></div>
+          <p><strong>Proceso de selección:</strong> Sí hay proceso de selección que consta de tres tests de "cognitive skills" y cuenta un 90% y de tus notas medias (GPA) que cuenta otro 10%. <a href="https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering/admission-and-application" target="_blank">Aquí</a> más información.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CARD: Twente -->
+  <div class="uni-card" id="card-twente">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.utwente.nl/en/education/bachelor/programmes/advanced-technology/" target="_blank">
+          Bachelor in Advanced Technology – Twente University <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">University of Twente · Enschede</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank">11–12ª de Holanda</span>
+          <span class="badge-rank">401–500ª del mundo – Shanghai</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-green">Admisión directa</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Enschede (158.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">2.692 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">1 mayo (recom.) / 1 julio</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>Advanced Technology at UT es un grado único. Ese solo hecho te diferenciará sobre otros graduados en Ingenierías y Grados Técnicos. Recibirás una amplia formación desde perspectivas multidisciplinares. Piensa, por ejemplo, en temas como la nanotecnología, la robótica y la <a href="https://www.utwente.nl/en/education/bachelor/programmes/advanced-technology/programme/mechatronica" target="_blank">mecatrónica</a>, así como el big data, la transición energética y la tecnología sostenible. Si, después de graduarte, te unes a un equipo de proyecto que incluye ingenieros mecánicos, gerentes industriales e ingenieros eléctricos, serás tú quien tenga una visión global y objetiva del proyecto. Estarás preparado para participar en el proyecto de principio a fin, en lugar de centrarse en una pequeña parte y luego entregársela al siguiente especialista. Como graduado de AT, estarás capacitado para analizar preguntas desde varios ángulos y hablar el idioma de disciplinas muy diferentes.</p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong></p>
+          <ul>
+            <li>Título de Bachiller + EVAU (incluyendo Matemáticas II y Física en ambos)</li>
+          </ul>
+          <p><strong>De nivel de inglés <span class="text-red">(necesario poder entregarlo antes del plazo límite de matriculación)</span>:</strong></p>
+          <ul>
+            <li>IELTS 6.0 (ninguna parte por debajo del 5,5)</li>
+            <li>TOEFL iBT 80 (ninguna parte por debajo de 18)</li>
+            <li>Cambridge CAE (mínimo 169, ninguna parte por debajo de 162)</li>
+            <li>A levels: English GCE/GCSE (A-C)</li>
+            <li>IB: <em>English (grade 5)</em></li>
+          </ul>
+          <div class="deadline-box">Fecha límite recomendada: <strong>1 de mayo</strong> (se aceptan matrículas hasta el 1 de julio)</div>
+          <p><strong>Proceso de selección:</strong> No hay proceso de selección — si cumples requisitos, la admisión está prácticamente garantizada.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CARD: Maastricht -->
+  <div class="uni-card" id="card-maastricht">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.maastrichtuniversity.nl/education/bachelor/bachelor-data-science-and-artificial-intelligence" target="_blank">
+          BA Data Science and Artificial Intelligence – Maastricht University <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Maastricht University · Maastricht</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank">10ª de Holanda</span>
+          <span class="badge-rank gold">201–300ª del mundo – Shanghai</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-orange">Dificultad media-alta</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Maastricht (122.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">2.692 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Plazo límite</div>
+        <div class="meta-value">1 de mayo</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>En este programa de licenciatura, estudiarás lógica, búsqueda inteligente y aprendizaje automático. Recopilarás y organizarás información relevante utilizando matemáticas y técnicas informáticas inteligentes. También utilizas modelos y computadoras para el análisis de datos. El objetivo final es desarrollar software y sistemas inteligentes fáciles de usar para, entre otros, atención médica, TI, robótica y juegos comerciales. Al graduarse, puede esperar una carrera prometedora, ya que los científicos de datos y los ingenieros del conocimiento tienen una gran demanda.</p>
+      <p><a href="https://curriculum.maastrichtuniversity.nl/education/bachelor/data-science-and-artificial-intelligence" target="_blank"><strong>CURRÍCULUM del grado:</strong> aquí puedes ver los contenidos de las asignaturas.</a></p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong> Bachiller (nota media de 7 en 2º de Bachillerato) + EVAU.</p>
+          <p><strong>De nivel de inglés:</strong> Maastricht acepta el inglés de 2º de bachiller aprobado como prueba de nivel suficiente.</p>
+          <p><strong>Específicos para este grado:</strong> Maastricht evaluará tus resultados de Matemáticas para decidir si debes pasar o no un examen adicional de Matemáticas.</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: <strong>1 de mayo</strong></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>Applied Science Universities</span></div>
+
+  <!-- CARD: FONTYS -->
+  <div class="uni-card" id="card-fontys">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.fontys.edu/Bachelor-degree/Fontys-University-of-Applied-Sciences/ICT.htm" target="_blank">
+          Information &amp; Communication Technology – FONTYS UAS <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">FONTYS University of Applied Sciences · Eindhoven</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank">Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-green">Admisión directa</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Eindhoven (223.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">2.692 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Plazo límite</div>
+        <div class="meta-value">1 de agosto</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>La tecnología de la información y la comunicación (TIC) es un amplio programa de licenciatura de 4 años. En el año 1, comenzará con una orientación amplia sobre cinco programas de estudio principales, que deberás escoger como especialización a partir del año 2:</p>
+      <ul style="margin:10px 0 0 20px;line-height:1.8">
+        <li><a href="https://www.fontys.edu/Bachelor-degree/Fontys-University-of-Applied-Sciences/ICT/Bachelor-ICT-Business.htm" target="_blank">Bachelor ICT &amp; Business</a></li>
+        <li><a href="https://www.fontys.edu/Bachelor-degree/Fontys-University-of-Applied-Sciences/ICT/Bachelor-ICT-Infrastructure.htm" target="_blank">Bachelor ICT &amp; Infrastructure</a></li>
+        <li><a href="https://www.fontys.edu/Bachelor-degree/Fontys-University-of-Applied-Sciences/ICT/Bachelor-ICT-Media-Design.htm" target="_blank">Bachelor ICT &amp; Media Design</a></li>
+        <li><a href="https://www.fontys.edu/Bachelor-degree/Fontys-University-of-Applied-Sciences/ICT/Bachelor-ICT-Software-Engineering.htm" target="_blank">Bachelor ICT &amp; Software Engineering</a></li>
+        <li><a href="https://www.fontys.edu/Bachelor-degree/Fontys-University-of-Applied-Sciences/ICT/Bachelor-ICT-Technology.htm" target="_blank">Bachelor ICT &amp; Technology</a></li>
+      </ul>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong> Título de bachillerato.</p>
+          <p><strong>Requisitos de inglés:</strong> Academic IELTS 6.0 (con un mínimo de 5.0 en cada parte), TOEFL 80 (internet based) o Cambridge ESOL score FCE-C (169 mínimo).</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: <strong>1 de agosto</strong></div>
+          <p><strong>Proceso de selección:</strong> No hay — si cumples los requisitos tienes el acceso garantizado.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- MAP HOLANDA -->
+  <div class="map-container" id="map-holanda">
+    <div class="map-title">🗺️ Universidades en Holanda</div>
+    <div id="leaflet-holanda" class="leaflet-map"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════ TAB: ALEMANIA ══════════════ -->
+<div id="tab-alemania" class="tab-panel">
+  <div class="country-header">
+    <div class="country-flag-big">
+      <div style="display:flex;flex-direction:column;width:56px;height:38px;border-radius:5px;overflow:hidden;">
+        <div class="flag-de-b" style="flex:1"></div>
+        <div class="flag-de-r" style="flex:1"></div>
+        <div class="flag-de-g" style="flex:1"></div>
+      </div>
+    </div>
+    <div class="country-info">
+      <h2>Alemania</h2>
+      <div class="country-meta">
+        <span class="country-meta-badge">🎓 Matrícula: <strong>~700 €/año</strong></span>
+        <span class="country-meta-badge">1 universidad seleccionada</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="country-intro-text">
+    <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Alemania, siendo el coste anual que tenemos que pagar de unos <strong style="color:var(--teal-dark)">700€/año</strong>.</p>
+  </div>
+
+  <div class="section-divider"><span>Applied Science Universities</span></div>
+
+  <!-- CARD: THI -->
+  <div class="uni-card" id="card-thi">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.thi.de/en/computer-science/courses-of-study/computer-science-and-artificial-intelligence-bachelor/" target="_blank">
+          Computer Science &amp; Artificial Intelligence – THI <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Technische Hochschule Ingolstadt · Ingolstadt</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank">Universidad técnica de Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-orange">Selección por nota</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Ingolstadt (142.400 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('alemania','map-alemania')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3,5 años</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">~700 €/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Plazo límite</div>
+        <div class="meta-value">15 de julio</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>En el programa de Grado en Informática e Inteligencia Artificial, los estudiantes adquieren conocimientos actualizados sobre informática aplicada y diseño de sistemas informáticos. Los módulos fundamentales de informática incluyen, por ejemplo, programación, ingeniería de software, tecnologías web, sistemas de bases de datos y big data, visualización de datos e interfaces persona-ordenador. Además, el programa abarca temas centrales de IA, como la visión por ordenador, la comprensión del lenguaje natural, los sistemas expertos, la optimización heurística, los agentes inteligentes, el aprendizaje automático y las redes neuronales. Además, los estudiantes se ocupan de cuestiones éticas, privacidad de los datos y problemas de seguridad asociados al uso de sistemas de procesamiento de la información. Son capaces de trabajar científicamente en equipo y de trasladar los resultados científicos a la práctica profesional, así como de comunicar y presentar dichos resultados de forma convincente.</p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong> Título de bachillerato + EVAU.</p>
+          <p><strong>De nivel de inglés:</strong> Aparentemente aceptan el inglés de 2º de bachiller como suficiente (por confirmar con la universidad).</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: <strong>15 de julio</strong></div>
+          <p><strong>Proceso de selección:</strong> Sí hay proceso de selección — la universidad usará la nota final de bachiller para elegir a los estudiantes admitidos.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- MAP ALEMANIA -->
+  <div class="map-container" id="map-alemania">
+    <div class="map-title">🗺️ Universidades en Alemania</div>
+    <div id="leaflet-alemania" class="leaflet-map"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════ TAB: BÉLGICA ══════════════ -->
+<div id="tab-belgica" class="tab-panel">
+  <div class="country-header">
+    <div class="country-flag-big">
+      <div style="display:flex;flex-direction:row;width:56px;height:38px;border-radius:5px;overflow:hidden;">
+        <div class="flag-be-b" style="flex:1"></div>
+        <div class="flag-be-y" style="flex:1"></div>
+        <div class="flag-be-r" style="flex:1"></div>
+      </div>
+    </div>
+    <div class="country-info">
+      <h2>Bélgica</h2>
+      <div class="country-meta">
+        <span class="country-meta-badge">🎓 Matrícula: <strong>1.187 €/año</strong></span>
+        <span class="country-meta-badge">4 universidades seleccionadas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="country-intro-text">
+    <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <strong style="color:var(--teal-dark)">1.187 €/año</strong>.</p>
+  </div>
+
+  <div class="section-divider"><span>Applied Science Universities</span></div>
+
+  <!-- CARD: Howest Cybersecurity -->
+  <div class="uni-card" id="card-howest-cyber">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.howest.be/en/programmes/bachelor/cybersecurity" target="_blank">
+          Bachelor Cybersecurity – Howest <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Howest University of Applied Sciences · Brujas</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank">Applied Sciences Bélgica – sin ranking internacional</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-green">Admisión directa</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Brujas (aprox. 119.541 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('belgica','map-belgica')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">1.187 €/año</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>Estudiar Ciberseguridad en Howest te prepara para proteger el mundo digital frente a amenazas cada vez más sofisticadas. Aprenderás a diseñar, implementar y gestionar sistemas seguros, desarrollando habilidades prácticas en defensa contra ciberataques, análisis forense digital y protección de datos. Este programa combina teoría y práctica desde el primer día, para que estés listo para enfrentar los desafíos reales del sector tecnológico.</p>
+      <p>Además, tendrás la oportunidad de trabajar en proyectos innovadores y realizar prácticas profesionales que te abrirán las puertas al mercado laboral. Si quieres formar parte de un campo en constante crecimiento y alta demanda, donde tu trabajo marcará la diferencia en la seguridad de empresas y personas, este programa es ideal para ti.</p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato.</p>
+          <p><strong>De nivel de inglés:</strong></p>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>Cambridge FCE 160</li>
+            <li>TOEFL / TOEFL iBT Special Home Edition 80</li>
+            <li>Duolingo 110</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CARD: Howest Creative Tech AI -->
+  <div class="uni-card" id="card-howest-creative">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.howest.be/en/programmes/bachelor/creative-technologies-and-artificial-intelligence" target="_blank">
+          Bachelor Creative Technologies and Artificial Intelligence <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Howest University of Applied Sciences · Kortrijk</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank">Applied Sciences Bélgica – sin ranking internacional</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-green">Admisión directa</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Kortrijk (aprox. 76.000 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('belgica','map-belgica')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">1.157 €/año <span class="text-red">+ tasa 50€ no reembolsable</span></div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste de vida</div>
+        <div class="meta-value"><a href="https://www.howest.be/en/student-life/housing-and-cost-of-living" target="_blank">Ver estimación aquí</a></div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>Este grado te permitirá sumergirte en un mundo donde la creatividad se une con la tecnología más avanzada. Aprenderás a diseñar y desarrollar soluciones innovadoras usando inteligencia artificial aplicada a áreas como el arte digital, la interacción multimedia y las experiencias creativas. Este programa te ofrece un enfoque práctico desde el primer día, para que puedas experimentar y crear proyectos que realmente marquen la diferencia.</p>
+      <p>Además, tendrás la oportunidad de trabajar con herramientas punteras y colaborar en proyectos reales, preparándote para un mercado laboral en auge donde la creatividad tecnológica es clave. Si quieres combinar tu pasión por la tecnología y la innovación con un enfoque artístico, este programa te brindará las habilidades y la experiencia que necesitas para destacar.</p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato.</p>
+          <p><strong>De nivel de inglés:</strong></p>
+          <ul>
+            <li>IELTS 6.5</li>
+            <li>Cambridge FCE 160</li>
+            <li>TOEFL / TOEFL iBT Special Home Edition 80</li>
+            <li>Duolingo 110</li>
+          </ul>
+          <p class="text-red"><strong>Nota:</strong> tasa de matrícula de 50€ no reembolsables al presentar la solicitud.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CARD: Thomas More TIC -->
+  <div class="uni-card" id="card-thomas-tic">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.thomasmore.be/en/programmes/bachelor-information-and-communication-technology" target="_blank">
+          Grado en TIC: Tecnologías de la Información &amp; la Comunicación <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Thomas More University of Applied Sciences · Mechelen</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank">Applied Sciences Bélgica – sin ranking internacional</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-green">Admisión directa</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Mechelen (aprox. 86.304 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('belgica','map-belgica')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">1.187 €/año</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>Sentar las bases de su experiencia en TIC desde la programación y configuración hasta la instalación de software y la gestión de hardware. Elige entre 3 especialidades:</p>
+      <ul style="margin:10px 0 0 20px;line-height:1.9">
+        <li><span style="color:var(--teal-dark);font-weight:500">Inteligencia artificial aplicada:</span> vaya mucho más allá de lo básico, explorando una variedad de diferentes programas y aplicaciones de IA.</li>
+        <li><span style="color:var(--teal-dark);font-weight:500">Desarrollo y Seguridad de Aplicaciones:</span> aprende a desarrollar todo tipo de aplicaciones desde la web hasta el móvil.</li>
+        <li><span style="color:var(--teal-dark);font-weight:500">Sistemas y servicios:</span> obtenga las habilidades para configurar una gama de servicios avanzados, tanto localmente como en la nube.</li>
+      </ul>
+      <p style="margin-top:10px">Fase 3: prepárese para el mundo empresarial real con prácticas internacionales. Colaboraras con tu grupo en la elaboración de un plan de negocios para un proyecto de su elección durante su curso de Emprendimiento.</p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato.</p>
+          <p><strong>Requisito inglés:</strong></p>
+          <ul>
+            <li>IELTS 6.0</li>
+            <li>Cambridge FCE 160</li>
+            <li>TOEFL / TOEFL iBT Special Home Edition 79</li>
+            <li>Duolingo 110</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CARD: Thomas More Data Science -->
+  <div class="uni-card" id="card-thomas-data">
+    <div class="uni-card-header">
+      <div class="uni-card-header-left">
+        <a class="uni-grade-title" href="https://www.thomasmore.be/en/programmes/bachelor-data-science-data-protection-and-cybersecurity" target="_blank">
+          Grado en Ciencia de Datos, Protección y Seguridad <span class="link-icon">🖱️</span>
+        </a>
+        <div class="uni-school">Thomas More University of Applied Sciences · Mechelen</div>
+        <div class="ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge-rank">Applied Sciences Bélgica – sin ranking internacional</span>
+        </div>
+      </div>
+      <span class="difficulty-badge diff-green">Admisión directa</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Mechelen (aprox. 86.304 hab.)</div>
+        <button class="map-btn" onclick="scrollToMap('belgica','map-belgica')">🗺️ Ver mapa</button>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste matrícula</div>
+        <div class="meta-value">1.187 €/año</div>
+      </div>
+    </div>
+
+    <div class="uni-desc">
+      <p>Te enseñaremos las herramientas tecnológicas que te permitirán iniciarte en bases de datos y grandes cantidades de datos. Aprenderá a trabajar con sintaxis y obtendrá una introducción a la protección de datos y la seguridad cibernética. También aprende los principios básicos del espíritu empresarial y la gestión. Te sumergirás en técnicas de análisis. Python es EL lenguaje de secuencias de comandos para esto. Simulamos ciberataques y te enseñamos a detectar puntos débiles en la seguridad. Aprenderás a pensar como un hacker. Asumirás el rol de experto en seguridad en esta fase: cree una red segura y construya firewalls para protegerla. En este mundo de big data también es importante aprender los principios de la inteligencia artificial y el aprendizaje automático.</p>
+    </div>
+
+    <div class="uni-requirements">
+      <details>
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="requirements-inner">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato.</p>
+          <p><strong>Nivel de inglés:</strong></p>
+          <ul>
+            <li>IELTS 6.0</li>
+            <li>Cambridge FCE 160</li>
+            <li>TOEFL / TOEFL iBT Special Home Edition 79</li>
+            <li>Duolingo 110</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- MAP BÉLGICA -->
+  <div class="map-container" id="map-belgica">
+    <div class="map-title">🗺️ Universidades en Bélgica</div>
+    <div id="leaflet-belgica" class="leaflet-map"></div>
+  </div>
+</div>
+
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <!-- SVG Logo inline – colores originales, opacidad reducida -->
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18" aria-label="Educoway" style="opacity:0.35">
+    <defs><style>
+      .fcls-1{fill:#36aadc;opacity:.8}
+      .fcls-2{fill:#30ac71;opacity:.8}
+      .fcls-3{fill:#737373}
+      .fcls-4{fill:#32abbb;opacity:.8}
+      .fcls-5{fill:#31ac9c;opacity:.8}
+    </style></defs>
+    <g>
+      <path class="fcls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="fcls-5" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="fcls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="fcls-4" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <path class="fcls-3" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+      <path class="fcls-3" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+      <path class="fcls-3" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+      <polygon class="fcls-3" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+    </g>
+  </svg>
+  <p>Informe Personalizado de Opciones de Grado · Héctor Beltrán Ruiz · Educoway</p>
+  <p style="margin-top:4px;font-size:0.72rem;opacity:0.6">orientación universitaria en el extranjero</p>
+</footer>
+
+
+<script>
+// ══════════════════════════════
+//   NAVIGATION
+// ══════════════════════════════
+
+function showTab(id, btn) {
+  // hide all panels
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  // show selected
+  const panel = document.getElementById('tab-' + id);
+  if (panel) panel.classList.add('active');
+  if (btn) btn.classList.add('active');
+  // scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // init map if needed
+  if (['dinamarca','suecia','holanda','alemania','belgica'].includes(id)) {
+    setTimeout(() => initMap(id), 300);
+  }
+}
+
+function goTo(tab, anchor) {
+  // find the tab button for this tab
+  const btns = document.querySelectorAll('.tab-btn');
+  let targetBtn = null;
+  btns.forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + tab + "'")) {
+      targetBtn = b;
+    }
+  });
+  showTab(tab, targetBtn);
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 350);
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function scrollToMap(tab, anchor) {
+  const panel = document.getElementById('tab-' + tab);
+  if (!panel || !panel.classList.contains('active')) {
+    goTo(tab, anchor);
+  } else {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// ══════════════════════════════
+//   LEAFLET MAPS
+// ══════════════════════════════
+
+const mapsInitialized = {};
+
+const mapData = {
+  dinamarca: {
+    center: [56.2, 10.0],
+    zoom: 6,
+    unis: [
+      {
+        id: 'card-aarhus',
+        name: 'Bachelor in Computer Sciences',
+        school: 'Aarhus University',
+        lat: 56.1629, lng: 10.2039,
+        webUrl: 'https://www.au.dk/en/education/bachelor-of-science-bsc/computer-science',
+        mapsUrl: 'https://maps.google.com/?q=Aarhus+University,Aarhus,Denmark'
+      },
+      {
+        id: 'card-via',
+        name: 'Bachelor in Computer Graphic Arts',
+        school: 'VIA University College',
+        lat: 56.4607, lng: 9.4057,
+        webUrl: 'https://en.via.dk/programmes/computer-graphic-arts',
+        mapsUrl: 'https://maps.google.com/?q=VIA+University+College,Viborg,Denmark'
+      }
+    ]
+  },
+  suecia: {
+    center: [57.7089, 11.9746],
+    zoom: 9,
+    unis: [
+      {
+        id: 'card-gothenburg',
+        name: 'Bachelor in Software Engineering & Management',
+        school: 'University of Gothenburg',
+        lat: 57.6969, lng: 11.9864,
+        webUrl: 'https://www.gu.se/en/study-gothenburg/software-engineering-and-management-bachelors-programme-n1sof',
+        mapsUrl: 'https://maps.google.com/?q=University+of+Gothenburg,Sweden'
+      }
+    ]
+  },
+  holanda: {
+    center: [52.3, 5.3],
+    zoom: 7,
+    unis: [
+      {
+        id: 'card-tue',
+        name: 'BA Computer Science and Engineering',
+        school: 'TU/e Eindhoven',
+        lat: 51.4484, lng: 5.4909,
+        webUrl: 'https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering',
+        mapsUrl: 'https://maps.google.com/?q=Eindhoven+University+of+Technology,Netherlands'
+      },
+      {
+        id: 'card-twente',
+        name: 'Bachelor in Advanced Technology',
+        school: 'University of Twente',
+        lat: 52.2388, lng: 6.8566,
+        webUrl: 'https://www.utwente.nl/en/education/bachelor/programmes/advanced-technology/',
+        mapsUrl: 'https://maps.google.com/?q=University+of+Twente,Enschede,Netherlands'
+      },
+      {
+        id: 'card-maastricht',
+        name: 'BA Data Science and Artificial Intelligence',
+        school: 'Maastricht University',
+        lat: 50.8514, lng: 5.6910,
+        webUrl: 'https://www.maastrichtuniversity.nl/education/bachelor/bachelor-data-science-and-artificial-intelligence',
+        mapsUrl: 'https://maps.google.com/?q=Maastricht+University,Netherlands'
+      },
+      {
+        id: 'card-fontys',
+        name: 'Information & Communication Technology',
+        school: 'FONTYS UAS',
+        lat: 51.4416, lng: 5.4697,
+        webUrl: 'https://www.fontys.edu/Bachelor-degree/Fontys-University-of-Applied-Sciences/ICT.htm',
+        mapsUrl: 'https://maps.google.com/?q=Fontys+University+of+Applied+Sciences,Eindhoven,Netherlands'
+      }
+    ]
+  },
+  alemania: {
+    center: [48.765, 11.424],
+    zoom: 9,
+    unis: [
+      {
+        id: 'card-thi',
+        name: 'Computer Science & Artificial Intelligence',
+        school: 'Technische Hochschule Ingolstadt',
+        lat: 48.7665, lng: 11.4257,
+        webUrl: 'https://www.thi.de/en/computer-science/courses-of-study/computer-science-and-artificial-intelligence-bachelor/',
+        mapsUrl: 'https://maps.google.com/?q=Technische+Hochschule+Ingolstadt,Germany'
+      }
+    ]
+  },
+  belgica: {
+    center: [50.95, 4.2],
+    zoom: 8,
+    unis: [
+      {
+        id: 'card-howest-cyber',
+        name: 'Bachelor Cybersecurity',
+        school: 'Howest University (Brujas)',
+        lat: 51.2093, lng: 3.2247,
+        webUrl: 'https://www.howest.be/en/programmes/bachelor/cybersecurity',
+        mapsUrl: 'https://maps.google.com/?q=Howest+University,Bruges,Belgium'
+      },
+      {
+        id: 'card-howest-creative',
+        name: 'Bachelor Creative Technologies & AI',
+        school: 'Howest University (Kortrijk)',
+        lat: 50.8285, lng: 3.2650,
+        webUrl: 'https://www.howest.be/en/programmes/bachelor/creative-technologies-and-artificial-intelligence',
+        mapsUrl: 'https://maps.google.com/?q=Howest+University,Kortrijk,Belgium'
+      },
+      {
+        id: 'card-thomas-tic',
+        name: 'Grado en TIC',
+        school: 'Thomas More UAS (Mechelen)',
+        lat: 51.0259, lng: 4.4776,
+        webUrl: 'https://www.thomasmore.be/en/programmes/bachelor-information-and-communication-technology',
+        mapsUrl: 'https://maps.google.com/?q=Thomas+More+University,Mechelen,Belgium'
+      },
+      {
+        id: 'card-thomas-data',
+        name: 'Grado en Ciencia de Datos, Protección y Seguridad',
+        school: 'Thomas More UAS (Mechelen)',
+        lat: 51.0265, lng: 4.4790,
+        webUrl: 'https://www.thomasmore.be/en/programmes/bachelor-data-science-data-protection-and-cybersecurity',
+        mapsUrl: 'https://maps.google.com/?q=Thomas+More+University,Mechelen,Belgium'
+      }
+    ]
+  }
+};
+
+function initMap(countryId) {
+  if (mapsInitialized[countryId]) return;
+  const data = mapData[countryId];
+  if (!data) return;
+  const mapEl = document.getElementById('leaflet-' + countryId);
+  if (!mapEl) return;
+
+  const map = L.map('leaflet-' + countryId).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a>',
+    maxZoom: 18
+  }).addTo(map);
+
+  const graduationIcon = L.divIcon({
+    html: '<div style="font-size:24px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.3))">🎓</div>',
+    className: '',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -16]
+  });
+
+  data.unis.forEach(u => {
+    const marker = L.marker([u.lat, u.lng], { icon: graduationIcon }).addTo(map);
+    const popupHTML = `
+      <div style="font-family:'DM Sans',sans-serif;min-width:200px;max-width:260px">
+        <div style="font-weight:700;font-size:13px;color:#0d2b3e;line-height:1.35;margin-bottom:4px">${u.name}</div>
+        <div style="font-size:11px;color:#0a9baa;font-weight:500;margin-bottom:10px">${u.school}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px">
+          <a href="${u.webUrl}" target="_blank" style="display:inline-block;background:#0a9baa;color:#fff;text-decoration:none;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600">🌐 Ver grado</a>
+          <button onclick="closePopupAndScrollToCard('${u.id}')" style="display:inline-block;background:#0d2b3e;color:#fff;border:none;cursor:pointer;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600">📋 Ver ficha</button>
+          <a href="${u.mapsUrl}" target="_blank" style="display:inline-block;background:#e8f5f7;color:#077a87;text-decoration:none;border:1px solid #c8e0e5;border-radius:5px;padding:4px 9px;font-size:11px;font-weight:600">📍 Google Maps</a>
+        </div>
+      </div>
+    `;
+    marker.bindPopup(popupHTML, { maxWidth: 280 });
+  });
+
+  mapsInitialized[countryId] = true;
+}
+
+function closePopupAndScrollToCard(cardId) {
+  // close all leaflet popups
+  document.querySelectorAll('.leaflet-popup-close-button').forEach(btn => btn.click());
+  setTimeout(() => {
+    const el = document.getElementById(cardId);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
+}
+</script>
+</body>
+</html>
