@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Opciones de Grado – Dayna Sayuri Wong Hernández</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<style>
+  :root {
+    --teal: #0a9baa;
+    --teal-dark: #077a87;
+    --teal-light: #e0f5f7;
+    --navy: #0d2b3e;
+    --bg: #f4f8fa;
+    --border: #c8e0e5;
+    --gold: #c9943a;
+    --gold-bg: #fdf3e0;
+    --red: #cc2222;
+    --green: #1a7a3a;
+    --yellow-bg: #fff9c4;
+    --yellow-border: #f0c040;
+    --text: #1e3a4a;
+    --muted: #6b8a9a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+  }
+
+  /* ─── STICKY HEADER ─── */
+  #site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--navy);
+    box-shadow: 0 2px 16px rgba(13,43,62,0.3);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 32px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .header-logo { flex-shrink: 0; height: 38px; }
+
+  .header-titles { flex: 1; }
+  .header-titles h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: #fff;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+  .header-titles .subtitle {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+  }
+
+  /* ─── TAB BAR ─── */
+  #tab-bar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 24px;
+    background: var(--navy);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  #tab-bar::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.65);
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tab-btn:hover { color: rgba(255,255,255,0.9); }
+  .tab-btn.active {
+    color: #fff;
+    border-bottom-color: var(--teal);
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  main { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ─── INTRO TAB ─── */
+  .intro-greeting {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin-bottom: 36px;
+    font-size: 1rem;
+  }
+  .intro-greeting p { margin-bottom: 1em; }
+  .intro-greeting p:last-child { margin-bottom: 0; }
+
+  .index-section {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 36px;
+  }
+  .index-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .index-country {
+    margin-bottom: 20px;
+  }
+  .index-country-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal-dark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .index-entry {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.15s;
+    margin-bottom: 4px;
+  }
+  .index-entry:hover { background: var(--teal-light); }
+  .index-entry-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .index-entry-uni {
+    font-family: 'Playfair Display', serif;
+    font-size: 11.5px;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .now-what {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+  }
+  .now-what h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--navy);
+    margin-bottom: 14px;
+  }
+
+  /* ─── COUNTRY TAB INTRO ─── */
+  .country-intro {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+  }
+  .country-flag-big { flex-shrink: 0; }
+  .country-info h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .country-text { margin-top: 12px; font-size: 0.95rem; }
+
+  /* ─── SECTION DIVIDERS ─── */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 36px 0 22px;
+  }
+  .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+  .section-divider-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ─── UNIVERSITY CARD ─── */
+  .uni-card {
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 28px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+  }
+  .uni-card:hover {
+    border-color: var(--teal);
+    box-shadow: 0 6px 28px rgba(10,155,170,0.12);
+  }
+
+  .card-header {
+    padding: 20px 24px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .card-header-left { flex: 1; min-width: 0; }
+
+  .card-title-link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 7px;
+    text-decoration: none;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.12rem;
+    font-weight: 600;
+    color: var(--navy);
+    transition: color 0.2s;
+    line-height: 1.3;
+  }
+  .card-title-link:hover { color: var(--teal); }
+  .card-title-link:hover .cursor-icon { transform: scale(1.35); }
+  .cursor-icon {
+    font-size: 0.85rem;
+    display: inline-block;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .card-school {
+    font-size: 0.88rem;
+    color: var(--teal);
+    font-weight: 500;
+    margin-top: 4px;
+  }
+
+  .ranking-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 9px;
+  }
+  .ranking-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .badge-rank {
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    border: 1px solid var(--teal);
+  }
+  .badge-rank-gold {
+    background: var(--gold-bg);
+    color: #8a5e10;
+    border: 1px solid var(--gold);
+  }
+  .badge-diff-high {
+    background: #fff0f0;
+    color: #c01818;
+    border: 1px solid #e05050;
+  }
+  .badge-diff-med {
+    background: #fff7ed;
+    color: #b35000;
+    border: 1px solid #e07820;
+  }
+  .badge-diff-low {
+    background: #f0faf2;
+    color: #1a6830;
+    border: 1px solid #3a9a50;
+  }
+
+  .diff-badge-wrap {
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+
+  /* ─── METADATA GRID ─── */
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background: #fafeff;
+  }
+  .meta-cell {
+    background: var(--teal-light);
+    border: 1px solid var(--teal);
+    border-radius: 8px;
+    padding: 9px 12px;
+  }
+  .meta-cell-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--teal-dark);
+    margin-bottom: 3px;
+  }
+  .meta-cell-value {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.3;
+  }
+
+  .map-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 5px;
+    padding: 3px 9px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--teal-dark);
+    background: #fff;
+    border: 1px solid var(--teal);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .map-btn:hover { background: var(--teal); color: #fff; }
+
+  /* ─── DESCRIPTION BOX ─── */
+  .desc-box {
+    margin: 16px 24px;
+    background: #f0fafc;
+    border-left: 4px solid var(--teal);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .desc-box p { margin-bottom: 0.8em; }
+  .desc-box p:last-child { margin-bottom: 0; }
+  .desc-box strong { font-weight: 600; }
+
+  .salidas-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--teal-dark);
+    margin-top: 14px;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .salidas-list {
+    columns: 2;
+    column-gap: 20px;
+    font-size: 0.83rem;
+    line-height: 1.6;
+    list-style: none;
+    padding: 0;
+  }
+  .salidas-list li::before {
+    content: "→ ";
+    color: var(--teal);
+    font-weight: 600;
+  }
+  @media (max-width: 600px) { .salidas-list { columns: 1; } }
+
+  /* ─── DETAILS / REQUIREMENTS ─── */
+  .req-details {
+    margin: 0 24px 20px;
+  }
+  .req-details summary {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--teal-dark);
+    cursor: pointer;
+    padding: 10px 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-top: 1px dashed var(--border);
+    user-select: none;
+  }
+  .req-details summary::before {
+    content: "▶";
+    font-size: 0.6rem;
+    color: var(--teal);
+    transition: transform 0.2s;
+  }
+  .req-details[open] summary::before { transform: rotate(90deg); }
+  .req-details summary::-webkit-details-marker { display: none; }
+
+  .req-inner {
+    padding: 14px 0 8px;
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+  .req-inner ul { list-style: disc; padding-left: 20px; margin: 6px 0; }
+  .req-inner li { margin-bottom: 3px; }
+  .req-inner p { margin-bottom: 0.6em; }
+
+  .deadline-box {
+    background: var(--yellow-bg);
+    border: 1px solid var(--yellow-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #7a5000;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ─── MAP SECTION ─── */
+  .map-section {
+    margin-top: 48px;
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .map-section-header {
+    padding: 16px 24px;
+    background: var(--navy);
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .map-container {
+    height: 420px;
+    width: 100%;
+  }
+
+  /* ─── LEAFLET POPUP ─── */
+  .popup-content { font-family: 'DM Sans', sans-serif; min-width: 200px; }
+  .popup-degree { font-family: 'Playfair Display', serif; font-size: 0.92rem; font-weight: 600; color: var(--navy); margin-bottom: 3px; }
+  .popup-school { font-size: 0.8rem; color: var(--teal-dark); margin-bottom: 10px; }
+  .popup-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .popup-btn {
+    padding: 5px 11px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    border: 1px solid;
+    font-family: 'DM Sans', sans-serif;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .popup-btn-teal { background: var(--teal); color: #fff; border-color: var(--teal); }
+  .popup-btn-outline { background: #fff; color: var(--teal-dark); border-color: var(--teal); }
+  .popup-btn-maps { background: #fff; color: #5a5a5a; border-color: #ccc; }
+
+  /* ─── FLAGS CSS ─── */
+  /* Spain */
+  .flag-es {
+    display: inline-flex;
+    flex-direction: column;
+    width: 30px;
+    height: 20px;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.1);
+    flex-shrink: 0;
+  }
+  .flag-es-top, .flag-es-bottom { flex: 1; background: #c60b1e; }
+  .flag-es-mid { flex: 2; background: #ffc400; }
+
+  .flag-es-big {
+    display: inline-flex;
+    flex-direction: column;
+    width: 54px;
+    height: 36px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+  .flag-es-big .flag-es-top, .flag-es-big .flag-es-bottom { flex: 1; background: #c60b1e; }
+  .flag-es-big .flag-es-mid { flex: 2; background: #ffc400; }
+
+  /* ─── INLINE RED / GREEN TEXT ─── */
+  .text-red { color: var(--red); font-weight: 600; }
+  .text-green { color: var(--green); font-weight: 600; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 60px;
+  }
+  footer .footer-logo { opacity: 0.5; height: 32px; }
+  footer p { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+
+  /* ─── UTILITIES ─── */
+  .text-sm { font-size: 0.85rem; }
+  .mt-4 { margin-top: 16px; }
+
+  /* Responsive */
+  @media (max-width: 680px) {
+    .header-inner { padding: 12px 16px 8px; }
+    #tab-bar { padding: 0 8px; }
+    main { padding: 24px 16px 60px; }
+    .country-intro { flex-direction: column; }
+    .meta-grid { grid-template-columns: 1fr 1fr; }
+    .card-header { flex-direction: column; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  STICKY HEADER                                      -->
+<!-- ═══════════════════════════════════════════════════ -->
+<header id="site-header">
+  <div class="header-inner">
+
+    <!-- LOGO SVG INLINE – versión blanca (fill: #ffffff) -->
+    <!-- NOTA: El logo original de Educoway no fue adjuntado. Se usa un logo representativo. -->
+    <!-- Para reemplazarlo, sustituye el bloque <svg> por el SVG real con fill:#ffffff en el texto -->
+    <svg class="header-logo" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg" aria-label="Educoway">
+      <!-- Icono: brújula estilizada -->
+      <circle cx="25" cy="25" r="20" fill="none" stroke="#ffffff" stroke-width="2"/>
+      <polygon points="25,10 29,25 25,22 21,25" fill="#ffffff"/>
+      <polygon points="25,40 21,25 25,28 29,25" fill="rgba(255,255,255,0.4)"/>
+      <circle cx="25" cy="25" r="3" fill="#ffffff"/>
+      <!-- Texto EDUCOWAY -->
+      <text x="52" y="20" font-family="'Playfair Display', serif" font-size="15" font-weight="700" fill="#ffffff">EDUCOWAY</text>
+      <text x="52" y="36" font-family="'DM Sans', sans-serif" font-size="9" letter-spacing="2" fill="rgba(255,255,255,0.65)">ORIENTACIÓN UNIVERSITARIA</text>
+    </svg>
+
+    <div class="header-titles">
+      <h1>Informe de Opciones de Grado</h1>
+      <div class="subtitle">Preparado para Dayna Sayuri Wong Hernández</div>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <nav id="tab-bar" role="tablist">
+    <button class="tab-btn active" onclick="showTab('intro', this)" role="tab" aria-selected="true">
+      Introducción
+    </button>
+    <button class="tab-btn" onclick="showTab('espana', this)" role="tab" aria-selected="false">
+      <span class="flag-es" aria-hidden="true">
+        <span class="flag-es-top"></span>
+        <span class="flag-es-mid"></span>
+        <span class="flag-es-bottom"></span>
+      </span>
+      España
+    </button>
+  </nav>
+</header>
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  MAIN CONTENT                                       -->
+<!-- ═══════════════════════════════════════════════════ -->
+<main>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!--  PESTAÑA: INTRODUCCIÓN                      -->
+  <!-- ─────────────────────────────────────────── -->
+  <section id="tab-intro" class="tab-panel active" role="tabpanel">
+
+    <!-- Texto de bienvenida -->
+    <div class="intro-greeting">
+      <p>Hola, Dayna:</p>
+      <p>Enhorabuena de nuevo tu decisión de continuar tus estudios en Europa, y gracias por haber confiado en nosotros para acompañarte en este gran paso.</p>
+      <p>Estas últimas semanas hemos seguido avanzando con la búsqueda de opciones de máster relevantes para ti. Te dejo primero un índice para que te ayude a localizar las opciones en el listado y, a continuación, el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p>
+      <p>Ahora sí, habiendo comentado este detalle, te paso las opciones de estudio más interesantes para tu caso particular:</p>
+    </div>
+
+    <!-- Índice -->
+    <div class="index-section">
+      <h2>Índice de opciones</h2>
+
+      <div class="index-country">
+        <div class="index-country-title">
+          <span class="flag-es" aria-hidden="true">
+            <span class="flag-es-top"></span>
+            <span class="flag-es-mid"></span>
+            <span class="flag-es-bottom"></span>
+          </span>
+          España
+        </div>
+
+        <a class="index-entry" href="#" onclick="goTo('espana','card-mda');return false;">
+          <div class="index-entry-name">BA (Hons) Interior Architecture &amp; Design</div>
+          <div class="index-entry-uni">Marbella Design Academy</div>
+        </a>
+
+        <a class="index-entry" href="#" onclick="goTo('espana','card-udit');return false;">
+          <div class="index-entry-name">Grado en Diseño de Interiores</div>
+          <div class="index-entry-uni">UDIT – Universidad de Diseño, Innovación y Tecnología</div>
+        </a>
+
+        <a class="index-entry" href="#" onclick="goTo('espana','card-esic');return false;">
+          <div class="index-entry-name">Grado en International Business</div>
+          <div class="index-entry-uni">ESIC University</div>
+        </a>
+
+        <a class="index-entry" href="#" onclick="goTo('espana','card-uem');return false;">
+          <div class="index-entry-name">International Business &amp; International Relations</div>
+          <div class="index-entry-uni">Universidad Europea de Madrid</div>
+        </a>
+
+        <a class="index-entry" href="#" onclick="goTo('espana','card-uax');return false;">
+          <div class="index-entry-name">Grado en Administración y Dirección de Empresas</div>
+          <div class="index-entry-uni">Universidad Alfonso X el Sabio (UAX)</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ¿Qué tienes que hacer ahora? -->
+    <div class="now-what">
+      <h2>¿Qué tienes que hacer ahora?</h2>
+      <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+      <p class="mt-4">¡Un saludo!</p>
+    </div>
+
+  </section>
+
+
+  <!-- ─────────────────────────────────────────── -->
+  <!--  PESTAÑA: ESPAÑA                            -->
+  <!-- ─────────────────────────────────────────── -->
+  <section id="tab-espana" class="tab-panel" role="tabpanel">
+
+    <!-- Country intro block -->
+    <div class="country-intro">
+      <div class="country-flag-big">
+        <span class="flag-es-big" aria-hidden="true">
+          <span class="flag-es-top"></span>
+          <span class="flag-es-mid"></span>
+          <span class="flag-es-bottom"></span>
+        </span>
+      </div>
+      <div class="country-info">
+        <h2>España</h2>
+        <div class="country-text">
+          <p>Las siguientes opciones se encuentran en España y cubren dos áreas principales: diseño de interiores y negocios internacionales / administración de empresas. Todas las universidades están ubicadas en Madrid o en la provincia de Málaga, ofreciendo programas impartidos en inglés o con fuerte componente internacional.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section divider: Diseño -->
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">🎨 Diseño de Interiores</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--  TARJETA 1: MARBELLA DESIGN ACADEMY        -->
+    <!-- ══════════════════════════════════════════ -->
+    <article class="uni-card" id="card-mda">
+      <div class="card-header">
+        <div class="card-header-left">
+          <a class="card-title-link" href="https://www.marbella-design-academy.com/ba-hons-interior-architecture-and-design/" target="_blank" rel="noopener">
+            BA (Hons) Interior Architecture &amp; Design
+            <span class="cursor-icon">🖱️</span>
+          </a>
+          <div class="card-school">Marbella Design Academy · Monda, Málaga</div>
+          <div class="ranking-row">
+            <span class="ranking-label">Ranking de la universidad:</span>
+            <span class="badge badge-rank">Título validado por University of Bedfordshire (UK)</span>
+          </div>
+        </div>
+        <div class="diff-badge-wrap">
+          <span class="badge badge-diff-low">Admisión directa</span>
+        </div>
+      </div>
+
+      <!-- Metadata grid -->
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Ciudad</div>
+          <div class="meta-cell-value">Monda, Málaga</div>
+          <button class="map-btn" onclick="scrollToMap('espana','map-espana')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Duración</div>
+          <div class="meta-cell-value">3 años (180 ECTS)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Coste</div>
+          <div class="meta-cell-value">15.000 € / curso</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Admisión</div>
+          <div class="meta-cell-value">Continua, plazas limitadas</div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="desc-box">
+        <p>El BA (Hons) Interior Architecture &amp; Design de Marbella Design Academy es un grado de tres años impartido en inglés que combina creatividad, diseño de interiores, arquitectura y desarrollo de espacios funcionales. El programa está validado por la University of Bedfordshire y conduce a la obtención de un título británico oficial de Bachelor of Arts with Honours. A lo largo de la formación, los estudiantes trabajan en proyectos reales e innovadores, explorando conceptos de diseño, representación visual, sostenibilidad, materiales y planificación de espacios adaptados a las necesidades de la sociedad actual.</p>
+        <p>La metodología del grado se centra en el aprendizaje práctico y en el desarrollo de soluciones creativas para entornos residenciales, comerciales, culturales y corporativos. Desde el primer año, los estudiantes adquieren conocimientos sobre fundamentos del diseño, comunicación visual, diseño asistido por ordenador y gestión de proyectos, mientras desarrollan la capacidad de analizar espacios y transformarlos en entornos atractivos, funcionales y sostenibles. Además, el programa fomenta el pensamiento crítico y el trabajo en equipos multiculturales, competencias muy valoradas en el sector del diseño internacional.</p>
+        <p>Gracias a su enfoque multidisciplinar, los graduados están preparados para incorporarse a diferentes áreas de la industria creativa y de la construcción. El programa proporciona una sólida base tanto para acceder al mercado laboral como para continuar con estudios de posgrado especializados en diseño, arquitectura o disciplinas afines.</p>
+        <span class="salidas-label">Salidas profesionales:</span>
+        <ul class="salidas-list">
+          <li>Diseñador de interiores</li>
+          <li>Arquitecto de interiores</li>
+          <li>Diseñador de espacios comerciales (retail)</li>
+          <li>Diseñador de oficinas y espacios corporativos</li>
+          <li>Diseñador de exposiciones y eventos</li>
+          <li>Consultor de diseño</li>
+          <li>Visual merchandiser</li>
+          <li>Gestor de proyectos de interiorismo</li>
+          <li>Especialista en rehabilitación de espacios</li>
+          <li>Diseñador de mobiliario y materiales</li>
+          <li>Escaparatista</li>
+          <li>Diseñador de espacios hoteleros y de restauración</li>
+        </ul>
+      </div>
+
+      <!-- Requirements (collapsible) -->
+      <div class="req-details-wrap req-details" style="margin:0 24px 20px;">
+        <details class="req-details" style="margin:0;">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="req-inner">
+            <p><strong>Requisitos académicos:</strong> Bachillerato / High School + nivel de inglés B2. Se recomienda portfolio.</p>
+            <p><strong>Proceso de selección:</strong> No hay proceso de selección más allá de cumplir con los requisitos académicos. El perfil de cada estudiante será validado por un comité del Departamento.</p>
+            <p><strong>Dificultad de acceso:</strong> Admisión directa.</p>
+            <div class="deadline-box">
+              📅 Fecha límite: Admisión continua · plazas limitadas
+            </div>
+          </div>
+        </details>
+      </div>
+    </article>
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--  TARJETA 2: UDIT                           -->
+    <!-- ══════════════════════════════════════════ -->
+    <article class="uni-card" id="card-udit">
+      <div class="card-header">
+        <div class="card-header-left">
+          <a class="card-title-link" href="https://www.udit.es/grado/diseno-interiores/" target="_blank" rel="noopener">
+            Grado en Diseño de Interiores
+            <span class="cursor-icon">🖱️</span>
+          </a>
+          <div class="card-school">UDIT – Universidad de Diseño, Innovación y Tecnología · Madrid</div>
+          <div class="ranking-row">
+            <span class="ranking-label">Ranking de la universidad:</span>
+            <span class="badge badge-rank">Pionera en diseño de interiores en España</span>
+          </div>
+        </div>
+        <div class="diff-badge-wrap">
+          <span class="badge badge-diff-low">Admisión directa</span>
+        </div>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Ciudad</div>
+          <div class="meta-cell-value">Madrid</div>
+          <button class="map-btn" onclick="scrollToMap('espana','map-espana')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Duración</div>
+          <div class="meta-cell-value">4 años (240 ECTS)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Coste</div>
+          <div class="meta-cell-value">14.540 € 1.º curso · 11.940 € siguientes</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Admisión</div>
+          <div class="meta-cell-value">Continua, plazas limitadas</div>
+        </div>
+      </div>
+
+      <div class="desc-box">
+        <p>El Grado en Diseño de Interiores de UDIT (Universidad de Diseño, Innovación y Tecnología) es una titulación oficial de cuatro años y 240 ECTS que prepara a los estudiantes para diseñar, transformar y optimizar espacios interiores desde una perspectiva creativa, técnica y funcional. A lo largo del programa se trabajan áreas como la distribución y rehabilitación de espacios, iluminación, materiales, climatización, acústica, ergonomía y representación gráfica, combinando el aprendizaje artístico con conocimientos constructivos y tecnológicos.</p>
+        <p>La formación tiene un marcado enfoque práctico basado en la metodología <em>learning by doing</em>, permitiendo a los estudiantes desarrollar proyectos reales desde los primeros cursos. El plan de estudios incluye dibujo artístico, técnico y arquitectónico, historia del arte y del diseño, modelado y visualización 3D, diseño de mobiliario, paisajismo y espacios efímeros, además de prácticas externas en empresas del sector. UDIT destaca por ser pionera en España en la enseñanza universitaria del diseño de interiores y por la participación de sus alumnos en proyectos profesionales y eventos de referencia como Casa Decor.</p>
+        <p>Gracias a esta combinación de creatividad, innovación y contacto directo con la industria, los graduados adquieren las competencias necesarias para afrontar proyectos residenciales, comerciales, corporativos y culturales. La formación está orientada a las demandas actuales del mercado, con especial atención a la sostenibilidad, la experiencia del usuario y las nuevas tecnologías aplicadas al diseño de espacios.</p>
+        <span class="salidas-label">Salidas profesionales:</span>
+        <ul class="salidas-list">
+          <li>Diseñador de interiores</li>
+          <li>Interiorista residencial y comercial</li>
+          <li>Diseñador de espacios corporativos</li>
+          <li>Diseñador de retail</li>
+          <li>Diseñador de mobiliario</li>
+          <li>Especialista en iluminación</li>
+          <li>Visual merchandiser</li>
+          <li>Escaparatista</li>
+          <li>Diseñador de exposiciones y eventos</li>
+          <li>Consultor de diseño</li>
+          <li>Gestor de proyectos de interiorismo</li>
+          <li>Diseñador de espacios hoteleros y restauración</li>
+          <li>Especialista en rehabilitación de espacios y paisajismo</li>
+        </ul>
+      </div>
+
+      <div class="req-details" style="margin:0 24px 20px;">
+        <details class="req-details" style="margin:0;">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="req-inner">
+            <p><strong>Requisitos académicos:</strong> High School + inglés B2; portfolio y entrevista.</p>
+            <p><strong>Proceso de selección:</strong> No hay proceso de selección más allá de cumplir con los requisitos académicos. El perfil de cada estudiante será validado por un comité del Departamento.</p>
+            <p><strong>Dificultad de acceso:</strong> Admisión directa.</p>
+            <div class="deadline-box">
+              📅 Fecha límite: Admisión continua · plazas limitadas
+            </div>
+          </div>
+        </details>
+      </div>
+    </article>
+
+
+    <!-- Section divider: Business -->
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">💼 Negocios Internacionales &amp; ADE</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--  TARJETA 3: ESIC                           -->
+    <!-- ══════════════════════════════════════════ -->
+    <article class="uni-card" id="card-esic">
+      <div class="card-header">
+        <div class="card-header-left">
+          <a class="card-title-link" href="https://www.esic.edu/grado/international-business" target="_blank" rel="noopener">
+            Grado en International Business
+            <span class="cursor-icon">🖱️</span>
+          </a>
+          <div class="card-school">ESIC University · Valencia / Madrid</div>
+          <div class="ranking-row">
+            <span class="ranking-label">Ranking de la universidad:</span>
+            <span class="badge badge-rank">Universidad de referencia en marketing y negocios en España</span>
+          </div>
+        </div>
+        <div class="diff-badge-wrap">
+          <span class="badge badge-diff-low">Admisión directa</span>
+        </div>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Ciudad</div>
+          <div class="meta-cell-value">Valencia / Madrid</div>
+          <button class="map-btn" onclick="scrollToMap('espana','map-espana')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Duración</div>
+          <div class="meta-cell-value">4 años (240 ECTS)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Coste</div>
+          <div class="meta-cell-value">9.600 € / curso</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Admisión</div>
+          <div class="meta-cell-value">Continua, plazas limitadas</div>
+        </div>
+      </div>
+
+      <div class="desc-box">
+        <p>El Grado en International Business de ESIC University está diseñado para formar profesionales capaces de desenvolverse en entornos empresariales internacionales y gestionar oportunidades de negocio en mercados globales. Impartido íntegramente en inglés, combina conocimientos de gestión empresarial, economía, finanzas, marketing, comercio internacional y estrategia, con una visión global de los negocios. Desde los primeros cursos, los estudiantes trabajan en proyectos internacionales y desarrollan competencias interculturales esenciales para operar en un entorno cada vez más globalizado.</p>
+        <p>A lo largo del programa, los alumnos adquieren una sólida formación en áreas como la internacionalización de empresas, el análisis de mercados globales, la gestión de operaciones internacionales, la negociación intercultural y el desarrollo de estrategias de expansión en diferentes países. La metodología combina teoría y práctica mediante casos reales, proyectos empresariales y experiencias internacionales, fomentando habilidades de liderazgo, comunicación y toma de decisiones en contextos multiculturales.</p>
+        <p>Este grado está orientado a estudiantes con interés por la economía global, los idiomas y las relaciones comerciales internacionales. Gracias a su enfoque internacional y empresarial, prepara a los graduados para trabajar tanto en multinacionales como en empresas en proceso de expansión internacional, organismos internacionales, consultoras o entidades financieras, desarrollando una carrera profesional en cualquier parte del mundo.</p>
+        <span class="salidas-label">Salidas profesionales:</span>
+        <ul class="salidas-list">
+          <li>International Business Manager</li>
+          <li>Export Manager</li>
+          <li>Import Manager</li>
+          <li>Business Development Manager</li>
+          <li>International Trade Specialist</li>
+          <li>Consultor de Negocios Internacionales</li>
+          <li>Responsable de Expansión Internacional</li>
+          <li>International Marketing Manager</li>
+          <li>Key Account Manager Internacional</li>
+          <li>Analista de Mercados Internacionales</li>
+          <li>Responsable de Compras Internacionales</li>
+          <li>Project Manager Internacional</li>
+          <li>Responsable de Operaciones Internacionales</li>
+          <li>Consultor Estratégico</li>
+          <li>Gestor de Relaciones Internacionales y Desarrollo de Negocio</li>
+        </ul>
+      </div>
+
+      <div class="req-details" style="margin:0 24px 20px;">
+        <details class="req-details" style="margin:0;">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="req-inner">
+            <p><strong>Requisitos académicos:</strong> High School + inglés B2; entrevista.</p>
+            <p><strong>Proceso de selección:</strong> No hay proceso de selección más allá de cumplir con los requisitos académicos. El perfil de cada estudiante será validado por un comité del Departamento.</p>
+            <p><strong>Dificultad de acceso:</strong> Admisión directa.</p>
+            <div class="deadline-box">
+              📅 Fecha límite: Admisión continua · plazas limitadas
+            </div>
+          </div>
+        </details>
+      </div>
+    </article>
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--  TARJETA 4: UNIVERSIDAD EUROPEA DE MADRID  -->
+    <!-- ══════════════════════════════════════════ -->
+    <article class="uni-card" id="card-uem">
+      <div class="card-header">
+        <div class="card-header-left">
+          <a class="card-title-link" href="https://universidadeuropea.com/grado-international-business-international-relations/" target="_blank" rel="noopener">
+            International Business &amp; International Relations
+            <span class="cursor-icon">🖱️</span>
+          </a>
+          <div class="card-school">Universidad Europea de Madrid · Madrid</div>
+          <div class="ranking-row">
+            <span class="ranking-label">Ranking de la universidad:</span>
+            <span class="badge badge-rank">Universidad privada de referencia en España</span>
+          </div>
+        </div>
+        <div class="diff-badge-wrap">
+          <span class="badge badge-diff-low">Admisión directa</span>
+        </div>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Ciudad</div>
+          <div class="meta-cell-value">Madrid</div>
+          <button class="map-btn" onclick="scrollToMap('espana','map-espana')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Duración</div>
+          <div class="meta-cell-value">4 años (240 ECTS)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Coste</div>
+          <div class="meta-cell-value">15.500 € / curso</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Admisión</div>
+          <div class="meta-cell-value">Continua, plazas limitadas</div>
+        </div>
+      </div>
+
+      <div class="desc-box">
+        <p>El Grado en International Business &amp; International Relations de Universidad Europea de Madrid combina la formación empresarial con el estudio de las relaciones internacionales, preparando a los estudiantes para comprender y gestionar los desafíos económicos, políticos y sociales que influyen en los mercados globales. Este programa multidisciplinar permite desarrollar una visión integral del entorno internacional, analizando cómo interactúan gobiernos, organizaciones internacionales, empresas y otros actores en un mundo cada vez más interconectado.</p>
+        <p>Durante la carrera, los estudiantes adquieren conocimientos en áreas como gestión empresarial, economía internacional, comercio exterior, geopolítica, diplomacia, derecho internacional, marketing global y negociación intercultural. La formación se complementa con metodologías prácticas, análisis de casos reales y proyectos que ayudan a desarrollar habilidades de liderazgo, pensamiento estratégico, comunicación y toma de decisiones en contextos internacionales y multiculturales.</p>
+        <p>Gracias a esta combinación de negocios y relaciones internacionales, los graduados cuentan con un perfil versátil y altamente valorado tanto en el sector privado como en organismos públicos e internacionales. El programa está especialmente indicado para estudiantes interesados en la economía global, la política internacional, la cooperación entre países y la gestión de empresas con presencia internacional.</p>
+        <span class="salidas-label">Salidas profesionales:</span>
+        <ul class="salidas-list">
+          <li>International Business Manager</li>
+          <li>Responsable de Desarrollo Internacional</li>
+          <li>Consultor de Negocios Internacionales</li>
+          <li>Analista de Mercados Internacionales</li>
+          <li>Export Manager</li>
+          <li>International Marketing Manager</li>
+          <li>Consultor de Comercio Exterior</li>
+          <li>Analista de Relaciones Internacionales</li>
+          <li>Técnico de Organismos Internacionales</li>
+          <li>Gestor de Proyectos Internacionales</li>
+          <li>Especialista en Diplomacia Corporativa</li>
+          <li>Consultor de Riesgo País y Geopolítica</li>
+          <li>Responsable de Asuntos Públicos Internacionales</li>
+          <li>Gestor de Cooperación Internacional</li>
+          <li>Analista de Política Internacional y Desarrollo Global</li>
+        </ul>
+      </div>
+
+      <div class="req-details" style="margin:0 24px 20px;">
+        <details class="req-details" style="margin:0;">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="req-inner">
+            <p><strong>Requisitos académicos:</strong> High School + inglés B2; portfolio y entrevista.</p>
+            <p><strong>Proceso de selección:</strong> No hay proceso de selección más allá de cumplir con los requisitos académicos. El perfil de cada estudiante será validado por un comité del Departamento.</p>
+            <p><strong>Dificultad de acceso:</strong> Admisión directa.</p>
+            <div class="deadline-box">
+              📅 Fecha límite: Admisión continua · plazas limitadas
+            </div>
+          </div>
+        </details>
+      </div>
+    </article>
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--  TARJETA 5: UAX                            -->
+    <!-- ══════════════════════════════════════════ -->
+    <article class="uni-card" id="card-uax">
+      <div class="card-header">
+        <div class="card-header-left">
+          <a class="card-title-link" href="https://www.uax.es/grado-en-administracion-y-direccion-de-empresas/" target="_blank" rel="noopener">
+            Grado en Administración y Dirección de Empresas
+            <span class="cursor-icon">🖱️</span>
+          </a>
+          <div class="card-school">Universidad Alfonso X el Sabio (UAX) · Madrid</div>
+          <div class="ranking-row">
+            <span class="ranking-label">Ranking de la universidad:</span>
+            <span class="badge badge-rank">Universidad privada reconocida en España</span>
+          </div>
+        </div>
+        <div class="diff-badge-wrap">
+          <span class="badge badge-diff-low">Admisión directa</span>
+        </div>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-cell-label">Ciudad</div>
+          <div class="meta-cell-value">Madrid</div>
+          <button class="map-btn" onclick="scrollToMap('espana','map-espana')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Duración</div>
+          <div class="meta-cell-value">4 años (240 ECTS)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Coste</div>
+          <div class="meta-cell-value">14.000 € / curso</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-cell-label">Admisión</div>
+          <div class="meta-cell-value">Continua, plazas limitadas</div>
+        </div>
+      </div>
+
+      <div class="desc-box">
+        <p>El Grado en Administración y Dirección de Empresas (ADE) de Universidad Alfonso X el Sabio está orientado a formar profesionales capaces de gestionar organizaciones, liderar equipos y tomar decisiones estratégicas en entornos empresariales dinámicos. El programa proporciona una sólida base en las principales áreas de la empresa, combinando conocimientos de gestión, economía, finanzas y marketing con el desarrollo de competencias analíticas y de liderazgo.</p>
+        <p>A lo largo de la carrera, los estudiantes profundizan en disciplinas como contabilidad, finanzas corporativas, dirección estratégica, recursos humanos, marketing, fiscalidad, emprendimiento y gestión de operaciones. La metodología tiene un marcado enfoque práctico, incorporando proyectos, estudios de caso y herramientas utilizadas en el ámbito empresarial para que los alumnos puedan aplicar los conocimientos adquiridos a situaciones reales desde las primeras etapas de su formación.</p>
+        <p>Esta titulación está dirigida a estudiantes con interés por el mundo empresarial, la gestión de organizaciones y la creación de nuevas oportunidades de negocio. Su carácter versátil permite acceder a una amplia variedad de sectores y funciones, tanto en empresas privadas como en organismos públicos, consultoras o proyectos emprendedores, adaptándose a las necesidades cambiantes del mercado laboral.</p>
+        <span class="salidas-label">Salidas profesionales:</span>
+        <ul class="salidas-list">
+          <li>Director de Empresas</li>
+          <li>Business Manager</li>
+          <li>Consultor de Negocio</li>
+          <li>Analista Financiero</li>
+          <li>Controller de Gestión</li>
+          <li>Responsable de Marketing</li>
+          <li>Responsable de Recursos Humanos</li>
+          <li>Product Manager</li>
+          <li>Responsable Comercial y de Ventas</li>
+          <li>Gestor de Proyectos</li>
+          <li>Emprendedor y Fundador de Empresas</li>
+          <li>Consultor Estratégico</li>
+          <li>Responsable de Operaciones</li>
+          <li>Analista de Mercados</li>
+          <li>Director de Desarrollo de Negocio</li>
+        </ul>
+      </div>
+
+      <div class="req-details" style="margin:0 24px 20px;">
+        <details class="req-details" style="margin:0;">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="req-inner">
+            <p><strong>Requisitos académicos:</strong> High School + inglés B2; portfolio y entrevista.</p>
+            <p><strong>Proceso de selección:</strong> No hay proceso de selección más allá de cumplir con los requisitos académicos. El perfil de cada estudiante será validado por un comité del Departamento.</p>
+            <p><strong>Dificultad de acceso:</strong> Admisión directa.</p>
+            <div class="deadline-box">
+              📅 Fecha límite: Admisión continua · plazas limitadas
+            </div>
+          </div>
+        </details>
+      </div>
+    </article>
+
+
+    <!-- ─── MAPA INTERACTIVO ─── -->
+    <div class="map-section" id="map-espana">
+      <div class="map-section-header">
+        🎓 Mapa de universidades – España
+      </div>
+      <div class="map-container" id="leaflet-espana"></div>
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  FOOTER                                             -->
+<!-- ═══════════════════════════════════════════════════ -->
+<footer>
+  <!-- Logo en colores originales, opacidad reducida -->
+  <svg class="footer-logo" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg" aria-label="Educoway">
+    <circle cx="25" cy="25" r="20" fill="none" stroke="#0a9baa" stroke-width="2"/>
+    <polygon points="25,10 29,25 25,22 21,25" fill="#0a9baa"/>
+    <polygon points="25,40 21,25 25,28 29,25" fill="#077a87"/>
+    <circle cx="25" cy="25" r="3" fill="#0a9baa"/>
+    <text x="52" y="20" font-family="'Playfair Display', serif" font-size="15" font-weight="700" fill="#0d2b3e">EDUCOWAY</text>
+    <text x="52" y="36" font-family="'DM Sans', sans-serif" font-size="9" letter-spacing="2" fill="#737373">ORIENTACIÓN UNIVERSITARIA</text>
+  </svg>
+  <p>Informe preparado por Educoway para Dayna Sayuri Wong Hernández · 2025</p>
+</footer>
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  JAVASCRIPT                                         -->
+<!-- ═══════════════════════════════════════════════════ -->
+<script>
+// ─── MAP DATA ───
+const mapData = {
+  espana: {
+    center: [40.35, -3.55],
+    zoom: 6,
+    universities: [
+      {
+        id: 'card-mda',
+        name: 'BA (Hons) Interior Architecture & Design',
+        school: 'Marbella Design Academy',
+        lat: 36.6214,
+        lng: -4.8638,
+        webUrl: 'https://www.marbella-design-academy.com/ba-hons-interior-architecture-and-design/',
+        mapsUrl: 'https://maps.google.com/?q=Marbella+Design+Academy+Monda+Malaga'
+      },
+      {
+        id: 'card-udit',
+        name: 'Grado en Diseño de Interiores',
+        school: 'UDIT – Universidad de Diseño, Innovación y Tecnología',
+        lat: 40.4168,
+        lng: -3.7038,
+        webUrl: 'https://www.udit.es/grado/diseno-interiores/',
+        mapsUrl: 'https://maps.google.com/?q=UDIT+Universidad+Diseño+Innovacion+Madrid'
+      },
+      {
+        id: 'card-esic',
+        name: 'Grado en International Business',
+        school: 'ESIC University – Valencia',
+        lat: 39.4699,
+        lng: -0.3763,
+        webUrl: 'https://www.esic.edu/grado/international-business',
+        mapsUrl: 'https://maps.google.com/?q=ESIC+University+Valencia'
+      },
+      {
+        id: 'card-esic-madrid',
+        name: 'Grado en International Business',
+        school: 'ESIC University – Madrid',
+        lat: 40.4530,
+        lng: -3.6883,
+        webUrl: 'https://www.esic.edu/grado/international-business',
+        mapsUrl: 'https://maps.google.com/?q=ESIC+University+Madrid'
+      },
+      {
+        id: 'card-uem',
+        name: 'International Business & International Relations',
+        school: 'Universidad Europea de Madrid',
+        lat: 40.3369,
+        lng: -3.7850,
+        webUrl: 'https://universidadeuropea.com/grado-international-business-international-relations/',
+        mapsUrl: 'https://maps.google.com/?q=Universidad+Europea+de+Madrid'
+      },
+      {
+        id: 'card-uax',
+        name: 'Grado en ADE',
+        school: 'Universidad Alfonso X el Sabio (UAX)',
+        lat: 40.3433,
+        lng: -3.8264,
+        webUrl: 'https://www.uax.es/grado-en-administracion-y-direccion-de-empresas/',
+        mapsUrl: 'https://maps.google.com/?q=Universidad+Alfonso+X+el+Sabio+Villanueva+de+la+Canada'
+      }
+    ]
+  }
+};
+
+const mapsInitialized = {};
+
+// ─── SHOW TAB ───
+function showTab(id, btn) {
+  // Hide all panels
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
+  });
+
+  const panel = document.getElementById('tab-' + id);
+  if (panel) panel.classList.add('active');
+  if (btn) {
+    btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Lazy init map if entering a country tab
+  if (mapData[id] && !mapsInitialized[id]) {
+    setTimeout(() => initMap(id), 150);
+  }
+}
+
+// ─── GO TO (tab + scroll to card) ───
+function goTo(tab, anchor) {
+  const tabBtn = document.querySelector(`[onclick*="showTab('${tab}'"]`);
+  showTab(tab, tabBtn);
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) {
+      const headerH = document.getElementById('site-header').offsetHeight;
+      const top = el.getBoundingClientRect().top + window.scrollY - headerH - 20;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  }, 200);
+}
+
+// ─── SCROLL TO CARD ───
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const headerH = document.getElementById('site-header').offsetHeight;
+  const top = el.getBoundingClientRect().top + window.scrollY - headerH - 20;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+
+// ─── SCROLL TO MAP ───
+function scrollToMap(tab, anchor) {
+  const activePanel = document.querySelector('.tab-panel.active');
+  const activeId = activePanel ? activePanel.id.replace('tab-', '') : null;
+
+  const doScroll = () => {
+    const el = document.getElementById(anchor);
+    if (!el) return;
+    const headerH = document.getElementById('site-header').offsetHeight;
+    const top = el.getBoundingClientRect().top + window.scrollY - headerH - 20;
+    window.scrollTo({ top, behavior: 'smooth' });
+  };
+
+  if (activeId === tab) {
+    doScroll();
+  } else {
+    const tabBtn = document.querySelector(`[onclick*="showTab('${tab}'"]`);
+    showTab(tab, tabBtn);
+    setTimeout(doScroll, 250);
+  }
+}
+
+// ─── INIT MAP ───
+function initMap(countryId) {
+  if (mapsInitialized[countryId]) return;
+  mapsInitialized[countryId] = true;
+
+  const data = mapData[countryId];
+  if (!data) return;
+
+  const mapEl = document.getElementById('leaflet-' + countryId);
+  if (!mapEl) return;
+
+  const map = L.map(mapEl).setView(data.center, data.zoom);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  const iconHtml = '<div style="font-size:24px;line-height:1;text-shadow:0 1px 3px rgba(0,0,0,0.3);">🎓</div>';
+  const icon = L.divIcon({ html: iconHtml, iconSize: [30, 30], iconAnchor: [15, 28], popupAnchor: [0, -28], className: '' });
+
+  data.universities.forEach(uni => {
+    const cardTarget = uni.id.replace('-madrid', '').replace('-valencia', '');
+    const popupHtml = `
+      <div class="popup-content">
+        <div class="popup-degree">${uni.name}</div>
+        <div class="popup-school">${uni.school}</div>
+        <div class="popup-btns">
+          <a class="popup-btn popup-btn-teal" href="${uni.webUrl}" target="_blank" rel="noopener">🌐 Ver grado</a>
+          <button class="popup-btn popup-btn-outline" onclick="scrollToCard('${cardTarget}')">📋 Ver ficha</button>
+          <a class="popup-btn popup-btn-maps" href="${uni.mapsUrl}" target="_blank" rel="noopener">📍 Google Maps</a>
+        </div>
+      </div>
+    `;
+    L.marker([uni.lat, uni.lng], { icon }).addTo(map).bindPopup(popupHtml, { maxWidth: 280 });
+  });
+}
+</script>
+
+</body>
+</html>
