@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Personalizado de Opciones de Grado - Carles Martí Oliver</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<style>
+:root{
+  --teal:#0a9baa;
+  --teal-dark:#077a87;
+  --teal-light:#e0f5f7;
+  --navy:#0d2b3e;
+  --bg:#f4f8fa;
+  --border:#c8e0e5;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:'DM Sans',sans-serif;
+  font-size:16px;
+  background:var(--bg);
+  color:var(--navy);
+  line-height:1.6;
+}
+
+h1,h2,h3,h4{font-family:'Playfair Display',serif;}
+
+a{color:var(--teal-dark);}
+
+/* ===== HEADER ===== */
+header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:linear-gradient(135deg,var(--teal-dark),var(--teal));
+  color:#fff;
+  padding:18px 24px 0 24px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+}
+
+.header-top{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  flex-wrap:wrap;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.header-logo svg{
+  height:48px;
+  width:auto;
+  display:block;
+}
+
+.header-logo .cls-5-white{
+  fill:#ffffff !important;
+}
+
+.header-titles{
+  flex:1;
+  min-width:200px;
+}
+
+.header-titles h1{
+  margin:0;
+  font-size:1.6rem;
+  font-weight:600;
+  letter-spacing:0.5px;
+}
+
+.header-titles .subtitle{
+  font-family:'DM Sans',sans-serif;
+  font-size:0.75rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  opacity:0.85;
+  margin-top:4px;
+}
+
+/* ===== NAV TABS ===== */
+.tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  max-width:1200px;
+  margin:14px auto 0 auto;
+  padding-bottom:12px;
+  overflow-x:auto;
+}
+
+.tab-btn{
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25);
+  color:#fff;
+  padding:8px 16px;
+  border-radius:8px 8px 0 0;
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  font-size:0.85rem;
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:all 0.2s ease;
+  white-space:nowrap;
+}
+
+.tab-btn:hover{
+  background:rgba(255,255,255,0.25);
+}
+
+.tab-btn.active{
+  background:#fff;
+  color:var(--teal-dark);
+  border-color:#fff;
+}
+
+/* ===== MAIN CONTENT ===== */
+main{
+  max-width:1200px;
+  margin:0 auto;
+  padding:32px 24px 80px 24px;
+}
+
+.tab-content{
+  display:none;
+  animation:fadeIn 0.3s ease;
+}
+
+.tab-content.active{
+  display:block;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.intro-text p{
+  margin:0 0 16px 0;
+  font-size:16px;
+}
+
+.intro-text strong{color:var(--teal-dark);}
+
+/* ===== INDEX ===== */
+.index-section h2{
+  color:var(--teal-dark);
+  border-bottom:2px solid var(--border);
+  padding-bottom:8px;
+  margin-top:40px;
+}
+
+.index-country-block{
+  margin-bottom:28px;
+}
+
+.index-country-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem;
+  font-weight:600;
+  color:var(--navy);
+  margin-bottom:12px;
+}
+
+.index-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:10px;
+}
+
+.index-item{
+  display:block;
+  text-decoration:none;
+  color:var(--navy);
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 14px;
+  transition:all 0.2s ease;
+}
+
+.index-item:hover{
+  border-color:var(--teal);
+  box-shadow:0 4px 14px rgba(10,155,170,0.15);
+  transform:translateY(-2px);
+}
+
+.index-item .degree-name{
+  font-family:'DM Sans',sans-serif;
+  font-size:13.5px;
+  font-weight:400;
+  color:var(--navy);
+  display:block;
+}
+
+.index-item .university-name{
+  font-family:'Playfair Display',serif;
+  font-size:11.5px;
+  font-style:italic;
+  color:#8a9aa3;
+  display:block;
+  margin-top:2px;
+}
+
+/* ===== ACTION BLOCK ===== */
+.action-block{
+  margin-top:48px;
+  background:#fff;
+  border:2px solid var(--border);
+  border-left:6px solid var(--teal);
+  border-radius:12px;
+  padding:24px;
+}
+
+.action-block h2{
+  margin-top:0;
+  color:var(--teal-dark);
+}
+
+/* ===== RESEARCH VS APPLIED TAB ===== */
+.rva-content h2{
+  color:var(--teal-dark);
+  border-bottom:2px solid var(--border);
+  padding-bottom:10px;
+}
+
+.rva-content h3{
+  color:var(--navy);
+  margin-top:28px;
+}
+
+.rva-content ul{
+  padding-left:20px;
+}
+
+.rva-content li{
+  margin-bottom:6px;
+}
+
+/* ===== COUNTRY HEADER ===== */
+.country-intro{
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+  align-items:center;
+  background:#fff;
+  border:2px solid var(--border);
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:28px;
+}
+
+.country-intro .flag-big{
+  flex-shrink:0;
+}
+
+.country-intro-text{
+  flex:1;
+  min-width:240px;
+}
+
+.country-intro-text h2{
+  margin:0 0 6px 0;
+  font-size:2rem;
+  color:var(--navy);
+}
+
+.country-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:10px 0 16px 0;
+}
+
+.meta-pill{
+  background:var(--teal-light);
+  border:1px solid var(--teal);
+  color:var(--teal-dark);
+  border-radius:20px;
+  padding:6px 14px;
+  font-size:0.85rem;
+  font-weight:700;
+}
+
+/* ===== SECTION SEPARATOR ===== */
+.section-separator{
+  background:var(--navy);
+  color:#fff;
+  text-align:center;
+  padding:10px 16px;
+  border-radius:8px;
+  font-family:'Playfair Display',serif;
+  font-weight:600;
+  letter-spacing:2px;
+  font-size:1rem;
+  margin:32px 0 20px 0;
+  text-transform:uppercase;
+}
+
+/* ===== UNIVERSITY CARD ===== */
+.uni-card{
+  background:#fff;
+  border:2px solid var(--border);
+  border-radius:12px;
+  padding:22px;
+  margin-bottom:24px;
+  transition:all 0.25s ease;
+}
+
+.uni-card:hover{
+  border-color:var(--teal);
+  box-shadow:0 8px 24px rgba(10,155,170,0.18);
+}
+
+.uni-card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:6px;
+}
+
+.uni-card-title-block{
+  flex:1;
+  min-width:240px;
+}
+
+.uni-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.35rem;
+  font-weight:600;
+  text-decoration:none;
+  color:var(--navy);
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  transition:color 0.2s ease;
+}
+
+.uni-title:hover{
+  color:var(--teal-dark);
+}
+
+.uni-title .icon-cursor{
+  display:inline-block;
+  transition:transform 0.2s ease;
+  font-size:1.1rem;
+}
+
+.uni-title:hover .icon-cursor{
+  transform:scale(1.3);
+}
+
+.uni-school{
+  color:var(--teal-dark);
+  font-weight:700;
+  margin-top:4px;
+  font-size:1rem;
+}
+
+.ranking-mini-title{
+  color:#9aa9b1;
+  font-size:0.78rem;
+  margin-top:10px;
+  margin-bottom:6px;
+}
+
+.ranking-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.rank-badge{
+  background:var(--teal-light);
+  border:1px solid var(--teal);
+  color:var(--teal-dark);
+  border-radius:6px;
+  padding:4px 10px;
+  font-size:0.78rem;
+  font-weight:700;
+}
+
+.rank-badge.gold{
+  background:#fff7e0;
+  border-color:#d4a017;
+  color:#9a7209;
+}
+
+/* difficulty badges */
+.difficulty-badge{
+  border-radius:8px;
+  padding:6px 14px;
+  font-size:0.78rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  white-space:nowrap;
+  border:2px solid;
+  flex-shrink:0;
+}
+
+.difficulty-badge.alta-muy-alta{
+  background:#fdeaea;
+  color:#c0392b;
+  border-color:#c0392b;
+}
+
+.difficulty-badge.alta{
+  background:#fef3e6;
+  color:#d35400;
+  border-color:#d35400;
+}
+
+.difficulty-badge.media{
+  background:#eafaf1;
+  color:#1e8449;
+  border-color:#1e8449;
+}
+
+/* metadata grid */
+.meta-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;
+  margin:16px 0;
+}
+
+.meta-cell{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 12px;
+}
+
+.meta-cell .meta-label{
+  font-size:0.75rem;
+  color:#8a9aa3;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  margin-bottom:2px;
+}
+
+.meta-cell .meta-value{
+  font-weight:700;
+  color:var(--navy);
+  font-size:0.95rem;
+}
+
+.map-btn{
+  display:inline-block;
+  margin-top:6px;
+  background:var(--teal-light);
+  border:1px solid var(--teal);
+  color:var(--teal-dark);
+  border-radius:6px;
+  padding:3px 10px;
+  font-size:0.75rem;
+  font-weight:700;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+.map-btn:hover{
+  background:var(--teal);
+  color:#fff;
+}
+
+/* description box */
+.desc-box{
+  background:#eef7fa;
+  border-left:4px solid var(--teal);
+  border-radius:0 8px 8px 0;
+  padding:16px 18px;
+  margin:16px 0;
+  font-size:0.97rem;
+}
+
+.desc-box p{margin:0 0 10px 0;}
+.desc-box p:last-child{margin-bottom:0;}
+
+/* details/collapsible */
+details{
+  margin-top:14px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--bg);
+  overflow:hidden;
+}
+
+details summary{
+  cursor:pointer;
+  padding:12px 16px;
+  font-weight:700;
+  color:var(--teal-dark);
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+details summary::-webkit-details-marker{display:none;}
+
+details summary::before{
+  content:"▶";
+  font-size:0.7rem;
+  transition:transform 0.2s ease;
+}
+
+details[open] summary::before{
+  transform:rotate(90deg);
+}
+
+.details-content{
+  padding:4px 16px 16px 16px;
+}
+
+.details-content h4{
+  margin:14px 0 6px 0;
+  color:var(--navy);
+  font-size:1rem;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+}
+
+.details-content ul{
+  margin:6px 0;
+  padding-left:22px;
+}
+
+.details-content li{margin-bottom:4px;}
+
+.deadline-box{
+  background:#fff8d6;
+  border:1px solid #e0c200;
+  border-radius:8px;
+  padding:10px 14px;
+  margin:10px 0;
+  font-weight:700;
+  color:#7a6300;
+}
+
+.red-text{color:#c0392b;font-weight:700;}
+.green-text{color:#1e8449;font-weight:700;}
+
+/* ===== MAP ===== */
+.map-section{
+  margin-top:36px;
+}
+
+.map-section h3{
+  color:var(--navy);
+  margin-bottom:12px;
+}
+
+.map-container{
+  height:420px;
+  border-radius:12px;
+  border:2px solid var(--border);
+  overflow:hidden;
+}
+
+.popup-content{
+  font-family:'DM Sans',sans-serif;
+}
+
+.popup-content strong{
+  display:block;
+  font-family:'Playfair Display',serif;
+  font-size:1rem;
+  margin-bottom:4px;
+}
+
+.popup-content .popup-school{
+  color:var(--teal-dark);
+  font-size:0.85rem;
+  margin-bottom:8px;
+}
+
+.popup-buttons{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.popup-buttons a, .popup-buttons button{
+  display:block;
+  text-align:center;
+  text-decoration:none;
+  background:var(--teal);
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  padding:6px 10px;
+  font-size:0.8rem;
+  font-weight:700;
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+}
+
+.popup-buttons a:hover, .popup-buttons button:hover{
+  background:var(--teal-dark);
+}
+
+/* ===== FLAGS (CSS only) ===== */
+.flag{
+  display:inline-block;
+  position:relative;
+  border:1px solid rgba(0,0,0,0.1);
+  overflow:hidden;
+  flex-shrink:0;
+}
+
+.flag-sm{width:28px;height:20px;}
+.flag-lg{width:96px;height:64px;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
+
+/* Denmark */
+.flag-dk{background:#c8102e;}
+.flag-dk span.cross-v{position:absolute;top:0;bottom:0;left:34%;width:18%;background:#fff;}
+.flag-dk span.cross-h{position:absolute;left:0;right:0;top:42%;height:16%;background:#fff;}
+
+/* Sweden */
+.flag-se{background:#006aa7;}
+.flag-se span.cross-v{position:absolute;top:0;bottom:0;left:34%;width:18%;background:#fecc02;}
+.flag-se span.cross-h{position:absolute;left:0;right:0;top:42%;height:16%;background:#fecc02;}
+
+/* Netherlands */
+.flag-nl{display:flex;flex-direction:column;}
+.flag-nl span{flex:1;display:block;}
+.flag-nl span.r1{background:#ae1c28;}
+.flag-nl span.r2{background:#fff;}
+.flag-nl span.r3{background:#21468b;}
+
+/* Germany */
+.flag-de{display:flex;flex-direction:column;}
+.flag-de span{flex:1;display:block;}
+.flag-de span.r1{background:#000;}
+.flag-de span.r2{background:#dd0000;}
+.flag-de span.r3{background:#ffce00;}
+
+/* Belgium */
+.flag-be{display:flex;flex-direction:row;}
+.flag-be span{flex:1;display:block;}
+.flag-be span.c1{background:#000;}
+.flag-be span.c2{background:#fae042;}
+.flag-be span.c3{background:#ed2939;}
+
+/* Multicampus / EU mix flag (stylized) */
+.flag-eu{background:#003399;display:flex;align-items:center;justify-content:center;}
+.flag-eu .star-ring{
+  position:relative;
+  width:60%;
+  height:60%;
+}
+.flag-eu .star{
+  position:absolute;
+  width:14%;
+  height:14%;
+  background:#ffcc00;
+  clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.flag-eu .star:nth-child(1){top:0;left:50%;transform:translateX(-50%);}
+.flag-eu .star:nth-child(2){top:13%;left:85%;}
+.flag-eu .star:nth-child(3){top:50%;left:100%;transform:translateX(-100%);}
+.flag-eu .star:nth-child(4){bottom:13%;left:85%;}
+.flag-eu .star:nth-child(5){bottom:0;left:50%;transform:translateX(-50%);}
+.flag-eu .star:nth-child(6){bottom:13%;left:0%;}
+.flag-eu .star:nth-child(7){top:50%;left:0%;}
+.flag-eu .star:nth-child(8){top:13%;left:0%;}
+
+/* ===== FOOTER ===== */
+footer{
+  background:var(--navy);
+  color:#cfe6ea;
+  padding:36px 24px;
+  text-align:center;
+}
+
+footer .footer-logo svg{
+  height:40px;
+  width:auto;
+  opacity:0.55;
+  margin-bottom:12px;
+}
+
+footer p{
+  font-size:0.85rem;
+  margin:4px 0;
+  opacity:0.8;
+}
+
+@media (max-width:640px){
+  .header-titles h1{font-size:1.2rem;}
+  .country-intro{padding:16px;}
+  .country-intro-text h2{font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header>
+  <div class="header-top">
+    <div class="header-logo">
+      <!-- LOGO SVG INLINE (blanco) -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+        <g>
+          <g>
+            <path class="header-logo-white" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+            <path class="header-logo-white" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <path class="header-logo-white" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+            <rect class="header-logo-white" x="20.46" y="77.57" width="1.03" height="7.81"/>
+            <path class="header-logo-white" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <path class="header-logo-white" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+            <path class="header-logo-white" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+            <path class="header-logo-white" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="header-logo-white" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+            <rect class="header-logo-white" x="76.5" y="77.57" width="1.03" height="7.81"/>
+            <path class="header-logo-white" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+            <path class="header-logo-white" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+            <polygon class="header-logo-white" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+            <path class="header-logo-white" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+            <path class="header-logo-white" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+            <path class="header-logo-white" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+            <rect class="header-logo-white" x="131.56" y="77.57" width="1.03" height="7.81"/>
+            <path class="header-logo-white" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+            <polygon class="header-logo-white" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+            <path class="header-logo-white" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <path class="header-logo-white" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <path class="header-logo-white" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+            <path class="header-logo-white" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+            <rect class="header-logo-white" x="174.55" y="77.57" width="1.03" height="7.81"/>
+            <path class="header-logo-white" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+            <path class="header-logo-white" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="header-logo-white" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <rect class="header-logo-white" x="206.86" y="77.57" width="1.03" height="7.81"/>
+            <path class="header-logo-white" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+            <path class="header-logo-white" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="header-logo-white" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <path class="header-logo-white" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+            <path class="header-logo-white" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <rect class="header-logo-white" x="267.96" y="74.48" width="1.03" height="10.9"/>
+            <path class="header-logo-white" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <polygon class="header-logo-white" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+            <path class="header-logo-white" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+            <path class="header-logo-white" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <path class="header-logo-white" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+            <path class="header-logo-white" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+            <path class="header-logo-white" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+            <path class="header-logo-white" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+            <path class="header-logo-white" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+            <path class="header-logo-white" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+            <path class="header-logo-white" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+          </g>
+          <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+          <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+          <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+          <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+          <g>
+            <path class="header-logo-white" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+            <path class="header-logo-white" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+            <path class="header-logo-white" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+            <path class="header-logo-white" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+            <path class="header-logo-white" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+            <path class="header-logo-white" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+            <polygon class="header-logo-white" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="header-titles">
+      <h1>Informe Personalizado de Opciones de Grado</h1>
+      <div class="subtitle">Preparado para Carles Martí Oliver</div>
+    </div>
+  </div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="showTab('intro', this)">Introducción</button>
+    <button class="tab-btn" onclick="showTab('rva', this)">Research vs Applied Sciences</button>
+    <button class="tab-btn" onclick="showTab('dinamarca', this)">
+      <span class="flag flag-sm flag-dk"><span class="cross-v"></span><span class="cross-h"></span></span>
+      Dinamarca
+    </button>
+    <button class="tab-btn" onclick="showTab('suecia', this)">
+      <span class="flag flag-sm flag-se"><span class="cross-v"></span><span class="cross-h"></span></span>
+      Suecia
+    </button>
+    <button class="tab-btn" onclick="showTab('holanda', this)">
+      <span class="flag flag-sm flag-nl"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+      Holanda
+    </button>
+    <button class="tab-btn" onclick="showTab('alemania', this)">
+      <span class="flag flag-sm flag-de"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+      Alemania
+    </button>
+    <button class="tab-btn" onclick="showTab('belgica', this)">
+      <span class="flag flag-sm flag-be"><span class="c1"></span><span class="c2"></span><span class="c3"></span></span>
+      Bélgica
+    </button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ===================== TAB: INTRODUCCIÓN ===================== -->
+<div id="tab-intro" class="tab-content active">
+  <div class="intro-text">
+    <p>Hola, Carles:</p>
+    <p>Enhorabuena de nueva por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estamos convencidos que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+    <p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p>
+  </div>
+
+  <div class="index-section">
+    <h2>Índice de opciones</h2>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-dk"><span class="cross-v"></span><span class="cross-h"></span></span>
+        Dinamarca
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('dinamarca','card-aarhus');return false;">
+          <span class="degree-name">Bachelor in Computer Sciences</span>
+          <span class="university-name">Aarhus University</span>
+        </a></li>
+      </ul>
+    </div>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-se"><span class="cross-v"></span><span class="cross-h"></span></span>
+        Suecia
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('suecia','card-gothenburg');return false;">
+          <span class="degree-name">Bachelor in Software Engineering &amp; Management</span>
+          <span class="university-name">University of Gothenburg</span>
+        </a></li>
+      </ul>
+    </div>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-nl"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+        Holanda
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('holanda','card-tue');return false;">
+          <span class="degree-name">BA Bachelor Computer Science and Engineering</span>
+          <span class="university-name">TU/e (Eindhoven University of Technology)</span>
+        </a></li>
+        <li><a class="index-item" href="#" onclick="goTo('holanda','card-twente');return false;">
+          <span class="degree-name">Bachelor in Advanced Technology</span>
+          <span class="university-name">Twente University</span>
+        </a></li>
+        <li><a class="index-item" href="#" onclick="goTo('holanda','card-maastricht');return false;">
+          <span class="degree-name">BA Data Science and Artificial Intelligence</span>
+          <span class="university-name">Maastricht University</span>
+        </a></li>
+        <li><a class="index-item" href="#" onclick="goTo('holanda','card-fontys');return false;">
+          <span class="degree-name">Information &amp; Communication Technology</span>
+          <span class="university-name">FONTYS UAS</span>
+        </a></li>
+      </ul>
+    </div>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-de"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+        Alemania
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('alemania','card-ingolstadt');return false;">
+          <span class="degree-name">Computer Science &amp; Artificial Intelligence</span>
+          <span class="university-name">Technische Hochschule Ingolstadt</span>
+        </a></li>
+        <li><a class="index-item" href="#" onclick="goTo('alemania','card-lancaster');return false;">
+          <span class="degree-name">Computer Science</span>
+          <span class="university-name">Lancaster University</span>
+        </a></li>
+        <li><a class="index-item" href="#" onclick="goTo('alemania','card-schiller');return false;">
+          <span class="degree-name">Computer Science (Multicampus)</span>
+          <span class="university-name">Schiller International University</span>
+        </a></li>
+      </ul>
+    </div>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-be"><span class="c1"></span><span class="c2"></span><span class="c3"></span></span>
+        Bélgica
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('belgica','card-howest-cyber');return false;">
+          <span class="degree-name">Bachelor Cybersecurity</span>
+          <span class="university-name">Howest University of Applied Sciences</span>
+        </a></li>
+        <li><a class="index-item" href="#" onclick="goTo('belgica','card-howest-creative');return false;">
+          <span class="degree-name">Bachelor Creative Technologies and Artificial Intelligence</span>
+          <span class="university-name">Howest University of Applied Sciences</span>
+        </a></li>
+        <li><a class="index-item" href="#" onclick="goTo('belgica','card-thomasmore-tic');return false;">
+          <span class="degree-name">Grado en TIC: Tecnologías de la Información &amp; la Comunicación</span>
+          <span class="university-name">Thomas More University of Applied Sciences</span>
+        </a></li>
+        <li><a class="index-item" href="#" onclick="goTo('belgica','card-thomasmore-data');return false;">
+          <span class="degree-name">Grado en Ciencia de Datos, Protección y Seguridad</span>
+          <span class="university-name">Thomas More University of Applied Sciences</span>
+        </a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="action-block">
+    <h2>¿Qué tienes que hacer ahora?</h2>
+    <p>Echa un vistazo a todas las opciones que hemos seleccionado, mira los vídeos, lee el contenido de las webs (asignaturas, especializaciones, etc.), ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+  </div>
+</div>
+
+<!-- ===================== TAB: RESEARCH VS APPLIED SCIENCES ===================== -->
+<div id="tab-rva" class="tab-content rva-content">
+  <h2>Universidades de Research vs Applied Science</h2>
+  <p>En la mayoría de países europeos existen tipos de universidades que es importante conocer y diferenciar, las universidades de "Research" y de "Applied Sciences". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+
+  <h3>Metodología teórica vs práctica</h3>
+  <p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project/Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+
+  <h3>Duración</h3>
+  <p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+  <p>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+
+  <h3>Ranking / Prestigio</h3>
+  <p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.</p>
+  <p>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+
+  <h3>Acceso a Másteres</h3>
+  <p>Aquí es importante diferenciar si tu máster será en uno de los países que diferencian las 2 universidades, o en un país que no lo hace. Sen España por ejemplo, que no diferencia estas universidades, ambos títulos te dan las mismas oportunidades. Pero si se trata de Holanda, Bélgica o Alemania, por ejemplo, sí hay diferencias. Con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. Pero en cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research</em>, te pedirán cursar un pre-máster (de 1 semestre o un año de duración) para ponerte al día con las habilidades de investigación que se supone no has desarrollado aún.</p>
+
+  <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de <em>Research</em> y otra de <em>Applied Sciences</em>):</p>
+  <ul>
+    <li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank">Applied Science vs. Research University</a></li>
+    <li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank">Types of universities in the Netherlands</a></li>
+  </ul>
+
+  <p>Ahora sí, habiendo comentado estos detalles, te paso las opciones de estudio más interesantes:</p>
+</div>
+
+<!-- ===================== TAB: DINAMARCA ===================== -->
+<div id="tab-dinamarca" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-dk"><span class="cross-v"></span><span class="cross-h"></span></div>
+    <div class="country-intro-text">
+      <h2>Dinamarca</h2>
+      <div class="country-meta">
+        <span class="meta-pill">Coste matrícula: 0€/año</span>
+      </div>
+      <p>Los estudiantes europeos tenemos los estudios totalmente subvencionados en Dinamarca, siendo el coste anual que tenemos que pagar de 0€/año.</p>
+      <p>Estas son las opciones más interesantes del país:</p>
+    </div>
+  </div>
+
+  <div class="section-separator">Research Universities</div>
+
+  <!-- ===== CARD: Aarhus University ===== -->
+  <div class="uni-card" id="card-aarhus">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://bachelor.au.dk/en/computerscience" target="_blank">
+          Bachelor in Computer Sciences <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">Aarhus University · Aarhus</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge gold">2ª de Dinamarca</span>
+          <span class="rank-badge"><a href="https://www.shanghairanking.com/rankings/arwu/2024" target="_blank" style="color:inherit;text-decoration:none;">80ª del mundo (Ranking de Shanghai)</a></span>
+        </div>
+      </div>
+      <span class="difficulty-badge media">Media</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Aarhus (352.000 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('dinamarca','map-dinamarca');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">0€/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 de marzo</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> El grado en Computer Science (BSc) en Aarhus University proporciona una formación rigurosa y orientada tanto a la teoría como a la práctica en ciencias de la computación. Los estudiantes aprenderán a programar desde cero, desarrollando las competencias necesarias para diseñar software, construir sistemas informáticos seguros y eficientes, y trabajar con grandes volúmenes de datos. Se cubren áreas clave como algoritmos, estructuras de datos, inteligencia artificial, aprendizaje automático (machine learning), Big Data, ciberseguridad y métodos de modelado para resolver problemas complejos mediante algoritmos matemáticos. Además, también se incluyen conocimientos en arquitectura de computadores, sistemas operativos, redes y teoría de lenguajes de programación. A lo largo de los semestres, los estudiantes realizan proyectos aplicados, trabajos grupales y, finalmente, un proyecto de grado (tesis) que permite especializarse en el área de su interés.</p>
+      <p>En cuanto a la estructura del programa y metodología docente, las clases combinan conferencias magistrales, sesiones prácticas y trabajo en grupos pequeños con tutores o asistentes. En el primer año, se dedica una parte considerable del tiempo a cursos introductorios —por ejemplo, Introducción a la Programación, Matemáticas y Optimización, Algoritmos y Estructuras de Datos— para asentar las bases. A medida que el estudiante avanza, puede escoger asignaturas optativas dentro de áreas especializadas (por ejemplo, interacción humano-computadora, sistemas distribuidos, compiladores, seguridad informática, computación física) que permiten adaptar el perfil profesional. La enseñanza se ofrece completamente en inglés, lo que facilita la movilidad internacional y la integración en un entorno académico global.</p>
+      <p>Las salidas profesionales de este grado son muy amplias y demandadas. Los graduados pueden trabajar como desarrolladores de software, ingenieros de sistemas, especialistas en ciberseguridad, analistas de datos, arquitectos de soluciones, consultores tecnológicos o gestores de proyectos en prácticamente cualquier sector (finanzas, salud, administración pública, tecnología, energías, etc.). Muchos optan también por continuar con estudios de Máster o Doctorado en ciencias de la computación o especializaciones afines, lo que les abre puertas hacia roles de investigación o docencia universitaria. En Dinamarca, los egresados gozan de una alta empleabilidad, y a menudo consiguen ofertas laborales incluso antes de terminar el programa. Además, gracias a un entorno tecnológico dinámico en Aarhus (con muchas empresas IT alrededor del campus), los estudiantes tienen oportunidades de colaborar en proyectos reales, hacer prácticas o participar en iniciativas de emprendimiento durante sus estudios.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>El programa exige <strong>Matemáticas en nivel A</strong> (equivalente a A-Level) y <strong>Inglés B</strong> (equivalente a AS-Level). La universidad indica que las asignaturas británicas de A-Level se equiparan a un nivel A danés y las de AS-Level a un nivel B danés, y que las notas de los A-Levels se convierten a la escala danesa.</p>
+        <h4>Nivel de inglés</h4>
+        <ul>
+          <li>Un mínimo de 6 en inglés en 2º de bachillerato</li>
+          <li>IELTS 6,5</li>
+          <li>TOEFL 85</li>
+          <li>Cambridge CAE (mínimo 180)</li>
+        </ul>
+        <h4>Proceso de selección</h4>
+        <p>Los solicitantes del cuota 1 deben tener un GPA convertido de al menos 6,0 en la escala danesa de 7 puntos; con un GPA inferior solo se opta al cuota 2, donde la admisión se basa en méritos adicionales.</p>
+        <div class="deadline-box">Fecha límite para presentar la matrícula: 15 de marzo</div>
+        <p><a href="https://international.au.dk/" target="_blank">Web internacional de Aarhus University</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAPA -->
+  <div class="map-section" id="map-dinamarca">
+    <h3>Mapa de universidades en Dinamarca</h3>
+    <div id="leaflet-dinamarca" class="map-container"></div>
+  </div>
+</div>
+
+<!-- ===================== TAB: SUECIA ===================== -->
+<div id="tab-suecia" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-se"><span class="cross-v"></span><span class="cross-h"></span></div>
+    <div class="country-intro-text">
+      <h2>Suecia</h2>
+      <div class="country-meta">
+        <span class="meta-pill">Coste matrícula: 0€/año</span>
+      </div>
+      <p>Los estudiantes europeos tenemos los estudios totalmente subvencionados en Suecia, siendo el coste anual que tenemos que pagar de 0€ año.</p>
+    </div>
+  </div>
+
+  <!-- ===== CARD: Gothenburg ===== -->
+  <div class="uni-card" id="card-gothenburg">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://www.gu.se/en/study-gothenburg/software-engineering-and-management-bachelors-programme-n1sof" target="_blank">
+          Bachelor in Software Engineering &amp; Management <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">University of Gothenburg · Gothenburg</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge gold">3-5ª de Suecia</span>
+          <span class="rank-badge"><a href="https://www.shanghairanking.com/institution/university-of-gothenburg" target="_blank" style="color:inherit;text-decoration:none;">101-150ª del mundo (Ranking de Shanghai)</a></span>
+        </div>
+      </div>
+      <span class="difficulty-badge alta-muy-alta">Alta</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Gothenburg (579.281 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('suecia','map-suecia');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años - 180 ECTS</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">0€/curso</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 de abril</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> El Bachelor in Software Engineering and Management de la Universidad de Gotemburgo ofrece una formación integral que combina los aspectos técnicos del desarrollo de software con la gestión de proyectos y el liderazgo en entornos tecnológicos. El programa se imparte íntegramente en inglés y desde el primer semestre los estudiantes trabajan en equipo, asumiendo roles como desarrolladores, gestores o arquitectos de software en proyectos inspirados en casos reales de la industria. Este enfoque práctico se complementa con una sólida base teórica en programación, matemáticas discretas, algoritmos, arquitectura de software, sistemas distribuidos, interacción humano–computadora y pruebas de calidad.</p>
+      <p>El plan de estudios se desarrolla a lo largo de seis semestres. Los cuatro primeros están centrados en asignaturas obligatorias, que incluyen programación fundamental y orientada a objetos, gestión de requisitos, estructuras de datos, desarrollo de sistemas, sistemas embebidos y de tiempo real, calidad de software y programación avanzada. En el quinto semestre los estudiantes pueden elegir asignaturas optativas o realizar un intercambio en una universidad asociada en Europa, Asia o Estados Unidos, mientras que el sexto semestre se dedica a métodos de investigación, liderazgo y a la tesis de fin de grado en ingeniería de software y gestión. Esta combinación permite adquirir tanto competencias técnicas como habilidades de comunicación, liderazgo y organización.</p>
+      <p>En cuanto a las salidas profesionales, los egresados están preparados para trabajar en una amplia gama de puestos dentro del sector tecnológico, como desarrolladores de software, arquitectos de sistemas, ingenieros de pruebas y calidad, gestores de proyectos, consultores o líderes de equipos. Gracias a la estrecha vinculación del programa con la industria, muchos estudiantes tienen la oportunidad de colaborar en proyectos reales durante sus estudios, lo que incrementa su empleabilidad en el mercado laboral sueco e internacional. Además, el grado constituye una sólida base para continuar estudios de máster en áreas avanzadas como inteligencia artificial, sistemas distribuidos o ingeniería de software.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>El programa requiere los cursos suecos <strong>English 6</strong> y <strong>Mathematics 3b/3c</strong>. Estos se convalidan con las titulaciones británicas de la siguiente forma:</p>
+        <ul>
+          <li><strong>Matemáticas:</strong> se puede satisfacer con Mathematics A-Level o con Mathematics GCSE/IGCSE (nota mínima C/4).</li>
+          <li><strong>Inglés:</strong> se acepta English A-Level con nota E o superior o inglés de GCSE/IGCSE con C/4.</li>
+        </ul>
+        <h4>Proceso de selección</h4>
+        <p>Sí hay proceso de selección: la universidad valorará tu nota media (GPA) para dar las admisiones. <span class="red-text">Dificultad alta</span> (en Suecia estamos obligados a aplicar a la 2ª ronda de admisiones, donde hay menos plazas y más competencia).</p>
+        <div class="deadline-box">Fecha límite de inscripción: 15 de abril</div>
+        <p><a href="https://www.gu.se/en" target="_blank">Web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAPA -->
+  <div class="map-section" id="map-suecia">
+    <h3>Mapa de universidades en Suecia</h3>
+    <div id="leaflet-suecia" class="map-container"></div>
+  </div>
+</div>
+<!-- ===================== TAB: HOLANDA ===================== -->
+<div id="tab-holanda" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-nl"><span class="r1"></span><span class="r2"></span><span class="r3"></span></div>
+    <div class="country-intro-text">
+      <h2>Holanda</h2>
+      <div class="country-meta">
+        <span class="meta-pill">Coste matrícula: 2.692€/año</span>
+      </div>
+      <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de 2.692€/año.</p>
+    </div>
+  </div>
+
+  <div class="section-separator">Research Universities</div>
+
+  <!-- ===== CARD: TU/e Eindhoven ===== -->
+  <div class="uni-card" id="card-tue">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering/" target="_blank">
+          BA Bachelor Computer Science and Engineering <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">TU/e (Eindhoven University of Technology) · Eindhoven</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge gold">11-12ª de Holanda</span>
+          <span class="rank-badge"><a href="https://www.shanghairanking.com/rankings/arwu/2024" target="_blank" style="color:inherit;text-decoration:none;">401-500ª del mundo (Ranking de Shanghai)</a></span>
+        </div>
+      </div>
+      <span class="difficulty-badge alta-muy-alta">Muy alta</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Eindhoven (223.000 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('holanda','map-holanda');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">2.692€/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 de enero</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> Como estudiante de ingeniería computacional, aprenderás los principios y métodos básicos para desarrollar sistemas de software y servicios web, y cómo tener en cuenta la perspectiva del usuario. Serás capaz de razonar científicamente sobre la corrección y eficiencia de los programas, utilizando métodos matemáticos formales. Sabrás cómo desarrollar y mejorar la tecnología y el software que sustenta Internet. Además de ampliar conocimientos y habilidades, también aprenderás a aplicarlos para resolver problemas específicos.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>3 GCSE/IGCSE (A–C / 9–4) + 3 A-Levels con calificaciones de A a C* en seis materias distintas. <strong>Asignaturas obligatorias:</strong> para este programa se requieren Matemáticas y Física en A-Level con calificaciones entre A* y C.</p>
+        <h4>Proceso de selección</h4>
+        <p>Sí hay proceso de selección que consta de tres tests de "cognitive skills" y cuenta un 90% y de tus notas medias (GPA) que cuenta otro 10%. <a href="https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering/selection-procedure" target="_blank">Aquí más información</a>.</p>
+        <div class="deadline-box">Fecha límite para enviar matrícula: 15 de enero</div>
+        <p class="red-text">APPLICATION FEE: esta Universidad cobra una tasa de 100€ solo por presentar la matrícula (no reembolsable)</p>
+        <p><a href="https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering/" target="_blank">Pág web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== CARD: Twente ===== -->
+  <div class="uni-card" id="card-twente">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://www.utwente.nl/en/education/bachelor/programmes/advanced-technology/" target="_blank">
+          Bachelor in Advanced Technology <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">Twente University · Enschede</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge gold">11-12ª de Holanda</span>
+          <span class="rank-badge"><a href="https://www.shanghairanking.com/rankings/arwu/2024" target="_blank" style="color:inherit;text-decoration:none;">401-500ª del mundo (Ranking de Shanghai)</a></span>
+        </div>
+      </div>
+      <span class="difficulty-badge media">Media</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Enschede (158.000 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('holanda','map-holanda');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">2.692€/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">1 de mayo</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> Advanced Technology at UT es un grado único. Ese solo hecho te diferenciará sobre otros graduados en Ingenierías y Grados Técnicos. Recibirás una amplia formación desde perspectivas multidisciplinares. Piensa, por ejemplo, en temas como la nanotecnología, la robótica y la mecatrónica, así como el big data, la transición energética y la tecnología sostenible. Si, después de graduarte, te unes a un equipo de proyecto que incluye ingenieros mecánicos, gerentes industriales e ingenieros eléctricos, serás tú quien tenga una visión global y objetiva del proyecto. Estarás preparado para participar en el proyecto de principio a fin, en lugar de centrarse en una pequeña parte y luego entregársela al siguiente especialista. Como graduado de AT, estarás capacitado para analizar preguntas desde varios ángulos y hablar el idioma de disciplinas muy diferentes.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>3 GCSE/O-level (A–C / 9–4) y 3 GCE A-Levels con calificaciones A–C, en seis asignaturas diferentes; solo se permite un idioma entre los A-Levels.</p>
+        <h4>Asignaturas obligatorias</h4>
+        <ul>
+          <li><strong>Advanced Technology:</strong> deben incluir Mathematics y Physics A-Level; se valoran buenas notas en ambas y se revisa cada caso.</li>
+          <li><strong>Technical Computer Science (ingeniería informática):</strong> requiere Mathematics A-Level.</li>
+        </ul>
+        <h4>Nivel de inglés (necesario poder entregarlo antes del plazo límite de matriculación)</h4>
+        <ul>
+          <li>IELTS 6.0 (ninguna parte por debajo del 5,5)</li>
+          <li>TOEFL iBT 80 (ninguna parte por debajo de 18)</li>
+          <li>Cambridge CAE (mínimo 169, ninguna parte por debajo de 162)</li>
+          <li>A levels: English GCE/GCSE (A-C)</li>
+          <li>IB: English (grade 5)</li>
+        </ul>
+        <div class="deadline-box">Fecha límite para presentar la matrícula: 1 de mayo (es el plazo recomendado, aunque se aceptan matrículas hasta el 1 de Julio)</div>
+        <h4>Proceso de selección</h4>
+        <p class="green-text">No hay proceso de selección: si cumples requisitos, la admisión está prácticamente garantizada.</p>
+        <p><a href="https://www.utwente.nl/en/" target="_blank">Web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== CARD: Maastricht ===== -->
+  <div class="uni-card" id="card-maastricht">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://www.maastrichtuniversity.nl/education/bachelor/programmes/data-science-and-artificial-intelligence" target="_blank">
+          BA Data Science and Artificial Intelligence <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">Maastricht University · Maastricht</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge gold">10ª de Holanda</span>
+          <span class="rank-badge"><a href="http://www.shanghairanking.com/ARWU2020.html" target="_blank" style="color:inherit;text-decoration:none;">201-300ª del mundo (Ranking de Shanghai)</a></span>
+        </div>
+      </div>
+      <span class="difficulty-badge media">Media</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Maastricht (122.000 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('holanda','map-holanda');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">2.692€/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">1 de mayo</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> En este programa de licenciatura, estudiarás lógica, búsqueda inteligente y aprendizaje automático. Recopilarás y organizará información relevante utilizando matemáticas y técnicas informáticas inteligentes. También utiliza modelos y computadoras para el análisis de datos. El objetivo final es desarrollar software y sistemas inteligentes fáciles de usar para, entre otros, atención médica, TI, robótica y juegos comerciales. Al graduarse, puede esperar una carrera prometedora, ya que los científicos de datos y los ingenieros del conocimiento tienen una gran demanda.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>3 GCE A-Levels con calificaciones A–C con Mathematics A-Level.</p>
+        <h4>Específicos para este grado</h4>
+        <p>Maastricht evaluará tus resultados de Matemáticas para decidir si debes pasar o no un examen adicional de Matemáticas.</p>
+        <div class="deadline-box">Plazo límite para enviar matrícula: 1 de mayo</div>
+        <p><a href="https://www.maastrichtuniversity.nl/education/bachelor/data-science-and-artificial-intelligence/courses-curriculum" target="_blank">CURRÍCULUM del grado: aquí puedes ver los contenidos de las asignaturas</a></p>
+        <p><a href="https://www.maastrichtuniversity.nl/education/bachelor/programmes/data-science-and-artificial-intelligence" target="_blank">Web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <div class="section-separator">Applied Science Universities</div>
+
+  <!-- ===== CARD: FONTYS ===== -->
+  <div class="uni-card" id="card-fontys">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://fontys.edu/Study-at-Fontys/Programmes/Information-Communication-Technology-Eindhoven.htm" target="_blank">
+          Information &amp; Communication Technology <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">FONTYS UAS · Eindhoven</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge">No aparece porque es universidad de Applied Sciences</span>
+        </div>
+      </div>
+      <span class="difficulty-badge media">Admisión directa</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Eindhoven (223.000 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('holanda','map-holanda');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">2.692€/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">1 de agosto</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> La tecnología de la información y la comunicación (TIC) es un amplio programa de licenciatura de 4 años. En el año 1, comenzará con una orientación amplia sobre cinco programas de estudio principales, que deberás escoger como especialización a partir del año 2:</p>
+      <ul>
+        <li><a href="https://fontys.edu/Bachelors-and-Masters/Bachelors/29-Fontys-Hogeschool-ICT/Information-Communication-Technology-Eindhoven/Structure-and-tracks-Courses-redesign/Bachelor-ICT-Business.htm" target="_blank">Bachelor ICT &amp; Business</a></li>
+        <li><a href="https://fontys.edu/Bachelors-and-Masters/Bachelors/Information-Communication-Technology-Eindhoven/Courses/Bachelor-ICT-Infrastructure-1.htm" target="_blank">Bachelor ICT &amp; Infrastructure</a></li>
+        <li><a href="https://fontys.edu/Bachelors-and-Masters/Bachelors/Information-Communication-Technology-Eindhoven/Courses/Bachelor-ICT-Media-Design-1.htm" target="_blank">Bachelor ICT &amp; Media Design</a></li>
+        <li><a href="https://fontys.edu/Bachelors-and-Masters/Bachelors/Information-Communication-Technology-Eindhoven/Courses/Bachelor-ICT-Software-Engineering.htm" target="_blank">Bachelor ICT &amp; Software Engineering</a></li>
+        <li><a href="https://fontys.edu/Bachelors-and-Masters/Bachelors/Information-Communication-Technology-Eindhoven/Courses/Bachelor-ICT-Technology-1.htm" target="_blank">Bachelor ICT &amp; Technology</a></li>
+      </ul>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>4 GCSE (A-C / 9-4) más 2 GCE (Advanced Subsidiary o Advanced Level).</p>
+        <div class="deadline-box">Plazo límite para enviar matrícula: 1 de agosto</div>
+        <h4>Proceso de selección</h4>
+        <p class="green-text">No hay, si cumples los requisitos tienes el acceso garantizado.</p>
+        <p><a href="https://fontys.edu/Study-at-Fontys/Programmes/Information-Communication-Technology-Eindhoven.htm" target="_blank">Pág web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAPA -->
+  <div class="map-section" id="map-holanda">
+    <h3>Mapa de universidades en Holanda</h3>
+    <div id="leaflet-holanda" class="map-container"></div>
+  </div>
+</div>
+<!-- ===================== TAB: ALEMANIA ===================== -->
+<div id="tab-alemania" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-de"><span class="r1"></span><span class="r2"></span><span class="r3"></span></div>
+    <div class="country-intro-text">
+      <h2>Alemania</h2>
+      <div class="country-meta">
+        <span class="meta-pill">Coste matrícula: ~700€/año</span>
+      </div>
+      <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Alemania, siendo el coste anual que tenemos que pagar de unos 700€/año.</p>
+    </div>
+  </div>
+
+  <div class="section-separator">Applied Science Universities</div>
+
+  <!-- ===== CARD: Technische Hochschule Ingolstadt ===== -->
+  <div class="uni-card" id="card-ingolstadt">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://www.thi.de/en/computer-science/degree-programmes/computer-science-and-artificial-intelligence-bsc/" target="_blank">
+          Computer Science &amp; Artificial Intelligence <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">Technische Hochschule Ingolstadt · Ingolstadt</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge">Al ser una universidad técnica y de "applied sciences", no aparece en los rankings internacionales</span>
+        </div>
+      </div>
+      <span class="difficulty-badge alta">Alta</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Ingolstadt (142.400 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('alemania','map-alemania');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3,5 años</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">~700€/año</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Fecha límite</div>
+        <div class="meta-value">15 de julio</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> En el programa de Grado en Informática e Inteligencia Artificial, los estudiantes adquieren conocimientos actualizados sobre informática aplicada y diseño de sistemas informáticos. Los módulos fundamentales de informática incluyen, por ejemplo, programación, ingeniería de software, tecnologías web, sistemas de bases de datos y big data, visualización de datos e interfaces persona-ordenador. Además, el programa abarca temas centrales de IA, como la visión por ordenador, la comprensión del lenguaje natural, los sistemas expertos, la optimización heurística, los agentes inteligentes, el aprendizaje automático y las redes neuronales. Además, los estudiantes se ocupan de cuestiones éticas, privacidad de los datos y problemas de seguridad asociados al uso de sistemas de procesamiento de la información. Son capaces de trabajar científicamente en equipo y de trasladar los resultados científicos a la práctica profesional, así como de comunicar y presentar dichos resultados de forma convincente.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>4 GCSE (A-C / 9-4) más 2 GCE (Advanced Subsidiary o Advanced Level).</p>
+        <div class="deadline-box">Plazo límite para enviar matrícula: 15 de julio</div>
+        <h4>Proceso de selección</h4>
+        <p>Sí hay proceso de selección: la universidad usará la nota final de bachiller para elegir a los estudiantes admitidos.</p>
+        <p><a href="https://www.thi.de/en/computer-science/degree-programmes/computer-science-and-artificial-intelligence-bsc/" target="_blank">Web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== CARD: Lancaster University (Leipzig) ===== -->
+  <div class="uni-card" id="card-lancaster">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://www.lancasterleipzig.de/study/undergraduate/courses/computer-science-bsc/" target="_blank">
+          Computer Science <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">Lancaster University · Leipzig</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge">Sin ranking específico indicado</span>
+        </div>
+      </div>
+      <span class="difficulty-badge media">Media</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Leipzig
+          <a class="map-btn" href="#" onclick="scrollToMap('alemania','map-alemania');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Precio</div>
+        <div class="meta-value">11.100 €</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> El BSc (Hons) Computer Science de Lancaster University ofrece una formación sólida y completa en los fundamentos de la informática, combinando teoría y aplicación práctica desde el primer año. Los estudiantes adquieren conocimientos en desarrollo de software, sistemas digitales, algoritmos, arquitectura de computadores y fundamentos matemáticos de la computación, construyendo una base técnica que les permite comprender cómo se diseñan y desarrollan las tecnologías que impulsan el mundo actual.</p>
+      <p>A medida que avanzan en el programa, los alumnos profundizan en áreas especializadas como inteligencia artificial, ciberseguridad, sistemas operativos, redes informáticas, ingeniería de datos e interacción persona-ordenador. El plan de estudios incorpora proyectos individuales y en grupo que permiten aplicar los conocimientos adquiridos a problemas reales, fomentando el pensamiento crítico, la creatividad y la capacidad de desarrollar soluciones tecnológicas innovadoras.</p>
+      <p>Uno de los puntos fuertes del grado es su estrecha conexión con la investigación y la industria tecnológica, respaldada por la reconocida School of Computing and Communications de Lancaster. Los estudiantes pueden optar por modalidades que incluyen experiencia industrial o estudios en el extranjero, enriqueciendo aún más su perfil internacional. Al finalizar la carrera, los graduados están preparados para desarrollar su trayectoria profesional en ámbitos como desarrollo de software, inteligencia artificial, ciencia de datos, ciberseguridad, consultoría tecnológica o investigación informática.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>4 GCSE (A-C / 9-4) más 2 GCE (Advanced Subsidiary o Advanced Level).</p>
+        <p><a href="https://www.lancasterleipzig.de/study/undergraduate/courses/computer-science-bsc/" target="_blank">Web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <div class="section-separator">Multicampus</div>
+
+  <!-- ===== CARD: Schiller International University ===== -->
+  <div class="uni-card" id="card-schiller">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://www.schiller.edu/programs/bachelor-of-science-in-computer-science/" target="_blank">
+          Computer Science <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">Schiller International University · Paris, Heidelberg, Tampa y Madrid</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge">Sin ranking específico indicado</span>
+        </div>
+      </div>
+      <span class="difficulty-badge media">Admisión directa</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Paris, Heidelberg, Tampa y Madrid
+          <a class="map-btn" href="#" onclick="scrollToMap('alemania','map-alemania');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Precio</div>
+        <div class="meta-value">15.400 €</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> El Bachelor of Science in Computer Science de Schiller International University es un grado internacional de cuatro años impartido íntegramente en inglés que prepara a los estudiantes para desarrollar las tecnologías del futuro. El programa combina una sólida formación en programación, algoritmos, estructuras de datos, ingeniería de software y sistemas informáticos, proporcionando las bases necesarias para desenvolverse en un sector tecnológico en constante evolución. Además, los estudiantes pueden cursar sus estudios en diferentes campus internacionales de la universidad, ubicados en Madrid, París, Heidelberg y Tampa.</p>
+      <p>A lo largo de la carrera, los alumnos adquieren competencias en áreas de gran demanda como la inteligencia artificial, la ciberseguridad, el análisis de datos, el cloud computing y el desarrollo de software. La metodología de Schiller pone un fuerte énfasis en el aprendizaje práctico mediante proyectos reales, laboratorios tecnológicos y la resolución de desafíos inspirados en el entorno empresarial, permitiendo desarrollar tanto habilidades técnicas como capacidad analítica y de resolución de problemas.</p>
+      <p>Uno de los aspectos más destacados del programa es su enfoque global e internacional. Los estudiantes trabajan en entornos multiculturales, colaboran con compañeros de distintas nacionalidades y tienen la posibilidad de beneficiarse de acuerdos académicos que amplían su reconocimiento internacional. Al finalizar sus estudios, los graduados están preparados para desarrollar su carrera profesional en ámbitos como desarrollo de software, ingeniería informática, inteligencia artificial, ciberseguridad, análisis de datos o consultoría tecnológica, en empresas y organizaciones de todo el mundo.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>4 GCSE (A-C / 9-4) más 2 GCE (Advanced Subsidiary o Advanced Level).</p>
+        <p><a href="https://www.schiller.edu/?utm_source=chatgpt.com" target="_blank">Web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAPA -->
+  <div class="map-section" id="map-alemania">
+    <h3>Mapa de universidades en Alemania y multicampus</h3>
+    <div id="leaflet-alemania" class="map-container"></div>
+  </div>
+</div>
+<!-- ===================== TAB: BÉLGICA ===================== -->
+<div id="tab-belgica" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-be"><span class="c1"></span><span class="c2"></span><span class="c3"></span></div>
+    <div class="country-intro-text">
+      <h2>Bélgica</h2>
+      <div class="country-meta">
+        <span class="meta-pill">Coste matrícula: 1.187€/año</span>
+      </div>
+      <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de 1187€/año.</p>
+    </div>
+  </div>
+
+  <div class="section-separator">Applied Science Universities</div>
+
+  <!-- ===== CARD: Howest Cybersecurity ===== -->
+  <div class="uni-card" id="card-howest-cyber">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://www.howest.be/en/programmes/bachelor/cybersecurity" target="_blank">
+          Bachelor Cybersecurity <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">Howest University of Applied Sciences · Brujas</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge">No aparece porque es universidad de Applied Sciences</span>
+        </div>
+      </div>
+      <span class="difficulty-badge media">Media</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Brujas (aprox. 119.541 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('belgica','map-belgica');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">1.187€/año</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> Estudiar Ciberseguridad en Howest te prepara para proteger el mundo digital frente a amenazas cada vez más sofisticadas. Aprenderás a diseñar, implementar y gestionar sistemas seguros, desarrollando habilidades prácticas en defensa contra ciberataques, análisis forense digital y protección de datos. Este programa combina teoría y práctica desde el primer día, para que estés listo para enfrentar los desafíos reales del sector tecnológico.</p>
+      <p>Además, tendrás la oportunidad de trabajar en proyectos innovadores y realizar prácticas profesionales que te abrirán las puertas al mercado laboral. Si quieres formar parte de un campo en constante crecimiento y alta demanda, donde tu trabajo marcará la diferencia en la seguridad de empresas y personas, este programa es ideal para ti.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos de admisión</h4>
+        <p><strong>Académicos:</strong> A-Levels o Cambridge Advanced A-Levels: se requiere mínimo 2 A-Levels con nota C o superior.</p>
+        <p><a href="https://www.howest.be/en/programmes/bachelor/cybersecurity" target="_blank">Enlace a la web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== CARD: Howest Creative Technologies and AI ===== -->
+  <div class="uni-card" id="card-howest-creative">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://www.howest.be/en/programmes/bachelor/creative-technologies-and-artificial-intelligence" target="_blank">
+          Bachelor Creative Technologies and Artificial Intelligence <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">Howest University of Applied Sciences · Kortrijk</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge">No aparece porque es universidad de Applied Sciences</span>
+        </div>
+      </div>
+      <span class="difficulty-badge media">Media</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Kortrijk (aprox. 76.000 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('belgica','map-belgica');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value"><span class="red-text">1.157€/año + tasa de matrícula 50€ no reembolsables</span></div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> Este grado te permitirá sumergirte en un mundo donde la creatividad se une con la tecnología más avanzada. Aprenderás a diseñar y desarrollar soluciones innovadoras usando inteligencia artificial aplicada a áreas como el arte digital, la interacción multimedia y las experiencias creativas. Este programa te ofrece un enfoque práctico desde el primer día, para que puedas experimentar y crear proyectos que realmente marquen la diferencia.</p>
+      <p>Además, tendrás la oportunidad de trabajar con herramientas punteras y colaborar en proyectos reales, preparándote para un mercado laboral en auge donde la creatividad tecnológica es clave. Si quieres combinar tu pasión por la tecnología y la innovación con un enfoque artístico, este programa te brindará las habilidades y la experiencia que necesitas para destacar.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos de admisión</h4>
+        <p><strong>Académicos:</strong> A-Levels o Cambridge Advanced A-Levels: se requiere mínimo 2 A-Levels con nota C o superior.</p>
+        <p><a href="https://www-howest-be.translate.goog/fs/documents/Howest-Flyer-Money-Matters.pdf?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es-419&_x_tr_pto=sc" target="_blank">Coste de vida aquí</a></p>
+        <p><a href="https://www.howest.be/en/programmes/bachelor/creative-technologies-and-artificial-intelligence" target="_blank">Enlace a la web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== CARD: Thomas More TIC ===== -->
+  <div class="uni-card" id="card-thomasmore-tic">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://thomasmore.be/en/educations/degree-students/electronics-ict/ict/sint-katelijne-waver/full-programme" target="_blank">
+          Grado en TIC: Tecnologías de la Información &amp; la Comunicación <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">Thomas More University of Applied Sciences · Mechelen</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge">No aparece porque es universidad de Applied Sciences</span>
+        </div>
+      </div>
+      <span class="difficulty-badge media">Media</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Mechelen (aprox. 86.304 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('belgica','map-belgica');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">1.187€/año</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> Sentar las bases de su experiencia en TIC desde la programación y configuración hasta la instalación de software y la gestión de hardware. Elige entre 3 especialidades:</p>
+      <p><strong>Inteligencia artificial aplicada:</strong> vaya mucho más allá de lo básico, explorando una variedad de diferentes programas y aplicaciones de IA.</p>
+      <p><strong>Desarrollo y Seguridad de Aplicaciones:</strong> aprende a desarrollar todo tipo de aplicaciones desde la web hasta el móvil.</p>
+      <p><strong>Sistemas y servicios:</strong> obtenga las habilidades para configurar una gama de servicios avanzados, tanto localmente como en la nube.</p>
+      <p><strong>Fase 3:</strong> prepárese para el mundo empresarial real con prácticas internacionales. Colaboraras con tu grupo en la elaboración de un plan de negocios para un proyecto de su elección durante su curso de Emprendimiento.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>A-Levels o Cambridge Advanced A-Levels: se requiere mínimo 2 A-Levels con nota C o superior.</p>
+        <p><a href="https://thomasmore.be/en/educations/degree-students/electronics-ict/ict/sint-katelijne-waver/full-programme" target="_blank">Web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===== CARD: Thomas More Ciencia de Datos ===== -->
+  <div class="uni-card" id="card-thomasmore-data">
+    <div class="uni-card-header">
+      <div class="uni-card-title-block">
+        <a class="uni-title" href="https://thomasmore.be/en/educations/degree-students/international-business-management/data-science-protection-and-security/mechelen/full-programme" target="_blank">
+          Grado en Ciencia de Datos, Protección y Seguridad <span class="icon-cursor">🖱️</span>
+        </a>
+        <div class="uni-school">Thomas More University of Applied Sciences · Mechelen</div>
+        <div class="ranking-mini-title">Ranking de la universidad:</div>
+        <div class="ranking-badges">
+          <span class="rank-badge">No aparece porque es universidad de Applied Sciences</span>
+        </div>
+      </div>
+      <span class="difficulty-badge media">Media</span>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Mechelen (aprox. 86.304 hab.)
+          <a class="map-btn" href="#" onclick="scrollToMap('belgica','map-belgica');return false;">🗺️ Ver mapa</a>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">1.187€/año</div>
+      </div>
+    </div>
+
+    <div class="desc-box">
+      <p><strong>Breve descripción del programa:</strong> Te enseñaremos las herramientas tecnológicas que te permitirán iniciarte en bases de datos y grandes cantidades de datos. Aprenderá a trabajar con sintaxis y obtendrá una introducción a la protección de datos y la seguridad cibernética. También aprende los principios básicos del espíritu empresarial y la gestión. Te sumergirás en técnicas de análisis. Python es EL lenguaje de secuencias de comandos para esto. Simulamos ciberataques y te enseñamos a detectar puntos débiles en la seguridad. Aprenderás a pensar como un hacker. Asumirás el rol de experto en seguridad en esta fase: cree una red segura y construya firewalls para protegerla. En este mundo de big data también es importante aprender los principios de la inteligencia artificial y el aprendizaje automático.</p>
+    </div>
+
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="details-content">
+        <h4>Requisitos académicos</h4>
+        <p>A-Levels o Cambridge Advanced A-Levels: se requiere mínimo 2 A-Levels con nota C o superior.</p>
+        <p><a href="https://thomasmore.be/en/educations/degree-students/international-business-management/data-science-protection-and-security/mechelen/full-programme" target="_blank">Web de la universidad</a></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAPA -->
+  <div class="map-section" id="map-belgica">
+    <h3>Mapa de universidades en Bélgica</h3>
+    <div id="leaflet-belgica" class="map-container"></div>
+  </div>
+</div>
+
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="footer-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+      <g>
+        <g>
+          <path class="cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+          <path class="cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+          <path class="cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+          <rect class="cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+          <path class="cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+          <path class="cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+          <path class="cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+          <path class="cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+          <path class="cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+          <rect class="cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+          <path class="cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+          <path class="cls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+          <polygon class="cls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+          <path class="cls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+          <path class="cls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+          <path class="cls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+          <rect class="cls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+          <path class="cls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+          <polygon class="cls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+          <path class="cls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+          <path class="cls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+          <path class="cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+          <path class="cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+          <rect class="cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+          <path class="cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+          <path class="cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+          <path class="cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+          <rect class="cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+          <path class="cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+          <path class="cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+          <path class="cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+          <path class="cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+          <path class="cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+          <rect class="cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+          <path class="cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+          <polygon class="cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+          <path class="cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+          <path class="cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+          <path class="cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+          <path class="cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+          <path class="cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+          <path class="cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+          <path class="cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+          <path class="cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+          <path class="cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        </g>
+        <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+        <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+        <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+        <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+        <g>
+          <path class="cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+          <path class="cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+          <path class="cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+          <path class="cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+          <path class="cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+          <path class="cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+          <polygon class="cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+  <p>Educoway · Orientación universitaria en el extranjero</p>
+  <p>Informe personalizado de opciones de grado para Carles Martí Oliver</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const mapsInitialized = {
+  dinamarca: false,
+  holanda: false,
+  alemania: false,
+  belgica: false
+};
+
+const mapData = {
+  dinamarca: {
+    center: [56.15, 10.2],
+    zoom: 6,
+    universities: [
+      { id: 'aarhus', name: 'Bachelor in Computer Sciences', school: 'Aarhus University', lat: 56.1572, lng: 10.2107, webUrl: 'https://bachelor.au.dk/en/computerscience', cardId: 'card-aarhus', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Aarhus+University,+Aarhus,+Denmark' }
+    ]
+  },
+  suecia: {
+    center: [57.7, 11.97],
+    zoom: 6,
+    universities: [
+      { id: 'gothenburg', name: 'Bachelor in Software Engineering & Management', school: 'University of Gothenburg', lat: 57.6887, lng: 11.9746, webUrl: 'https://www.gu.se/en/study-gothenburg/software-engineering-and-management-bachelors-programme-n1sof', cardId: 'card-gothenburg', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=University+of+Gothenburg,+Gothenburg,+Sweden' }
+    ]
+  },
+  holanda: {
+    center: [51.9, 5.8],
+    zoom: 7,
+    universities: [
+      { id: 'tue', name: 'BA Bachelor Computer Science and Engineering', school: 'TU/e (Eindhoven University of Technology)', lat: 51.4488, lng: 5.4881, webUrl: 'https://www.tue.nl/en/education/bachelor-college/bachelor-computer-science-and-engineering/', cardId: 'card-tue', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Eindhoven+University+of+Technology' },
+      { id: 'twente', name: 'Bachelor in Advanced Technology', school: 'Twente University', lat: 52.2394, lng: 6.8551, webUrl: 'https://www.utwente.nl/en/education/bachelor/programmes/advanced-technology/', cardId: 'card-twente', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=University+of+Twente,+Enschede' },
+      { id: 'maastricht', name: 'BA Data Science and Artificial Intelligence', school: 'Maastricht University', lat: 50.8467, lng: 5.6909, webUrl: 'https://www.maastrichtuniversity.nl/education/bachelor/programmes/data-science-and-artificial-intelligence', cardId: 'card-maastricht', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Maastricht+University' },
+      { id: 'fontys', name: 'Information & Communication Technology', school: 'FONTYS UAS', lat: 51.4416, lng: 5.4697, webUrl: 'https://fontys.edu/Study-at-Fontys/Programmes/Information-Communication-Technology-Eindhoven.htm', cardId: 'card-fontys', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Fontys+University+of+Applied+Sciences,+Eindhoven' }
+    ]
+  },
+  alemania: {
+    center: [50.5, 10.5],
+    zoom: 5,
+    universities: [
+      { id: 'ingolstadt', name: 'Computer Science & Artificial Intelligence', school: 'Technische Hochschule Ingolstadt', lat: 48.7665, lng: 11.4257, webUrl: 'https://www.thi.de/en/computer-science/degree-programmes/computer-science-and-artificial-intelligence-bsc/', cardId: 'card-ingolstadt', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Technische+Hochschule+Ingolstadt' },
+      { id: 'lancaster', name: 'Computer Science', school: 'Lancaster University Leipzig', lat: 51.3397, lng: 12.3731, webUrl: 'https://www.lancasterleipzig.de/study/undergraduate/courses/computer-science-bsc/', cardId: 'card-lancaster', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Lancaster+University+Leipzig' },
+      { id: 'schiller-madrid', name: 'Computer Science (Campus Madrid)', school: 'Schiller International University', lat: 40.4500, lng: -3.6900, webUrl: 'https://www.schiller.edu/programs/bachelor-of-science-in-computer-science/', cardId: 'card-schiller', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Schiller+International+University,+Madrid' },
+      { id: 'schiller-heidelberg', name: 'Computer Science (Campus Heidelberg)', school: 'Schiller International University', lat: 49.4093, lng: 8.6939, webUrl: 'https://www.schiller.edu/programs/bachelor-of-science-in-computer-science/', cardId: 'card-schiller', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Schiller+International+University,+Heidelberg' },
+      { id: 'schiller-paris', name: 'Computer Science (Campus Paris)', school: 'Schiller International University', lat: 48.8566, lng: 2.3522, webUrl: 'https://www.schiller.edu/programs/bachelor-of-science-in-computer-science/', cardId: 'card-schiller', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Schiller+International+University,+Paris' },
+      { id: 'schiller-tampa', name: 'Computer Science (Campus Tampa)', school: 'Schiller International University', lat: 27.9506, lng: -82.4572, webUrl: 'https://www.schiller.edu/programs/bachelor-of-science-in-computer-science/', cardId: 'card-schiller', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Schiller+International+University,+Tampa' }
+    ]
+  },
+  belgica: {
+    center: [50.95, 4.3],
+    zoom: 8,
+    universities: [
+      { id: 'howest-cyber', name: 'Bachelor Cybersecurity', school: 'Howest University of Applied Sciences', lat: 51.2093, lng: 3.2247, webUrl: 'https://www.howest.be/en/programmes/bachelor/cybersecurity', cardId: 'card-howest-cyber', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Howest,+Bruges' },
+      { id: 'howest-creative', name: 'Bachelor Creative Technologies and AI', school: 'Howest University of Applied Sciences', lat: 50.8279, lng: 3.2649, webUrl: 'https://www.howest.be/en/programmes/bachelor/creative-technologies-and-artificial-intelligence', cardId: 'card-howest-creative', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Howest,+Kortrijk' },
+      { id: 'thomasmore-tic', name: 'Grado en TIC', school: 'Thomas More University of Applied Sciences', lat: 51.0259, lng: 4.4778, webUrl: 'https://thomasmore.be/en/educations/degree-students/electronics-ict/ict/sint-katelijne-waver/full-programme', cardId: 'card-thomasmore-tic', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Thomas+More,+Mechelen' },
+      { id: 'thomasmore-data', name: 'Grado en Ciencia de Datos, Protección y Seguridad', school: 'Thomas More University of Applied Sciences', lat: 51.0300, lng: 4.4830, webUrl: 'https://thomasmore.be/en/educations/degree-students/international-business-management/data-science-protection-and-security/mechelen/full-programme', cardId: 'card-thomasmore-data', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Thomas+More,+Mechelen' }
+    ]
+  }
+};
+
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+
+  // Lazy-init map if this tab has one
+  if (mapData[id] && !mapsInitialized[id]) {
+    setTimeout(() => initMap(id), 50);
+  }
+}
+
+function goTo(tab, anchorId) {
+  // Activate the right tab
+  const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => {
+    return b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + tab + "'");
+  });
+  if (btn) showTab(tab, btn);
+
+  setTimeout(() => {
+    const el = document.getElementById(anchorId);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function scrollToCard(cardId) {
+  const el = document.getElementById(cardId);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function scrollToMap(tab, mapId) {
+  const tabEl = document.getElementById('tab-' + tab);
+  if (tabEl && !tabEl.classList.contains('active')) {
+    const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => {
+      return b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + tab + "'");
+    });
+    if (btn) showTab(tab, btn);
+  }
+  setTimeout(() => {
+    const el = document.getElementById(mapId);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function initMap(countryId) {
+  if (mapsInitialized[countryId]) return;
+  const data = mapData[countryId];
+  if (!data) return;
+
+  const mapEl = document.getElementById('leaflet-' + countryId);
+  if (!mapEl) return;
+
+  const map = L.map('leaflet-' + countryId).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  data.universities.forEach(uni => {
+    const icon = L.divIcon({
+      html: '🎓',
+      className: 'uni-marker-icon',
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+
+    const marker = L.marker([uni.lat, uni.lng], { icon: icon }).addTo(map);
+
+    const popupContent = document.createElement('div');
+    popupContent.className = 'popup-content';
+    popupContent.innerHTML = `
+      <strong>${uni.name}</strong>
+      <div class="popup-school">${uni.school}</div>
+      <div class="popup-buttons">
+        <a href="${uni.webUrl}" target="_blank">Ver grado</a>
+        <button onclick="scrollToCard('${uni.cardId}')">Ver ficha</button>
+        <a href="${uni.mapsUrl}" target="_blank">Google Maps</a>
+      </div>
+    `;
+
+    marker.bindPopup(popupContent);
+  });
+
+  mapsInitialized[countryId] = true;
+
+  // Fix sizing issue when map container becomes visible
+  setTimeout(() => map.invalidateSize(), 100);
+}
+</script>
+
+
+</body>
+</html>
