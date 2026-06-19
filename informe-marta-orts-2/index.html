@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Informe de Grado – Marta Orts Carbonell | Educoway</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  :root {
+    --teal: #0a9baa;
+    --teal-dark: #077a87;
+    --teal-light: #e0f5f7;
+    --navy: #0d2b3e;
+    --bg: #f4f8fa;
+    --border: #c8e0e5;
+    --gold: #c9891a;
+    --red: #c0392b;
+    --orange: #e67e22;
+    --green: #27ae60;
+    --text: #1a2e38;
+    --muted: #7a9aab;
+    --white: #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; font-size: 16px; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  /* ── HEADER ── */
+  #site-header {
+    position: sticky; top: 0; z-index: 1000;
+    background: linear-gradient(135deg, var(--navy) 0%, #0a3a50 100%);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+  }
+  .header-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; gap: 20px;
+    padding: 14px 24px 0;
+  }
+  .header-logo { flex-shrink: 0; }
+  .header-logo svg { height: 38px; width: auto; }
+  .header-text { flex: 1; }
+  .header-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem; color: var(--white); font-weight: 700; letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  .header-text .subtitle {
+    font-size: 0.68rem; color: rgba(255,255,255,0.6);
+    text-transform: uppercase; letter-spacing: 0.12em; margin-top: 2px;
+  }
+
+  /* ── TABS ── */
+  .tab-bar {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; overflow-x: auto; gap: 0;
+    padding: 10px 24px 0;
+    scrollbar-width: none;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 14px 10px;
+    background: none; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: rgba(255,255,255,0.85); }
+  .tab-btn.active { color: var(--white); border-bottom-color: var(--teal); }
+
+  /* ── MAIN ── */
+  main { max-width: 1200px; margin: 0 auto; padding: 32px 24px 80px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── SECTION DIVIDER ── */
+  .section-divider {
+    display: flex; align-items: center; gap: 14px;
+    margin: 40px 0 24px;
+  }
+  .section-divider span {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--teal-dark);
+    background: var(--teal-light); padding: 4px 14px; border-radius: 20px;
+    border: 1px solid var(--border); white-space: nowrap;
+  }
+  .section-divider::before, .section-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* ── UNIVERSITY CARD ── */
+  .card {
+    background: var(--white); border: 2px solid var(--border);
+    border-radius: 12px; margin-bottom: 28px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+  }
+  .card:hover {
+    border-color: var(--teal);
+    box-shadow: 0 6px 28px rgba(10,155,170,0.12);
+  }
+  .card-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 20px 22px 14px; gap: 12px;
+  }
+  .card-header-left { flex: 1; }
+  .card-title {
+    font-family: 'Playfair Display', serif; font-size: 1.1rem;
+    font-weight: 700; color: var(--navy); line-height: 1.3;
+    display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap;
+  }
+  .card-title a {
+    color: var(--navy); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .card-title a:hover { color: var(--teal); }
+  .card-title .click-icon {
+    font-size: 0.85rem; display: inline-block;
+    transition: transform 0.2s;
+  }
+  .card-title a:hover ~ .click-icon,
+  .card-title:hover .click-icon { transform: scale(1.3); }
+  .card-school {
+    font-size: 0.9rem; color: var(--teal-dark); font-weight: 500;
+    margin-top: 3px;
+  }
+  .card-ranking-row {
+    margin-top: 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .ranking-label {
+    font-size: 0.72rem; color: var(--muted); font-weight: 400; font-style: italic;
+  }
+  .badge {
+    display: inline-flex; align-items: center;
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.04em;
+    padding: 2px 9px; border-radius: 20px;
+  }
+  .badge-rank {
+    background: var(--teal-light); color: var(--teal-dark);
+    border: 1px solid var(--teal);
+  }
+  .badge-rank-gold {
+    background: #fef3d0; color: #7a5200;
+    border: 1px solid #c9891a;
+  }
+  .badge-diff-high { background: #fdecea; color: #922b21; border: 1px solid #e74c3c; }
+  .badge-diff-mid { background: #fff4e5; color: #784212; border: 1px solid #e67e22; }
+  .badge-diff-low { background: #eafaf1; color: #1a6b3c; border: 1px solid #27ae60; }
+
+  /* META GRID */
+  .meta-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 10px; padding: 0 22px 18px;
+  }
+  .meta-cell {
+    background: var(--teal-light); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .meta-cell .meta-label {
+    font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); font-weight: 600; margin-bottom: 2px;
+  }
+  .meta-cell .meta-value {
+    font-size: 0.85rem; font-weight: 600; color: var(--navy);
+    line-height: 1.3;
+  }
+  .map-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--teal); color: white;
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.04em;
+    padding: 3px 9px; border-radius: 12px; border: none;
+    cursor: pointer; margin-top: 4px;
+    transition: background 0.2s;
+  }
+  .map-btn:hover { background: var(--teal-dark); }
+
+  /* DESCRIPTION BOX */
+  .desc-box {
+    margin: 0 22px 18px;
+    background: #f0fafc; border-left: 4px solid var(--teal);
+    border-radius: 0 8px 8px 0; padding: 14px 16px;
+    font-size: 0.9rem; line-height: 1.75;
+  }
+
+  /* DETAILS / REQUIREMENTS */
+  .req-details {
+    margin: 0 22px 20px;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .req-details summary {
+    background: var(--teal-light); padding: 11px 16px;
+    font-size: 0.82rem; font-weight: 600; color: var(--teal-dark);
+    cursor: pointer; list-style: none;
+    display: flex; align-items: center; gap: 8px;
+    user-select: none;
+  }
+  .req-details summary::before { content: '▶'; font-size: 0.6rem; }
+  .req-details[open] summary::before { content: '▼'; }
+  .req-details summary::-webkit-details-marker { display: none; }
+  .req-body { padding: 16px; font-size: 0.87rem; line-height: 1.8; }
+  .req-body ul { margin: 4px 0 10px 20px; }
+  .req-body li { margin-bottom: 3px; }
+  .req-body strong { color: var(--navy); }
+  .deadline-box {
+    background: #fffde7; border: 1px solid #f9ca24;
+    border-radius: 6px; padding: 8px 14px;
+    font-size: 0.85rem; font-weight: 600; margin: 10px 0 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .text-red { color: var(--red); font-weight: 600; }
+  .text-green { color: var(--green); font-weight: 600; }
+
+  /* ── INTRO TAB ── */
+  .intro-welcome {
+    max-width: 780px; font-size: 1rem; line-height: 1.85;
+    margin-bottom: 36px;
+  }
+  .intro-welcome p { margin-bottom: 14px; }
+
+  .index-table {
+    background: var(--white); border: 2px solid var(--border);
+    border-radius: 12px; overflow: hidden; margin-bottom: 36px;
+  }
+  .index-country-header {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--navy); color: white;
+    padding: 10px 20px; font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .index-entry {
+    border-bottom: 1px solid var(--border); padding: 11px 20px;
+    cursor: pointer; transition: background 0.15s;
+    display: block; text-decoration: none;
+  }
+  .index-entry:last-child { border-bottom: none; }
+  .index-entry:hover { background: var(--teal-light); }
+  .index-degree { font-size: 13.5px; color: var(--navy); font-weight: 400; }
+  .index-uni {
+    font-family: 'Playfair Display', serif; font-size: 11.5px;
+    font-style: italic; color: var(--muted); margin-top: 1px;
+  }
+
+  .cta-box {
+    background: var(--white); border: 2px solid var(--border);
+    border-radius: 12px; padding: 28px 30px;
+    font-size: 0.95rem; line-height: 1.8;
+  }
+  .cta-box h2 {
+    font-family: 'Playfair Display', serif; font-size: 1.25rem;
+    color: var(--navy); margin-bottom: 14px;
+  }
+
+  /* ── RESEARCH VS APPLIED TAB ── */
+  .rva-section h2 {
+    font-family: 'Playfair Display', serif; font-size: 1.3rem;
+    color: var(--navy); margin: 28px 0 12px;
+  }
+  .rva-section h3 {
+    font-size: 1rem; font-weight: 600; color: var(--teal-dark);
+    margin: 22px 0 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .rva-section h3::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--teal); }
+  .rva-section p { margin-bottom: 12px; max-width: 780px; }
+  .rva-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+  .rva-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--teal-light); border: 1px solid var(--teal);
+    color: var(--teal-dark); padding: 8px 16px; border-radius: 8px;
+    text-decoration: none; font-size: 0.87rem; font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+  }
+  .rva-link:hover { background: var(--teal); color: white; }
+
+  /* ── COUNTRY TAB ── */
+  .country-intro-block {
+    display: flex; gap: 24px; align-items: flex-start;
+    background: var(--white); border: 2px solid var(--border);
+    border-radius: 12px; padding: 24px;
+    margin-bottom: 32px;
+  }
+  .country-flag-big { flex-shrink: 0; }
+  .country-info h2 {
+    font-family: 'Playfair Display', serif; font-size: 1.5rem;
+    color: var(--navy); margin-bottom: 8px;
+  }
+  .country-meta {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .country-meta-item { font-size: 0.85rem; color: var(--muted); }
+  .country-meta-item strong { color: var(--navy); }
+  .country-info p { font-size: 0.92rem; line-height: 1.75; }
+
+  /* ── MAP ── */
+  .map-container {
+    border-radius: 12px; overflow: hidden;
+    border: 2px solid var(--border); margin-top: 40px;
+  }
+  .map-header {
+    background: var(--navy); color: white;
+    padding: 12px 20px; display: flex; align-items: center; gap: 10px;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em;
+  }
+  .leaflet-map { height: 380px; }
+
+  /* ── FLAGS CSS ── */
+  .flag { display: inline-flex; overflow: hidden; border-radius: 2px; }
+  .flag-nl { width: 22px; height: 15px; flex-direction: column; }
+  .flag-nl .s1 { background: #ae1c28; flex: 1; }
+  .flag-nl .s2 { background: #ffffff; flex: 1; }
+  .flag-nl .s3 { background: #21468b; flex: 1; }
+  .flag-ie { width: 22px; height: 15px; flex-direction: row; }
+  .flag-ie .s1 { background: #169b62; flex: 1; }
+  .flag-ie .s2 { background: #ffffff; flex: 1; }
+  .flag-ie .s3 { background: #ff883e; flex: 1; }
+  .flag-at { width: 22px; height: 15px; flex-direction: column; }
+  .flag-at .s1 { background: #ed2939; flex: 1; }
+  .flag-at .s2 { background: #ffffff; flex: 1; }
+  .flag-at .s3 { background: #ed2939; flex: 1; }
+  .flag-se { width: 22px; height: 15px; position: relative; background: #006aa7; }
+  .flag-se::before { content: ''; position: absolute; background: #fecc02; top: 0; bottom: 0; left: 7px; width: 3px; }
+  .flag-se::after { content: ''; position: absolute; background: #fecc02; left: 0; right: 0; top: 5px; height: 3px; }
+  .flag-dk { width: 22px; height: 15px; position: relative; background: #c60c30; }
+  .flag-dk::before { content: ''; position: absolute; background: #fff; top: 0; bottom: 0; left: 7px; width: 3px; }
+  .flag-dk::after { content: ''; position: absolute; background: #fff; left: 0; right: 0; top: 5px; height: 3px; }
+  .flag-de { width: 22px; height: 15px; flex-direction: column; }
+  .flag-de .s1 { background: #000000; flex: 1; }
+  .flag-de .s2 { background: #dd0000; flex: 1; }
+  .flag-de .s3 { background: #ffce00; flex: 1; }
+
+  /* big flags */
+  .flag-big { transform: scale(2.8); transform-origin: left center; margin-right: 30px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy); color: rgba(255,255,255,0.5);
+    text-align: center; padding: 28px 24px;
+    font-size: 0.8rem;
+  }
+  footer .footer-logo { opacity: 0.35; margin-bottom: 10px; }
+  footer .footer-logo svg { height: 28px; }
+
+  /* responsive */
+  @media (max-width: 640px) {
+    .header-inner { padding: 10px 14px 0; }
+    main { padding: 20px 14px 60px; }
+    .country-intro-block { flex-direction: column; }
+    .card-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header id="site-header">
+  <div class="header-inner">
+    <div class="header-logo">
+      <!-- LOGO SVG INLINE – versión blanca para cabecera -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 110" role="img" aria-label="Educoway">
+        <style>.lw{fill:#ffffff}</style>
+        <!-- "educo" letters -->
+        <text x="0" y="78" font-family="'DM Sans',sans-serif" font-size="88" font-weight="300" class="lw" letter-spacing="-2">educo</text>
+        <!-- "way" letters -->
+        <text x="354" y="78" font-family="'DM Sans',sans-serif" font-size="88" font-weight="300" class="lw" letter-spacing="-2">way</text>
+        <!-- W mark – teal/green gradient shapes -->
+        <polygon points="310,8 330,68 350,28 370,68 390,8 375,8 355,52 335,12 315,52 295,8" fill="url(#wg)"/>
+        <defs>
+          <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#3dbea0"/>
+            <stop offset="100%" stop-color="#0a9baa"/>
+          </linearGradient>
+        </defs>
+        <!-- subtitle -->
+        <text x="0" y="102" font-family="'DM Sans',sans-serif" font-size="16" font-weight="300" fill="#ffffff" opacity="0.55" letter-spacing="2">orientación universitaria en el extranjero</text>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>Informe Personalizado de Opciones de Grado</h1>
+      <div class="subtitle">Preparado para Marta Orts Carbonell · Biomedicina · Ingeniería Química · Biotecnología</div>
+    </div>
+  </div>
+  <!-- TAB BAR -->
+  <nav class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('intro',this)">📋 Introducción</button>
+    <button class="tab-btn" onclick="showTab('rva',this)">🎓 Research vs Applied</button>
+    <button class="tab-btn" onclick="showTab('nl',this)"><span class="flag flag-nl"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span> Holanda</button>
+    <button class="tab-btn" onclick="showTab('ie',this)"><span class="flag flag-ie"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span> Irlanda</button>
+    <button class="tab-btn" onclick="showTab('at',this)"><span class="flag flag-at"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span> Austria</button>
+    <button class="tab-btn" onclick="showTab('se',this)"><span class="flag flag-se"></span> Suecia</button>
+    <button class="tab-btn" onclick="showTab('dk',this)"><span class="flag flag-dk"></span> Dinamarca</button>
+    <button class="tab-btn" onclick="showTab('de',this)"><span class="flag flag-de"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span> Alemania</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ══════════════ TAB: INTRODUCCIÓN ══════════════ -->
+<section id="intro" class="tab-panel active">
+  <div class="intro-welcome">
+    <p>Hola Marta,</p>
+    <p>Enhorabuena de nueva por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencido que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+    <p>Estos días he estado trabajando en la búsqueda de grados en Biomedicina, Ingeniería Química, Biotecnología, Life Sciences y afines que, según lo que hemos hablado en nuestra última reunión.</p>
+    <p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p>
+  </div>
+
+  <!-- INDEX TABLE -->
+  <div class="index-table">
+
+    <div class="index-country-header">
+      <span class="flag flag-nl"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      Holanda
+    </div>
+    <a class="index-entry" onclick="goTo('nl','card-fontys')">
+      <div class="index-degree">BSc Chemistry and Chemical Engineering</div>
+      <div class="index-uni">Fontys University of Applied Sciences, Eindhoven</div>
+    </a>
+    <a class="index-entry" onclick="goTo('nl','card-han')">
+      <div class="index-degree">Life Science</div>
+      <div class="index-uni">HAN University of Applied Sciences, Nijmegen</div>
+    </a>
+    <a class="index-entry" onclick="goTo('nl','card-maastricht')">
+      <div class="index-degree">Biomedical Sciences</div>
+      <div class="index-uni">Maastricht University, Maastricht</div>
+    </a>
+
+    <div class="index-country-header">
+      <span class="flag flag-ie"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      Irlanda
+    </div>
+    <a class="index-entry" onclick="goTo('ie','card-nui')">
+      <div class="index-degree">BSc Biomedical Sciences</div>
+      <div class="index-uni">NUI Galway (National University of Ireland), Galway</div>
+    </a>
+    <a class="index-entry" onclick="goTo('ie','card-ucd')">
+      <div class="index-degree">BSc Biomedical Health &amp; Life Sciences</div>
+      <div class="index-uni">UCD School of Medicine, University College Dublin</div>
+    </a>
+    <a class="index-entry" onclick="goTo('ie','card-ucc')">
+      <div class="index-degree">Biomedical Sciences</div>
+      <div class="index-uni">University College Cork, Cork</div>
+    </a>
+
+    <div class="index-country-header">
+      <span class="flag flag-at"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      Austria
+    </div>
+    <a class="index-entry" onclick="goTo('at','card-imc')">
+      <div class="index-degree">Medical and Pharmaceutical Biotechnology</div>
+      <div class="index-uni">IMC Krems University of Applied Sciences, Krems an der Donau</div>
+    </a>
+
+    <div class="index-country-header">
+      <span class="flag flag-se"></span>
+      Suecia
+    </div>
+    <a class="index-entry" onclick="goTo('se','card-karolinska')">
+      <div class="index-degree">Bachelor Programme in Biomedicine</div>
+      <div class="index-uni">Karolinska Institutet, Solna</div>
+    </a>
+    <a class="index-entry" onclick="goTo('se','card-lund')">
+      <div class="index-degree">Bachelor Programme in Biomedicine</div>
+      <div class="index-uni">Lund University, Lund</div>
+    </a>
+    <a class="index-entry" onclick="goTo('se','card-linkoping')">
+      <div class="index-degree">Bachelor Programme in Experimental and Industrial Biomedicine</div>
+      <div class="index-uni">Linköping University, Linköping</div>
+    </a>
+    <a class="index-entry" onclick="goTo('se','card-skovde-bio')">
+      <div class="index-degree">BSc in Biomedicine</div>
+      <div class="index-uni">University of Skövde, Skövde</div>
+    </a>
+    <a class="index-entry" onclick="goTo('se','card-skovde-mol')">
+      <div class="index-degree">Molecular Biodesign</div>
+      <div class="index-uni">University of Skövde, Skövde</div>
+    </a>
+
+    <div class="index-country-header">
+      <span class="flag flag-dk"></span>
+      Dinamarca
+    </div>
+    <a class="index-entry" onclick="goTo('dk','card-absalon')">
+      <div class="index-degree">Engineering in Biotechnology</div>
+      <div class="index-uni">University College Absalon, Kalundborg</div>
+    </a>
+    <a class="index-entry" onclick="goTo('dk','card-aalborg')">
+      <div class="index-degree">Chemical Engineering and Biotechnology</div>
+      <div class="index-uni">Aalborg University, Esbjerg</div>
+    </a>
+    <a class="index-entry" onclick="goTo('dk','card-roskilde')">
+      <div class="index-degree">International Bachelor in Natural Sciences</div>
+      <div class="index-uni">Roskilde University, Roskilde</div>
+    </a>
+
+    <div class="index-country-header">
+      <span class="flag flag-de"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      Alemania
+    </div>
+    <a class="index-entry" onclick="goTo('de','card-rheinwaal')">
+      <div class="index-degree">Bioengineering</div>
+      <div class="index-uni">Rhine-Waal University of Applied Sciences, Kleve</div>
+    </a>
+  </div><!-- /index-table -->
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <h2>¿Qué tienes que hacer ahora?</h2>
+    <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+    <p style="margin-top:14px;">¡Un saludo!<br/><strong>Jenni</strong></p>
+  </div>
+</section>
+
+
+<!-- ══════════════ TAB: RESEARCH VS APPLIED ══════════════ -->
+<section id="rva" class="tab-panel rva-section">
+  <h2>Universidades "Research" vs "Applied Sciences"</h2>
+  <p>En la mayoría de los países europeos tenemos que diferenciar entre 2 tipos de universidades: "Research" y "Applied Sciences". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+
+  <h3>Metodología teórica y práctica</h3>
+  <p>Las universidades de Applied Sciences destacan por usar una metodología muy práctica llamada PBL (Project/Problem Based Learning). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de Research no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+
+  <h3>Duración</h3>
+  <p>Las universidades de Applied Sciences duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+  <p>Las de Research duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+
+  <h3>Ranking / Prestigio</h3>
+  <p>El principal motivo por el cual se podría escoger una universidad de Research es por el mayor ranking y prestigio que estas universidades tienen.</p>
+  <p>Las universidades de Applied Sciences (Hogeschools en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+
+  <h3>Acceso a Másteres</h3>
+  <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de Research podrás acceder a másteres tanto en universidades de Research como Applied Sciences. En cambio, con tu título de Applied Sciences podrás acceder a másteres en universidades de Applied Sciences, pero si quieres acceder a universidades de Research, te pedirán cursar un premáster (de 1 semestre o un año de duración).</p>
+
+  <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de Research y otra de Applied Sciences):</p>
+  <div class="rva-links">
+    <a class="rva-link" href="https://www.uva.nl/en/education/bachelor-s/study-in-amsterdam/admission-and-application/types-of-universities/types-of-universities.html" target="_blank">🔗 Applied Science vs. Research University</a>
+    <a class="rva-link" href="https://www.studyinholland.nl/plan-your-studies/choosing-a-university" target="_blank">🔗 Types of universities in the Netherlands</a>
+  </div>
+</section>
+
+
+<!-- ══════════════ TAB: HOLANDA ══════════════ -->
+<section id="nl" class="tab-panel">
+  <div class="country-intro-block">
+    <div class="country-flag-big">
+      <span class="flag flag-nl flag-big"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+    </div>
+    <div class="country-info">
+      <h2>Holanda</h2>
+      <div class="country-meta">
+        <div class="country-meta-item"><strong>Coste matrícula:</strong> 2.695 €/año (ciudadanos europeos)</div>
+      </div>
+      <p>Los ciudadanos europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de 2.695€/año.</p>
+      <p>Dentro de Holanda tenemos que diferenciar entre 2 tipos de universidades: "Research" y "Applied Sciences". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias.</p>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>Universities of Applied Sciences</span></div>
+
+  <!-- CARD: FONTYS -->
+  <div class="card" id="card-fontys">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.fontys.nl/en/Study-at-Fontys/Bachelor/Chemistry-and-Chemical-Engineering.htm" target="_blank">BSc Chemistry and Chemical Engineering</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">Fontys University of Applied Sciences · Eindhoven</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low">Dificultad: Sin selección</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Eindhoven (249.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">2.695 €/año</div>
+      </div>
+    </div>
+    <div class="desc-box">
+      En Ciencias Aplicadas, explorarán la química y la tecnología mediante la experimentación, la colaboración y el aprendizaje, tanto teórico como práctico. Mediante trabajo de laboratorio, proyectos innovadores y tareas en grupo, desarrollarás las habilidades necesarias para resolver problemas del mundo real.
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Título de bachillerato aprobado</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>IELTS Academic 6.0</li>
+          <li>TOEFL iBT 80</li>
+          <li>Cambridge: Minimum score of 169</li>
+          <li>PTE 61</li>
+        </ul>
+        <strong>Proceso de selección:</strong> No hay proceso de selección.
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <strong>15 de mayo</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD: HAN -->
+  <div class="card" id="card-han">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.han.nl/opleidingen/bachelor/life-sciences/voltijd/" target="_blank">Life Science</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">HAN University of Applied Sciences · Nijmegen</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low">Dificultad: Proceso de matching</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Nijmegen (189.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">4 años (240 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">2.695 €/año</div>
+      </div>
+    </div>
+    <div class="desc-box">
+      El programa de Life Sciences en HAN ofrece formación en biología molecular, microbiología, bioquímica y biotecnología, con un enfoque en proyectos prácticos y colaborativos. Este grado prepara a los estudiantes para carreras internacionales en ciencias biológicas y el sector biotecnológico.
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Bachillerato con asignaturas en Química y Matemáticas. Biología es recomendada.</li>
+        </ul>
+        <strong>Requisitos de inglés</strong> (antes del 15 agosto):
+        <ul>
+          <li>IELTS Academic 6.0</li>
+          <li>TOEFL iBT 80</li>
+          <li>Cambridge: Minimum score of 169</li>
+          <li>PTE 61</li>
+        </ul>
+        <strong>Proceso de selección:</strong> Después de la matrícula hay un proceso de matching que consiste en rellenar un cuestionario con dos preguntas: te pedirán que expliques por qué elegiste este programa y por qué crees que es el adecuado para ti, y la segunda parte del cuestionario te preguntará sobre tus expectativas del programa de Ciencias de la Vida.
+        <p><strong>Fecha de envío de admisiones:</strong> 4–8 semanas después de realizar la matrícula.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <strong>15 de agosto</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <div class="section-divider"><span>Research Universities</span></div>
+
+  <!-- CARD: MAASTRICHT -->
+  <div class="card" id="card-maastricht">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.maastrichtuniversity.nl/education/bachelor/biomedical-sciences" target="_blank">Biomedical Sciences</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">Maastricht University · Maastricht</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank-gold">10–11ª de Holanda (Shanghái)</span>
+          <span class="badge badge-rank">101–150 mundo – Biomedical Sciences (Shanghái)</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-high">Dificultad: Numerus Fixus</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Maastricht (122.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Duración</div>
+        <div class="meta-value">3 años (180 ECTS)</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-label">Coste</div>
+        <div class="meta-value">2.695 €/año</div>
+      </div>
+    </div>
+    <div class="desc-box">
+      Este programa es muy interesante ya que puedes amoldar el programa como tú lo desees, escogiendo optativas desde el primer año. El Programa de Ciencias de Maastricht te ofrece la oportunidad de explorar las ciencias naturales y construir un perfil académico único basado en sus intereses y ambiciones personales. Cada semestre, tu asesor académico personal te guiará en la selección de cursos de campos tan diversos como biología, química, matemáticas, física, neurociencia y varios campos interdisciplinarios como la ingeniería biomédica y el espíritu empresarial. Puedes especializarte en una sola disciplina o puedes combinar varias disciplinas en un solo título.
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Título de Bachiller con una nota media superior a 7,0 en el último año + Evaluación de Acceso a la Universidad (EVAU/PAU) con una calificación de APTO.</li>
+          <li>Asignaturas requeridas: Mates II y Química II</li>
+          <li>*Examen externo de Biología: mandar resultados antes del 16 julio.</li>
+        </ul>
+        <p>Opciones para el examen externo de Biología:</p>
+        <ul>
+          <li><strong>Boswell-Bèta (English):</strong> Boswell-Bèta en Utrecht (Holanda) para obtener el título de VWO en Mathematics A and B, Physics, Biology and Chemistry en inglés con exámenes en diciembre, mayo y julio.</li>
+          <li><strong>CCVX (Dutch and English):</strong> CCVX para obtener VWO Mathematics A and B, Physics, Biology and Chemistry exams. Dentro de los enlaces puedes encontrar información de los exámenes, temario y también hay preguntas de exámenes para que puedas ver el nivel.</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>Cambridge FCE (mínimum 169)</li>
+          <li>IELTS 6.0</li>
+          <li>Duolingo (nota mínima 110)</li>
+          <li>Si has estudiado inglés en Bachillerato hasta el último año – cumples los requisitos de admisión.</li>
+        </ul>
+        <strong>Proceso de selección:</strong> NUMERUS FIXUS – 400 PLAZAS para 2024/2025 (aún no están publicadas las plazas para 26/27).
+        <p>Después de aplicar el 15 de enero hay un proceso de dos partes:</p>
+        <ul>
+          <li>Parte 1: un cuestionario vía Qualtrics sobre tu educación previa (dos horas aproximadamente).</li>
+          <li>Parte 2: un examen on-line.</li>
+        </ul>
+        <p><em>*Tras finalizar las dos partes, recibirás un número de clasificación personal en el orden que establecimos en función de su puntuación durante la selección, es decir, la combinación de la parte 1, el cuestionario online, y la parte 2, la prueba online.</em></p>
+        <p><strong>Fecha de envío de admisiones:</strong> 15 abril.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar la matrícula: <strong class="text-red">15 de enero</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP HOLANDA -->
+  <div class="map-container" id="map-nl">
+    <div class="map-header">🗺️ MAPA DE UNIVERSIDADES – HOLANDA</div>
+    <div id="leaflet-nl" class="leaflet-map"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════ TAB: IRLANDA ══════════════ -->
+<section id="ie" class="tab-panel">
+  <div class="country-intro-block">
+    <div class="country-flag-big">
+      <span class="flag flag-ie flag-big"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+    </div>
+    <div class="country-info">
+      <h2>Irlanda</h2>
+      <div class="country-meta">
+        <div class="country-meta-item"><strong>Coste matrícula:</strong> 7.408 €/año (puede ser 3.000 €/año con beca SUSI)</div>
+      </div>
+      <p>Estudiar en Irlanda también está parcialmente subvencionados para los europeos. El coste habitual es de 7.408€ año (pero puede ser de 3.000€/año si conceden la beca SUSI).</p>
+    </div>
+  </div>
+
+  <!-- CARD: NUI GALWAY -->
+  <div class="card" id="card-nui">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.universityofgalway.ie/courses/undergraduate-courses/biomedical-science.html" target="_blank">BSc Biomedical Sciences</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">NUI Galway (National University of Ireland) · Galway</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">No figura en ranking mundial Shanghái</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-mid">Dificultad: Sistema CAO – 566 pts</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Galway (79.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('ie','map-ie')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">7.408 €/año</div></div>
+      <div class="meta-cell"><div class="meta-label">Nota de corte</div><div class="meta-value">566 puntos CAO (2025)</div></div>
+    </div>
+    <div class="desc-box">
+      Si te fascina la biología humana y quieres aprender sobre salud y enfermedad, la Licenciatura en Ciencias Biomédicas es el curso ideal para ti. Te sumergirás en las últimas investigaciones desde el inicio y adquirirás habilidades clave como técnicas de laboratorio, pensamiento crítico, comunicación y trabajo en equipo. Esto te preparará para una carrera en investigación biomédica, con la capacidad de realizar descubrimientos con potencial para mejorar la salud humana.
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Acceso mínimo con 566 puntos CAO en 2025.</li>
+          <li>Título de Bachiller: el requisito mínimo de acceso a Irlanda es tener el título de bachillerato, calificación mínima 6 en dos materias y aprobados en otras cuatro materias: inglés, matemáticas, una materia de ciencias de laboratorio (es decir, química, física, biología, física con química (conjunta), informática o ciencias agrícolas) y otras dos materias cualesquiera reconocidas para fines de ingreso.</li>
+          <li>Students must satisfy the Garda/Police vetting requirements.</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>IELTS: 6.5 overall, no less than 5.5 in any one component</li>
+          <li>Cambridge CAE (C1) 176 overall</li>
+          <li>PTE 61 overall, no less than 48 in any one component</li>
+        </ul>
+        <strong>Proceso de selección:</strong> EU/EFTA/UK applicants must apply through the Central Applications System (CAO). Complete information on the CAO system – 566 puntos (2025) (65 plazas para el curso 2025).
+        <p><strong>Fecha de envío de admisiones:</strong> finales de agosto.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar la matrícula: <strong class="text-red">1 de febrero</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD: UCD -->
+  <div class="card" id="card-ucd">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.ucd.ie/medicine/study/undergraduate/biomedical-health-life-sciences/" target="_blank">BSc Biomedical Health &amp; Life Sciences</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">UCD School of Medicine, University College Dublin · Dublín</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank-gold">2ª–3ª de Irlanda (Shanghái)</span>
+          <span class="badge badge-rank">301–400 mundo (Shanghái)</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-mid">Dificultad: CAO – 589 pts</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Dublín (1.388.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('ie','map-ie')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">7.408 €/año</div></div>
+      <div class="meta-cell"><div class="meta-label">Nota de corte</div><div class="meta-value">589 puntos CAO (2025)</div></div>
+    </div>
+    <div class="desc-box">
+      Este curso será atractivo para quienes tengan un gran interés en la ciencia y en cómo la investigación y la tecnología pueden impactar la salud humana. Forma a científicos en la intersección de la ciencia y la medicina. Aprenderá cómo las investigaciones con base científica pueden impulsar nuestro conocimiento sobre la prevención, detección y tratamiento de enfermedades, y cómo traducirlo en utilidad clínica. El curso le sumergirá en las ciencias médicas y biológicas modernas y se centrará en la aplicación de los avances científicos. BHLS ofrece a los estudiantes una oportunidad única para completar un proyecto de investigación con un investigador principal en un área de investigación biomédica de su interés, así como la oportunidad de participar en publicaciones con revisión por pares.
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Título de Bachillerato aprobado y 5 asignaturas con una nota mínimo de 5.</li>
+          <li>Asignaturas requeridas: English, matemáticas, y ciencias con laboratorio (biología, química o física).</li>
+          <li>8 de media inglés en Bachillerato.</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>8 de media inglés en Bachillerato</li>
+          <li>Cambridge CAE nota C 176 overall y 169 en Use of English</li>
+          <li>IELTS: 6.5 overall, no less than 5.5 in any one component</li>
+          <li>Cambridge CAE (C1) 176 overall</li>
+          <li>PTE: 63 overall (59 en cada sección de Communicative Skills)</li>
+        </ul>
+        <strong>Proceso de selección:</strong> EU/EFTA/UK applicants must apply through the Central Applications System (CAO). – 589 puntos (2025).
+        <p><strong>Fecha de envío de admisiones:</strong> <span class="text-red">finales de agosto</span></p>
+        <div class="deadline-box">📅 Plazo límite para enviar la matrícula: <strong class="text-red">1 de febrero</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD: UCC -->
+  <div class="card" id="card-ucc">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.ucc.ie/en/ck600/" target="_blank">Biomedical Sciences</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">University College Cork · Cork</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank-gold">2ª–3ª de Irlanda (Shanghái)</span>
+          <span class="badge badge-rank">401–500 mundo (Shanghái)</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-mid">Dificultad: CAO – 555 pts</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Cork (124.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('ie','map-ie')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">7.408 €/año</div></div>
+      <div class="meta-cell"><div class="meta-label">Nota de corte</div><div class="meta-value">555 puntos CAO (2025)</div></div>
+    </div>
+    <div class="desc-box">
+      <p>Los científicos biomédicos trabajan en colaboración con médicos y otros profesionales de la salud en la investigación de muestras de tejidos y fluidos corporales para diagnosticar enfermedades y supervisar los tratamientos de los pacientes. La ciencia biomédica es una profesión dinámica y en constante evolución que abarca diversas áreas de la ciencia médica, como la bioquímica, la microbiología, la patología celular, la hematología y la ciencia transfusional. Ofrece formación en tecnologías de vanguardia para facilitar la investigación de enfermedades y la medicina.</p>
+      <p style="margin-top:10px;">Durante este curso, tendrás acceso a todas las instalaciones de la UCC y la MTU, asistiendo a conferencias, tutorías y clases prácticas en ambas facultades. Adquirirás un conocimiento detallado de la teoría, los principios y la aplicación de los métodos en ciencias biomédicas, y también aprenderás a valorar la importancia del científico médico para brindar un servicio de patología de calidad dentro del sistema sanitario. Es importante destacar que aprenderás a evaluar e interpretar las pruebas y resultados de laboratorio clínico para facilitar el diagnóstico clínico. Una combinación de trabajo de laboratorio, conferencias, tutorías y exámenes escritos y prácticos te preparará para las diversas funciones de los laboratorios médicos.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Título de Bachillerato aprobado y 5 asignaturas con una nota mínimo de 5.</li>
+          <li>Asignaturas requeridas: English, matemáticas, y ciencias con laboratorio (biología, química o física).</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>8 de media inglés en Bachillerato</li>
+          <li>Cambridge CAE nota C 176 overall y 169 en Use of English</li>
+          <li>PTE: 63 overall (59 en cada sección de Communicative Skills)</li>
+        </ul>
+        <strong>Proceso de selección:</strong> EU/EFTA/UK applicants must apply through the Central Applications System (CAO). – 555 puntos (2025).
+        <p>Applications for this programme are made via <a href="https://www.mtu.ie/" target="_blank" style="color:var(--teal)">Munster Technological University (MTU)</a>.</p>
+        <p><strong>Fecha de envío de admisiones:</strong> <span class="text-red">finales de agosto</span></p>
+        <div class="deadline-box">📅 Plazo límite para enviar la matrícula: <strong class="text-red">1 de febrero</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP IRLANDA -->
+  <div class="map-container" id="map-ie">
+    <div class="map-header">🗺️ MAPA DE UNIVERSIDADES – IRLANDA</div>
+    <div id="leaflet-ie" class="leaflet-map"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════ TAB: AUSTRIA ══════════════ -->
+<section id="at" class="tab-panel">
+  <div class="country-intro-block">
+    <div class="country-flag-big">
+      <span class="flag flag-at flag-big"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+    </div>
+    <div class="country-info">
+      <h2>Austria</h2>
+      <div class="country-meta">
+        <div class="country-meta-item"><strong>Coste matrícula:</strong> 726 €/año (ciudadanos europeos)</div>
+      </div>
+      <p>En Austria la educación es parcialmente subvencionada para los ciudadanos europeos, esto quiere decir que el coste de la universidad es de 726€ año.</p>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>Universities of Applied Sciences</span></div>
+
+  <!-- CARD: IMC KREMS -->
+  <div class="card" id="card-imc">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.imc.ac.at/en/degree-programs/bachelor-programs/medical-and-pharmaceutical-biotechnology/" target="_blank">Medical and Pharmaceutical Biotechnology</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">IMC Krems University of Applied Sciences · Krems an der Donau</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">Applied Sciences – sin ranking internacional</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-mid">Dificultad: Entrevista + carta</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Krems an der Donau (25.000–30.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('at','map-at')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">726 €/año</div></div>
+    </div>
+    <div class="desc-box">
+      La licenciatura en Biotecnología Médica y Farmacéutica se imparte en inglés y comprende cursos teóricos y extensas prácticas de laboratorio que cubren los fundamentos de las ciencias naturales, la biomedicina y las tecnologías aplicables. Habrá clases teóricas y prácticas de laboratorio sobre procesos bioquímicos, biología celular y molecular e ingeniería genética, incluyendo las diversas técnicas analíticas, que proporcionan una sólida base de conocimientos. También adquirirás conocimientos sobre medicina humana y ciencias farmacéuticas para comprender los efectos de los medicamentos y su producción, también los principios teóricos y la implementación práctica de los procesos utilizados en la industria biofarmacéutica. Estos cursos abarcan aspectos como el diseño de procesos de producción biofarmacéutica y los fundamentos de la planificación de las instalaciones de producción relacionadas. En los cursos de laboratorio, se utiliza un modelo de proceso para ilustrar conceptos importantes.
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Titulo de bachillerato + EVAU aprobado</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>IELTS: 6.0 (sin ninguna banda por debajo de 5.5)</li>
+          <li>TOEFL iBT: 78</li>
+          <li>Cambridge: FCE (First Certificate) – B2</li>
+          <li>Duolingo English Test: 95</li>
+        </ul>
+        <strong>Proceso de selección:</strong>
+        <ul>
+          <li>Entrevista (normalmente en inglés, centrada en motivación, habilidades comunicativas y conocimiento básico del área de negocios)</li>
+          <li>Carta de motivación y essay relevante al grado de interés. Los tópicos del essay estarán disponibles durante el proceso de matriculación.</li>
+        </ul>
+        <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de abril</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP AUSTRIA -->
+  <div class="map-container" id="map-at">
+    <div class="map-header">🗺️ MAPA DE UNIVERSIDADES – AUSTRIA</div>
+    <div id="leaflet-at" class="leaflet-map"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════ TAB: SUECIA ══════════════ -->
+<section id="se" class="tab-panel">
+  <div class="country-intro-block">
+    <div class="country-flag-big">
+      <span class="flag flag-se flag-big"></span>
+    </div>
+    <div class="country-info">
+      <h2>Suecia</h2>
+      <div class="country-meta">
+        <div class="country-meta-item"><strong>Coste matrícula:</strong> 0 € (100% subvencionado para ciudadanos europeos)</div>
+      </div>
+      <p>En Suecia la educación es 100% subvencionada para los ciudadanos europeos, esto quiere decir que el coste de la universidad es de 0€.</p>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>Research Universities</span></div>
+
+  <!-- CARD: KAROLINSKA -->
+  <div class="card" id="card-karolinska">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://education.ki.se/bachelor-programme-in-biomedicine" target="_blank">Bachelor Programme in Biomedicine</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">Karolinska Institutet · Solna</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank-gold">#1 de Suecia (Shanghái)</span>
+          <span class="badge badge-rank-gold">#42 del mundo (Shanghái)</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-high">Dificultad: Muy alta – notas top</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Solna (60.500 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+    </div>
+    <div class="desc-box">
+      ¿Estás interesado en las funciones del cuerpo humano y quieres contribuir a reducir la enfermedad y el sufrimiento? ¿Te gustaría encontrar una cura contra enfermedades como el cáncer y la diabetes? ¿Quieres una educación que combine la medicina y la ciencia con habilidades y aplicaciones prácticas? La biomedicina es para ti. Serás instruido por científicos de investigación activos, algunos de ellos líderes en el mundo en sus campos. Formarás parte de un entorno de investigación desde el principio y participarás de las últimas técnicas y resultados de investigación.
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Título de Bachiller de ciencias (incluyendo Matemáticas II, Química y Biología)</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>IELTS 6.5 (ninguna sección por debajo de 5.5)</li>
+          <li>TOEFL 90 (mínimo 20 en writing)</li>
+          <li>CAMBRIDGE CAE (C1) 180 (nunca un FCE podrá ser equivalente, aunque se alcance el 180)</li>
+          <li>PTE 62 overall (writing 61)</li>
+        </ul>
+        <strong>Proceso de selección:</strong> Sí, la universidad seleccionará a los mejores candidatos basándose en las notas y resto de documentos aportados.
+        <p><strong>Fecha de envío de admisiones:</strong> 12 de julio.</p>
+        <div class="deadline-box">📅 Fecha límite para presentar la matrícula (2ª ronda de admisiones de Suecia): <strong>15 de abril</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD: LUND -->
+  <div class="card" id="card-lund">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.lunduniversity.lu.se/lubas/i-uoh-lu-NABME" target="_blank">Bachelor Programme in Biomedicine</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">Lund University · Lund</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank-gold">#4 de Suecia (Shanghái)</span>
+          <span class="badge badge-rank">101–150 mundo (Shanghái)</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-high">Dificultad: Competencia extrema</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Lund (91.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+    </div>
+    <div class="desc-box">
+      ¿Estás interesado en las funciones del cuerpo humano y quieres contribuir a reducir las enfermedades y el sufrimiento? ¿Le gustaría encontrar una cura contra enfermedades como el cáncer y la diabetes? ¿Te gustaría tener una educación que combine la medicina y la ciencia con habilidades y aplicaciones prácticas? En ese caso, la biomedicina es para ti. Serás instruido por científicos de investigación activos, algunos de ellos líderes en el mundo en sus campos. Formarás parte de un entorno de investigación desde el principio y participarás de las últimas técnicas y resultados de investigación.
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Título de Bachiller de ciencias (incluyendo Matemáticas II, Química y Biología)</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>IELTS 6.5 (ninguna sección por debajo de 5.5)</li>
+          <li>TOEFL 90 (mínimo 20 en writing)</li>
+          <li>CAMBRIDGE CAE (C1) 180 (nunca un FCE podrá ser equivalente, aunque se alcance el 180)</li>
+          <li>PTE 62 overall (writing 61)</li>
+        </ul>
+        <strong>Dificultad de acceso:</strong> Competencia extrema. El tamaño de las clases para estudiantes internacionales suele ser muy reducido (a menudo cerca de 20 a 30 plazas en total). La admisión se basa en tu nota media de bachillerato convertida al sistema sueco (merito rating, escala máxima de 22.5). Históricamente, la nota de corte para entrar ronda los 21.5 a 22.0 puntos. Esto equivale a tener prácticamente un expediente de 9.5 o 10 sobre 10 o un Bachillerato Internacional (IB) con 38 a 42 puntos.
+        <p><strong>Proceso de selección:</strong> Sí, la universidad seleccionará a los mejores candidatos basándose en las notas y resto de documentos aportados.</p>
+        <p><strong>Fecha de envío de admisiones:</strong> 12 de julio.</p>
+        <div class="deadline-box">📅 Fecha límite para presentar la matrícula (2ª ronda de admisiones de Suecia): <strong>15 de abril</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD: LINKOPING -->
+  <div class="card" id="card-linkoping">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://liu.se/en/education/program/6bike" target="_blank">Bachelor Programme in Experimental and Industrial Biomedicine</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">Linköping University · Linköping</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">#7–8 de Suecia (Shanghái)</span>
+          <span class="badge badge-rank">301–401 mundo (Shanghái)</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-mid">Dificultad: Alta – expediente excelente</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Linköping (104.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+    </div>
+    <div class="desc-box">
+      ¿Estás interesado en aplicar la teoría en Biomedicina en proyectos de la industria, la salud o académicos? En este grado aprenderás a gestionar proyectos en ejecución y adquirirás habilidades en emprendimiento y desarrollo empresarial. ¡Entonces el programa de Licenciatura en Biomedicina Experimental e Industrial te brindará años emocionantes!
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Título de Bachiller de ciencias (incluyendo Matemáticas II, Química y Biología)</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>IELTS 6.5 (ninguna sección por debajo de 5.5)</li>
+          <li>TOEFL 90 (mínimo 20 en writing)</li>
+          <li>CAMBRIDGE CAE (C1) 180 (nunca un FCE podrá ser equivalente, aunque se alcance el 180)</li>
+          <li>PTE 62 overall (writing 61)</li>
+        </ul>
+        <strong>Dificultad de acceso:</strong> Linköping destaca por su innovación industrial y asignaturas de ciencias muy avanzadas en el bachillerato. Si tienes un expediente excelente (ej. un 9.0 o más) y un trasfondo fuerte en ciencias y matemáticas, tus posibilidades en Linköping aumentan significativamente en comparación con la competencia extrema de Lund.
+        <p><strong>Proceso de selección:</strong> Sí, la universidad seleccionará a los mejores candidatos basándose en las notas y resto de documentos aportados.</p>
+        <p><strong>Fecha de envío de admisiones:</strong> 12 de julio.</p>
+        <div class="deadline-box">📅 Fecha límite para presentar la matrícula (2ª ronda de admisiones de Suecia): <strong>15 de abril</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD: SKOVDE BSC BIOMEDICINE -->
+  <div class="card" id="card-skovde-bio">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.his.se/en/education/natural-science/biomedicine-bachelor-programme/" target="_blank">BSc in Biomedicine</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">University of Skövde · Skövde</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">No figura en ranking Shanghái</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low">Dificultad: Media</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Skövde (56.973 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+    </div>
+    <div class="desc-box">
+      El programa de estudios de Biomedicina es un programa internacional impartido íntegramente en inglés. Se centra en el mercado laboral de la biomedicina, la investigación médica y la salud digital. El programa ofrece una formación integral, que abarca desde química y bioquímica médica hasta biología celular y humana, anatomía, genética, inmunología, microbiología, biología molecular, farmacología, fisiología, biología de las infecciones y las bases biomédicas de las enfermedades.
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Título de Bachillerato de ciencias (incluyendo Matemáticas II, Química II y Biología II e inglés)</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>IELTS 6.5 (ninguna sección por debajo de 5.5)</li>
+          <li>TOEFL 90 (mínimo 20 en writing)</li>
+          <li>CAMBRIDGE CAE (C1) 180 (nunca un FCE podrá ser equivalente, aunque se alcance el 180)</li>
+          <li>PTE 62 overall writing 61</li>
+        </ul>
+        <strong>Dificultad de acceso:</strong> Media. Las notas de corte históricas son sustancialmente más bajas. Un expediente de bachillerato notable o bueno suele ser suficiente para competir por una plaza. El gran beneficio en matemáticas: Mientras otras universidades en Suecia piden matemáticas avanzadas (nivel 4 sueco), Skövde solo pide Matemáticas nivel 2 (el equivalente a un nivel básico-intermedio de bachillerato) junto con biología y química básicas. Esto abre la puerta a estudiantes que no llevaron un bachillerato puramente tecnológico o de ciencias exactas.
+        <p><strong>Proceso de selección:</strong> Sí, la universidad seleccionará a los mejores candidatos basándose en las notas y resto de documentos aportados.</p>
+        <p><strong>Fecha de envío de admisiones:</strong> 12 de julio.</p>
+        <div class="deadline-box">📅 Fecha límite para presentar la matrícula (2ª ronda de admisiones de Suecia): <strong>15 de abril</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD: SKOVDE MOLECULAR BIODESIGN -->
+  <div class="card" id="card-skovde-mol">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.his.se/en/education/natural-science/molecular-biodesign-bachelor-programme/" target="_blank">Molecular Biodesign</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">University of Skövde · Skövde</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">No figura en ranking Shanghái</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low">Dificultad: Media</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Skövde (56.973 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+    </div>
+    <div class="desc-box">
+      <p>El biodiseño molecular es una forma de diseño biológico que se ha desarrollado para abordar una tarea biológica estructural o funcional. El programa conduce a una amplia titulación en biociencia, con especial atención a la biología molecular y la biotecnología. Es en estos campos donde se encuentra su futuro mercado laboral. Tus conocimientos teóricos, combinados con los métodos y herramientas moleculares que adquirirás durante el programa, pueden utilizarse en muchas áreas diferentes.</p>
+      <p style="margin-top:10px;">Durante el primer año del programa, aprenderá los fundamentos del trabajo de laboratorio, biología celular, evolución, genética, química, microbiología y bioinformática. Adquirirá amplios conocimientos de biociencia, y el segundo año incluirá estudios avanzados de biología molecular centrados en el biodiseño molecular, los biomarcadores y el trabajo de laboratorio. También aprenderá a utilizar diversos tipos de software de apoyo al diseño biomolecular. Durante el tercer año, estudiará la gestión de proyectos y el espíritu empresarial, y aplicará sus conocimientos en un proyecto práctico de biodiseño molecular. Durante todo el último semestre se trabaja en un proyecto experimental de licenciatura en biociencia. La enseñanza se imparte en inglés.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Título de Bachillerato de ciencias (incluyendo Matemáticas II, Química II y Biología II e Inglés)</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong>
+        <ul>
+          <li>IELTS 6.5 (ninguna sección por debajo de 5.5)</li>
+          <li>TOEFL 90 (mínimo 20 en writing)</li>
+          <li>CAMBRIDGE CAE (C1) 180 (nunca un FCE podrá ser equivalente, aunque se alcance el 180)</li>
+          <li>PTE 62 overall writing 61</li>
+        </ul>
+        <strong>Dificultad de acceso:</strong> Media. Las notas de corte históricas son sustancialmente más bajas. Un expediente de bachillerato notable o bueno suele ser suficiente para competir por una plaza. El gran beneficio en matemáticas: Mientras otras universidades en Suecia piden matemáticas avanzadas (nivel 4 sueco), Skövde solo pide Matemáticas nivel 2 (el equivalente a un nivel básico-intermedio de bachillerato) junto con biología y química básicas. Esto abre la puerta a estudiantes que no llevaron un bachillerato puramente tecnológico o de ciencias exactas.
+        <p><strong>Proceso de selección:</strong> Sí, la universidad seleccionará a los mejores candidatos basándose en las notas y resto de documentos aportados.</p>
+        <p><strong>Fecha de envío de admisiones:</strong> 12 de julio.</p>
+        <div class="deadline-box">📅 Fecha límite para presentar la matrícula (2ª ronda de admisiones de Suecia): <strong>15 de abril</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP SUECIA -->
+  <div class="map-container" id="map-se">
+    <div class="map-header">🗺️ MAPA DE UNIVERSIDADES – SUECIA</div>
+    <div id="leaflet-se" class="leaflet-map"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════ TAB: DINAMARCA ══════════════ -->
+<section id="dk" class="tab-panel">
+  <div class="country-intro-block">
+    <div class="country-flag-big">
+      <span class="flag flag-dk flag-big"></span>
+    </div>
+    <div class="country-info">
+      <h2>Dinamarca</h2>
+      <div class="country-meta">
+        <div class="country-meta-item"><strong>Coste matrícula:</strong> 0 € (100% subvencionado para ciudadanos europeos)</div>
+      </div>
+      <p>En Dinamarca la educación es 100% subvencionada para los ciudadanos europeos, esto quiere decir que el coste de la universidad es de 0€.</p>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>Applied Science Universities</span></div>
+
+  <!-- CARD: ABSALON -->
+  <div class="card" id="card-absalon">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://en.zealand.dk/education/engineering/biotechnology/" target="_blank">Engineering in Biotechnology</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">University College Absalon · Kalundborg</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">Applied Sciences – sin ranking Shanghái</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low">Dificultad: Media</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Kalundborg (16.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3½ años incl. prácticas 5 meses (semestre 6)</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+    </div>
+    <div class="desc-box">
+      <p>Durante tus estudios, aprenderás a aplicar conocimientos profundos sobre los procesos bioquímicos y biotecnológicos asociados a la producción de fármacos, la industria alimentaria y los desafíos ambientales.</p>
+      <p style="margin-top:8px;">Te familiarizarás con los métodos utilizados en el campo de la biotecnología en la producción industrial. También adquirirás conocimientos sobre los principios de ingeniería relevantes para el procesamiento de materiales por microorganismos (como bacterias, hongos, algas, protozoos y virus) o células vegetales y animales para crear productos o procesos industriales útiles.</p>
+      <p style="margin-top:8px;">El grado se centra en la biotecnología; por ejemplo, en cómo se utilizan las células como pequeñas fábricas para la producción de medicamentos y alimentos, o en cómo se utilizan en la purificación de aguas residuales o la conversión de residuos en energía (biocombustibles). Adquirirás conocimientos teóricos en biotecnología y trabajarás con las siguientes disciplinas: Célula y microbiología; Biotecnología y química de proteínas; Química general y técnica; Matemáticas y estadística.</p>
+      <p style="margin-top:8px;">Además, te familiarizarás con una serie de materias técnicas como operaciones unitarias químicas, regulación práctica, fermentación e ingeniería de reacciones químicas.</p>
+      <p style="margin-top:8px;">Desde el inicio de tu formación, conectarás la teoría con la práctica, integrando los conocimientos teóricos adquiridos con la práctica profesional. Nuestro programa de Grado en Ingeniería se basa en la estrecha colaboración con empresas locales, líderes del mercado de la biofabricación, como Novo Nordisk, Novozymes, Unibio, Kalundborg Refinery, Kalundborg Utility, etc.</p>
+      <p style="margin-top:8px;">El programa mantiene una estrecha colaboración con las empresas biotecnológicas locales de Kalundborg. A lo largo de la formación, trabajarás con problemas reales del entorno de producción de las empresas, realizarás visitas a empresas y, por supuesto, conocerás a las empresas biotecnológicas durante tus prácticas.</p>
+      <p style="margin-top:8px;">Durante el último año y medio de tus estudios, realizarás asignaturas optativas, prácticas y el proyecto de fin de grado, donde podrás desarrollar un proceso personalizado con las empresas de Kalundborg y alrededores.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong> Título de bachillerato aprobado y haber cursado en los últimos 3 años:
+        <ul>
+          <li>Matemáticas "A" = 375 H</li>
+          <li>Física "B" = 190 H</li>
+          <li>Química "B" = 190 H</li>
+          <li>Inglés "B" = 210 H y 6 de media en bachillerato</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong> Inglés 210 H.
+        <strong>Proceso de selección:</strong> Las solicitudes recibidas antes de la fecha límite (15 de marzo, 12:00 h) se evaluarán según los siguientes criterios:
+        <ul>
+          <li>Vídeo motivacional</li>
+          <li>Resultados de los exámenes de bachillerato</li>
+          <li>Experiencia laboral: sube tu CV y la Declaración del Empleador (PDF) a optagelse.dk.</li>
+          <li>Cursos relevantes</li>
+          <li>Otras cualificaciones documentadas relevantes, como deportes de élite, voluntariado, etc.</li>
+        </ul>
+        <strong>Dificultad de acceso:</strong> Medio. Para un estudiante con una media de bachiller en el área científica de más de un 7.0 tiene buenas probabilidades de acceso.
+        <p><strong>Resolución de admisión:</strong> 28 julio.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <strong>15 de marzo</strong> (a las 12:00 h)</div>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD: AALBORG -->
+  <div class="card" id="card-aalborg">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.en.aau.dk/education/bachelor/chemical-engineering-and-biotechnology" target="_blank">Chemical Engineering and Biotechnology</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">Aalborg University · Esbjerg</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">Applied Sciences – sin ranking Shanghái</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-mid">Dificultad: Media-Alta</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Esbjerg (71.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+    </div>
+    <div class="desc-box">
+      <p>La química y la biología son cada vez más importantes. Los alimentos que comemos, el aire que respiramos, la ropa que vestimos; de hecho, todo lo que nos rodea se desarrolla o se ve influenciado por la química y la biología. Los procesos químicos más complejos son obra de organismos vivos, y la química determina el sabor de los alimentos y cómo se diseñan y procesan nuestros productos. En el programa, adquirirás conocimientos sobre procesos e industrias biotecnológicos y químicos, y aprenderás a utilizar técnicas avanzadas al realizar experimentos tanto en laboratorios como en ordenadores.</p>
+      <p style="margin-top:8px;">Como estudiante de Ingeniería Química y Biotecnología, desarrollarás habilidades técnicas y prácticas. Te enfrentarás a los desafíos del mundo que nos rodea y colaborarás con investigadores y la comunidad empresarial para encontrar soluciones concretas. La enseñanza se imparte en inglés y el entorno internacional fortalece tus habilidades lingüísticas y te proporciona una perspectiva y una red de contactos internacionales.</p>
+      <p style="margin-top:8px;">El programa se centra en explotar el potencial de la química y la biotecnología. Trabajarás con procesos biológicos y químicos y aprenderás a diseñar soluciones para la industria, la protección del medio ambiente, la energía y la salud. Durante el programa, aprenderás a comprender y desarrollar procesos químicos y biológicos. Trabajarás en temas como sostenibilidad, energía y medio ambiente, y en disciplinas como química orgánica y física, microbiología y bioquímica, y trabajarás en soluciones para, por ejemplo, la purificación del agua, la generación de energía verde o la producción de nuevos medicamentos.</p>
+      <p style="margin-top:8px;">Con este grado de Ingeniería, podrás trabajar tanto en el sector público como en el privado. Esto puede abarcar desde el desarrollo de nuevos materiales y procesos, la optimización de la producción y la gestión de residuos, hasta la investigación y la consultoría en los campos del medio ambiente, la energía, la alimentación y la biotecnología.</p>
+      <p style="margin-top:10px;"><strong>Opciones de combinación y máster:</strong> Con un grado en Ingeniería Química y Biotecnología, puedes continuar tus estudios en uno de los másteres relacionados de la AAU, como: Ingeniería Química (Esbjerg), Bioingeniería (Esbjerg), Química (Aalborg), Biotecnología Sostenible (Copenhague).</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong> Título de bachillerato aprobado y haber cursado en los últimos 3 años:
+        <ul>
+          <li>Matemáticas "A" = 375 H: nota mínima (5.5)</li>
+          <li>Física "B" = 190 H</li>
+          <li>Química "B" = 190 H</li>
+          <li>Inglés "B" = 210 H</li>
+        </ul>
+        <strong>Requisitos de inglés</strong> (obligado test de inglés antes del 5 julio):
+        <ul>
+          <li>IELTS (including IELTS Online) (academic test): 6.5 overall band score with a minimum score of 6.0 in each section</li>
+          <li>TOEFL (internet-based + Home Edition): 85 with a minimum score of 20 in each section</li>
+          <li>C2 Proficiency (CPE): 180 / level C1</li>
+          <li>C1 Advanced (CAE): 180 / grade C</li>
+          <li>ECPE: Passed test including certificate</li>
+        </ul>
+        <strong>Proceso de selección:</strong> El programa tiene admisión restringida. Por lo tanto, no todos los solicitantes que solicitan admisión dentro del plazo establecido y cumplen con los requisitos de admisión tienen garantizada su admisión. En 2024, la AAU ofreció 40 plazas para estudiantes. Todos los solicitantes que cumplieron con los requisitos de admisión fueron admitidos.
+        <p><strong>Dificultad de acceso:</strong> Medio-Alto. <strong>*Importante:</strong> Este programa cuenta con un examen de inicio de estudios. Por lo tanto, durante las primeras semanas del primer semestre, todos los estudiantes de nuevo ingreso deben realizar un examen escrito de inicio de estudios. El objetivo de este examen es determinar si los estudiantes han comenzado sus estudios. Para continuar en el programa, los estudiantes deben participar y aprobar el examen de inicio de estudios. Si no participan o no aprueban el examen de inicio, deberán participar y aprobar el reexamen, que también es escrito. Si no aprueban el examen de inicio de estudios o el reexamen, el estudiante será dado de baja de sus estudios antes del 1 de octubre. El examen de inicio de estudios se basa en la introducción, así como en las expectativas y la motivación de los estudiantes. Los estudiantes reciben la calificación de "Aprobado" o "No aprobado" según sus respuestas en el examen escrito. La calificación de "Aprobado" se obtiene al realizar y entregar el examen escrito.</p>
+        <p><strong>Resolución de matrícula:</strong> 28 de julio.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <strong>15 de marzo</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD: ROSKILDE -->
+  <div class="card" id="card-roskilde">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.ruc.dk/en/bachelor/international-bachelor-natural-sciences" target="_blank">International Bachelor in Natural Sciences</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">Roskilde University · Roskilde</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">Applied Sciences – sin ranking Shanghái</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low">Dificultad: Media</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Roskilde (52.000 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">0 €/año</div></div>
+    </div>
+    <div class="desc-box">
+      <p>¿Cómo está estructurado el mundo que nos rodea y cómo se comporta? ¿Cómo podemos utilizar el conocimiento y los métodos científicos para encontrar soluciones que beneficien el medio ambiente, la salud, las enfermedades, la medicina y la tecnología? Estas son algunas de las preguntas que puedes explorar en el Grado Internacional en Ciencias Naturales.</p>
+      <p style="margin-top:8px;">La demanda de empleados e investigadores con formación en ciencias naturales seguirá aumentando en el futuro, ya que el mundo necesita encontrar nuevas soluciones a los desafíos ambientales, sanitarios y climáticos. También se necesitarán personas curiosas que puedan usar experimentos y teorías fundamentales para comprender cómo se interconectan las cosas.</p>
+      <p style="margin-top:8px;">Como estudiante, puedes centrarte en abordar problemas sociales como la reducción de la contaminación por plásticos, la restauración de la biodiversidad o la lucha contra la resistencia a los antibióticos. También puedes sumergirte en cuestiones científicas impulsado por la curiosidad y contribuir al desarrollo de una mejor comprensión fundamental del mundo que nos rodea, tanto a través de teorías como de experimentos. Tendrás acceso a nuestra supercomputadora y a nuestros nuevos laboratorios, utilizados tanto por investigadores como por estudiantes.</p>
+      <p style="margin-top:8px;">Conocerás teorías, técnicas y métodos fundamentales de diversas disciplinas científicas, aprendiendo a trabajar más allá de las fronteras científicas en colaboración con otros estudiantes. Te capacitaremos para pensar como un investigador y, en la práctica, trabajarás en estrecha colaboración con investigadores.</p>
+      <p style="margin-top:8px;">El programa comienza con un año de estudios interdisciplinarios básicos. Durante los dos últimos años, te especializarás en dos asignaturas de grado. Durante tus estudios, podrás elegir las especializaciones académicas que más te interesen. Aproximadamente la mitad de tus estudios se centrarán en el trabajo en proyectos, lo que te dará la oportunidad de desarrollar tus intereses seleccionando temas y problemas en los que trabajar.</p>
+      <p style="margin-top:8px;">El Grado Internacional en Ciencias Naturales te proporciona una comprensión interdisciplinaria de las teorías y herramientas científicas. Además, tendrás la oportunidad de adquirir diversas competencias específicas de la materia, muy demandadas en el mercado laboral, como: Codificación y simulación (Python y Latex); Estadística y procesamiento de datos; Diseño experimental, trabajo de campo y técnicas de laboratorio; Modelización matemática, desarrollo de escenarios y proyección; Gestión de proyectos e innovación; Trabajo experimental en laboratorios químicos, físicos y biológicos.</p>
+      <p style="margin-top:8px;">Dependiendo de las asignaturas que elijas durante tu grado y posterior máster, un perfil en ciencias naturales te abre un amplio abanico de oportunidades profesionales: Biólogo médico, Ecotoxicólogo, Analista de Datos, Físico, Consultor Ambiental, Desarrollador de Software, Profesional de Control de Calidad, Matemático, o estudiante de doctorado en tu campo específico.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong> Título de bachillerato aprobado y haber cursado en los últimos 3 años:
+        <ul>
+          <li>Inglés 210 horas</li>
+          <li>Matemáticas 375 horas</li>
+          <li>Una de las siguientes combinaciones: Física 190 horas y Química 190 horas, O bien Química 190 horas, Biología 325 horas y Física 75 horas.</li>
+        </ul>
+        <strong>Requisitos de inglés:</strong> Inglés 210 H (antes del 5 julio).
+        <strong>Proceso de selección:</strong> Las solicitudes recibidas antes de la fecha límite (15 de marzo, 12:00 h) se evaluarán según los siguientes criterios:
+        <ul>
+          <li>Motivational letter and CV</li>
+          <li>Notas de los últimos 3 años</li>
+          <li>Verificación de horas</li>
+          <li>Otras cualificaciones documentadas relevantes, como deportes de élite, voluntariado, etc.</li>
+        </ul>
+        <strong>Dificultad de acceso:</strong> Medio.
+        <p><strong>Resolución de matrícula:</strong> 28 de julio.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <strong>15 de marzo</strong></div>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP DINAMARCA -->
+  <div class="map-container" id="map-dk">
+    <div class="map-header">🗺️ MAPA DE UNIVERSIDADES – DINAMARCA</div>
+    <div id="leaflet-dk" class="leaflet-map"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════ TAB: ALEMANIA ══════════════ -->
+<section id="de" class="tab-panel">
+  <div class="country-intro-block">
+    <div class="country-flag-big">
+      <span class="flag flag-de flag-big"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+    </div>
+    <div class="country-info">
+      <h2>Alemania</h2>
+      <div class="country-meta">
+        <div class="country-meta-item"><strong>Coste matrícula:</strong> ~750 €/año (ciudadanos europeos)</div>
+      </div>
+      <p>En Alemania la educación es parcialmente subvencionada para los ciudadanos europeos, esto quiere decir que el coste de la universidad es de 750€ aprox.</p>
+    </div>
+  </div>
+
+  <div class="section-divider"><span>Universities of Applied Sciences</span></div>
+
+  <!-- CARD: RHEIN-WAAL -->
+  <div class="card" id="card-rheinwaal">
+    <div class="card-header">
+      <div class="card-header-left">
+        <div class="card-title">
+          <a href="https://www.hochschule-rhein-waal.de/en/faculties/life-sciences/degree-programmes/bioengineering-bsc" target="_blank">Bioengineering</a>
+          <span class="click-icon">🖱️</span>
+        </div>
+        <div class="card-school">Rhine-Waal University of Applied Sciences · Kleve</div>
+        <div class="card-ranking-row">
+          <span class="ranking-label">Ranking de la universidad:</span>
+          <span class="badge badge-rank">Applied Sciences – sin ranking Shanghái</span>
+        </div>
+      </div>
+      <span class="badge badge-diff-low">Dificultad: Media–Baja</span>
+    </div>
+    <div class="meta-grid">
+      <div class="meta-cell">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">Kleve (52.887 hab.)
+          <br/><button class="map-btn" onclick="scrollToMap('de','map-de')">🗺️ Ver mapa</button>
+        </div>
+      </div>
+      <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3,5 años</div></div>
+      <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">~750 €/año</div></div>
+      <div class="meta-cell"><div class="meta-label">Inicio del curso</div><div class="meta-value">Finales de septiembre</div></div>
+    </div>
+    <div class="desc-box">
+      <p>La bioingeniería es un campo interdisciplinario donde se desarrollan nuevos materiales y tecnologías con una amplia variedad de aplicaciones con la ayuda de las ciencias naturales y la ingeniería. Los ejemplos históricos de las primeras biotecnologías incluyen el queso, el vino y el pan. Los ejemplos modernos, sin embargo, implican ingeniería a nivel biológico-molecular para producir sustancias utilizadas en detergentes y cosméticos, ingredientes farmacéuticos activos y medicamentos, materias primas químicas para la fabricación industrial, biocombustibles e incluso nuevas variedades de especies de plantas.</p>
+      <p style="margin-top:8px;">Este programa se imparte en inglés y comenzó en el semestre de invierno 2012-2013 en Kleve. Desde entonces, ha logrado el reconocimiento internacional, particularmente entre los estudiantes: más de 60 países están representados por los estudiantes que actualmente cursan este programa.</p>
+    </div>
+    <details class="req-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <strong>Requisitos académicos:</strong>
+        <ul>
+          <li>Título de bachillerato o similar que dé acceso a una carrera universitaria. (Es la universidad quien evalúa si el título y notas son válidas para entrar al grado.)</li>
+        </ul>
+        <strong>Requisitos de inglés</strong> (Los certificados de idioma inglés son válidos por dos años a partir de la fecha de emisión):
+        <ul>
+          <li>IELTS academic 5.5</li>
+          <li>TOEFL iBT 72</li>
+          <li>Cambridge FCE min 169</li>
+          <li>PTE 59–75</li>
+        </ul>
+        <strong>Proceso de selección:</strong> Todos los aplicantes tienen que aplicar a través de Uniassist para establecer la equivalencia basándose en directrices oficiales de la Conferencia Permanente de ministros de Educación y Asuntos Culturales (Kultusministerkonferenz), la Conferencia de Rectores de Alemania (Hochschulrectorenkonferenz) y la Oficina Central de Educación Extranjera (Zentralstelle für ausländisches Bildungswesen).
+        <p><strong>Dificultad de acceso:</strong> Media–Baja. Sin restricción estricta. Muchos de sus programas científicos no tienen un Numerus Clausus (NC) asfixiante. Esto significa que no necesitas una nota media perfecta (un 10/10) para entrar. Si cumples con los requisitos técnicos de homologación, la probabilidad de ser aceptado es muy alta.</p>
+        <p><strong>Fecha de envío de admisiones:</strong> mitad–finales de agosto.</p>
+        <div class="deadline-box">📅 Plazo límite para enviar matrícula: <strong>15 de julio</strong> (lo antes posible mejor)</div>
+      </div>
+    </details>
+  </div>
+
+  <!-- MAP ALEMANIA -->
+  <div class="map-container" id="map-de">
+    <div class="map-header">🗺️ MAPA DE UNIVERSIDADES – ALEMANIA</div>
+    <div id="leaflet-de" class="leaflet-map"></div>
+  </div>
+</section>
+
+</main>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 110" role="img" aria-label="Educoway">
+      <!-- "educo" letters -->
+      <text x="0" y="78" font-family="'DM Sans',sans-serif" font-size="88" font-weight="300" fill="#737373" letter-spacing="-2">educo</text>
+      <!-- "way" letters -->
+      <text x="354" y="78" font-family="'DM Sans',sans-serif" font-size="88" font-weight="300" fill="#737373" letter-spacing="-2">way</text>
+      <!-- W mark -->
+      <polygon points="310,8 330,68 350,28 370,68 390,8 375,8 355,52 335,12 315,52 295,8" fill="url(#wgf)"/>
+      <defs>
+        <linearGradient id="wgf" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#3dbea0"/>
+          <stop offset="100%" stop-color="#0a9baa"/>
+        </linearGradient>
+      </defs>
+      <text x="0" y="102" font-family="'DM Sans',sans-serif" font-size="16" font-weight="300" fill="#737373" letter-spacing="2">orientación universitaria en el extranjero</text>
+    </svg>
+  </div>
+  <div>Informe personalizado · Marta Orts Carbonell · Biomedicina · Ingeniería Química · Biotecnología</div>
+  <div style="margin-top:6px; font-size:0.72rem; opacity:0.6;">Elaborado por Educoway · Orientación universitaria en el extranjero</div>
+</footer>
+
+<!-- ══════════════ JAVASCRIPT ══════════════ -->
+<script>
+// ── TAB NAVIGATION
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // lazy init maps
+  if (['nl','ie','at','se','dk','de'].includes(id)) {
+    setTimeout(() => initMap(id), 100);
+  }
+}
+
+function goTo(tab, anchor) {
+  const btns = document.querySelectorAll('.tab-btn');
+  const tabMap = { intro: 0, rva: 1, nl: 2, ie: 3, at: 4, se: 5, dk: 6, de: 7 };
+  showTab(tab, btns[tabMap[tab]]);
+  setTimeout(() => scrollToCard(anchor), 300);
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function scrollToMap(tab, mapId) {
+  const active = document.querySelector('.tab-panel.active');
+  if (!active || active.id !== tab) {
+    const btns = document.querySelectorAll('.tab-btn');
+    const tabMap = { nl: 2, ie: 3, at: 4, se: 5, dk: 6, de: 7 };
+    showTab(tab, btns[tabMap[tab]]);
+    setTimeout(() => {
+      const el = document.getElementById(mapId);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 350);
+  } else {
+    const el = document.getElementById(mapId);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// ── MAPS
+const mapsInitialized = {};
+
+const mapData = {
+  nl: {
+    center: [52.3, 5.3], zoom: 7,
+    unis: [
+      { id: 'card-fontys', name: 'BSc Chemistry & Chemical Engineering', school: 'Fontys University of Applied Sciences', lat: 51.4416, lng: 5.4697, webUrl: 'https://www.fontys.nl/en/Study-at-Fontys/Bachelor/Chemistry-and-Chemical-Engineering.htm', mapsUrl: 'https://maps.google.com/?q=Fontys+University+Eindhoven' },
+      { id: 'card-han', name: 'Life Science', school: 'HAN University of Applied Sciences', lat: 51.8125, lng: 5.8372, webUrl: 'https://www.han.nl/opleidingen/bachelor/life-sciences/voltijd/', mapsUrl: 'https://maps.google.com/?q=HAN+University+Nijmegen' },
+      { id: 'card-maastricht', name: 'Biomedical Sciences', school: 'Maastricht University', lat: 50.8514, lng: 5.6909, webUrl: 'https://www.maastrichtuniversity.nl/education/bachelor/biomedical-sciences', mapsUrl: 'https://maps.google.com/?q=Maastricht+University' }
+    ]
+  },
+  ie: {
+    center: [53.2, -8.0], zoom: 7,
+    unis: [
+      { id: 'card-nui', name: 'BSc Biomedical Sciences', school: 'NUI Galway', lat: 53.2835, lng: -9.0609, webUrl: 'https://www.universityofgalway.ie/courses/undergraduate-courses/biomedical-science.html', mapsUrl: 'https://maps.google.com/?q=NUI+Galway' },
+      { id: 'card-ucd', name: 'BSc Biomedical Health & Life Sciences', school: 'University College Dublin', lat: 53.3082, lng: -6.2245, webUrl: 'https://www.ucd.ie/medicine/study/undergraduate/biomedical-health-life-sciences/', mapsUrl: 'https://maps.google.com/?q=University+College+Dublin' },
+      { id: 'card-ucc', name: 'Biomedical Sciences', school: 'University College Cork', lat: 51.8931, lng: -8.4923, webUrl: 'https://www.ucc.ie/en/ck600/', mapsUrl: 'https://maps.google.com/?q=University+College+Cork' }
+    ]
+  },
+  at: {
+    center: [48.4085, 15.5985], zoom: 11,
+    unis: [
+      { id: 'card-imc', name: 'Medical & Pharmaceutical Biotechnology', school: 'IMC Krems University', lat: 48.4085, lng: 15.5985, webUrl: 'https://www.imc.ac.at/en/degree-programs/bachelor-programs/medical-and-pharmaceutical-biotechnology/', mapsUrl: 'https://maps.google.com/?q=IMC+Krems+University' }
+    ]
+  },
+  se: {
+    center: [57.5, 15.5], zoom: 5,
+    unis: [
+      { id: 'card-karolinska', name: 'Bachelor Programme in Biomedicine', school: 'Karolinska Institutet', lat: 59.3502, lng: 18.0237, webUrl: 'https://education.ki.se/bachelor-programme-in-biomedicine', mapsUrl: 'https://maps.google.com/?q=Karolinska+Institutet+Solna' },
+      { id: 'card-lund', name: 'Bachelor Programme in Biomedicine', school: 'Lund University', lat: 55.7114, lng: 13.2019, webUrl: 'https://www.lunduniversity.lu.se/lubas/i-uoh-lu-NABME', mapsUrl: 'https://maps.google.com/?q=Lund+University' },
+      { id: 'card-linkoping', name: 'Bachelor in Experimental & Industrial Biomedicine', school: 'Linköping University', lat: 58.3988, lng: 15.5760, webUrl: 'https://liu.se/en/education/program/6bike', mapsUrl: 'https://maps.google.com/?q=Linkoping+University' },
+      { id: 'card-skovde-bio', name: 'BSc in Biomedicine', school: 'University of Skövde', lat: 58.3902, lng: 13.8454, webUrl: 'https://www.his.se/en/education/natural-science/biomedicine-bachelor-programme/', mapsUrl: 'https://maps.google.com/?q=University+of+Skovde' },
+      { id: 'card-skovde-mol', name: 'Molecular Biodesign', school: 'University of Skövde', lat: 58.3860, lng: 13.8410, webUrl: 'https://www.his.se/en/education/natural-science/molecular-biodesign-bachelor-programme/', mapsUrl: 'https://maps.google.com/?q=University+of+Skovde' }
+    ]
+  },
+  dk: {
+    center: [55.8, 10.5], zoom: 6,
+    unis: [
+      { id: 'card-absalon', name: 'Engineering in Biotechnology', school: 'University College Absalon', lat: 55.6813, lng: 11.0890, webUrl: 'https://en.zealand.dk/education/engineering/biotechnology/', mapsUrl: 'https://maps.google.com/?q=Kalundborg+Denmark' },
+      { id: 'card-aalborg', name: 'Chemical Engineering and Biotechnology', school: 'Aalborg University Esbjerg', lat: 55.4761, lng: 8.4528, webUrl: 'https://www.en.aau.dk/education/bachelor/chemical-engineering-and-biotechnology', mapsUrl: 'https://maps.google.com/?q=Aalborg+University+Esbjerg' },
+      { id: 'card-roskilde', name: 'International Bachelor in Natural Sciences', school: 'Roskilde University', lat: 55.6510, lng: 12.0842, webUrl: 'https://www.ruc.dk/en/bachelor/international-bachelor-natural-sciences', mapsUrl: 'https://maps.google.com/?q=Roskilde+University' }
+    ]
+  },
+  de: {
+    center: [51.7891, 6.1351], zoom: 11,
+    unis: [
+      { id: 'card-rheinwaal', name: 'Bioengineering', school: 'Rhine-Waal University of Applied Sciences', lat: 51.7891, lng: 6.1351, webUrl: 'https://www.hochschule-rhein-waal.de/en/faculties/life-sciences/degree-programmes/bioengineering-bsc', mapsUrl: 'https://maps.google.com/?q=Rhine-Waal+University+Kleve' }
+    ]
+  }
+};
+
+function initMap(countryId) {
+  if (mapsInitialized[countryId]) return;
+  mapsInitialized[countryId] = true;
+  const data = mapData[countryId];
+  const leafletId = 'leaflet-' + countryId;
+  const map = L.map(leafletId).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  data.unis.forEach(uni => {
+    const marker = L.marker([uni.lat, uni.lng]).addTo(map);
+    marker.bindPopup(`
+      <div style="font-family:'DM Sans',sans-serif; min-width:220px;">
+        <div style="font-size:1.2rem; margin-bottom:4px;">🎓</div>
+        <strong style="font-size:0.88rem; color:#0d2b3e;">${uni.name}</strong><br/>
+        <span style="font-size:0.8rem; color:#0a9baa;">${uni.school}</span>
+        <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;">
+          <a href="${uni.webUrl}" target="_blank" style="background:#0a9baa;color:white;padding:4px 10px;border-radius:6px;font-size:0.75rem;text-decoration:none;font-weight:600;">🌐 Ver grado</a>
+          <button onclick="scrollToCard('${uni.id}'); return false;" style="background:#0d2b3e;color:white;padding:4px 10px;border-radius:6px;font-size:0.75rem;border:none;cursor:pointer;font-weight:600;">📋 Ver ficha</button>
+          <a href="${uni.mapsUrl}" target="_blank" style="background:#e8f5e9;color:#1a6b3c;padding:4px 10px;border-radius:6px;font-size:0.75rem;text-decoration:none;font-weight:600;border:1px solid #27ae60;">🗺️ Google Maps</a>
+        </div>
+      </div>
+    `);
+  });
+}
+</script>
+</body>
+</html>
