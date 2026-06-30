@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Personalizado de Opciones de Grado — Javier Aguado López</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+  :root{
+    --teal:#0a9baa;
+    --teal-dark:#077a87;
+    --teal-light:#e0f5f7;
+    --navy:#0d2b3e;
+    --bg:#f4f8fa;
+    --border:#c8e0e5;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'DM Sans',sans-serif;
+    font-size:16px;
+    background:var(--bg);
+    color:var(--navy);
+    line-height:1.65;
+  }
+  h1,h2,h3,.serif{font-family:'Playfair Display',serif;}
+  a{color:var(--teal-dark);}
+  .container{max-width:980px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- HEADER ---------- */
+  header.site-header{
+    position:sticky;top:0;z-index:100;
+    background:linear-gradient(135deg,var(--navy) 0%,#123a52 100%);
+    color:#fff;
+    box-shadow:0 4px 18px rgba(13,43,62,.25);
+  }
+  .header-top{
+    display:flex;align-items:center;gap:24px;
+    padding:20px 24px 14px;
+    max-width:980px;margin:0 auto;
+    flex-wrap:wrap;
+  }
+  .header-logo svg{height:46px;width:auto;display:block;}
+  .header-titles{flex:1;min-width:240px;}
+  .header-titles h1{
+    margin:0 0 4px;font-size:22px;font-weight:600;color:#fff;letter-spacing:.2px;
+  }
+  .header-titles .subtitle{
+    font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:#a9cdd6;font-weight:600;
+  }
+
+  nav.tabs{
+    display:flex;gap:6px;overflow-x:auto;
+    padding:0 24px 12px;max-width:980px;margin:0 auto;
+    border-top:1px solid rgba(255,255,255,.12);
+    padding-top:10px;
+  }
+  nav.tabs button{
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.15);
+    color:#dfeef1;
+    padding:9px 16px;border-radius:30px;
+    font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;
+    cursor:pointer;white-space:nowrap;
+    display:flex;align-items:center;gap:8px;
+    transition:.2s;
+  }
+  nav.tabs button:hover{background:rgba(255,255,255,.16);}
+  nav.tabs button.active{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+  /* ---------- MAIN ---------- */
+  main{padding:36px 0 80px;}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;animation:fadein .25s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .section-title{
+    background:var(--teal);color:#fff;font-weight:700;
+    padding:10px 18px;border-radius:8px;font-size:15px;letter-spacing:.3px;
+    margin:34px 0 18px;text-transform:uppercase;
+  }
+  .intro-text p{margin:0 0 16px;}
+
+  /* ---------- INDEX ---------- */
+  .index-list{list-style:none;margin:0;padding:0;}
+  .index-country{font-family:'Playfair Display',serif;font-weight:600;font-size:17px;color:var(--teal-dark);margin:26px 0 10px;display:flex;align-items:center;gap:10px;}
+  .index-item{
+    display:block;padding:12px 16px;margin-bottom:8px;
+    background:#fff;border:1.5px solid var(--border);border-radius:10px;
+    cursor:pointer;text-decoration:none;color:inherit;
+    transition:.2s;
+  }
+  .index-item:hover{border-color:var(--teal);box-shadow:0 4px 14px rgba(10,155,170,.14);}
+  .index-degree{font-size:13.5px;font-weight:600;color:var(--navy);}
+  .index-school{font-family:'Playfair Display',serif;font-style:italic;font-size:11.5px;color:#7a8a93;margin-top:2px;}
+
+  /* ---------- CARDS ---------- */
+  .uni-card{
+    background:#fff;border:2px solid var(--border);border-radius:12px;
+    padding:24px;margin-bottom:28px;
+    transition:.25s;
+  }
+  .uni-card:hover{border-color:var(--teal);box-shadow:0 8px 24px rgba(10,155,170,.16);}
+  .card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+  .card-title a{
+    font-family:'Playfair Display',serif;font-size:20px;font-weight:600;
+    color:var(--navy);text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    transition:.2s;
+  }
+  .card-title a:hover{color:var(--teal-dark);}
+  .card-title a:hover .cursor-icon{transform:scale(1.3);}
+  .cursor-icon{display:inline-block;transition:.2s;}
+  .card-school{color:var(--teal-dark);font-weight:600;font-size:14.5px;margin-top:4px;}
+
+  .badge-difficulty{
+    padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;
+    border:1.5px solid; white-space:nowrap;
+  }
+  .badge-muyalta{color:#c0392b;border-color:#c0392b;background:#fdecea;}
+  .badge-alta{color:#d35400;border-color:#d35400;background:#fdf1e6;}
+  .badge-media{color:#1e8449;border-color:#1e8449;background:#eafaf1;}
+
+  .ranking-label{font-size:12px;color:#8a9aa3;margin:14px 0 6px;font-weight:500;}
+  .ranking-badges{display:flex;flex-wrap:wrap;gap:8px;}
+  .rank-badge{
+    background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark);
+    font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;
+  }
+  .rank-badge.gold{background:#fdf3da;border-color:#cda434;color:#8a6d10;}
+
+  .meta-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px;margin:18px 0;
+  }
+  .meta-cell{
+    background:var(--bg);border:1px solid var(--border);border-radius:8px;
+    padding:10px 14px;
+  }
+  .meta-cell .meta-label{font-size:11.5px;color:#8a9aa3;font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+  .meta-cell .meta-value{font-size:14.5px;font-weight:600;margin-top:2px;}
+  .meta-value.green{color:#1e8449;}
+  .meta-value.red{color:#c0392b;}
+  .map-btn{
+    margin-top:6px;display:inline-flex;align-items:center;gap:5px;
+    background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark);
+    font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:6px;
+    cursor:pointer;
+  }
+  .map-btn:hover{background:var(--teal);color:#fff;}
+
+  .description-box{
+    background:#eef6f8;border-left:4px solid var(--teal);
+    padding:16px 20px;border-radius:0 8px 8px 0;margin:18px 0;font-size:15px;
+  }
+  .description-box p{margin:0 0 12px;}
+  .description-box p:last-child{margin-bottom:0;}
+
+  details.admission{
+    margin-top:16px;border:1.5px solid var(--border);border-radius:10px;
+    padding:0;overflow:hidden;
+  }
+  details.admission summary{
+    cursor:pointer;padding:13px 18px;font-weight:700;font-size:14px;
+    background:var(--bg);color:var(--teal-dark);list-style:none;
+  }
+  details.admission summary::-webkit-details-marker{display:none;}
+  details.admission summary:before{content:"▸ ";}
+  details.admission[open] summary:before{content:"▾ ";}
+  .admission-body{padding:16px 20px 20px;}
+  .admission-body p{margin:0 0 10px;}
+  .deadline-box{
+    background:#fff7d6;border:1.5px solid #e8c441;color:#7a5d00;
+    border-radius:8px;padding:10px 16px;font-weight:700;font-size:14px;
+    display:inline-block;margin:8px 0;
+  }
+  .text-red{color:#c0392b;font-weight:700;}
+  .text-green{color:#1e8449;font-weight:700;}
+
+  .country-intro{
+    background:#fff;border:2px solid var(--border);border-radius:14px;
+    padding:28px;margin-bottom:30px;
+  }
+  .country-intro-top{display:flex;align-items:center;gap:18px;margin-bottom:16px;flex-wrap:wrap;}
+  .country-intro h2{margin:0;font-size:28px;color:var(--navy);}
+  .country-meta{display:flex;gap:24px;flex-wrap:wrap;margin:14px 0;}
+  .country-meta-item{font-size:14px;}
+  .country-meta-item .label{color:#8a9aa3;font-size:11.5px;font-weight:700;text-transform:uppercase;display:block;margin-bottom:2px;}
+
+  #map-holanda{height:420px;border-radius:12px;margin-top:10px;border:2px solid var(--border);}
+  .leaflet-popup-content{font-family:'DM Sans',sans-serif;}
+  .popup-title{font-family:'Playfair Display',serif;font-weight:700;font-size:14px;margin-bottom:2px;}
+  .popup-school{font-size:12.5px;color:#666;margin-bottom:8px;}
+  .popup-buttons{display:flex;flex-direction:column;gap:5px;}
+  .popup-buttons a, .popup-buttons button{
+    font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:6px;
+    border:1px solid var(--teal);background:var(--teal-light);color:var(--teal-dark);
+    text-align:center;text-decoration:none;cursor:pointer;font-family:'DM Sans',sans-serif;
+  }
+
+  /* ---------- FLAGS (pure CSS, no emoji) ---------- */
+  .flag{display:inline-block;width:26px;height:18px;border-radius:2px;overflow:hidden;border:1px solid rgba(0,0,0,.12);flex-shrink:0;position:relative;}
+  .flag-lg{width:52px;height:36px;border-radius:4px;}
+  .flag.nl span{display:block;width:100%;height:33.33%;}
+  .flag.nl span:nth-child(1){background:#AE1C28;}
+  .flag.nl span:nth-child(2){background:#fff;}
+  .flag.nl span:nth-child(3){background:#21468B;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--navy);color:#bcd3da;padding:36px 0;margin-top:40px;
+  }
+  footer .footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+  footer svg{height:34px;width:auto;opacity:.55;}
+  footer .footer-text{font-size:12.5px;}
+
+  @media(max-width:640px){
+    .header-top{padding:16px 16px 10px;}
+    nav.tabs{padding:0 16px 10px;}
+    main{padding:24px 0 60px;}
+    .uni-card{padding:18px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-logo">
+      <!-- Logo inline SVG - versión blanca (cabecera) -->
+      <svg viewBox="0 0 1800 433" xmlns="http://www.w3.org/2000/svg">
+        <style>.logo-word{fill:#ffffff;} .logo-w1{fill:#5fc18c;} .logo-w2{fill:#1fa9ab;} .logo-w3{fill:#5bb7e0;} .logo-tag{fill:#ffffff;}</style>
+        <text x="0" y="240" font-family="DM Sans, sans-serif" font-weight="700" font-size="240" letter-spacing="-4">
+          <tspan class="logo-word">educo</tspan><tspan class="logo-w1" dx="2">w</tspan><tspan class="logo-w3">ay</tspan>
+        </text>
+        <text x="2" y="410" font-family="DM Sans, sans-serif" font-weight="400" font-size="40" class="logo-tag" letter-spacing="1">
+          orientación universitaria en el extranjero
+        </text>
+      </svg>
+    </div>
+    <div class="header-titles">
+      <h1>Informe Personalizado de Opciones de Grado</h1>
+      <div class="subtitle">Preparado para Javier Aguado López</div>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="active" onclick="showTab('intro', this)">Introducción</button>
+    <button onclick="showTab('research', this)">Research vs Applied Sciences</button>
+    <button onclick="showTab('holanda', this)"><span class="flag nl"><span></span><span></span><span></span></span> Holanda</button>
+  </nav>
+</header>
+
+<main class="container">
+
+  <!-- ===================== TAB INTRODUCCIÓN ===================== -->
+  <section id="intro" class="tab-panel active">
+    <div class="intro-text">
+      <p>Hola JAVIER,</p>
+      <p>Espero que estés bien. Estos días he estado trabajando en la búsqueda de grados en Fisioterapia, según lo que nos indicaste, más podrían interesarte.</p>
+      <p>Te dejo el listado de opciones a continuación, cualquier duda estaré encantada de ayudarte a resolverla.</p>
+    </div>
+
+    <div class="section-title">Índice de opciones</div>
+    <ul class="index-list">
+      <li class="index-country"><span class="flag nl"><span></span><span></span><span></span></span> Holanda</li>
+      <li>
+        <a class="index-item" onclick="goTo('holanda','fontys-physio')">
+          <div class="index-degree">Bachelor Physiotherapy</div>
+          <div class="index-school">Fontys University of Applied Sciences</div>
+        </a>
+      </li>
+    </ul>
+
+    <div class="section-title">¿Qué tienes que hacer ahora?</div>
+    <div class="intro-text">
+      <p>Echa un vistazo a todas las opciones que hemos seleccionado, mira los vídeos, lee el contenido de las webs (asignaturas, especializaciones, etc.), ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+      <p>Un saludo,<br>Jenni</p>
+    </div>
+  </section>
+
+  <!-- ===================== TAB RESEARCH VS APPLIED ===================== -->
+  <section id="research" class="tab-panel">
+    <h2 style="font-size:24px;">Universidades de Research vs Applied Science</h2>
+    <div class="intro-text">
+      <p>En la mayoría de países europeos existen dos tipos de universidades que es importante conocer y diferenciar, las universidades de <em>Research</em> y las de <em>Applied Sciences</em>. Los dos tipos de universidad comparten muchos puntos en común, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+
+      <h3 style="font-size:17px;font-family:'DM Sans',sans-serif;">Metodología teórica vs práctica</h3>
+      <p>Las universidades de Applied Sciences destacan por usar una metodología muy práctica llamada PBL (Project/Problem Based Learning). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de Research no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+
+      <h3 style="font-size:17px;font-family:'DM Sans',sans-serif;">Duración</h3>
+      <p>Las universidades de Applied Sciences duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster. Por otro lado, las de Research duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+
+      <h3 style="font-size:17px;font-family:'DM Sans',sans-serif;">Ranking / Prestigio</h3>
+      <p>El principal motivo por el cual se podría escoger una universidad de Research es por el mayor ranking y prestigio que estas universidades tienen.</p>
+      <p>Las universidades de Applied Sciences (Hogeschools, en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+
+      <h3 style="font-size:17px;font-family:'DM Sans',sans-serif;">Acceso a Másteres</h3>
+      <p>Aquí es importante diferenciar si tu máster será en uno de los países que diferencian entre las 2 universidades, o en un país que no lo hace. En España, por ejemplo, que no hace diferencia entre estas universidades, ambos títulos te dan las mismas oportunidades. Pero si se trata de Holanda, Bélgica o Alemania, por ejemplo, sí hay diferencias. Con tu título de universidad de Research podrás acceder a másteres tanto en universidades de Research como Applied Sciences. Pero en cambio, con tu título de Applied Sciences podrás acceder a másteres en universidades de Applied Sciences, pero si quieres acceder a universidades de Research, te pedirán cursar un pre-máster (de 1 semestre o un año de duración) para ponerte al día con las habilidades de investigación que se supone no has desarrollado aún.</p>
+
+      <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de Research y otra de Applied Sciences):</p>
+      <ul>
+        <li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank">Applied Science vs. Research University</a></li>
+        <li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank">Types of universities in the Netherlands</a></li>
+      </ul>
+
+      <p>Ahora sí, habiendo comentado estos detalles, te paso las opciones de estudio más interesantes:</p>
+    </div>
+  </section>
+
+  <!-- ===================== TAB HOLANDA ===================== -->
+  <section id="holanda" class="tab-panel">
+    <div class="country-intro">
+      <div class="country-intro-top">
+        <span class="flag nl flag-lg"><span></span><span></span><span></span></span>
+        <h2>Holanda</h2>
+      </div>
+      <div class="country-meta">
+        <div class="country-meta-item"><span class="label">Coste matrícula (estudiantes UE)</span><span class="text-green">2.695€/año</span></div>
+      </div>
+      <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <span class="text-green">2.695€/año</span>.</p>
+    </div>
+
+    <div class="section-title">Applied Sciences Universities</div>
+
+    <div class="uni-card" id="fontys-physio">
+      <div class="card-header">
+        <div>
+          <div class="card-title">
+            <a href="https://www.fontys.nl/en/Programmes/Physiotherapy-bachelor-full-time.htm" target="_blank">Bachelor Physiotherapy <span class="cursor-icon">🖱️</span></a>
+          </div>
+          <div class="card-school">Fontys University of Applied Sciences — Eindhoven</div>
+        </div>
+        <div class="badge-difficulty badge-media">Admisión directa</div>
+      </div>
+
+      <div class="ranking-label">Ranking de la universidad:</div>
+      <div class="ranking-badges">
+        <span class="rank-badge">Holanda · No aparece en rankings internacionales (metodología práctica / applied sciences)</span>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-cell">
+          <div class="meta-label">Ciudad</div>
+          <div class="meta-value">Eindhoven (223.000 hab.)</div>
+          <button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Duración</div>
+          <div class="meta-value">4 años (240 ECTS)</div>
+        </div>
+        <div class="meta-cell">
+          <div class="meta-label">Coste</div>
+          <div class="meta-value green">2.695€/año</div>
+        </div>
+      </div>
+
+      <div class="description-box">
+        <p>Prepárate para destacar en el Grado en Fisioterapia de Fontys en Eindhoven. Dominarás tanto la teoría como la práctica, desde el masaje y la terapia del movimiento hasta la comprensión de la estructura corporal. Participa en formación práctica con pacientes reales, combinando el autoaprendizaje con las clases interactivas en la vibrante ciudad universitaria de Eindhoven.</p>
+        <p>En el primer año del Grado en Fisioterapia de Fontys en Eindhoven, profundizarás en la anatomía, la fisiología y la neurología para comprender las funciones corporales. También aprenderás tratamientos fisioterapéuticos y practicarás con pacientes reales y compañeros. Con 16 horas de clases, 4 horas de trabajo de proyecto y 16 horas de autoaprendizaje semanales, obtendrás una base sólida para tu futura carrera.</p>
+        <p>En el segundo año del Grado en Fisioterapia de Fontys, adquirirás mayor independencia en tus estudios, a la vez que recibirás orientación y apoyo. También seleccionarás uno de los tres programas de especialización y una especialización menor para cursar en tu tercer año, lo que te permitirá convertirte en un fisioterapeuta cualificado.</p>
+        <p>En los años 3 y 4, adquirirás mayor independencia, cursarás una especialización menor y elegirás entre tres programas de especialización: Atención Médica, Autogestión o Colaboración Interprofesional. Además, realizarás prácticas profesionales exhaustivas, con oportunidades de ir al extranjero gracias a las sólidas colaboraciones de Fontys con instituciones de todo el mundo. Esta experiencia práctica es crucial para tu desarrollo profesional.</p>
+        <p><a href="https://www.fontys.nl/en/Programmes/Mechatronics-bachelor-full-time.htm#ska-activity" target="_blank">Open Day</a></p>
+      </div>
+
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Académicos:</strong> IBDP diploma</p>
+          <p><strong>Nivel de inglés:</strong> cumple con English A o B en IBDP</p>
+          <p><strong>Proceso de selección:</strong> No hay proceso de selección, aunque la universidad puede realizar exámenes de admisión para evaluar tu nivel de matemáticas e inglés, también podrías tener que realizar una entrevista y presentar una carta de motivación.</p>
+          <p><strong>Fecha límite para presentar la matrícula:</strong></p>
+          <div class="deadline-box">31 agosto</div>
+        </div>
+      </details>
+    </div>
+
+    <div class="section-title">Mapa — Holanda</div>
+    <div id="map-holanda"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <svg viewBox="0 0 1800 433" xmlns="http://www.w3.org/2000/svg" style="height:34px;">
+      <text x="0" y="240" font-family="DM Sans, sans-serif" font-weight="700" font-size="240" letter-spacing="-4">
+        <tspan fill="#737373">educo</tspan><tspan fill="#5fc18c" dx="2">w</tspan><tspan fill="#5bb7e0">ay</tspan>
+      </text>
+      <text x="2" y="410" font-family="DM Sans, sans-serif" font-weight="400" font-size="40" fill="#737373" letter-spacing="1">
+        orientación universitaria en el extranjero
+      </text>
+    </svg>
+    <div class="footer-text">Educoway — Orientación universitaria en el extranjero</div>
+  </div>
+</footer>
+
+<script>
+  const mapsInitialized = {};
+
+  const mapData = {
+    holanda: {
+      center: [51.4416, 5.4697],
+      zoom: 7,
+      universities: [
+        {
+          id: 'fontys-physio',
+          name: 'Bachelor Physiotherapy',
+          school: 'Fontys University of Applied Sciences — Eindhoven',
+          lat: 51.4416,
+          lng: 5.4697,
+          webUrl: 'https://www.fontys.nl/en/Programmes/Physiotherapy-bachelor-full-time.htm',
+          mapsUrl: 'https://maps.google.com/?q=Fontys+University+of+Applied+Sciences,+Eindhoven'
+        }
+      ]
+    }
+  };
+
+  function showTab(id, btn){
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if(btn) btn.classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+    if(id === 'holanda') initMap('holanda');
+  }
+
+  function goTo(tab, anchor){
+    const btn = Array.from(document.querySelectorAll('nav.tabs button')).find(b => b.getAttribute('onclick').includes("'"+tab+"'"));
+    showTab(tab, btn);
+    setTimeout(() => {
+      const el = document.getElementById(anchor);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 150);
+  }
+
+  function scrollToCard(id){
+    const tabBtn = document.querySelector('nav.tabs button[onclick*="holanda"]');
+    showTab('holanda', tabBtn);
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 150);
+  }
+
+  function scrollToMap(tab, mapId){
+    const activePanel = document.querySelector('.tab-panel.active');
+    if(!activePanel || activePanel.id !== tab){
+      const btn = document.querySelector('nav.tabs button[onclick*="'+tab+'"]');
+      showTab(tab, btn);
+    }
+    setTimeout(() => {
+      const el = document.getElementById(mapId);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 200);
+  }
+
+  function initMap(countryId){
+    if(mapsInitialized[countryId]) return;
+    const data = mapData[countryId];
+    if(!data) return;
+    const map = L.map('map-'+countryId).setView(data.center, data.zoom);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const gradIcon = L.divIcon({
+      html: '<div style="font-size:26px;line-height:1;">🎓</div>',
+      className: '',
+      iconSize: [26,26],
+      iconAnchor: [13,13]
+    });
+
+    data.universities.forEach(u => {
+      const marker = L.marker([u.lat, u.lng], {icon: gradIcon}).addTo(map);
+      const popupHtml = `
+        <div class="popup-title">${u.name}</div>
+        <div class="popup-school">${u.school}</div>
+        <div class="popup-buttons">
+          <a href="${u.webUrl}" target="_blank">Ver grado</a>
+          <button onclick="scrollToCard('${u.id}')">Ver ficha</button>
+          <a href="${u.mapsUrl}" target="_blank">Google Maps</a>
+        </div>
+      `;
+      marker.bindPopup(popupHtml);
+    });
+
+    mapsInitialized[countryId] = true;
+  }
+</script>
+
+</body>
+</html>
