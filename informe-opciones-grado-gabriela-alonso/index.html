@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe personalizado de opciones de grado — Gabriela Alonso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin=""/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+<style>
+:root{
+  --teal:#0a9baa;
+  --teal-dark:#077a87;
+  --teal-light:#e0f5f7;
+  --navy:#0d2b3e;
+  --bg:#f4f8fa;
+  --border:#c8e0e5;
+  --gold:#c9a227;
+  --gold-light:#faf3dd;
+  --red:#c0392b;
+  --red-light:#fdecea;
+  --orange:#d97706;
+  --orange-light:#fef3e2;
+  --green:#1e8a52;
+  --green-light:#e7f7ee;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'DM Sans', sans-serif;
+  font-size:16px;
+  color:var(--navy);
+  background:var(--bg);
+  line-height:1.65;
+}
+h1,h2,h3,h4,.font-display{font-family:'Playfair Display', serif;}
+a{color:var(--teal-dark);}
+p{margin:0 0 1em 0;}
+ul{margin:0;}
+
+/* ---------- FLAGS (pure CSS, nested spans) ---------- */
+.flag{display:inline-flex;overflow:hidden;border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,.15);vertical-align:middle;}
+.flag-h{flex-direction:column;width:22px;height:15px;}
+.flag-h .stripe{flex:1;}
+.flag-v{flex-direction:row;width:22px;height:15px;}
+.flag-v .stripe{flex:1;}
+.flag-lg.flag-h{width:64px;height:44px;}
+.flag-lg.flag-v{width:64px;height:44px;}
+.flag-dk{position:relative;width:22px;height:15px;background:#C8102E;}
+.flag-dk .dk-field{position:absolute;inset:0;background:#C8102E;}
+.flag-dk .dk-cross-h{position:absolute;left:0;right:0;top:6px;height:3px;background:#fff;}
+.flag-dk .dk-cross-v{position:absolute;top:0;bottom:0;left:8px;width:3px;background:#fff;}
+.flag-dk.flag-lg{width:64px;height:44px;}
+.flag-dk.flag-lg .dk-cross-h{top:19px;height:6px;}
+.flag-dk.flag-lg .dk-cross-v{left:22px;width:6px;}
+
+/* ---------- HEADER ---------- */
+.site-header{
+  position:sticky; top:0; z-index:100;
+  background:linear-gradient(135deg, var(--navy) 0%, #123c52 100%);
+  color:#fff;
+  box-shadow:0 2px 12px rgba(0,0,0,.18);
+}
+.header-top{
+  display:flex; align-items:center; gap:24px;
+  padding:18px 32px 14px;
+  max-width:1200px; margin:0 auto;
+}
+.educoway-logo-header{height:38px; width:auto; flex-shrink:0;}
+.header-titles{flex:1; min-width:0;}
+.header-titles h1{
+  font-size:1.5rem; margin:0 0 4px 0; font-weight:700; color:#fff; line-height:1.2;
+}
+.header-subtitle{
+  font-family:'DM Sans', sans-serif;
+  font-size:.72rem; letter-spacing:2px; text-transform:uppercase;
+  color:#9fd4dc; margin:0; font-weight:600;
+}
+.nav-tabs{
+  display:flex; flex-wrap:wrap; gap:4px;
+  padding:0 32px; max-width:1200px; margin:0 auto;
+  border-top:1px solid rgba(255,255,255,.12);
+}
+.nav-tab{
+  appearance:none; border:none; background:transparent; color:#cfe9ec;
+  font-family:'DM Sans', sans-serif; font-size:.88rem; font-weight:600;
+  padding:13px 16px; cursor:pointer; border-bottom:3px solid transparent;
+  display:flex; align-items:center; gap:8px; transition:all .15s ease;
+  white-space:nowrap;
+}
+.nav-tab:hover{color:#fff; background:rgba(255,255,255,.06);}
+.nav-tab.active{color:#fff; border-bottom-color:var(--teal);}
+.nav-tab .flag{box-shadow:0 0 0 1px rgba(255,255,255,.35);}
+
+/* ---------- LAYOUT ---------- */
+.page-container{max-width:1100px; margin:0 auto; padding:36px 32px 80px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block; animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+
+.section-title{
+  font-size:1.8rem; color:var(--navy); margin:0 0 22px 0; font-weight:700;
+}
+.prose-block{
+  background:#fff; border:2px solid var(--border); border-radius:12px; padding:30px 34px;
+}
+.prose-block p{font-size:1rem;}
+
+/* ---------- INDEX ---------- */
+.index-wrapper{margin-top:28px;}
+.index-country-group{margin-bottom:26px;}
+.index-country-title{
+  display:flex; align-items:center; gap:10px;
+  font-size:1.15rem; color:var(--teal-dark); margin:0 0 12px 0;
+  border-bottom:2px solid var(--teal-light); padding-bottom:6px;
+}
+.index-list{list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:10px;}
+.index-entry a{
+  display:block; text-decoration:none; padding:10px 14px;
+  background:#fff; border:1.5px solid var(--border); border-radius:9px;
+  transition:all .15s ease;
+}
+.index-entry a:hover{border-color:var(--teal); box-shadow:0 3px 10px rgba(10,155,170,.15); transform:translateY(-1px);}
+.index-degree{display:block; font-family:'DM Sans', sans-serif; font-size:13.5px; font-weight:400; color:var(--navy);}
+.index-school{display:block; font-family:'Playfair Display', serif; font-size:11.5px; font-style:italic; color:#8a97a0; margin-top:2px;}
+
+.next-steps-box{
+  margin-top:36px; background:var(--navy); color:#fff; border-radius:12px;
+  padding:26px 32px;
+}
+.next-steps-box h3{color:#fff; margin:0 0 10px 0; font-size:1.25rem;}
+.next-steps-box p{color:#dcebee; white-space:pre-line;}
+
+/* ---------- RESEARCH VS APPLIED ---------- */
+.rva-section{margin:22px 0;}
+.rva-section h3{color:var(--teal-dark); font-size:1.15rem; margin:0 0 8px 0;}
+.link-list{list-style:none; padding:0; margin:10px 0;}
+.link-list li{margin:6px 0;}
+
+/* ---------- COUNTRY INTRO ---------- */
+.country-intro{background:#fff; border:2px solid var(--border); border-radius:12px; padding:28px 34px; margin-bottom:28px;}
+.country-intro-header{display:flex; align-items:center; gap:18px; margin-bottom:14px;}
+.country-intro-header h2{margin:0; font-size:2rem; color:var(--navy);}
+.country-meta-row{display:flex; flex-wrap:wrap; gap:14px; margin-bottom:16px;}
+.country-meta-item{
+  background:var(--teal-light); border:1.5px solid var(--border); border-radius:8px;
+  padding:8px 16px;
+}
+.country-meta-label{display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.6px; color:var(--teal-dark); font-weight:700;}
+.country-meta-value{display:block; font-size:.95rem; color:var(--navy); font-weight:600;}
+.country-intro-text{font-size:1rem; margin:0;}
+
+/* ---------- TRACK SEPARATOR ---------- */
+.track-separator{
+  background:var(--teal); color:#fff; font-weight:700; letter-spacing:1px;
+  font-size:.85rem; padding:10px 18px; border-radius:8px; margin:30px 0 18px;
+  text-transform:uppercase;
+}
+.track-separator-applied{background:var(--navy);}
+
+/* ---------- UNI CARD ---------- */
+.uni-cards{display:flex; flex-direction:column; gap:22px;}
+.uni-card{
+  background:#fff; border:2px solid var(--border); border-radius:12px;
+  padding:26px 30px; scroll-margin-top:150px;
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+.uni-card:hover{border-color:var(--teal); box-shadow:0 8px 24px rgba(10,155,170,.15);}
+.card-header{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:14px;}
+.card-title{margin:0; font-size:1.3rem; line-height:1.35;}
+.card-title-link{
+  color:var(--navy); text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+  transition:color .15s ease;
+}
+.card-title-link:hover{color:var(--teal-dark);}
+.card-title-link .cursor-icon{display:inline-block; transition:transform .15s ease;}
+.card-title-link:hover .cursor-icon{transform:scale(1.25);}
+.card-school{margin:4px 0 0 0; color:var(--teal-dark); font-weight:600; font-size:.95rem;}
+
+.badge-diff{
+  flex-shrink:0; border:1.5px solid; border-radius:20px; padding:5px 13px;
+  font-size:.75rem; font-weight:700; white-space:nowrap;
+}
+.badge-diff-red{color:var(--red); border-color:var(--red); background:var(--red-light);}
+.badge-diff-orange{color:var(--orange); border-color:var(--orange); background:var(--orange-light);}
+.badge-diff-green{color:var(--green); border-color:var(--green); background:var(--green-light);}
+
+.card-ranking{margin-bottom:16px;}
+.rank-minititle{display:block; font-size:.72rem; color:#8a97a0; margin-bottom:6px; font-weight:600;}
+.badge-rank{
+  display:inline-block; background:var(--teal-light); color:var(--teal-dark);
+  border:1px solid var(--border); border-radius:16px; padding:4px 12px;
+  font-size:.78rem; font-weight:600; margin:0 6px 6px 0;
+}
+.badge-rank-gold{background:var(--gold-light); color:#8a6d1a; border-color:var(--gold);}
+.badge-rank-muted{background:var(--bg); color:#6b7a82; border-color:var(--border); font-style:italic; font-weight:400;}
+
+.meta-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:10px;
+  margin-bottom:18px;
+}
+.meta-cell{background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:9px 12px;}
+.meta-label{display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.5px; color:#8a97a0; font-weight:700;}
+.meta-value{display:block; font-size:.9rem; color:var(--navy); font-weight:600; margin-top:2px;}
+.map-btn{
+  margin-left:8px; background:var(--teal-light); border:1.5px solid var(--teal);
+  color:var(--teal-dark); border-radius:6px; padding:2px 8px; font-size:.72rem; font-weight:700;
+  cursor:pointer; vertical-align:middle;
+}
+.map-btn:hover{background:var(--teal); color:#fff;}
+
+.desc-box{
+  background:#f0f8fa; border-left:4px solid var(--teal); border-radius:0 8px 8px 0;
+  padding:16px 20px; margin-bottom:14px;
+}
+.desc-box p{margin:0 0 10px 0; font-size:.95rem;}
+.desc-box p:last-child{margin-bottom:0;}
+
+.uni-web-link{font-size:.88rem; margin:0 0 14px 0;}
+
+.admission-details{border:1.5px solid var(--border); border-radius:10px; overflow:hidden;}
+.admission-details summary{
+  cursor:pointer; padding:12px 18px; font-weight:700; color:var(--teal-dark);
+  background:var(--teal-light); list-style:none; font-size:.92rem;
+}
+.admission-details summary::-webkit-details-marker{display:none;}
+.admission-details summary::before{content:"▸ "; }
+.admission-details[open] summary::before{content:"▾ ";}
+.admission-content{padding:18px 20px; font-size:.92rem;}
+.admission-content p{margin:0 0 10px 0;}
+.req-list{list-style:none; padding:0; margin:0 0 12px 0;}
+.req-list li{padding:4px 0 4px 20px; position:relative; font-size:.9rem;}
+.req-list li::before{content:"✓"; position:absolute; left:0; color:var(--teal);}
+.deadline-box{
+  background:#fff8e1; border:1.5px solid #f0c95a; border-radius:8px;
+  padding:10px 16px; margin:12px 0; font-size:.92rem; color:#7a5c00; font-weight:600;
+}
+
+/* ---------- MAP ---------- */
+.map-section{margin-top:38px; scroll-margin-top:110px;}
+.map-title{font-size:1.2rem; color:var(--navy); margin:0 0 14px 0;}
+.leaflet-map{width:100%; height:420px; border-radius:12px; border:2px solid var(--border); background:#e6eef0;}
+.map-emoji-icon{font-size:26px; line-height:1; text-align:center; filter:drop-shadow(0 2px 3px rgba(0,0,0,.35));}
+.popup-degree{font-family:'Playfair Display', serif; font-weight:700; font-size:.95rem; margin:0 0 2px 0; color:var(--navy);}
+.popup-school{font-size:.82rem; color:var(--teal-dark); margin:0 0 10px 0;}
+.popup-actions{display:flex; flex-direction:column; gap:6px;}
+.popup-actions a, .popup-actions button{
+  display:block; text-align:center; text-decoration:none; font-size:.78rem; font-weight:700;
+  padding:6px 10px; border-radius:6px; border:1.5px solid var(--teal); color:var(--teal-dark);
+  background:#fff; cursor:pointer; font-family:'DM Sans', sans-serif;
+}
+.popup-actions a:hover, .popup-actions button:hover{background:var(--teal); color:#fff;}
+
+/* ---------- FOOTER ---------- */
+.site-footer{
+  background:#fff; border-top:1px solid var(--border);
+  padding:34px 32px; text-align:center; margin-top:60px;
+}
+.educoway-logo-footer{height:34px; width:auto; margin-bottom:8px;}
+.footer-tagline{font-size:.8rem; color:#8a97a0; margin:0;}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:640px){
+  .header-top{padding:14px 18px 10px; gap:14px;}
+  .header-titles h1{font-size:1.15rem;}
+  .nav-tabs{padding:0 10px; overflow-x:auto;}
+  .page-container{padding:24px 16px 60px;}
+  .country-intro{padding:20px;}
+  .uni-card{padding:20px;}
+  .card-header{flex-direction:column;}
+  .index-list{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <!-- PLACEHOLDER LOGO: el SVG real de Educoway no fue adjuntado en esta sesión.
+         Sustituir este bloque por el <svg>...</svg> original de Educoway.
+         Para la cabecera, cambiar fill:#737373 por fill:#ffffff en el <svg> real. -->
+    <svg class="educoway-logo educoway-logo-header" viewBox="0 0 300 70" xmlns="http://www.w3.org/2000/svg" style="opacity:1" role="img" aria-label="Educoway">
+      <text x="0" y="42" font-family="'DM Sans', sans-serif" font-size="34" font-weight="700" fill="#ffffff">educo<tspan fill="#4fd1de">w</tspan>ay</text>
+      <text x="2" y="60" font-family="'DM Sans', sans-serif" font-size="10" letter-spacing="1.5" fill="#ffffff">ORIENTACIÓN UNIVERSITARIA EN EL EXTRANJERO</text>
+    </svg>
+    <div class="header-titles">
+      <h1>Informe personalizado de opciones de grado</h1>
+      <p class="header-subtitle">Preparado para Gabriela Alonso</p>
+    </div>
+  </div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" id="navbtn-intro" onclick="showTab('intro', this)">Introducción</button>
+<button class="nav-tab" id="navbtn-research-vs-applied" onclick="showTab('research-vs-applied', this)">Research vs Applied Sciences</button>
+<button class="nav-tab" id="navbtn-dinamarca" onclick="showTab('dinamarca', this)"><span class="flag flag-dk"><span class="dk-field"></span><span class="dk-cross-h"></span><span class="dk-cross-v"></span></span> Dinamarca</button>
+<button class="nav-tab" id="navbtn-holanda" onclick="showTab('holanda', this)"><span class="flag flag-h"><span class="stripe" style="background:#AE1C28"></span><span class="stripe" style="background:#ffffff"></span><span class="stripe" style="background:#21468B"></span></span> Holanda</button>
+<button class="nav-tab" id="navbtn-belgica" onclick="showTab('belgica', this)"><span class="flag flag-v"><span class="stripe" style="background:#000000"></span><span class="stripe" style="background:#FFD90C"></span><span class="stripe" style="background:#EF3340"></span></span> Bélgica</button>
+<button class="nav-tab" id="navbtn-austria" onclick="showTab('austria', this)"><span class="flag flag-h"><span class="stripe" style="background:#ED2939"></span><span class="stripe" style="background:#ffffff"></span><span class="stripe" style="background:#ED2939"></span></span> Austria</button>
+<button class="nav-tab" id="navbtn-alemania" onclick="showTab('alemania', this)"><span class="flag flag-h"><span class="stripe" style="background:#000000"></span><span class="stripe" style="background:#DD0000"></span><span class="stripe" style="background:#FFCE00"></span></span> Alemania</button>
+  </nav>
+</header>
+
+<main class="page-container">
+
+  <section class="tab-panel active" id="tab-intro">
+    <h2 class="section-title">Introducción</h2>
+    <div class="prose-block">
+      <p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencido de que estás tomando una decisión acertada, de la que te alegrarás y acordarás toda la vida.</p><p>Estos días he estado trabajando en la búsqueda de grados en Biomedicina, Ingeniería Química, Biotecnología, Life Sciences, entre otros.</p><p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado y, a continuación, el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p>
+    </div>
+    <div class="index-wrapper">
+      <div class="index-country-group">
+          <h4 class="index-country-title"><span class="flag flag-dk"><span class="dk-field"></span><span class="dk-cross-h"></span><span class="dk-cross-v"></span></span> Dinamarca</h4>
+          <ul class="index-list"><li class="index-entry">
+              <a href="#" onclick="goTo('dinamarca','dk-absalon-biotech'); return false;">
+                <span class="index-degree">Engineering in Biotechnology</span>
+                <span class="index-school">Absalon University College</span>
+              </a>
+            </li></ul>
+        </div>
+<div class="index-country-group">
+          <h4 class="index-country-title"><span class="flag flag-h"><span class="stripe" style="background:#AE1C28"></span><span class="stripe" style="background:#ffffff"></span><span class="stripe" style="background:#21468B"></span></span> Holanda</h4>
+          <ul class="index-list"><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-wageningen-envsci'); return false;">
+                <span class="index-degree">BSc Environmental Sciences</span>
+                <span class="index-school">Wageningen University and Research</span>
+              </a>
+            </li><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-leiden-sustainable'); return false;">
+                <span class="index-degree">BSc Science for Sustainable Societies</span>
+                <span class="index-school">Leiden University</span>
+              </a>
+            </li><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-utrecht-sustainability'); return false;">
+                <span class="index-degree">BSc Global Sustainability Science</span>
+                <span class="index-school">Utrecht University</span>
+              </a>
+            </li><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-vanhall-animals'); return false;">
+                <span class="index-degree">BSc Animals, Society and Business</span>
+                <span class="index-school">Van Hall Larenstein University of Applied Sciences</span>
+              </a>
+            </li><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-han-lifescience-1'); return false;">
+                <span class="index-degree">BSc Life Science</span>
+                <span class="index-school">HAN University of Applied Sciences</span>
+              </a>
+            </li><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-avans-envscience'); return false;">
+                <span class="index-degree">BSc Environmental Science for Sustainability, Ecosystems and Technology</span>
+                <span class="index-school">Avans University of Applied Sciences</span>
+              </a>
+            </li><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-hague-europeanstudies'); return false;">
+                <span class="index-degree">European Studies</span>
+                <span class="index-school">The Hague University of Applied Sciences</span>
+              </a>
+            </li><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-hague-ippl'); return false;">
+                <span class="index-degree">International Public Policy & Leadership</span>
+                <span class="index-school">The Hague University of Applied Sciences</span>
+              </a>
+            </li><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-han-lifescience-2'); return false;">
+                <span class="index-degree">Life Science</span>
+                <span class="index-school">HAN University of Applied Sciences</span>
+              </a>
+            </li><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-nhlstenden-iteps'); return false;">
+                <span class="index-degree">International Teacher Education for Primary Schools (ITEPS)</span>
+                <span class="index-school">NHL Stenden University of Applied Sciences</span>
+              </a>
+            </li><li class="index-entry">
+              <a href="#" onclick="goTo('holanda','nl-nhlstenden-itess'); return false;">
+                <span class="index-degree">International Teacher Education for Secondary Schools (ITESS)</span>
+                <span class="index-school">NHL Stenden University of Applied Sciences</span>
+              </a>
+            </li></ul>
+        </div>
+<div class="index-country-group">
+          <h4 class="index-country-title"><span class="flag flag-v"><span class="stripe" style="background:#000000"></span><span class="stripe" style="background:#FFD90C"></span><span class="stripe" style="background:#EF3340"></span></span> Bélgica</h4>
+          <ul class="index-list"><li class="index-entry">
+              <a href="#" onclick="goTo('belgica','be-vub-socialsciences'); return false;">
+                <span class="index-degree">Social Sciences</span>
+                <span class="index-school">Vrije University Brussels (VUB)</span>
+              </a>
+            </li></ul>
+        </div>
+<div class="index-country-group">
+          <h4 class="index-country-title"><span class="flag flag-h"><span class="stripe" style="background:#ED2939"></span><span class="stripe" style="background:#ffffff"></span><span class="stripe" style="background:#ED2939"></span></span> Austria</h4>
+          <ul class="index-list"><li class="index-entry">
+              <a href="#" onclick="goTo('austria','at-imckrems-biotech'); return false;">
+                <span class="index-degree">Medical and Pharmaceutical Biotechnology</span>
+                <span class="index-school">IMC Krems University of Applied Sciences</span>
+              </a>
+            </li></ul>
+        </div>
+<div class="index-country-group">
+          <h4 class="index-country-title"><span class="flag flag-h"><span class="stripe" style="background:#000000"></span><span class="stripe" style="background:#DD0000"></span><span class="stripe" style="background:#FFCE00"></span></span> Alemania</h4>
+          <ul class="index-list"><li class="index-entry">
+              <a href="#" onclick="goTo('alemania','de-rhinewaal-bioengineering'); return false;">
+                <span class="index-degree">Bioengineering</span>
+                <span class="index-school">Rhine-Waal University of Applied Sciences</span>
+              </a>
+            </li></ul>
+        </div>
+    </div>
+    <div class="next-steps-box">
+      <h3>¿Qué tienes que hacer ahora?</h3>
+      <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.
+
+¡Un saludo!</p>
+    </div>
+  </section>
+
+  <section class="tab-panel" id="tab-research-vs-applied">
+    <h2 class="section-title">Universidades "Research" vs "Applied Sciences"</h2>
+    
+    <div class="prose-block">
+      <p>En la mayoría de los países europeos tenemos que diferenciar entre 2 tipos de universidades: “Research” y “Applied Sciences”. Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+      <div class="rva-section">
+          <h3>Metodología teórica y práctica</h3>
+          <p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project/Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+        </div><div class="rva-section">
+          <h3>Duración</h3>
+          <p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.<br><br>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+        </div><div class="rva-section">
+          <h3>Ranking / Prestigio</h3>
+          <p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.<br><br>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+        </div><div class="rva-section">
+          <h3>Acceso a Másteres</h3>
+          <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. En cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research,</em> te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p>
+        </div>
+      <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de <em>Research</em> y otra de <em>Applied Sciences</em>):</p>
+      <ul class="link-list"><li>🔗 <a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank" rel="noopener">Applied Science vs. Research University</a></li><li>🔗 <a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank" rel="noopener">Types of universities in the Netherlands</a></li></ul>
+      <p>Ahora sí, habiendo comentado estos detalles, vamos a ver las opciones de cada país.</p>
+    </div>
+    
+  </section>
+
+  <section class="tab-panel" id="tab-dinamarca">
+    <div class="country-intro">
+      <div class="country-intro-header">
+        <span class="flag flag-dk flag-lg"><span class="dk-field"></span><span class="dk-cross-h"></span><span class="dk-cross-v"></span></span>
+        <h2>Dinamarca</h2>
+      </div>
+      
+      <p class="country-intro-text">En Dinamarca, las universidades comprueban si el alumno cumple los requisitos de entrada mediante las <strong>horas lectivas cursadas en 4º de la ESO, 1º y 2º de Bachillerato</strong>. Cada materia se compara con los niveles daneses A, B y C, que exigen un número mínimo de horas para considerar que el estudiante tiene la base académica adecuada. Por eso, no basta con tener buenas notas: es necesario haber cursado suficientes horas en asignaturas clave como Matemáticas, Física, Química o Economía, según el grado al que se quiera acceder.</p>
+    </div>
+    <div class="uni-cards">
+      
+<article class="uni-card" id="dk-absalon-biotech">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://en.phabsalon.dk/full-degree/bachelor-engineering-biotechnology" target="_blank" rel="noopener" class="card-title-link">Engineering in Biotechnology <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">Absalon University College — Kalundborg</p>
+    </div>
+    <span class="badge-diff badge-diff-orange">Dificultad alta</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Dinamarca):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Kalundborg (16.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('dinamarca','dk-absalon-biotech')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3,5 años (210 ECTS)</span></div>
+<div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">0 euros</span></div>
+  </div>
+  <div class="desc-box">
+    <p>En este grado se estudian los principios científicos y técnicos que subyacen en los procesos biotecnológicos industriales. Los alumnos adquieren conocimientos profundos de bioquímica, microbiología, biología molecular, genética, ingeniería de enzimas, fermentación, cultivo celular y procesos de biorreactores. También se imparten asignaturas de ingeniería química y de procesos (como transferencia de masa, termodinámica, control de procesos) para diseñar y optimizar sistemas donde microorganismos o células vegetales/animales producen productos útiles. Además, el plan de estudios incluye formación práctica: trabajos de proyecto en colaboración con empresas del sector, prácticas profesionales en compañías biotecnológicas, visitas industriales, mentorías y tareas aplicadas en entornos reales.</p><p>Las salidas profesionales del título son amplias, gracias al carácter interdisciplinar entre biología, ingeniería y tecnología. Los graduados pueden trabajar en la industria farmacéutica, alimentaria, cosmética, ambiental o energética, ocupando puestos como ingeniero de procesos, ingeniero de producción, responsable de control de calidad, desarrollo de producto, investigación y desarrollo, regulación normativa, consultoría biotecnológica o administración pública en áreas medioambientales. También pueden colaborar en empresas emergentes (startups) del ámbito biotecnológico o laboratorios de innovación.</p><p>El contenido del grado combina teoría y práctica. Se desarrollan módulos en ciencias básicas (biología molecular, química, matemáticas), ingeniería de procesos biotecnológicos, control y automatización, escalamiento industrial, gestión de calidad y normativa, análisis de datos y bioprocesos, así como eficiencia energética y sostenibilidad. También hay proyectos integradores donde los estudiantes aplican lo aprendido para resolver retos reales, y colocaciones profesionales que les acercan al mundo laboral, integrando conocimientos de producción, optimización, regulación y diseño bioprocesal.</p>
+  </div>
+  <p class="uni-web-link">🔗 <a href="https://en.phabsalon.dk/" target="_blank" rel="noopener">Web de la universidad</a></p>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+<ul class="req-list"><li>Matemáticas “A” = 375 H</li><li>Física “B” = 190 H</li><li>Química “B” = 190 H</li><li>Inglés “B” = 210 H</li></ul>
+<p><strong>Requisitos de inglés:</strong> Se acepta el Inglés B como requisito de inglés</p>
+<p><strong>Proceso de selección:</strong> Presentación de un video motivacional (3 minutos)</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 15 de marzo</div>
+    </div>
+  </details>
+</article>
+
+    </div>
+    <div class="map-section" id="map-section-dinamarca">
+      <h3 class="map-title">Mapa de universidades — Dinamarca</h3>
+      <div id="map-dinamarca" class="leaflet-map"></div>
+    </div>
+    </section>
+<section class="tab-panel" id="tab-holanda">
+    <div class="country-intro">
+      <div class="country-intro-header">
+        <span class="flag flag-h flag-lg"><span class="stripe" style="background:#AE1C28"></span><span class="stripe" style="background:#ffffff"></span><span class="stripe" style="background:#21468B"></span></span>
+        <h2>Holanda</h2>
+      </div>
+      <div class="country-meta-row"><div class="country-meta-item"><span class="country-meta-label">Coste matrícula</span><span class="country-meta-value">2.690 euros al año</span></div></div>
+      <p class="country-intro-text">En Países Bajos, la educación universitaria está parcialmente <strong>subvencionada para los ciudadanos europeos</strong>. El coste de la universidad es de <strong>2.690 euros al año</strong>.</p>
+    </div>
+    <div class="uni-cards">
+      <div class="track-separator track-separator-research">RESEARCH UNIVERSITIES</div>
+<article class="uni-card" id="nl-wageningen-envsci">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.wur.nl/en/education/bachelor/bachelors-environmental-sciences" target="_blank" rel="noopener" class="card-title-link">BSc Environmental Sciences <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">Wageningen University and Research — Wageningen</p>
+    </div>
+    <span class="badge-diff badge-diff-orange">Dificultad alta</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank">7-9ª de Países Bajos</span><span class="badge-rank badge-rank-gold">151-200 del mundo (Ranking de Shanghái)</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Wageningen (45.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-wageningen-envsci')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El BSc en Environmental Sciences de Wageningen University & Research (Países Bajos) es un grado internacional de 3 años (180 ECTS) impartido en inglés que forma a estudiantes con una visión multidisciplinar sobre los retos ambientales y la sostenibilidad global. El programa combina ciencias naturales, sociales y tecnológicas para ofrecer una comprensión amplia de cómo los sistemas humanos y naturales interactúan y cómo podemos diseñar soluciones sostenibles a problemas como la contaminación, el cambio climático, la escasez de recursos o la pérdida de biodiversidad. Esta mezcla de enfoques permite al alumnado abordar cuestiones ambientales complejas desde diferentes ángulos y prepararse para un mundo donde la sostenibilidad es central en decisiones científicas, políticas y empresariales.</p><p>El plan de estudios empieza con fundamentos sólidos en matemáticas, estadística, química y física, combinados con cursos introductores sobre procesos ambientales como suelos, agua, biogeoquímica y políticas medioambientales, y a medida que avanza el grado se introducen herramientas de investigación científica, análisis de datos y soluciones prácticas. Los estudiantes investigan desafíos ambientales reales, aprenden a integrar conocimientos de distintas disciplinas y desarrollan habilidades para formular estrategias de sostenibilidad aplicables en contextos reales, apoyándose en un aprendizaje que combina teoría, trabajos de campo y proyectos prácticos.</p><p>Estudiar en Wageningen —una universidad reconocida internacionalmente por su enfoque en las ciencias medioambientales y de la vida— ofrece también un ambiente internacional y colaborativo, con oportunidades para trabajar en equipos multiculturales y construir redes globales de profesionales y académicos. Tras graduarse, los estudiantes están bien preparados para continuar con másters especializados o integrarse en sectores como investigación ambiental, consultoría de sostenibilidad, gestión de recursos naturales, políticas públicas o roles técnicos en organizaciones públicas y privadas orientadas al desarrollo sostenible.</p>
+  </div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de IB</p>
+<ul class="req-list"><li>Matemáticas (obligatoria)</li><li>Química (obligatoria)</li><li>Biología (recomendada)</li></ul>
+<p><strong>Requisitos de inglés:</strong> Certificado B2</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 1 de mayo</div>
+<p>🔗 <a href="https://www.shanghairanking.com/institution/wageningen-university-research" target="_blank" rel="noopener">Ranking de Shanghái</a></p>
+    </div>
+  </details>
+</article>
+
+<article class="uni-card" id="nl-leiden-sustainable">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/science-for-sustainable-societies" target="_blank" rel="noopener" class="card-title-link">BSc Science for Sustainable Societies <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">Leiden University — Leiden</p>
+    </div>
+    <span class="badge-diff badge-diff-red">Dificultad muy alta</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank">3-6ª de Países Bajos</span><span class="badge-rank badge-rank-gold">101-150 del mundo (Ranking de Shanghái)</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Leiden (120.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-leiden-sustainable')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El BSc en Science for Sustainable Societies en Leiden University es un grado internacional de tres años (180 ECTS) impartido completamente en inglés que prepara a estudiantes con una visión interdisciplinar para abordar los retos ambientales y de sostenibilidad más complejos de nuestro tiempo. Este programa surge como respuesta a desafíos globales como el cambio climático, la pérdida de biodiversidad, la contaminación y la escasez de recursos, y se basa en la idea de que estos problemas no pueden entenderse ni solucionarse desde una única disciplina, sino combinando enfoques de ciencias naturales y sociales para generar soluciones innovadoras y justas. La formación integra teoría y práctica mediante trabajo de campo, seminarios interactivos, excursiones y proyectos basados en retos reales, permitiendo que los estudiantes apliquen sus conocimientos a contextos concretos a lo largo de toda la carrera. El currículo cubre temas como ecología aplicada, sistemas terrestres en el Antropoceno, evaluación de políticas socio-económicas, antropología de la sostenibilidad y programación para análisis de datos, desarrollando tanto habilidades científicas como transferibles —trabajo en equipo, comunicación, gestión de proyectos y pensamiento crítico— que son muy valoradas en el mercado laboral.</p><p>Estudiar este grado en Leiden ofrece un entorno académico internacional y colaborativo, con grupos pequeños que favorecen la atención personalizada y un enfoque práctico de aprendizaje. En el tercer año, los estudiantes tienen la oportunidad de realizar una tesis y trabajar en un proyecto de consultoría centrado en desafíos reales de sostenibilidad, aplicando lo aprendido a casos concretos junto a organizaciones externas. Los graduados están preparados para continuar con estudios de posgrado o desempeñarse en campos como consultoría ambiental, análisis de políticas públicas, gestión de proyectos de sostenibilidad, investigación aplicada o en organismos públicos y ONGs centrados en desarrollo sostenible.</p>
+  </div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de IB</p>
+<ul class="req-list"><li>Analysis & Approaches SL/HL or Applications & Interpretation HL</li><li>+ 1 HL y 1 SL subject entre: Biology, Chemistry, Physics, Economics, Geography, Environmental Systems and Societies</li></ul>
+<p><strong>Requisitos de inglés:</strong> Certificado B2</p>
+<p><strong>Proceso de selección:</strong> Se lleva a cabo una entrevista</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 1 de mayo</div>
+<p>🔗 <a href="https://www.shanghairanking.com/institution/leiden-university" target="_blank" rel="noopener">Ranking de Shanghái</a></p>
+    </div>
+  </details>
+</article>
+
+<article class="uni-card" id="nl-utrecht-sustainability">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.uu.nl/en/bachelors/global-sustainability-science" target="_blank" rel="noopener" class="card-title-link">BSc Global Sustainability Science <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">Utrecht University — Utrecht</p>
+    </div>
+    <span class="badge-diff badge-diff-red">Dificultad muy alta</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank badge-rank-gold">1ª de Países Bajos</span><span class="badge-rank badge-rank-gold">55 del mundo (Ranking de Shanghái)</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Utrecht (380.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-utrecht-sustainability')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El BSc en Global Sustainability Science en Utrecht University es un grado internacional de tres años (180 créditos ECTS) impartido completamente en inglés que prepara a estudiantes con una visión holística para comprender y abordar los problemas de sostenibilidad a escala local, regional y global. El programa combina conocimientos de ciencias naturales y sociales para que el alumnado no solo entienda los procesos ambientales como el ciclo del agua o el cambio climático, sino también las dinámicas socioeconómicas, políticas y de gestión que permiten proponer soluciones sostenibles y equitativas. La formación se imparte en el campus principal de Utrecht, en el Science Park, dentro de la Faculty of Geosciences reconocida por su enfoque en sostenibilidad científica.</p><p>Durante el primer año los estudiantes adquieren una base común sólida que introduce los principales retos y métodos de la ciencia de la sostenibilidad, incluyendo matemáticas, análisis de sistemas, procesos naturales y socioeconómicos. A partir del segundo año, el programa ofrece cinco itinerarios especializados (tracks) entre los que elegir según los intereses individuales: Water, Climate & Ecosystems, Energy & Resources, Sustainable & Healthy Food, Governance & Societal Transformation y Business & Innovation. Este modelo permite profundizar en áreas específicas sin perder la perspectiva interdisciplinar y favorece una formación flexible con opciones de materias optativas y proyectos basados en problemáticas reales.</p><p>Además de la instrucción en aula, el grado enfatiza el trabajo práctico y proyectos grupales, fomentando habilidades de investigación, liderazgo y resolución de problemas que son esenciales para abordar desafíos complejos de sostenibilidad. Los estudiantes también tienen la oportunidad de participar en intercambios internacionales, realizando parte de sus estudios en universidades socias del extranjero. Al finalizar, los graduados están preparados para desempeñarse en ámbitos como consultoría ambiental, gestión de políticas públicas, desarrollo sostenible, investigación aplicada y roles de liderazgo en organizaciones públicas o privadas, o bien para continuar con estudios de maestría especializados.</p>
+  </div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de IB</p>
+<ul class="req-list"><li>Mathematics: Analysis & Approaches at at least Standard Level or Mathematics: Applications & Interpretation at Higher Level</li><li>y al menos 2 de las siguientes: Biology at Higher Level, Chemistry at Higher Level, Physics at Standard Level, Economics at Standard Level OR Geography at Standard Level OR Environmental Systems and Societies at Standard Level</li></ul>
+<p><strong>Requisitos de inglés:</strong> Certificado B2</p>
+<p><strong>Proceso de selección:</strong> Se lleva a cabo una entrevista</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 1 de mayo</div>
+<p>🔗 <a href="https://www.shanghairanking.com/institution/utrecht-university" target="_blank" rel="noopener">Ranking de Shanghái</a></p>
+    </div>
+  </details>
+</article>
+<div class="track-separator track-separator-applied">APPLIED SCIENCE UNIVERSITIES</div>
+<article class="uni-card" id="nl-vanhall-animals">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.vhluas.com/programmes/bachelor/animals-society-and-business/?gad_source=1&gad_campaignid=23077263044&gbraid=0AAAAAD3q-0ybNRrUa-OlFSfpRwFcsZdOt&gclid=Cj0KCQiAjJTKBhCjARIsAIMC448ilWWY2GmeYJO62vmreS2-UsPZPlDP1HV4YO5fuc6mnIK6U7Ya4hgaAkr6EALw_wcB" target="_blank" rel="noopener" class="card-title-link">BSc Animals, Society and Business <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">Van Hall Larenstein University of Applied Sciences — Velp</p>
+    </div>
+    <span class="badge-diff badge-diff-green">Admisión directa / dificultad media</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Velp (Países Bajos)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-vanhall-animals')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 ECTS)</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El BSc en Animals, Society and Business en Van Hall Larenstein University of Applied Sciences (ubicado en Velp, Países Bajos) es un grado internacional de 4 años (180 ECTS) impartido completamente en inglés que combina de forma equilibrada ciencias animales, aspectos empresariales y sociales relacionados con la ganadería y el manejo responsable de animales. El programa se centra en entender cómo funcionan los sistemas productivos de animales (como salud, nutrición, reproducción y bienestar) y al mismo tiempo aborda temas de negocio y sociedad como emprendimiento, marketing, gestión financiera y desarrollo sostenible dentro del sector animal.</p><p>Desde el primer año, los estudiantes reciben una base sólida en cuestiones biológicas y de manejo —como nutrición, reproducción y salud animal— y gradualmente incorporan competencias empresariales y de innovación que les permiten participar en proyectos reales, resolver casos prácticos junto a compañeros y profesionales, y aplicar sus conocimientos a desafíos del sector, ya sea en granjas, empresas o iniciativas sostenibles. El currículo incluye trabajos con clientes reales, prácticas (internships) tanto en los Países Bajos como en el extranjero, un minor para especializarse y un proyecto de graduación que integra teoría y práctica.</p><p>Al finalizar este grado, los titulados obtienen una formación versátil que los capacita para trabajar como asesores especializados, investigadores aplicados, gestores de empresas del sector animal, policymakers en bienestar animal, o incluso emprendedores que gestionen sus propios proyectos o negocios agrícolas. Las competencias adquiridas también permiten continuar estudios de máster o especializaciones relacionadas con ganadería sostenible, salud animal, gestión ambiental o políticas públicas en contextos nacionales e internacionales.</p>
+  </div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de IB</p>
+<p><strong>Requisitos de inglés:</strong> Certificado B2</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 1 de agosto</div>
+    </div>
+  </details>
+</article>
+
+<article class="uni-card" id="nl-han-lifescience-1">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.hanuniversity.com/en/programs/bachelor/life-sciences/fulltime/program/" target="_blank" rel="noopener" class="card-title-link">BSc Life Science <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">HAN University of Applied Sciences — Nijmegen</p>
+    </div>
+    <span class="badge-diff badge-diff-orange">Dificultad alta</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Nijmegen (189.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-han-lifescience-1')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 ECTS)</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El programa está diseñado para ofrecer una formación integral en ciencias de la vida (life sciences). El estudiante adquiere conocimientos fundamentales en biología molecular, microbiología, bioquímica, genética, inmunología, biotecnología y química, a la vez que trabaja intensivamente en el laboratorio, en proyectos reales y en equipo. Desde el primer año los cursos combinan teoría y práctica («lab skills», investigación, comunicación científica) y más adelante el alumnado elige especializaciones (por ejemplo, «Molecular Plant Biology», «Biomedical Research», “Biotechnology” o “Neuroimmunology”).</p><p>En cuanto al perfil de formación y metodología, este grado se caracteriza por su fuerte orientación aplicada: los estudiantes realizan prácticas profesionales (internship) y trabajos de graduación en empresas, institutos de investigación o hospitales. Además, las instalaciones de la universidad —como el HAN BioCentre— facilitan la vinculación con el mundo profesional y la investigación aplicada, lo que contribuye a que los titulados puedan intervenir desde el primer momento en entornos de trabajo relacionados con la ciencia de las vidas y la biotecnología.</p><p>Las salidas profesionales para los graduados de este grado son variadas y relevantes en un contexto internacional. Los titulados pueden trabajar como investigadores de laboratorio, técnicos en control de calidad, especialistas en biotecnología, profesionales en el sector alimentario, medioambiental o farmacéutico, o pueden continuar con estudios de máster o investigación avanzada. La formación práctica, el uso del inglés y la orientación a la industria convierten a este programa en una opción atractiva para estudiantes que buscan inserción laboral internacional y movilidad académica.</p>
+  </div>
+  <p class="uni-web-link">🔗 <a href="https://www.hanuniversity.com/en/" target="_blank" rel="noopener">Web de la universidad</a></p>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de IB</p>
+<ul class="req-list"><li>Matemáticas (obligatoria)</li><li>Química (obligatoria)</li><li>Biología (recomendada)</li></ul>
+<p><strong>Requisitos de inglés:</strong> Certificado B2</p>
+<p><strong>Proceso de selección:</strong> Se lleva a cabo una entrevista</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 15 agosto</div>
+    </div>
+  </details>
+</article>
+
+<article class="uni-card" id="nl-avans-envscience">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.avans.nl/international/studying/programmes/environmental-science-for-sustainability-ecosystems-and-technology/fulltime?gad_source=1&gad_campaignid=11670293686&gbraid=0AAAAADR6_sEfC3-KpPc4B13eJpeFhAZP-&gclid=Cj0KCQiAjJTKBhCjARIsAIMC44-z9cFGeYOA64674TSLbc3bcqyIBwl1lbnZ7Voc3A1EDwM6PfacuEkaAv5mEALw_wcB" target="_blank" rel="noopener" class="card-title-link">BSc Environmental Science for Sustainability, Ecosystems and Technology <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">Avans University of Applied Sciences — Breda</p>
+    </div>
+    <span class="badge-diff badge-diff-green">Admisión directa / dificultad media</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Breda (140.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-avans-envscience')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 ECTS)</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El BSc en Environmental Science for Sustainability, Ecosystems and Technology en Avans University of Applied Sciences (campus Breda, Países Bajos) es un grado internacional de 4 años (48 meses) impartido en inglés centrado en formar profesionales capaces de entender y solucionar los principales retos ambientales del siglo XXI combinando ciencias naturales, tecnología y gestión sostenible. El programa pone énfasis en un enfoque práctico y orientado a proyectos reales, donde aprenderás aplicando tus conocimientos a problemas como el cambio climático, la contaminación o la degradación de ecosistemas, y desarrollarás habilidades útiles tanto en campo como en laboratorio.</p><p>Desde el primer año, el currículo te permite elegir entre proyectos enfocados en biología y soluciones basadas en la naturaleza o en química y tecnologías innovadoras, y aproximadamente un 25 % del programa es elección libre, de modo que puedas personalizar tu trayectoria según tus intereses y fortalezas. A lo largo de la formación, realizarás trabajos para clientes reales, viajes de campo internacionales y dos periodos de prácticas profesionales, lo que te dota de experiencia directa en entornos laborales y mejora tu preparación profesional.</p><p>Estudiar este grado en Avans también significa integrarte en un entorno internacional con estudiantes y docentes de múltiples nacionalidades, favoreciendo la colaboración intercultural y una perspectiva global de los problemas ambientales. Al terminar, estarás preparado para desarrollar tu carrera en ámbitos como consultoría ambiental, políticas de sostenibilidad, gestión y licencia medioambiental, auditoría de ESG (Environment, Social & Governance), gestión de recursos naturales o roles técnicos en organizaciones públicas y privadas, o bien continuar con estudios de máster especializados.</p>
+  </div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de IB</p>
+<p><strong>Requisitos de inglés:</strong> Certificado B2</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 1 de mayo</div>
+    </div>
+  </details>
+</article>
+
+<article class="uni-card" id="nl-hague-europeanstudies">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.thuas.com/programmes/bachelors/european-studies-4-years" target="_blank" rel="noopener" class="card-title-link">European Studies <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">The Hague University of Applied Sciences — La Haya</p>
+    </div>
+    <span class="badge-diff badge-diff-green">Admisión directa / dificultad media</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">La Haya (550.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-hague-europeanstudies')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 créditos)</span></div>
+<div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.601 €</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El grado en European Studies en The Hague University of Applied Sciences está diseñado para formar profesionales capaces de resolver desafíos internacionales dentro del contexto europeo. Con un enfoque interdisciplinario, este programa combina aspectos de política, derecho, negocios, cultura y comunicación, proporcionando una formación integral para la toma de decisiones en entornos internacionales. El aprendizaje se basa en un enfoque práctico y orientado a la empleabilidad, con metodologías de enseñanza activas como estudios de caso, proyectos en equipo y simulaciones. Además, los estudiantes tienen acceso a oportunidades de prácticas profesionales en empresas e instituciones europeas, así como la posibilidad de realizar intercambios académicos en universidades asociadas. El programa se distingue por su enfoque multilingüe: los estudiantes deben estudiar al menos un idioma adicional (francés, alemán, español o neerlandés) para ampliar sus oportunidades en el mercado laboral. Asimismo, cuenta con acreditaciones de calidad y está alineado con las necesidades del sector público y privado en Europa.</p>
+  </div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de bachillerato + EVAU</p>
+<ul class="req-list"><li>TOEFL iBT: puntuación mínima de 20 por componente.</li><li>Cambridge English (FCE, CAE, CPE): mínimo 169 en cada parte (Reading, Use of English, Writing, Listening y Speaking). Se aceptan calificaciones A, B o C.</li><li>Pearson PTE Academic: mínimo 61 por habilidad.</li></ul>
+<p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+<p><strong>Consejos de la universidad para el acceso:</strong> Todos los estudiantes deben cursar francés, alemán o español; quienes ya hayan estudiado uno de estos idiomas en secundaria deben preferentemente continuar con él, ya que cursarlo a nivel avanzado permite alcanzar un nivel profesional, acceder a más opciones de intercambio y participar en proyectos especiales; el cambio a otro idioma está sujeto a disponibilidad en el nivel inicial, que es limitado.</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 1 de mayo</div>
+<p><strong>Áreas claves del programa:</strong></p>
+<ul class="req-list">
+<li>Política y gobernanza en la Unión Europea.</li>
+<li>Negocios y economía en el contexto europeo.</li>
+<li>Derecho internacional y regulaciones de la UE.</li>
+<li>Comunicación y diplomacia intercultural.</li>
+<li>Idiomas extranjeros (francés, alemán, español o neerlandés).</li>
+<li>Prácticas y experiencias en el extranjero.</li>
+</ul>
+    </div>
+  </details>
+</article>
+
+<article class="uni-card" id="nl-hague-ippl">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><span class="card-title-link">International Public Policy & Leadership</span></h3>
+      <p class="card-school">The Hague University of Applied Sciences — La Haya</p>
+    </div>
+    <span class="badge-diff badge-diff-orange">Dificultad alta</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">La Haya (550.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-hague-ippl')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 ECTS)</span></div>
+<div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.601 €</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El grado en International Public Policy and Leadership (IPPL), anteriormente conocido como International Public Management, está diseñado para formar líderes capaces de analizar y abordar los grandes desafíos globales desde una perspectiva práctica y estratégica. El enfoque del programa combina la formación en políticas públicas, relaciones internacionales, derecho, economía y gobernanza, con una metodología basada en proyectos reales, trabajo en grupo, visitas a instituciones y participación activa en iniciativas de impacto social. Su localización en La Haya, ciudad sede de múltiples organizaciones internacionales, ofrece a los estudiantes un contacto directo con ONGs, organismos gubernamentales, empresas internacionales y movimientos sociales. El grado destaca por su enfoque aplicado, su red de contactos en el ámbito político y diplomático, la alta tasa de empleabilidad y la posibilidad de prácticas relevantes desde los primeros años. Los estudiantes trabajan en el desarrollo de productos profesionales como informes de políticas, campañas de incidencia o documentales, y pueden participar en intercambios y programas conjuntos con otras universidades europeas. El profesorado combina experiencia académica con trayectoria en organismos internacionales, y el entorno multicultural favorece la creación de una red sólida para el futuro profesional.</p>
+  </div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de Bachillerato. Aunque no es obligatorio presentar la EBAU/EvAU/PAU, hacerlo se recomienda, ya que facilita la evaluación del expediente por parte de NUFFIC, el organismo neerlandés encargado de validar titulaciones internacionales.</p>
+<ul class="req-list"><li>TOEFL iBT: puntuación mínima total de 80.</li><li>Cambridge English (FCE, CAE o CPE): puntuación mínima total de 169 (Grade A, B o C).</li><li>IELTS Academic: puntuación mínima total de 6.0.</li><li>Pearson PTE Academic: puntuación mínima total de 61.</li></ul>
+<p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 1 de mayo</div>
+<p><strong>Áreas clave del programa:</strong></p>
+<ul class="req-list">
+<li>Política internacional y relaciones exteriores</li>
+<li>Derecho internacional y derechos humanos</li>
+<li>Elaboración y evaluación de políticas públicas</li>
+<li>Gestión de organizaciones internacionales</li>
+<li>Incidencia política y campañas sociales</li>
+<li>Negociación, mediación y resolución de conflictos</li>
+<li>Economía política global y análisis de datos</li>
+<li>Organización de eventos y conferencias</li>
+</ul>
+    </div>
+  </details>
+</article>
+
+<article class="uni-card" id="nl-han-lifescience-2">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.hanuniversity.com/en/programs/bachelor/life-sciences/fulltime/program/" target="_blank" rel="noopener" class="card-title-link">Life Science <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">HAN University of Applied Sciences — Nijmegen</p>
+    </div>
+    <span class="badge-diff badge-diff-orange">Dificultad alta</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Nijmegen (189.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-han-lifescience-2')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 ECTS)</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El programa está diseñado para ofrecer una formación integral en ciencias de la vida (life sciences). El estudiante adquiere conocimientos fundamentales en biología molecular, microbiología, bioquímica, genética, inmunología, biotecnología y química, a la vez que trabaja intensivamente en el laboratorio, en proyectos reales y en equipo. Desde el primer año los cursos combinan teoría y práctica («lab skills», investigación, comunicación científica) y más adelante el alumnado elige especializaciones (por ejemplo, «Molecular Plant Biology», «Biomedical Research», “Biotechnology” o “Neuroimmunology”).</p><p>En cuanto al perfil de formación y metodología, este grado se caracteriza por su fuerte orientación aplicada: los estudiantes realizan prácticas profesionales (internship) y trabajos de graduación en empresas, institutos de investigación o hospitales. Además, las instalaciones de la universidad —como el HAN BioCentre— facilitan la vinculación con el mundo profesional y la investigación aplicada, lo que contribuye a que los titulados puedan intervenir desde el primer momento en entornos de trabajo relacionados con la ciencia de las vidas y la biotecnología.</p><p>Las salidas profesionales para los graduados de este grado son variadas y relevantes en un contexto internacional. Los titulados pueden trabajar como investigadores de laboratorio, técnicos en control de calidad, especialistas en biotecnología, profesionales en el sector alimentario, medioambiental o farmacéutico, o pueden continuar con estudios de máster o investigación avanzada. La formación práctica, el uso del inglés y la orientación a la industria convierten a este programa en una opción atractiva para estudiantes que buscan inserción laboral internacional y movilidad académica.</p>
+  </div>
+  <p class="uni-web-link">🔗 <a href="https://www.hanuniversity.com/en/" target="_blank" rel="noopener">Web de la universidad</a></p>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+<ul class="req-list"><li>Matemáticas (obligatoria)</li><li>Química (obligatoria)</li><li>Biología (recomendada)</li></ul>
+<p><strong>Requisitos de inglés:</strong> Certificado B2</p>
+<p><strong>Proceso de selección:</strong> Se lleva a cabo una entrevista</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 15 agosto</div>
+    </div>
+  </details>
+</article>
+
+<article class="uni-card" id="nl-nhlstenden-iteps">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.nhlstenden.com/en/courses/international-teacher-education-for-primary-schools-iteps" target="_blank" rel="noopener" class="card-title-link">International Teacher Education for Primary Schools (ITEPS) <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">NHL Stenden University of Applied Sciences — Meppel</p>
+    </div>
+    <span class="badge-diff badge-diff-green">Admisión directa / dificultad media</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Meppel (34.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-nhlstenden-iteps')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 ECTS)</span></div>
+<div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.601 €</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El grado ITEPS prepara a futuros profesores de primaria para escuelas internacionales privadas en un contexto multicultural. Su enfoque es holístico, combinando contenidos académicos con el desarrollo emocional, social y ético del alumnado. A través del modelo de enseñanza Design-Based Education, los estudiantes resuelven retos reales del aula desde el primer curso y desarrollan competencias en pedagogía, inclusión, sostenibilidad y ciudadanía global. Las prácticas son parte central del plan de estudios desde el primer año. El programa está acreditado por IBEC (International Baccalaureate Educator Certificate), lo que facilita el acceso a escuelas IB. Además, incluye minors de especialización y estancias opcionales en países como Sudáfrica, Noruega, Tailandia o Bali.</p>
+  </div>
+  <p class="uni-web-link">🔗 <a href="https://www.nhlstenden.com/en" target="_blank" rel="noopener">Web de la universidad</a></p>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+<ul class="req-list"><li>TOEFL iBT nota mínima: 80 (solo Traditional o Paper Edition)</li><li>Cambridge FCE (B2) / CAE (C1) / CPE (C2) nota mínima: 169</li><li>IELTS nota mínima: 6.0 (mínimo recomendado por destreza: 5.0)</li><li>PTE Academic nota mínima: 61</li><li>LanguageCert Academic nota mínima: 65</li><li>TOEIC Listening and Reading nota mínima: 865; Speaking and Writing nota mínima: 335.</li></ul>
+<p><strong>Proceso de selección:</strong> Revisión por parte del Departamento de Admisiones de los requisitos académicos y lingüísticos</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 15 de agosto</div>
+<p><strong>Áreas clave del programa:</strong></p>
+<ul class="req-list">
+<li>Pedagogía, psicología del desarrollo y didáctica.</li>
+<li>Ciudadanía democrática e interculturalidad.</li>
+<li>Educación sostenible y global.</li>
+<li>Enseñanza del inglés como lengua internacional.</li>
+<li>Investigación educativa aplicada.</li>
+<li>Prácticas docentes en contextos internacionales.</li>
+</ul>
+<p><strong>Plan de estudios:</strong></p>
+<p><strong>Año 1 – Fundamentos pedagógicos y primera experiencia docente:</strong> Se trabajan las bases de la enseñanza y se realiza una primera práctica en una escuela internacional. Incluye proyecto grupal creativo (publicación de un cuento infantil).</p>
+<p><strong>Año 2 – Didáctica aplicada y sostenibilidad:</strong> Se integran herramientas didácticas con contenidos vinculados a los ODS. Se diseña y prueba un recurso educativo práctico en escuelas.</p>
+<p><strong>Año 3 – Minor internacional y práctica intensiva:</strong> Se cursa un minor de especialización en Países Bajos o en el extranjero. Práctica docente de 10 semanas con formación en investigación educativa.</p>
+<p><strong>Año 4 – Práctica autónoma y tesis:</strong> Se realiza una práctica intensiva de 9 a 12 semanas enseñando el 85–100% de las clases. Se finaliza con un bachelor thesis basado en metodología DBE.</p>
+<p><strong>Salidas profesionales:</strong></p>
+<ul class="req-list">
+<li>International Primary School Teacher.</li>
+<li>Educational Assistant.</li>
+<li>Special Education Teacher.</li>
+<li>Principal o Deputy Principal.</li>
+<li>Coordinador/a de programas educativos internacionales.</li>
+<li>Acceso a másteres especializados en educación internacional.</li>
+</ul>
+    </div>
+  </details>
+</article>
+
+<article class="uni-card" id="nl-nhlstenden-itess">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.nhlstenden.com/en/courses/itess-international-teacher-education-for-secondary-schools" target="_blank" rel="noopener" class="card-title-link">International Teacher Education for Secondary Schools (ITESS) <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">NHL Stenden University of Applied Sciences — Meppel</p>
+    </div>
+    <span class="badge-diff badge-diff-green">Admisión directa / dificultad media</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Holanda):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Meppel (34.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('holanda','nl-nhlstenden-itess')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 ECTS)</span></div>
+<div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.601 €</span></div>
+  </div>
+  <div class="desc-box">
+    <p>ITESS es un grado único en Europa que forma profesores internacionales de secundaria para contextos multiculturales. El programa combina teoría, práctica intensiva desde el primer año y Design-Based Education, una metodología centrada en proyectos reales del aula. El enfoque es holístico: se enseña a integrar el desarrollo académico, emocional, social y ético del alumnado. Además, el grado incluye estancias en el extranjero, minors de especialización, y está acreditado por el IBEC para enseñar en colegios IB.</p>
+  </div>
+  <p class="uni-web-link">🔗 <a href="https://www.nhlstenden.com/en" target="_blank" rel="noopener">Web de la universidad</a></p>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+<ul class="req-list"><li>TOEFL iBT nota mínima: 80 (solo versiones Traditional o Paper Edition).</li><li>Cambridge FCE (B2) / CAE (C1) / CPE (C2) nota mínima: 169.</li><li>IELTS nota mínima: 6.0 (mínimo recomendado: 5.0 por destreza).</li><li>PTE Academic nota mínima: 61.</li><li>LanguageCert Academic nota mínima: 65.</li><li>TOEIC Listening and Reading nota mínima: 865; Speaking and Writing nota mínima: 335.</li></ul>
+<p><strong>Proceso de selección:</strong> Revisión por parte del Departamento de Admisiones de los requisitos académicos y lingüísticos</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 15 de agosto</div>
+<p><strong>Especialidades del programa:</strong></p>
+<ul class="req-list">
+<li>Matemáticas</li>
+<li>Ciencias</li>
+<li>Inglés</li>
+<li>Ciencias Sociales: Historia</li>
+<li>Ciencias Sociales: Geografía</li>
+</ul>
+<p><strong>Plan de estudios:</strong></p>
+<p><strong>Año 1 – Introducción a la docencia internacional:</strong> Exploración del mundo educativo internacional, ciudadanía y estudios pedagógicos. Primera práctica docente de 3 semanas en un centro internacional cercano. Primer contacto con el currículo MYP del Bachillerato Internacional.</p>
+<p><strong>Año 2 – Didáctica avanzada y práctica internacional:</strong> Práctica docente de 8 semanas en una escuela internacional en el extranjero. Formación en investigación educativa aplicada y evaluación formativa.</p>
+<p><strong>Año 3 – Inclusión y minor en el extranjero:</strong> En el primer semestre se realiza otra práctica de 9 semanas. En el segundo, se cursa un minor (en Países Bajos o en destinos como Sudáfrica, Tailandia o a través de programas de intercambio).</p>
+<p><strong>Año 4 – Práctica final y tesis:</strong> Práctica de 11 semanas en la que se enseña de forma casi autónoma. Elaboración de una tesis de grado basada en investigación educativa. Defensa final mediante presentación y portafolio.</p>
+<p><strong>Salidas profesionales:</strong></p>
+<ul class="req-list">
+<li>Profesor en colegios internacionales.</li>
+<li>Profesor en programas bilingües.</li>
+<li>Coordinador/a de programas educativos.</li>
+<li>Consejero/a escolar o académico.</li>
+<li>Especialista en necesidades educativas especiales.</li>
+<li>Acceso a másteres internacionales en educación.</li>
+</ul>
+    </div>
+  </details>
+</article>
+
+    </div>
+    <div class="map-section" id="map-section-holanda">
+      <h3 class="map-title">Mapa de universidades — Holanda</h3>
+      <div id="map-holanda" class="leaflet-map"></div>
+    </div>
+    </section>
+<section class="tab-panel" id="tab-belgica">
+    <div class="country-intro">
+      <div class="country-intro-header">
+        <span class="flag flag-v flag-lg"><span class="stripe" style="background:#000000"></span><span class="stripe" style="background:#FFD90C"></span><span class="stripe" style="background:#EF3340"></span></span>
+        <h2>Bélgica</h2>
+      </div>
+      <div class="country-meta-row"><div class="country-meta-item"><span class="country-meta-label">Coste matrícula</span><span class="country-meta-value">1.180 €/año</span></div><div class="country-meta-item"><span class="country-meta-label">Alojamiento (media)</span><span class="country-meta-value">550€</span></div></div>
+      <p class="country-intro-text">Los estudiantes europeos tenemos los <strong>estudios</strong> parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <strong>1.180 €/año.</strong><br><br>El precio medio del <strong>alojamiento</strong> en Bélgica es de unos 550€.</p>
+    </div>
+    <div class="uni-cards">
+      
+<article class="uni-card" id="be-vub-socialsciences">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.vub.be/en/studying-vub/all-study-programmes-vub/bachelors-and-masters-programmes-vub/social-sciences-vrije-universiteit-brussel-vub" target="_blank" rel="noopener" class="card-title-link">Social Sciences <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">Vrije University Brussels (VUB) — Bruselas</p>
+    </div>
+    <span class="badge-diff badge-diff-orange">Dificultad alta</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Bélgica):</span>
+    <span class="badge-rank">5-6ª de Bélgica</span><span class="badge-rank">301-400 del mundo</span><span class="badge-rank badge-rank-gold">Ranking en Sociología (Shanghái)</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Bruselas (190.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('belgica','be-vub-socialsciences')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div>
+<div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">1.116 € + Tasa de solicitud de 90 €</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El Bachelor in Social Sciences de la Vrije Universiteit Brussel (VUB), en colaboración con la Universidad de Gante (UGent), es un programa innovador y único en Europa que combina tres disciplinas clave: Sociología, Ciencias Políticas y Comunicación. Su enfoque interdisciplinario permite a los estudiantes comprender las complejas dinámicas sociales a través de una metodología basada en la resolución de problemas y el análisis crítico. El programa se imparte en inglés y está diseñado para formar profesionales con una visión global, capacitados para desenvolverse en entornos internacionales, especialmente en el contexto europeo, dado que Bruselas es el epicentro político y social de la Unión Europea. Desde el primer año, los estudiantes adquieren herramientas metodológicas para investigar fenómenos sociales mediante técnicas cuantitativas y cualitativas. Se fomenta el aprendizaje activo a través de seminarios interactivos, estudios de caso y simulaciones que recrean situaciones del mundo real. La enseñanza combina teoría con práctica, permitiendo la participación en proyectos de investigación aplicada, estudios de campo y trabajos en colaboración con organismos internacionales, empresas de comunicación, ONG y organizaciones gubernamentales con sede en Bruselas.</p><p>El programa también ofrece oportunidades de intercambio internacional en universidades de Europa, América del Norte y Asia, a través de programas como Erasmus+ y acuerdos de movilidad global. En el último año, los estudiantes pueden realizar prácticas en instituciones de renombre como la Comisión Europea, el Parlamento Europeo, medios de comunicación internacionales y centros de investigación. Las instalaciones incluyen modernos laboratorios de datos sociales, bibliotecas digitales especializadas y acceso a bases de datos de organismos internacionales. Al finalizar el grado, los egresados poseen una sólida formación para incorporarse al mercado laboral o continuar con estudios de posgrado en universidades de prestigio mundial.</p>
+  </div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+<ul class="req-list"><li>TOEFL iBT nota mínima: 79.</li><li>Cambridge FCE (B2) / CAE (C1) / CPE (C2) nota mínima: 170.</li><li>IELTS Academic nota mínima: 6.5.</li></ul>
+<p><strong>Proceso de selección:</strong> Revisión y validación de la documentación académica y de competencia lingüística por parte del comité de admisiones de la universidad.</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 31 de julio</div>
+<p><strong>Áreas claves del programa:</strong></p>
+<ul class="req-list">
+<li>Enfoque interdisciplinario: integración de Sociología, Ciencias Políticas y Comunicación.</li>
+<li>Metodología basada en problemas: aprendizaje práctico con estudios de caso y simulaciones.</li>
+<li>Movilidad internacional: intercambios en universidades asociadas y oportunidades de prácticas en instituciones globales.</li>
+<li>Investigación aplicada: acceso a laboratorios de datos sociales y metodologías cuantitativas y cualitativas.</li>
+<li>Ubicación estratégica: en el corazón de Bruselas, con acceso a organismos internacionales y ONG.</li>
+<li>Colaboraciones con empresas y organismos: prácticas en instituciones europeas, medios de comunicación y consultoras.</li>
+<li>Opción de especialización en el tercer año en Sociología, Ciencias Políticas o Comunicación.</li>
+</ul>
+<p>🔗 <a href="https://www.shanghairanking.com/institution/vrije-universiteit-brussel-vub" target="_blank" rel="noopener">Ranking de Shangai</a></p>
+    </div>
+  </details>
+</article>
+
+    </div>
+    <div class="map-section" id="map-section-belgica">
+      <h3 class="map-title">Mapa de universidades — Bélgica</h3>
+      <div id="map-belgica" class="leaflet-map"></div>
+    </div>
+    </section>
+<section class="tab-panel" id="tab-austria">
+    <div class="country-intro">
+      <div class="country-intro-header">
+        <span class="flag flag-h flag-lg"><span class="stripe" style="background:#ED2939"></span><span class="stripe" style="background:#ffffff"></span><span class="stripe" style="background:#ED2939"></span></span>
+        <h2>Austria</h2>
+      </div>
+      <div class="country-meta-row"><div class="country-meta-item"><span class="country-meta-label">Coste matrícula</span><span class="country-meta-value">726 euros al año</span></div></div>
+      <p class="country-intro-text">En Austria, la educación universitaria está parcialmente subvencionada para los ciudadanos europeos. El coste de la universidad es de <strong>726 euros al año</strong>.</p>
+    </div>
+    <div class="uni-cards">
+      
+<article class="uni-card" id="at-imckrems-biotech">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.imc.ac.at/en/study/bachelor/science-technology/medical-and-pharmaceutical-biotechnology" target="_blank" rel="noopener" class="card-title-link">Medical and Pharmaceutical Biotechnology <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">IMC Krems University of Applied Sciences — Krems an der Donau</p>
+    </div>
+    <span class="badge-diff badge-diff-red">Dificultad muy alta</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Austria):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Krems an der Donau (25.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('austria','at-imckrems-biotech')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div>
+  </div>
+  <div class="desc-box">
+    <p>El grado en Medical and Pharmaceutical Biotechnology de IMC Krems University of Applied Sciences ofrece una formación moderna e internacional en el campo de las ciencias biomédicas y farmacéuticas, combinando biología, medicina y tecnología. Durante los tres años de duración (180 ECTS), el estudiante adquiere una base científica sólida en biología molecular, genética, microbiología, bioquímica, fisiología y farmacología. A medida que avanza el programa, se incorporan asignaturas más técnicas como ingeniería de bioprocesos, producción de medicamentos biotecnológicos (biopharmaceuticals), validación de procesos, control de calidad, regulaciones GMP y aspectos éticos y legales de la biotecnología médica.</p><p>Una de las características más destacadas del programa es su enfoque práctico e internacional. Los estudiantes trabajan desde el inicio en laboratorios equipados con tecnología avanzada y desarrollan proyectos en colaboración con empresas e institutos de investigación. En el último año, realizan un internado obligatorio de 20 semanas, que puede llevarse a cabo en Austria o en el extranjero, en instituciones del sector biomédico o farmacéutico. Además, el programa se imparte completamente en inglés, dentro de un entorno multicultural, lo que permite desarrollar una red internacional de contactos profesionales y académicos.</p><p>Las salidas profesionales son muy amplias y altamente demandadas en el mercado global. Los graduados pueden trabajar en la industria farmacéutica y biotecnológica, en áreas como desarrollo y producción de fármacos, control de calidad, validación de procesos, investigación biomédica, ensayos clínicos, o consultoría en biotecnología. También tienen la posibilidad de continuar su formación con un máster en Biotecnología Médica y Farmacéutica, en Austria o en otros países europeos. Este grado es ideal para estudiantes que buscan una carrera científica con proyección internacional, combinando investigación aplicada, innovación tecnológica y orientación al sector salud.</p>
+  </div>
+  <p class="uni-web-link">🔗 <a href="https://www.imc.ac.at/en/" target="_blank" rel="noopener">Web de la universidad</a></p>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+<ul class="req-list"><li>Biología (recomendado)</li><li>Química (recomendado)</li><li>Matemáticas (recomendado)</li></ul>
+<p><strong>Requisitos de inglés:</strong> Se valora durante la entrevista personal de admisión</p>
+<ul class="req-list"><li>Carta de motivación y ensayo: el candidato debe redactar ambos dentro de la solicitud online, eligiendo uno de los temas propuestos y aportando su propio punto de vista tras una breve investigación.</li><li>Entrevista de admisión: se basa en la carta y el ensayo, y permite al estudiante presentarse y debatir su motivación y argumentos con el responsable del programa.</li><li>Evaluación final: tras la entrevista, se valoran el contenido, la claridad en la expresión y la solidez de los argumentos utilizados en los tres componentes (carta, ensayo e entrevista).</li></ul>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 15 de abril</div>
+    </div>
+  </details>
+</article>
+
+    </div>
+    <div class="map-section" id="map-section-austria">
+      <h3 class="map-title">Mapa de universidades — Austria</h3>
+      <div id="map-austria" class="leaflet-map"></div>
+    </div>
+    </section>
+<section class="tab-panel" id="tab-alemania">
+    <div class="country-intro">
+      <div class="country-intro-header">
+        <span class="flag flag-h flag-lg"><span class="stripe" style="background:#000000"></span><span class="stripe" style="background:#DD0000"></span><span class="stripe" style="background:#FFCE00"></span></span>
+        <h2>Alemania</h2>
+      </div>
+      <div class="country-meta-row"><div class="country-meta-item"><span class="country-meta-label">Coste matrícula</span><span class="country-meta-value">unos 700 euros al año</span></div></div>
+      <p class="country-intro-text">En Alemania la educación es parcialmente subvencionados para los ciudadanos europeos. El coste de la universidad es de <strong>unos 700 euros al año</strong>.</p>
+    </div>
+    <div class="uni-cards">
+      
+<article class="uni-card" id="de-rhinewaal-bioengineering">
+  <div class="card-header">
+    <div class="card-header-main">
+      <h3 class="card-title"><a href="https://www.hochschule-rhein-waal.de/en/faculties/life-sciences/degree-programmes/bioengineering-bsc" target="_blank" rel="noopener" class="card-title-link">Bioengineering <span class="cursor-icon">🖱️</span></a></h3>
+      <p class="card-school">Rhine-Waal University of Applied Sciences — Kleve</p>
+    </div>
+    <span class="badge-diff badge-diff-green">Admisión directa / dificultad media</span>
+  </div>
+  <div class="card-ranking">
+    <span class="rank-minititle">Ranking de la universidad (Alemania):</span>
+    <span class="badge-rank badge-rank-muted">Las universidades de <em>Applied Sciences</em> no entran en los rankings internacionales por su metodología de estudio</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Kleve (50.000 habitantes)
+              <button class="map-btn" onclick="scrollToMap('alemania','de-rhinewaal-bioengineering')" type="button">🗺️ Ver mapa</button>
+            </span>
+        </div>
+<div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3,5 años (210 ECTS)</span></div>
+  </div>
+  <div class="desc-box">
+    <p>Este grado interdisciplinario combina ciencias naturales y tecnología de forma intensiva. Desde el primer semestre el currículo entrelaza biología, química, ingeniería y tecnología, enfocándose en tres grandes áreas: salud y medicina (“red”), agricultura (“green”) e industria (“white”). Los estudiantes tienen la opción de realizar asignaturas electivas que les permiten enfatizar según sus intereses, por ejemplo en biotecnología vegetal o industrial. El programa se imparte íntegramente en inglés, y se desarrolla en el campus de Kleve. Con una duración de 7 semestres, este B.Sc. ofrece un recorrido académico robusto que prepara a los estudiantes para afrontar tecnologías emergentes en el ámbito de la bioingeniería.</p><p>La metodología de estudio incluye trabajo en pequeños grupos y laboratorios modernos orientados tanto a la enseñanza como a la investigación. También se requiere completar una pasantía de 8 semanas antes del cuarto semestre, lo que asegura que los estudiantes adquieran experiencia práctica temprana en el campo. De esta manera, no solo se profundiza en los conceptos teóricos, sino que se facilita la transición hacia entornos reales de producción, innovación o investigación en biotecnología o ingeniería.</p><p>En cuanto a las salidas profesionales, los graduados están preparados para desempeñarse en sectores diversos como la industria química, farmacéutica, biotecnológica, alimentaria o del medio ambiente. Algunos pueden dedicarse a industrias de procesos, investigación y desarrollo de nuevos materiales o productos biológicos, análisis de datos biológicos o gestión de sistemas biotecnológicos. Gracias a la amplia formación técnica y científica, también están bien posicionados para continuar sus estudios con un máster o ingresar en la investigación aplicada.</p>
+  </div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p><strong>Requisitos académicos:</strong> Título de Bachillerato + EVAU</p>
+<p><strong>Requisitos de inglés:</strong> Certificado B2</p>
+<p>Todos los aplicantes tienen que aplicar a través de Uni-assist para establecer la equivalencia basándose en directrices oficiales de la Conferencia Permanente de Ministros de Educación y Asuntos Culturales (Kultusministerkonferenz), la Conferencia de Rectores de Alemania (Hochschulrectorenkonferenz) y la Oficina Central de Educación Extranjera (Zentralstelle für ausländisches Bildungswesen).</p>
+<div class="deadline-box">📅 <strong>Fecha límite para presentar la matrícula:</strong> 15 de julio</div>
+    </div>
+  </details>
+</article>
+
+    </div>
+    <div class="map-section" id="map-section-alemania">
+      <h3 class="map-title">Mapa de universidades — Alemania</h3>
+      <div id="map-alemania" class="leaflet-map"></div>
+    </div>
+    </section>
+
+
+</main>
+
+<footer class="site-footer">
+  <!-- PLACEHOLDER LOGO: el SVG real de Educoway no fue adjuntado en esta sesión.
+         Sustituir este bloque por el <svg>...</svg> original de Educoway.
+         Para la cabecera, cambiar fill:#737373 por fill:#ffffff en el <svg> real. -->
+    <svg class="educoway-logo educoway-logo-footer" viewBox="0 0 300 70" xmlns="http://www.w3.org/2000/svg" style="opacity:0.55" role="img" aria-label="Educoway">
+      <text x="0" y="42" font-family="'DM Sans', sans-serif" font-size="34" font-weight="700" fill="#737373">educo<tspan fill="#0a9baa">w</tspan>ay</text>
+      <text x="2" y="60" font-family="'DM Sans', sans-serif" font-size="10" letter-spacing="1.5" fill="#737373">ORIENTACIÓN UNIVERSITARIA EN EL EXTRANJERO</text>
+    </svg>
+  <p class="footer-tagline">Educoway — Orientación universitaria en el extranjero</p>
+</footer>
+
+<script>
+const mapData = {
+  "dinamarca": {
+    "center": [
+      55.6797,
+      11.0958
+    ],
+    "zoom": 12,
+    "universities": [
+      {
+        "id": "dk-absalon-biotech",
+        "name": "Engineering in Biotechnology",
+        "school": "Absalon University College",
+        "lat": 55.6797,
+        "lng": 11.0958,
+        "webUrl": "https://en.phabsalon.dk/full-degree/bachelor-engineering-biotechnology",
+        "mapsUrl": "https://www.google.com/maps?q=55.6797,11.0958"
+      }
+    ]
+  },
+  "holanda": {
+    "center": [
+      51.95,
+      5.3
+    ],
+    "zoom": 7,
+    "universities": [
+      {
+        "id": "nl-wageningen-envsci",
+        "name": "BSc Environmental Sciences",
+        "school": "Wageningen University and Research",
+        "lat": 51.9692,
+        "lng": 5.6656,
+        "webUrl": "https://www.wur.nl/en/education/bachelor/bachelors-environmental-sciences",
+        "mapsUrl": "https://www.google.com/maps?q=51.9692,5.6656"
+      },
+      {
+        "id": "nl-leiden-sustainable",
+        "name": "BSc Science for Sustainable Societies",
+        "school": "Leiden University",
+        "lat": 52.1601,
+        "lng": 4.497,
+        "webUrl": "https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/science-for-sustainable-societies",
+        "mapsUrl": "https://www.google.com/maps?q=52.1601,4.497"
+      },
+      {
+        "id": "nl-utrecht-sustainability",
+        "name": "BSc Global Sustainability Science",
+        "school": "Utrecht University",
+        "lat": 52.0907,
+        "lng": 5.1214,
+        "webUrl": "https://www.uu.nl/en/bachelors/global-sustainability-science",
+        "mapsUrl": "https://www.google.com/maps?q=52.0907,5.1214"
+      },
+      {
+        "id": "nl-vanhall-animals",
+        "name": "BSc Animals, Society and Business",
+        "school": "Van Hall Larenstein University of Applied Sciences",
+        "lat": 52.0055,
+        "lng": 5.9938,
+        "webUrl": "https://www.vhluas.com/programmes/bachelor/animals-society-and-business/?gad_source=1&gad_campaignid=23077263044&gbraid=0AAAAAD3q-0ybNRrUa-OlFSfpRwFcsZdOt&gclid=Cj0KCQiAjJTKBhCjARIsAIMC448ilWWY2GmeYJO62vmreS2-UsPZPlDP1HV4YO5fuc6mnIK6U7Ya4hgaAkr6EALw_wcB",
+        "mapsUrl": "https://www.google.com/maps?q=52.0055,5.9938"
+      },
+      {
+        "id": "nl-han-lifescience-1",
+        "name": "BSc Life Science",
+        "school": "HAN University of Applied Sciences",
+        "lat": 51.8126,
+        "lng": 5.8372,
+        "webUrl": "https://www.hanuniversity.com/en/programs/bachelor/life-sciences/fulltime/program/",
+        "mapsUrl": "https://www.google.com/maps?q=51.8126,5.8372"
+      },
+      {
+        "id": "nl-avans-envscience",
+        "name": "BSc Environmental Science for Sustainability, Ecosystems and Technology",
+        "school": "Avans University of Applied Sciences",
+        "lat": 51.5719,
+        "lng": 4.7683,
+        "webUrl": "https://www.avans.nl/international/studying/programmes/environmental-science-for-sustainability-ecosystems-and-technology/fulltime?gad_source=1&gad_campaignid=11670293686&gbraid=0AAAAADR6_sEfC3-KpPc4B13eJpeFhAZP-&gclid=Cj0KCQiAjJTKBhCjARIsAIMC44-z9cFGeYOA64674TSLbc3bcqyIBwl1lbnZ7Voc3A1EDwM6PfacuEkaAv5mEALw_wcB",
+        "mapsUrl": "https://www.google.com/maps?q=51.5719,4.7683"
+      },
+      {
+        "id": "nl-hague-europeanstudies",
+        "name": "European Studies",
+        "school": "The Hague University of Applied Sciences",
+        "lat": 52.0705,
+        "lng": 4.3007,
+        "webUrl": "https://www.thuas.com/programmes/bachelors/european-studies-4-years",
+        "mapsUrl": "https://www.google.com/maps?q=52.0705,4.3007"
+      },
+      {
+        "id": "nl-hague-ippl",
+        "name": "International Public Policy & Leadership",
+        "school": "The Hague University of Applied Sciences",
+        "lat": 52.068,
+        "lng": 4.305,
+        "webUrl": "",
+        "mapsUrl": "https://www.google.com/maps?q=52.068,4.305"
+      },
+      {
+        "id": "nl-han-lifescience-2",
+        "name": "Life Science",
+        "school": "HAN University of Applied Sciences",
+        "lat": 51.8136,
+        "lng": 5.8382,
+        "webUrl": "https://www.hanuniversity.com/en/programs/bachelor/life-sciences/fulltime/program/",
+        "mapsUrl": "https://www.google.com/maps?q=51.8136,5.8382"
+      },
+      {
+        "id": "nl-nhlstenden-iteps",
+        "name": "International Teacher Education for Primary Schools (ITEPS)",
+        "school": "NHL Stenden University of Applied Sciences",
+        "lat": 52.6958,
+        "lng": 6.1947,
+        "webUrl": "https://www.nhlstenden.com/en/courses/international-teacher-education-for-primary-schools-iteps",
+        "mapsUrl": "https://www.google.com/maps?q=52.6958,6.1947"
+      },
+      {
+        "id": "nl-nhlstenden-itess",
+        "name": "International Teacher Education for Secondary Schools (ITESS)",
+        "school": "NHL Stenden University of Applied Sciences",
+        "lat": 52.6968,
+        "lng": 6.1957,
+        "webUrl": "https://www.nhlstenden.com/en/courses/itess-international-teacher-education-for-secondary-schools",
+        "mapsUrl": "https://www.google.com/maps?q=52.6968,6.1957"
+      }
+    ]
+  },
+  "belgica": {
+    "center": [
+      50.8228,
+      4.3958
+    ],
+    "zoom": 12,
+    "universities": [
+      {
+        "id": "be-vub-socialsciences",
+        "name": "Social Sciences",
+        "school": "Vrije University Brussels (VUB)",
+        "lat": 50.8228,
+        "lng": 4.3958,
+        "webUrl": "https://www.vub.be/en/studying-vub/all-study-programmes-vub/bachelors-and-masters-programmes-vub/social-sciences-vrije-universiteit-brussel-vub",
+        "mapsUrl": "https://www.google.com/maps?q=50.8228,4.3958"
+      }
+    ]
+  },
+  "austria": {
+    "center": [
+      48.4103,
+      15.6081
+    ],
+    "zoom": 12,
+    "universities": [
+      {
+        "id": "at-imckrems-biotech",
+        "name": "Medical and Pharmaceutical Biotechnology",
+        "school": "IMC Krems University of Applied Sciences",
+        "lat": 48.4103,
+        "lng": 15.6081,
+        "webUrl": "https://www.imc.ac.at/en/study/bachelor/science-technology/medical-and-pharmaceutical-biotechnology",
+        "mapsUrl": "https://www.google.com/maps?q=48.4103,15.6081"
+      }
+    ]
+  },
+  "alemania": {
+    "center": [
+      51.7879,
+      6.1427
+    ],
+    "zoom": 12,
+    "universities": [
+      {
+        "id": "de-rhinewaal-bioengineering",
+        "name": "Bioengineering",
+        "school": "Rhine-Waal University of Applied Sciences",
+        "lat": 51.7879,
+        "lng": 6.1427,
+        "webUrl": "https://www.hochschule-rhein-waal.de/en/faculties/life-sciences/degree-programmes/bioengineering-bsc",
+        "mapsUrl": "https://www.google.com/maps?q=51.7879,6.1427"
+      }
+    ]
+  }
+};
+const mapsInitialized = {};
+const leafletMaps = {};
+
+function showTab(id, btn){
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('tab-' + id);
+  if(panel) panel.classList.add('active');
+  const navBtn = btn || document.getElementById('navbtn-' + id);
+  if(navBtn) navBtn.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(mapData[id] && !mapsInitialized[id]){
+    setTimeout(() => initMap(id), 120);
+  } else if(leafletMaps[id]){
+    setTimeout(() => leafletMaps[id].invalidateSize(), 150);
+  }
+}
+
+function goTo(tab, anchor){
+  showTab(tab);
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 220);
+}
+
+function scrollToCard(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function scrollToMap(tab, anchor){
+  const currentActive = document.querySelector('.tab-panel.active');
+  const alreadyOn = currentActive && currentActive.id === 'tab-' + tab;
+  if(!alreadyOn){
+    showTab(tab);
+  }
+  setTimeout(() => {
+    const mapEl = document.getElementById('map-section-' + tab);
+    if(mapEl) mapEl.scrollIntoView({behavior:'smooth', block:'start'});
+  }, alreadyOn ? 0 : 260);
+}
+
+function initMap(countryId){
+  if(mapsInitialized[countryId]) return;
+  const data = mapData[countryId];
+  if(!data) return;
+  const mapEl = document.getElementById('map-' + countryId);
+  if(!mapEl) return;
+  const map = L.map(mapEl).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  data.universities.forEach(u => {
+    const icon = L.divIcon({
+      className: 'map-emoji-icon-wrap',
+      html: '<div class="map-emoji-icon">\uD83C\uDF93</div>',
+      iconSize: [30,30],
+      iconAnchor: [15,28],
+      popupAnchor: [0,-26]
+    });
+    const marker = L.marker([u.lat, u.lng], {icon}).addTo(map);
+    const popupHtml = `
+      <div class="popup-content">
+        <p class="popup-degree">${u.name}</p>
+        <p class="popup-school">${u.school}</p>
+        <div class="popup-actions">
+          ${u.webUrl ? `<a href="${u.webUrl}" target="_blank" rel="noopener">Ver grado</a>` : ''}
+          <button onclick="scrollToCard('${u.id}')">Ver ficha</button>
+          <a href="${u.mapsUrl}" target="_blank" rel="noopener">Google Maps</a>
+        </div>
+      </div>`;
+    marker.bindPopup(popupHtml);
+  });
+
+  leafletMaps[countryId] = map;
+  mapsInitialized[countryId] = true;
+  setTimeout(() => map.invalidateSize(), 100);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if(mapData['dinamarca'] === undefined){ /* noop */ }
+});
+</script>
+</body>
+</html>
