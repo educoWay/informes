@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Personalizado de Opciones de Grado - Margary Cueva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<style>
+:root{--teal:#0a9baa;--teal-dark:#077a87;--teal-light:#e0f5f7;--navy:#0d2b3e;--bg:#f4f8fa;--border:#c8e0e5;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'DM Sans',sans-serif;font-size:16px;background:var(--bg);color:var(--navy);line-height:1.6;}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;}
+a{color:var(--teal-dark);}
+header{position:sticky;top:0;z-index:1000;background:linear-gradient(135deg,var(--teal-dark),var(--teal));color:#fff;padding:18px 24px 0 24px;box-shadow:0 2px 10px rgba(0,0,0,0.15);}
+.header-top{display:flex;align-items:center;gap:24px;flex-wrap:wrap;max-width:1200px;margin:0 auto;}
+.header-logo svg{height:48px;width:auto;display:block;}
+.header-titles{flex:1;min-width:200px;}
+.header-titles h1{margin:0;font-size:1.6rem;font-weight:600;letter-spacing:0.5px;}
+.header-titles .subtitle{font-family:'DM Sans',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;opacity:0.85;margin-top:4px;}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;max-width:1200px;margin:14px auto 0 auto;padding-bottom:12px;overflow-x:auto;}
+.tab-btn{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:8px 16px;border-radius:8px 8px 0 0;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;display:flex;align-items:center;gap:8px;transition:all 0.2s ease;white-space:nowrap;}
+.tab-btn:hover{background:rgba(255,255,255,0.25);}
+.tab-btn.active{background:#fff;color:var(--teal-dark);border-color:#fff;}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 80px 24px;}
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.intro-text p{margin:0 0 16px 0;font-size:16px;}
+.index-section h2{color:var(--teal-dark);border-bottom:2px solid var(--border);padding-bottom:8px;margin-top:40px;}
+.index-country-block{margin-bottom:28px;}
+.index-country-title{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:var(--navy);margin-bottom:12px;}
+.index-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;}
+.index-item{display:block;text-decoration:none;color:var(--navy);background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 14px;transition:all 0.2s ease;}
+.index-item:hover{border-color:var(--teal);box-shadow:0 4px 14px rgba(10,155,170,0.15);transform:translateY(-2px);}
+.index-item .degree-name{font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:400;color:var(--navy);display:block;}
+.index-item .university-name{font-family:'Playfair Display',serif;font-size:11.5px;font-style:italic;color:#8a9aa3;display:block;margin-top:2px;}
+.action-block{margin-top:48px;background:#fff;border:2px solid var(--border);border-left:6px solid var(--teal);border-radius:12px;padding:24px;}
+.action-block h2{margin-top:0;color:var(--teal-dark);}
+.rva-content h2{color:var(--teal-dark);border-bottom:2px solid var(--border);padding-bottom:10px;}
+.rva-content h3{color:var(--navy);margin-top:28px;}
+.country-intro{display:flex;flex-wrap:wrap;gap:24px;align-items:center;background:#fff;border:2px solid var(--border);border-radius:12px;padding:24px;margin-bottom:28px;}
+.country-intro-text{flex:1;min-width:240px;}
+.country-intro-text h2{margin:0 0 6px 0;font-size:2rem;color:var(--navy);}
+.country-meta{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 16px 0;}
+.meta-pill{background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark);border-radius:20px;padding:6px 14px;font-size:0.85rem;font-weight:700;}
+.section-separator{background:var(--navy);color:#fff;text-align:center;padding:10px 16px;border-radius:8px;font-family:'Playfair Display',serif;font-weight:600;letter-spacing:2px;font-size:1rem;margin:32px 0 20px 0;text-transform:uppercase;}
+.info-box{background:#fff8e1;border:1px solid #f0c040;border-left:5px solid #f0a000;border-radius:10px;padding:18px 20px;margin-bottom:24px;}
+.info-box p{margin:0 0 10px 0;}
+.info-box p:last-child{margin-bottom:0;}
+.uni-card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px;margin-bottom:24px;transition:all 0.25s ease;}
+.uni-card:hover{border-color:var(--teal);box-shadow:0 8px 24px rgba(10,155,170,0.18);}
+.uni-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+.uni-card-title-block{flex:1;min-width:240px;}
+.uni-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;text-decoration:none;color:var(--navy);display:inline-flex;align-items:center;gap:10px;transition:color 0.2s ease;}
+.uni-title:hover{color:var(--teal-dark);}
+.icon-cursor{display:inline-block;transition:transform 0.2s ease;font-size:1.1rem;}
+.uni-title:hover .icon-cursor{transform:scale(1.3);}
+.uni-school{color:var(--teal-dark);font-weight:700;margin-top:4px;font-size:1rem;}
+.difficulty-badge{border-radius:8px;padding:6px 14px;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;border:2px solid;flex-shrink:0;}
+.difficulty-badge.media{background:#eafaf1;color:#1e8449;border-color:#1e8449;}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0;}
+.meta-cell{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+.meta-cell .meta-label{font-size:0.75rem;color:#8a9aa3;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}
+.meta-cell .meta-value{font-weight:700;color:var(--navy);font-size:0.95rem;}
+.map-btn{display:inline-block;margin-top:6px;background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark);border-radius:6px;padding:3px 10px;font-size:0.75rem;font-weight:700;cursor:pointer;text-decoration:none;}
+.map-btn:hover{background:var(--teal);color:#fff;}
+.desc-box{background:#eef7fa;border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:16px 18px;margin:16px 0;font-size:0.97rem;}
+.desc-box p{margin:0 0 10px 0;}
+.desc-box p:last-child{margin-bottom:0;}
+.salidas{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin:10px 0;font-size:0.9rem;}
+.salidas strong{color:var(--teal-dark);display:block;margin-bottom:6px;}
+.salidas ul{margin:0;padding-left:20px;}
+.salidas li{margin-bottom:3px;}
+details{margin-top:14px;border:1px solid var(--border);border-radius:8px;background:var(--bg);overflow:hidden;}
+details summary{cursor:pointer;padding:12px 16px;font-weight:700;color:var(--teal-dark);list-style:none;display:flex;align-items:center;gap:8px;}
+details summary::-webkit-details-marker{display:none;}
+details summary::before{content:"▶";font-size:0.7rem;transition:transform 0.2s ease;}
+details[open] summary::before{transform:rotate(90deg);}
+.details-content{padding:4px 16px 16px 16px;}
+.details-content h4{margin:14px 0 6px 0;color:var(--navy);font-size:1rem;font-family:'DM Sans',sans-serif;font-weight:700;}
+.map-section{margin-top:36px;}
+.map-section h3{color:var(--navy);margin-bottom:12px;}
+.map-container{height:420px;border-radius:12px;border:2px solid var(--border);overflow:hidden;}
+.popup-content{font-family:'DM Sans',sans-serif;}
+.popup-content strong{display:block;font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:4px;}
+.popup-content .popup-school{color:var(--teal-dark);font-size:0.85rem;margin-bottom:8px;}
+.popup-buttons{display:flex;flex-direction:column;gap:6px;}
+.popup-buttons a,.popup-buttons button{display:block;text-align:center;text-decoration:none;background:var(--teal);color:#fff;border:none;border-radius:6px;padding:6px 10px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.popup-buttons a:hover,.popup-buttons button:hover{background:var(--teal-dark);}
+.flag{display:inline-block;position:relative;border:1px solid rgba(0,0,0,0.1);overflow:hidden;flex-shrink:0;}
+.flag-sm{width:28px;height:20px;}
+.flag-lg{width:96px;height:64px;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
+.flag-nl{display:flex;flex-direction:column;}
+.flag-nl span{flex:1;display:block;}
+.flag-nl span.r1{background:#ae1c28;}
+.flag-nl span.r2{background:#fff;}
+.flag-nl span.r3{background:#21468b;}
+.flag-es{display:flex;flex-direction:column;}
+.flag-es span{flex:1;display:block;}
+.flag-es span.r1{background:#c60b1e;}
+.flag-es span.r2{background:#ffc400;flex:2;}
+.flag-es span.r3{background:#c60b1e;}
+.flag-uk{background:#012169;position:relative;}
+.flag-uk::before{content:'';position:absolute;inset:0;background:
+  linear-gradient(to bottom right,transparent calc(50% - 3px),#fff calc(50% - 3px),#fff calc(50% + 3px),transparent calc(50% + 3px)),
+  linear-gradient(to bottom left,transparent calc(50% - 3px),#fff calc(50% - 3px),#fff calc(50% + 3px),transparent calc(50% + 3px));}
+.flag-uk::after{content:'';position:absolute;inset:0;background:
+  linear-gradient(to bottom,transparent 40%,#c8102e 40%,#c8102e 60%,transparent 60%),
+  linear-gradient(to right,transparent 40%,#c8102e 40%,#c8102e 60%,transparent 60%);}
+.flag-de{display:flex;flex-direction:column;}
+.flag-de span{flex:1;display:block;}
+.flag-de span.r1{background:#000;}
+.flag-de span.r2{background:#dd0000;}
+.flag-de span.r3{background:#ffce00;}
+footer{background:var(--navy);color:#cfe6ea;padding:36px 24px;text-align:center;}
+footer .footer-logo svg{height:40px;width:auto;opacity:0.55;margin-bottom:12px;}
+footer p{font-size:0.85rem;margin:4px 0;opacity:0.8;}
+.hlw{fill:#ffffff !important;}
+@media (max-width:640px){.header-titles h1{font-size:1.2rem;}.country-intro{padding:16px;}.country-intro-text h2{font-size:1.5rem;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="header-logo"><svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #36aadc;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        opacity: .8;
+      }
+
+      .cls-2 {
+        fill: #30ac71;
+      }
+
+      .cls-5 {
+        fill: #737373;
+      }
+
+      .cls-3 {
+        fill: #32abbb;
+      }
+
+      .cls-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="Capa_3" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="hlw" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="hlw" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hlw" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="hlw" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="hlw" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hlw" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hlw" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="hlw" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hlw" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="hlw" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="hlw" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="hlw" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="hlw" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="hlw" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hlw" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="hlw" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="hlw" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="hlw" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="hlw" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="hlw" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hlw" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hlw" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="hlw" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="hlw" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="hlw" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="hlw" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hlw" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="hlw" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="hlw" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="hlw" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hlw" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hlw" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hlw" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="hlw" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="hlw" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="hlw" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="hlw" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="hlw" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hlw" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hlw" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hlw" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="hlw" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="hlw" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hlw" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hlw" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="hlw" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="hlw" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="hlw" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="hlw" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="hlw" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="hlw" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="hlw" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+    <div class="header-titles">
+      <h1>Informe Personalizado de Opciones de Grado</h1>
+      <div class="subtitle">Preparado para Margary Cueva</div>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="showTab('intro',this)">Introducción</button>
+    <button class="tab-btn" onclick="showTab('rva',this)">Research vs Applied Sciences</button>
+    <button class="tab-btn" onclick="showTab('holanda',this)">
+      <span class="flag flag-sm flag-nl"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+      Holanda
+    </button>
+    <button class="tab-btn" onclick="showTab('espana',this)">
+      <span class="flag flag-sm flag-es"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+      España
+    </button>
+    <button class="tab-btn" onclick="showTab('reinounido',this)">
+      <span class="flag flag-sm flag-uk"></span>
+      Reino Unido
+    </button>
+    <button class="tab-btn" onclick="showTab('alemania',this)">
+      <span class="flag flag-sm flag-de"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+      Alemania
+    </button>
+  </nav>
+</header>
+
+<main>
+
+<!-- INTRO -->
+<div id="tab-intro" class="tab-content active">
+  <div class="intro-text">
+    <p>Hola, Margary:</p>
+    <p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencido que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+    <p>Estos días he estado trabajando en la búsqueda de grados en Psicología y afines que, según lo que hemos hablado, más podrían interesarte.</p>
+    <p>Te dejo primero una propuesta más definida según nuestra reunión previa y los datos recogidos desde entonces, de un posible plan de matrículas que quería proponerte:</p>
+    <p>Ahora te dejo el índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p>
+  </div>
+
+  <div class="index-section">
+    <h2>Índice de opciones</h2>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-nl"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+        Holanda
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('holanda','card-webster');return false;"><span class="degree-name">Bachelor in Psychology</span><span class="university-name">Webster University Leiden Campus</span></a></li>
+        <li><a class="index-item" href="#" onclick="goTo('holanda','card-srh-haarlem');return false;"><span class="degree-name">Bachelor in Business Psychology</span><span class="university-name">SRH Haarlem University of Applied Sciences</span></a></li>
+        <li><a class="index-item" href="#" onclick="goTo('holanda','card-nhl-hrm');return false;"><span class="degree-name">Bachelor in International Human Resource Management</span><span class="university-name">NHL Stenden University of Applied Sciences</span></a></li>
+      </ul>
+    </div>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-es"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+        España
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('espana','card-ue');return false;"><span class="degree-name">Grado en Psicología</span><span class="university-name">Universidad Europea (Valencia / Málaga / Madrid)</span></a></li>
+        <li><a class="index-item" href="#" onclick="goTo('espana','card-ucam');return false;"><span class="degree-name">Grado en Psicología</span><span class="university-name">UCAM (Universidad Católica San Antonio de Murcia)</span></a></li>
+      </ul>
+    </div>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-uk"></span>
+        Reino Unido
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('reinounido','card-portsmouth');return false;"><span class="degree-name">Bachelor in Sociology with Psychology</span><span class="university-name">University of Portsmouth</span></a></li>
+        <li><a class="index-item" href="#" onclick="goTo('reinounido','card-westminster');return false;"><span class="degree-name">Bachelor in Psychology</span><span class="university-name">University of Westminster</span></a></li>
+        <li><a class="index-item" href="#" onclick="goTo('reinounido','card-swansea');return false;"><span class="degree-name">Bachelor in Psychology</span><span class="university-name">Swansea University</span></a></li>
+      </ul>
+    </div>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-de"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+        Alemania
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('alemania','card-karlshochschule');return false;"><span class="degree-name">Bachelor in Business Psychology</span><span class="university-name">Karlshochschule University of Applied Sciences</span></a></li>
+        <li><a class="index-item" href="#" onclick="goTo('alemania','card-macromedia-clinical');return false;"><span class="degree-name">Bachelor in Clinical Psychology</span><span class="university-name">Macromedia University of Applied Sciences</span></a></li>
+        <li><a class="index-item" href="#" onclick="goTo('alemania','card-macromedia-psych');return false;"><span class="degree-name">Bachelor in Psychology</span><span class="university-name">Macromedia University of Applied Sciences</span></a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="action-block">
+    <h2>¿Qué tienes que hacer ahora?</h2>
+    <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+    <p>¡Un saludo!</p>
+  </div>
+</div>
+
+<!-- RESEARCH VS APPLIED SCIENCES -->
+<div id="tab-rva" class="tab-content rva-content">
+  <h2>Universidades "Research" vs "Applied Sciences"</h2>
+  <p>En la mayoría de países europeos tenemos que diferenciar entre <a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank">2 tipos de universidades</a>: "Research" y "Applied Sciences". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+
+  <h3>Metodología teórica y práctica</h3>
+  <p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project/Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+
+  <h3>Duración</h3>
+  <p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+  <p>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+
+  <h3>Ranking / Prestigio</h3>
+  <p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.</p>
+  <p>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+
+  <h3>Acceso a Másteres</h3>
+  <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. En cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research</em>, te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p>
+
+  <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de <em>Research</em> y otra de <em>Applied Sciences</em>):</p>
+  <ul>
+    <li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank">Applied Science vs. Research University</a></li>
+    <li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank">Types of universities in the Netherlands</a></li>
+  </ul>
+  <p>Ahora sí, habiendo comentado estos detalles, vamos a ver las opciones de cada país.</p>
+</div>
+
+<!-- HOLANDA -->
+<div id="tab-holanda" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-nl"><span class="r1"></span><span class="r2"></span><span class="r3"></span></div>
+    <div class="country-intro-text">
+      <h2>Holanda</h2>
+      <div class="country-meta"><span class="meta-pill">Coste subvencionado: desde 2.692€/año</span></div>
+      <p>Tres opciones en Holanda que combinan psicología, empresa y recursos humanos desde diferentes enfoques.</p>
+    </div>
+  </div>
+  
+<div class="uni-card" id="card-webster">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.webster.nl/academics/ba-psychology.php" target="_blank">Bachelor in Psychology <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">Webster University Leiden Campus · Leiden</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Leiden <a class="map-btn" href="#" onclick="scrollToMap('holanda','map-holanda');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años (240 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">17.500€/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El <strong>Bachelor of Arts in Psychology</strong> de Webster University ofrece una formación amplia sobre el comportamiento humano desde una perspectiva científica, social y multicultural. A lo largo del programa, los estudiantes exploran las principales áreas de la psicología, incluyendo la psicología cognitiva, del desarrollo, social, biológica, clínica y de la personalidad, desarrollando una sólida capacidad para analizar e interpretar la conducta humana en diferentes contextos.</p>
+<p>El grado destaca por su enfoque internacional y por fomentar el pensamiento crítico, la investigación y la aplicación práctica de los conocimientos psicológicos. Los estudiantes aprenden a diseñar y analizar investigaciones, interpretar datos, comunicar resultados de forma profesional y comprender cómo factores como la diversidad, la cultura o el entorno influyen en el comportamiento de las personas. Además, pueden personalizar parte de su formación mediante asignaturas optativas o elegir la especialización en <strong>Mental Health</strong>, orientada a quienes deseen profundizar en el ámbito de la salud mental.</p>
+<p>Gracias a esta formación versátil, los graduados adquieren competencias muy valoradas tanto en el ámbito empresarial como en el educativo, social o de la investigación. Asimismo, el programa constituye una excelente base para acceder a estudios de máster y especializarse posteriormente en áreas como la psicología clínica, organizacional, educativa, experimental o la neurociencia.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Técnico de Recursos Humanos.</li><li>Especialista en selección y desarrollo del talento.</li><li>Investigador o asistente de investigación en psicología.</li><li>Orientador educativo o académico.</li><li>Profesional en servicios sociales y comunitarios.</li><li>Técnico en programas de bienestar y salud mental.</li><li>Analista de comportamiento del consumidor.</li><li>Consultor en desarrollo organizacional.</li><li>Formador en empresas e instituciones.</li><li>Continuación hacia estudios de máster en Psicología, Neurociencia, Educación, Recursos Humanos o áreas relacionadas.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>Por confirmar</p>
+      
+    </div>
+  </details>
+</div>
+<div class="uni-card" id="card-srh-haarlem">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.srh-haarlem-campus.com/bachelor/business-psychology/?" target="_blank">Bachelor in Business Psychology <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">SRH Haarlem University of Applied Sciences · Haarlem</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Haarlem <a class="map-btn" href="#" onclick="scrollToMap('holanda','map-holanda');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años (240 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">9.500€/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El Grado en <strong>Business Psychology</strong> de SRH Haarlem University of Applied Sciences combina la psicología y la gestión empresarial para formar profesionales capaces de comprender cómo las personas influyen en el éxito de las organizaciones. A lo largo del programa, los estudiantes adquieren conocimientos sobre comportamiento organizacional, psicología cognitiva, social y de la personalidad, al tiempo que desarrollan competencias en liderazgo, recursos humanos, marketing, emprendimiento y gestión empresarial.</p>
+<p>El grado destaca por su metodología de aprendizaje basada en proyectos y en la resolución de retos reales. Durante los cuatro años de formación, los estudiantes trabajan en equipos internacionales, desarrollan habilidades de investigación y análisis de datos, y profundizan en áreas como la gestión del cambio, el comportamiento del consumidor, la selección de personal y el desarrollo organizacional. Además, el último curso incluye un semestre de intercambio o asignaturas optativas, unas prácticas profesionales y un proyecto de investigación aplicado.</p>
+<p>Gracias a su enfoque internacional e interdisciplinar, los graduados están preparados para afrontar los desafíos relacionados con la gestión del talento, la transformación de las organizaciones y la experiencia del cliente. La combinación de conocimientos psicológicos y empresariales permite desarrollar una visión estratégica centrada en las personas, muy demandada por empresas, consultoras y organizaciones de todo el mundo.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Especialista en Recursos Humanos.</li><li>Técnico de selección y reclutamiento.</li><li>Consultor de desarrollo organizacional.</li><li>Especialista en gestión del cambio.</li><li>Business Coach.</li><li>Consultor de liderazgo y desarrollo de equipos.</li><li>Analista de comportamiento del consumidor.</li><li>Especialista en marketing e investigación de mercados.</li><li>Consultor en diversidad e inclusión.</li><li>Continuación hacia estudios de máster en Psicología Organizacional, Recursos Humanos, Dirección de Empresas o Marketing.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>IELTS Academic: 6.0 (all bands ≥6.0) / Cambridge English scale: 169–175</p>
+      
+    </div>
+  </details>
+</div>
+<div class="uni-card" id="card-nhl-hrm">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.nhlstenden.com/en/courses/international-human-resource-management?" target="_blank">Bachelor in International Human Resource Management <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">NHL Stenden University of Applied Sciences · Leeuwarden</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Leeuwarden <a class="map-btn" href="#" onclick="scrollToMap('holanda','map-holanda');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años (240 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">2.692€/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de agosto</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El Grado en <strong>International Human Resource Management</strong> de NHL Stenden University of Applied Sciences forma profesionales capaces de gestionar el talento en un entorno empresarial global, combinando los conocimientos propios de los recursos humanos con la psicología, la ética y la estrategia empresarial. El programa pone un especial énfasis en comprender el comportamiento humano dentro de las organizaciones y en crear entornos de trabajo que favorezcan el bienestar, la inclusión y el desarrollo de las personas, sin perder de vista los objetivos de negocio.</p>
+<p>La metodología de aprendizaje es eminentemente práctica y se basa en el modelo <strong>Design-Based Education</strong>, donde los estudiantes trabajan en pequeños equipos para resolver retos reales planteados por empresas internacionales. A lo largo de los cuatro años del grado desarrollan competencias en liderazgo, gestión del cambio, selección y desarrollo del talento, diversidad e inclusión, salud mental en el trabajo y comportamiento organizacional. Además, el programa incluye una experiencia internacional obligatoria de al menos cinco meses, ya sea mediante prácticas, intercambio o estudios en el extranjero.</p>
+<p>Gracias a este enfoque internacional e interdisciplinar, los graduados adquieren un perfil muy demandado por empresas multinacionales y consultoras. La formación les prepara para diseñar estrategias de gestión del talento, impulsar la transformación de las organizaciones y liderar equipos en contextos multiculturales, además de ofrecer una excelente base para continuar con estudios de máster en recursos humanos, dirección de empresas o psicología organizacional.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Human Resources Specialist.</li><li>Talent Acquisition Specialist.</li><li>HR Business Partner.</li><li>Consultor de Recursos Humanos.</li><li>Especialista en aprendizaje y desarrollo (Learning &amp; Development).</li><li>Consultor en gestión del cambio.</li><li>Especialista en diversidad, equidad e inclusión (DE&amp;I).</li><li>Responsable de desarrollo organizacional.</li><li>Responsable de employer branding y experiencia del empleado.</li><li>Continuación hacia estudios de máster en Recursos Humanos, Psicología Organizacional, Dirección de Empresas o áreas relacionadas.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>IELTS Academic: 6.0 (all bands ≥6.0) / Cambridge English scale: 169–175</p>
+      
+    </div>
+  </details>
+</div>
+  <div class="map-section" id="map-holanda">
+    <h3>Mapa de universidades en Holanda</h3>
+    <div id="leaflet-holanda" class="map-container"></div>
+  </div>
+</div>
+
+<!-- ESPAÑA -->
+<div id="tab-espana" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-es"><span class="r1"></span><span class="r2"></span><span class="r3"></span></div>
+    <div class="country-intro-text">
+      <h2>España</h2>
+      <div class="country-meta"><span class="meta-pill">Desde 7.950€/año</span></div>
+      <p>Dos opciones de grado en Psicología impartido en inglés en universidades privadas españolas, con posibilidad de acceder posteriormente al Máster en Psicología General Sanitaria.</p>
+    </div>
+  </div>
+  
+<div class="uni-card" id="card-ue">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://universidadeuropea.com/grado-psicologia-valencia/" target="_blank">Grado en Psicología <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">Universidad Europea · Valencia / Málaga / Madrid</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Valencia / Málaga / Madrid <a class="map-btn" href="#" onclick="scrollToMap('espana','map-espana');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años (240 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">10.960€/año (Madrid y Málaga) · 9.400€/año (Valencia)</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El <strong>Grado en Psicología</strong> de la Universidad Europea de Valencia ofrece una formación integral para comprender, evaluar e intervenir sobre el comportamiento humano, las emociones y los procesos mentales desde una perspectiva científica y basada en la evidencia. A lo largo de los cuatro años del programa, los estudiantes adquieren conocimientos en áreas como psicología clínica, social, educativa, del desarrollo, neuropsicología y metodología de la investigación, preparándose para responder a las necesidades actuales en el ámbito de la salud mental y el bienestar.</p>
+<p>Uno de los puntos fuertes del grado es su enfoque experiencial, basado en el aprendizaje mediante casos reales y simulaciones profesionales. Las prácticas externas comienzan en tercer curso y se desarrollan en hospitales, clínicas, centros sanitarios y entidades especializadas con las que la universidad mantiene convenios. Además, los estudiantes pueden cursar la <strong>mención en Psicología Legal y Forense</strong>, ampliando sus oportunidades de especialización en un ámbito con creciente demanda profesional.</p>
+<p>El plan de estudios está diseñado para proporcionar una sólida base tanto para el ejercicio profesional en distintos ámbitos de la psicología como para continuar la formación de posgrado. El grado cumple con los requisitos académicos que permiten acceder al <strong>Máster Universitario en Psicología General Sanitaria</strong>, imprescindible para ejercer como Psicólogo General Sanitario en España, además de facilitar el acceso a otras especializaciones e itinerarios de investigación.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Psicólogo General Sanitario (tras cursar el Máster habilitante).</li><li>Psicólogo Clínico (vía PIR).</li><li>Psicólogo educativo.</li><li>Psicólogo de Recursos Humanos.</li><li>Psicólogo de organizaciones.</li><li>Psicólogo jurídico y forense.</li><li>Psicólogo de intervención social.</li><li>Neuropsicólogo (previa especialización).</li><li>Investigador en Psicología.</li><li>Continuación hacia estudios de máster y doctorado en las diferentes ramas de la Psicología.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>No especificada</p>
+      
+    </div>
+  </details>
+</div>
+<div class="uni-card" id="card-ucam">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.ucam.edu/estudios/grados/psicologia-presencial" target="_blank">Grado en Psicología <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">UCAM (Universidad Católica San Antonio de Murcia) · Murcia</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Murcia <a class="map-btn" href="#" onclick="scrollToMap('espana','map-espana');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años (240 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">7.950€/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El <strong>Bachelor's Degree in Psychology</strong> de la UCAM (Universidad Católica San Antonio de Murcia) ofrece una formación completa en el estudio científico del comportamiento humano y los procesos mentales, preparando a los estudiantes para evaluar, comprender e intervenir en las diferentes necesidades psicológicas de personas y grupos. Impartido íntegramente en inglés, el programa combina una sólida base en psicología clínica, social, educativa, neuropsicología y metodología de la investigación con una clara orientación hacia la práctica profesional.</p>
+<p>A lo largo de los cuatro años del grado, los estudiantes realizan prácticas externas supervisadas y pueden orientar su formación mediante diferentes itinerarios de especialización en <strong>Psicología de la Salud</strong>, <strong>Neuropsicología y Neurodesarrollo</strong> o <strong>Intervención en el Ámbito Educativo</strong>. El plan de estudios integra asignaturas de evaluación psicológica, psicopatología, terapias psicológicas, neuropsicología e intervención, permitiendo desarrollar las competencias necesarias para abordar problemas relacionados con la salud mental, el aprendizaje y el bienestar psicológico.</p>
+<p>Gracias a su enfoque aplicado y a la experiencia práctica adquirida durante las prácticas profesionales, los graduados están preparados para continuar su formación mediante estudios de máster o incorporarse a distintos ámbitos de la psicología. El grado constituye además la vía de acceso al <strong>Máster en Psicología General Sanitaria</strong> y a otras especializaciones que permiten desarrollar una carrera profesional en el ámbito clínico, educativo, organizacional o de la investigación.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Psicólogo General Sanitario (tras cursar el máster habilitante).</li><li>Psicólogo Clínico (vía PIR).</li><li>Neuropsicólogo (previa especialización).</li><li>Psicólogo educativo.</li><li>Psicólogo de Recursos Humanos y organizaciones.</li><li>Psicólogo de intervención social.</li><li>Psicólogo jurídico y forense.</li><li>Investigador en Psicología.</li><li>Técnico en programas de salud mental y bienestar.</li><li>Continuación hacia estudios de máster y doctorado en las diferentes especialidades de la Psicología.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>No especificada</p>
+      
+    </div>
+  </details>
+</div>
+  <div class="map-section" id="map-espana">
+    <h3>Mapa de universidades en España</h3>
+    <div id="leaflet-espana" class="map-container"></div>
+  </div>
+</div>
+
+<!-- REINO UNIDO -->
+<div id="tab-reinounido" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-uk"></div>
+    <div class="country-intro-text">
+      <h2>Reino Unido</h2>
+      <div class="country-meta"><span class="meta-pill">Desde 17.600 libras/año</span><span class="meta-pill">+ Foundation Year</span></div>
+      <p>Las universidades británicas ofrecen programas de psicología acreditados por la BPS (British Psychological Society). Al venir del sistema educativo mexicano, se recomienda un año de Foundation previo.</p>
+    </div>
+  </div>
+  <div class="info-box">
+  <p><strong>Foundation Year en el Reino Unido:</strong> En el Reino Unido, algunas titulaciones incluyen un <strong>Foundation Year</strong>, que es un año preparatorio diseñado para estudiantes internacionales o para aquellos cuya formación previa no es totalmente equivalente al sistema educativo británico.</p>
+  <p>En tu caso, al haber cursado el <strong>bachillerato en México</strong>, las universidades consideran que, por la estructura y duración de este sistema educativo, es recomendable realizar este año adicional antes de comenzar el grado. El Foundation no significa que tengas un nivel insuficiente, sino que sirve para equiparar tu formación con la de un estudiante británico que accede directamente a la universidad.</p>
+  <p>Durante este año estudiarás asignaturas relacionadas con la carrera (como introducción a la psicología, métodos de investigación o habilidades académicas), además de desarrollar competencias como redacción de trabajos universitarios, pensamiento crítico y metodología de estudio. Una vez superado el Foundation Year, pasarás automáticamente al primer curso del grado sin necesidad de volver a solicitar la admisión.</p>
+</div>
+  
+<div class="uni-card" id="card-portsmouth">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.port.ac.uk/study/courses/undergraduate/bsc-hons-sociology-with-psychology?" target="_blank">Bachelor in Sociology with Psychology <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">University of Portsmouth · Portsmouth</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Portsmouth <a class="map-btn" href="#" onclick="scrollToMap('reinounido','map-reinounido');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">1 año Foundation + 3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">18.600 libras/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El <strong>BSc (Hons) Sociology with Psychology</strong> de la University of Portsmouth combina el estudio de la sociología y la psicología para comprender cómo interactúan el comportamiento humano y las estructuras sociales. A lo largo del programa, los estudiantes analizan algunos de los principales desafíos de la sociedad actual, como la desigualdad económica, las migraciones, el cambio climático, la igualdad de género o la exclusión social, explorando al mismo tiempo conceptos de psicología social como la influencia social, la identidad de grupo y el comportamiento prosocial.</p>
+<p>El grado tiene un marcado enfoque investigador y desarrolla competencias para analizar fenómenos sociales desde una perspectiva crítica y basada en la evidencia. Los estudiantes aprenden a diseñar investigaciones, recopilar e interpretar datos, elaborar propuestas de mejora y comunicar sus resultados de forma efectiva. Además, trabajan con herramientas propias tanto de la sociología como de la psicología crítica para comprender cómo factores como el género, la clase social o la diversidad influyen en las experiencias y oportunidades de las personas.</p>
+<p>Gracias a esta formación interdisciplinar, los graduados adquieren un perfil muy versátil para trabajar en ámbitos relacionados con la investigación social, las políticas públicas, el tercer sector, la educación o la gestión de personas. Asimismo, el programa constituye una excelente base para continuar con estudios de posgrado en sociología, psicología social, criminología, políticas públicas o intervención comunitaria.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Investigador social.</li><li>Analista de políticas públicas.</li><li>Técnico de intervención social.</li><li>Consultor en organizaciones sin ánimo de lucro (ONG).</li><li>Especialista en igualdad, diversidad e inclusión.</li><li>Técnico en investigación de mercados y estudios sociales.</li><li>Responsable de programas comunitarios.</li><li>Consultor en Recursos Humanos y desarrollo organizacional.</li><li>Analista de opinión pública.</li><li>Continuación hacia estudios de máster en Sociología, Psicología Social, Criminología, Políticas Públicas o Trabajo Social.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>IELTS mínimo 5.5 en banda total y sin componente por debajo de 5.5</p>
+      <p>Título de Bachillerato + año de Foundation</p>
+    </div>
+  </details>
+</div>
+<div class="uni-card" id="card-westminster">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.westminster.ac.uk/psychology-courses/2026-27/september/full-time/psychology-with-foundation-bsc-honours#entry_requirements" target="_blank">Bachelor in Psychology <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">University of Westminster · Londres</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Londres <a class="map-btn" href="#" onclick="scrollToMap('reinounido','map-reinounido');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">1 año Foundation + 3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">17.600 libras/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El <strong>Psychology with Foundation BSc (Hons)</strong> de la University of Westminster está diseñado para estudiantes que necesitan un año preparatorio antes de comenzar el grado. El <strong>Foundation Year</strong> permite adquirir las competencias académicas y metodológicas necesarias para acceder con éxito a los tres años del Grado en Psicología, ofreciendo una transición progresiva hacia los estudios universitarios. Una vez superado este primer año, los estudiantes continúan con un programa acreditado por la <strong>British Psychological Society (BPS)</strong>, requisito fundamental para quienes deseen desarrollar una carrera como psicólogos en el Reino Unido.</p>
+<p>Durante el grado, los estudiantes exploran las principales áreas de la psicología, incluyendo la psicología cognitiva, biológica, social, del desarrollo y las diferencias individuales, combinando la teoría con una sólida formación en investigación y análisis científico. La docencia está impartida por investigadores en activo y se complementa con prácticas de laboratorio, seminarios y la posibilidad de realizar un año de prácticas profesionales o una estancia internacional, lo que permite adquirir experiencia antes de finalizar los estudios.</p>
+<p>El programa está orientado a desarrollar tanto conocimientos científicos como habilidades altamente valoradas por los empleadores, como el pensamiento crítico, la comunicación, el análisis de datos y la resolución de problemas. Los graduados pueden acceder a estudios de posgrado para especializarse en las distintas ramas de la psicología o incorporarse a sectores donde comprender el comportamiento humano resulta clave, como la salud, la educación, los recursos humanos, el marketing o la investigación.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Psicólogo clínico (previa especialización y habilitación profesional).</li><li>Psicólogo educativo.</li><li>Psicólogo forense.</li><li>Psicólogo organizacional.</li><li>Psicólogo de la salud.</li><li>Asistente de investigación en Psicología.</li><li>Especialista en Recursos Humanos.</li><li>Analista de comportamiento del consumidor.</li><li>Profesional en salud mental y bienestar.</li><li>Continuación hacia estudios de máster y doctorado en Psicología y sus diferentes especialidades.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>IELTS 6.0 en total, con mínimo 5.5 en cada componente</p>
+      <p>Título de Bachillerato + año de Foundation</p>
+    </div>
+  </details>
+</div>
+<div class="uni-card" id="card-swansea">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.swansea.ac.uk/undergraduate/courses/psychology/psychology-bsc-hons/" target="_blank">Bachelor in Psychology <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">Swansea University · Swansea</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Swansea <a class="map-btn" href="#" onclick="scrollToMap('reinounido','map-reinounido');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">1 año Foundation + 3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">20.550 libras/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El <strong>BSc (Hons) Psychology</strong> de Swansea University ofrece una formación científica centrada en la relación entre la mente, el cerebro y el comportamiento humano. El programa está acreditado por la <strong>British Psychological Society (BPS)</strong> y permite estudiar áreas clave como la psicología cognitiva, biológica, social y del desarrollo, además de procesos como la memoria, el lenguaje, el razonamiento, las lesiones cerebrales y la conducta relacionada con la salud.</p>
+<p>El grado combina clases teóricas con seminarios, talleres, tutorías personales y prácticas de investigación, ayudando al estudiante a desarrollar competencias en análisis crítico, investigación, comunicación, trabajo en equipo, estadística y uso de herramientas digitales. Además, Swansea ofrece distintas opciones de especialización académica, como el <strong>MSci de cuatro años</strong>, el grado con <strong>Year in Industry</strong> o la posibilidad de realizar un <strong>Year Abroad</strong>.</p>
+<p>Gracias a su enfoque investigador y aplicado, este grado prepara a los estudiantes tanto para continuar hacia estudios de posgrado como para acceder a sectores donde el conocimiento del comportamiento humano es especialmente útil. También supone el primer paso académico para quienes quieran desarrollar una carrera como psicólogos en Reino Unido, siempre que cumplan los requisitos posteriores de especialización y habilitación profesional.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Psicólogo clínico, educativo, forense u organizacional, previa especialización.</li><li>Asistente de investigación en Psicología.</li><li>Técnico en salud mental y bienestar.</li><li>Especialista en Recursos Humanos.</li><li>Analista de comportamiento y experiencia de usuario.</li><li>Investigador de mercados.</li><li>Profesional en intervención social o comunitaria.</li><li>Continuación hacia másteres en Psicología, Neurociencia, Salud Mental, Educación o áreas afines.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>IELTS 6.0 en total, con mínimo 5.5 en cada componente</p>
+      <p>Título de Bachillerato + año de Foundation</p>
+    </div>
+  </details>
+</div>
+  <div class="map-section" id="map-reinounido">
+    <h3>Mapa de universidades en el Reino Unido</h3>
+    <div id="leaflet-reinounido" class="map-container"></div>
+  </div>
+</div>
+
+<!-- ALEMANIA -->
+<div id="tab-alemania" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-de"><span class="r1"></span><span class="r2"></span><span class="r3"></span></div>
+    <div class="country-intro-text">
+      <h2>Alemania</h2>
+      <div class="country-meta"><span class="meta-pill">Desde 5.500€/año</span></div>
+      <p>Tres programas en universidades de Applied Sciences alemanas, con enfoque práctico e internacional en psicología clínica, empresarial y general.</p>
+    </div>
+  </div>
+  
+<div class="uni-card" id="card-karlshochschule">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://karlshochschule.de/en/bachelor-programs/business-psychology.html" target="_blank">Bachelor in Business Psychology <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">Karlshochschule University of Applied Sciences · Karlsruhe</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Karlsruhe <a class="map-btn" href="#" onclick="scrollToMap('alemania','map-alemania');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">5.500€/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El Grado en <strong>Business Psychology</strong> de Karlshochschule International University combina los fundamentos de la psicología con la gestión empresarial para formar profesionales capaces de comprender el comportamiento de las personas dentro de las organizaciones. El programa pone el foco en la psicología social y organizacional, analizando cómo influyen la cultura, el liderazgo, la diversidad, la comunicación y la toma de decisiones en el funcionamiento de empresas y equipos, sin orientarse a la práctica clínica o terapéutica.</p>
+<p>La metodología de la universidad es eminentemente práctica e internacional. A lo largo de los seis semestres, los estudiantes participan en proyectos reales con empresas, desarrollan trabajos de consultoría, realizan un periodo de prácticas y cursan un semestre en el extranjero. Además, el grado permite especializarse en áreas como <strong>International Human Resource Management</strong>, <strong>Change &amp; Transformation Management</strong> o <strong>Market and Consumer Psychology</strong>, adaptando el perfil a distintos intereses profesionales.</p>
+<p>Gracias a su enfoque interdisciplinar, los graduados desarrollan competencias en análisis del comportamiento, liderazgo, resolución de conflictos, gestión del cambio y diseño de estrategias centradas en las personas. Esta formación les permite incorporarse a empresas, consultoras y organizaciones internacionales, así como continuar sus estudios con un máster en psicología organizacional, recursos humanos, marketing o dirección de empresas.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Psicólogo organizacional o empresarial.</li><li>Consultor de Recursos Humanos.</li><li>Especialista en selección y desarrollo del talento.</li><li>Consultor en gestión del cambio y transformación organizacional.</li><li>Business Coach.</li><li>Especialista en desarrollo organizacional.</li><li>Investigador de mercados y comportamiento del consumidor.</li><li>Consultor en marketing y experiencia de cliente.</li><li>Responsable de formación y desarrollo de equipos.</li><li>Continuación hacia estudios de máster en Psicología Organizacional, Recursos Humanos, Marketing, Dirección de Empresas o áreas afines.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>Por confirmar</p>
+      
+    </div>
+  </details>
+</div>
+<div class="uni-card" id="card-macromedia-clinical">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.macromedia-fachhochschule.de/en/bachelor/clinical-psychology/" target="_blank">Bachelor in Clinical Psychology <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">Macromedia University of Applied Sciences · Berlín o Múnich</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Berlín o Múnich <a class="map-btn" href="#" onclick="scrollToMap('alemania','map-alemania');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">12.000€/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El Grado en <strong>Clinical Psychology</strong> de Macromedia University ofrece una formación especializada en la comprensión, evaluación e intervención de los trastornos mentales desde una perspectiva científica y práctica. A lo largo de los tres años del programa, el estudiante adquiere conocimientos en psicología clínica, diagnóstico psicológico, neurobiología, psicofarmacología, prevención y rehabilitación, desarrollando las competencias necesarias para analizar el comportamiento humano y diseñar estrategias de intervención adaptadas a cada caso.</p>
+<p>El plan de estudios combina una sólida base teórica con una marcada orientación aplicada. Los estudiantes trabajan en proyectos reales, aprenden de profesionales en activo y realizan un semestre completo de prácticas en una organización de su elección, donde pueden poner en práctica los conocimientos adquiridos y ganar experiencia profesional antes de graduarse. Además, se profundiza en el uso de herramientas de evaluación psicológica, técnicas de asesoramiento y elaboración de programas de prevención y seguimiento de pacientes.</p>
+<p>Gracias a este enfoque práctico e interdisciplinar, los graduados están preparados para continuar su formación mediante estudios de máster o incorporarse a distintos ámbitos relacionados con la salud mental, el bienestar y la intervención psicológica. La combinación de conocimientos clínicos, habilidades de comunicación y experiencia práctica permite acceder a un mercado laboral con una creciente demanda de profesionales especializados en salud psicológica.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Psicólogo clínico (previa habilitación o formación de posgrado según la legislación del país).</li><li>Asesor o orientador psicológico.</li><li>Coach especializado en bienestar y desarrollo personal.</li><li>Especialista en prevención y promoción de la salud mental.</li><li>Consejero en adicciones.</li><li>Técnico en evaluación y diagnóstico psicológico.</li><li>Profesional en programas de rehabilitación psicosocial.</li><li>Coordinador de proyectos de salud mental en organizaciones públicas o privadas.</li><li>Investigador o asistente de investigación en psicología.</li><li>Continuación hacia estudios de máster y especialización en psicología clínica, psicoterapia o neuropsicología.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>Por confirmar</p>
+      
+    </div>
+  </details>
+</div>
+<div class="uni-card" id="card-macromedia-psych">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.macromedia-fachhochschule.de/en/bachelor/psychology/" target="_blank">Bachelor in Psychology <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">Macromedia University of Applied Sciences · Berlín o Múnich</div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Berlín o Múnich <a class="map-btn" href="#" onclick="scrollToMap('alemania','map-alemania');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">12.000€/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de septiembre</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El Grado en <strong>Psychology</strong> de Macromedia University proporciona una formación integral sobre el comportamiento humano, los procesos mentales y las relaciones sociales, preparando a los estudiantes para comprender cómo piensan, sienten y actúan las personas en distintos contextos. A lo largo del programa se estudian áreas fundamentales como la psicología general, social, del desarrollo, biológica y de la personalidad, junto con una sólida formación en métodos de investigación y análisis estadístico.</p>
+<p>Uno de los aspectos diferenciadores del grado es su enfoque multidisciplinar, que permite conocer las múltiples aplicaciones de la psicología más allá del ámbito clínico. Los estudiantes exploran disciplinas como la psicología educativa, de la salud, del deporte, de los recursos humanos, de los medios de comunicación y del comportamiento del consumidor, complementando su formación con proyectos prácticos y un semestre completo de prácticas en una empresa u organización.</p>
+<p>Esta combinación de conocimientos científicos, experiencia práctica y habilidades de comunicación capacita a los graduados para desenvolverse en sectores muy diversos donde comprender el comportamiento humano resulta esencial. Además, el programa constituye una excelente base para continuar con estudios de máster y especializarse en áreas concretas de la psicología o desarrollar una carrera investigadora.</p></div>
+  <div class="salidas"><strong>Salidas profesionales:</strong><ul><li>Psicólogo (previa especialización o habilitación cuando la legislación lo requiera).</li><li>Técnico en Recursos Humanos y selección de personal.</li><li>Consultor en desarrollo organizacional.</li><li>Orientador o asesor psicológico.</li><li>Especialista en formación y desarrollo del talento.</li><li>Investigador o asistente de investigación en psicología.</li><li>Analista de comportamiento del consumidor.</li><li>Especialista en psicología del deporte.</li><li>Profesional en departamentos de bienestar y salud laboral.</li><li>Continuación hacia estudios de máster en psicología, neurociencia, psicología organizacional, salud, investigación u otras áreas de especialización.</li></ul></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content">
+      <h4>Requisitos académicos</h4><p>Título de Bachillerato</p>
+      <h4>Nivel de inglés</h4><p>Por confirmar</p>
+      
+    </div>
+  </details>
+</div>
+  <div class="map-section" id="map-alemania">
+    <h3>Mapa de universidades en Alemania</h3>
+    <div id="leaflet-alemania" class="map-container"></div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="footer-logo"><svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #36aadc;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        opacity: .8;
+      }
+
+      .cls-2 {
+        fill: #30ac71;
+      }
+
+      .cls-5 {
+        fill: #737373;
+      }
+
+      .cls-3 {
+        fill: #32abbb;
+      }
+
+      .cls-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="Capa_3" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="cls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="cls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="cls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="cls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="cls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="cls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+  <p>Educoway · Experiencias educativas en el extranjero</p>
+  <p>Informe personalizado de opciones de grado para Margary Cueva</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const mapsInitialized = { holanda:false, espana:false, reinounido:false, alemania:false };
+const mapData = {
+  holanda:{
+    center:[52.3,4.9],zoom:7,
+    universities:[
+      {id:'webster',name:'Bachelor in Psychology',school:'Webster University Leiden Campus',lat:52.1601,lng:4.4970,webUrl:'https://www.webster.nl/academics/ba-psychology.php',cardId:'card-webster',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Webster+University+Leiden'},
+      {id:'srh-haarlem',name:'Bachelor in Business Psychology',school:'SRH Haarlem University of Applied Sciences',lat:52.3784,lng:4.6462,webUrl:'https://www.srh-haarlem-campus.com/bachelor/business-psychology/?',cardId:'card-srh-haarlem',mapsUrl:'https://www.google.com/maps/search/?api=1&query=SRH+Haarlem+University'},
+      {id:'nhl-hrm',name:'Bachelor in International Human Resource Management',school:'NHL Stenden University of Applied Sciences',lat:53.2012,lng:5.7999,webUrl:'https://www.nhlstenden.com/en/courses/international-human-resource-management?',cardId:'card-nhl-hrm',mapsUrl:'https://www.google.com/maps/search/?api=1&query=NHL+Stenden+Leeuwarden'}
+    ]
+  },
+  espana:{
+    center:[39.5,-3.5],zoom:5,
+    universities:[
+      {id:'ue-valencia',name:'Grado en Psicología',school:'Universidad Europea (Valencia)',lat:39.4699,lng:-0.3763,webUrl:'https://universidadeuropea.com/grado-psicologia-valencia/',cardId:'card-ue',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Universidad+Europea+Valencia'},
+      {id:'ue-madrid',name:'Grado en Psicología',school:'Universidad Europea (Madrid)',lat:40.3833,lng:-3.7080,webUrl:'https://universidadeuropea.com/grado-psicologia-valencia/',cardId:'card-ue',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Universidad+Europea+Madrid'},
+      {id:'ue-malaga',name:'Grado en Psicología',school:'Universidad Europea (Málaga)',lat:36.7213,lng:-4.4217,webUrl:'https://universidadeuropea.com/grado-psicologia-valencia/',cardId:'card-ue',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Universidad+Europea+Malaga'},
+      {id:'ucam',name:'Grado en Psicología',school:'UCAM',lat:37.9922,lng:-1.1307,webUrl:'https://www.ucam.edu/estudios/grados/psicologia-presencial',cardId:'card-ucam',mapsUrl:'https://www.google.com/maps/search/?api=1&query=UCAM+Murcia'}
+    ]
+  },
+  reinounido:{
+    center:[52.5,-2.5],zoom:6,
+    universities:[
+      {id:'portsmouth',name:'Bachelor in Sociology with Psychology',school:'University of Portsmouth',lat:50.7984,lng:-1.0929,webUrl:'https://www.port.ac.uk/study/courses/undergraduate/bsc-hons-sociology-with-psychology?',cardId:'card-portsmouth',mapsUrl:'https://www.google.com/maps/search/?api=1&query=University+of+Portsmouth'},
+      {id:'westminster',name:'Bachelor in Psychology',school:'University of Westminster',lat:51.5231,lng:-0.1456,webUrl:'https://www.westminster.ac.uk/psychology-courses/2026-27/september/full-time/psychology-with-foundation-bsc-honours',cardId:'card-westminster',mapsUrl:'https://www.google.com/maps/search/?api=1&query=University+of+Westminster+London'},
+      {id:'swansea',name:'Bachelor in Psychology',school:'Swansea University',lat:51.6072,lng:-3.9259,webUrl:'https://www.swansea.ac.uk/undergraduate/courses/psychology/psychology-bsc-hons/',cardId:'card-swansea',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Swansea+University'}
+    ]
+  },
+  alemania:{
+    center:[49.5,10.5],zoom:6,
+    universities:[
+      {id:'karlshochschule',name:'Bachelor in Business Psychology',school:'Karlshochschule University of Applied Sciences',lat:49.0069,lng:8.4037,webUrl:'https://karlshochschule.de/en/bachelor-programs/business-psychology.html',cardId:'card-karlshochschule',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Karlshochschule+Karlsruhe'},
+      {id:'macromedia-berlin',name:'Bachelor in Clinical/General Psychology',school:'Macromedia University (Berlín)',lat:52.5200,lng:13.4050,webUrl:'https://www.macromedia-fachhochschule.de/en/bachelor/clinical-psychology/',cardId:'card-macromedia-clinical',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Macromedia+University+Berlin'},
+      {id:'macromedia-munich',name:'Bachelor in Clinical/General Psychology',school:'Macromedia University (Múnich)',lat:48.1374,lng:11.5755,webUrl:'https://www.macromedia-fachhochschule.de/en/bachelor/clinical-psychology/',cardId:'card-macromedia-clinical',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Macromedia+University+Munich'}
+    ]
+  }
+};
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(mapData[id]&&!mapsInitialized[id]) setTimeout(()=>initMap(id),50);
+}
+function goTo(tab,anchorId){
+  const btn=Array.from(document.querySelectorAll('.tab-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+tab+"'"));
+  if(btn) showTab(tab,btn);
+  setTimeout(()=>{const el=document.getElementById(anchorId);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},100);
+}
+function scrollToCard(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function scrollToMap(tab,mapId){
+  const tabEl=document.getElementById('tab-'+tab);
+  if(tabEl&&!tabEl.classList.contains('active')){
+    const btn=Array.from(document.querySelectorAll('.tab-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+tab+"'"));
+    if(btn) showTab(tab,btn);
+  }
+  setTimeout(()=>{const el=document.getElementById(mapId);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},100);
+}
+function initMap(countryId){
+  if(mapsInitialized[countryId]) return;
+  const data=mapData[countryId];
+  if(!data) return;
+  const map=L.map('leaflet-'+countryId).setView(data.center,data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+  data.universities.forEach(uni=>{
+    const icon=L.divIcon({html:'🎓',className:'uni-marker-icon',iconSize:[30,30],iconAnchor:[15,15]});
+    const marker=L.marker([uni.lat,uni.lng],{icon}).addTo(map);
+    const popup=document.createElement('div');
+    popup.className='popup-content';
+    popup.innerHTML=`<strong>${uni.name}</strong><div class="popup-school">${uni.school}</div><div class="popup-buttons"><a href="${uni.webUrl}" target="_blank">Ver grado</a><button onclick="scrollToCard('${uni.cardId}')">Ver ficha</button><a href="${uni.mapsUrl}" target="_blank">Google Maps</a></div>`;
+    marker.bindPopup(popup);
+  });
+  mapsInitialized[countryId]=true;
+  setTimeout(()=>map.invalidateSize(),100);
+}
+</script>
+</body>
+</html>
