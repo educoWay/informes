@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Personalizado de Opciones de Grado - Ana Ojeda Valdivia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<style>
+:root{--teal:#0a9baa;--teal-dark:#077a87;--teal-light:#e0f5f7;--navy:#0d2b3e;--bg:#f4f8fa;--border:#c8e0e5;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'DM Sans',sans-serif;font-size:16px;background:var(--bg);color:var(--navy);line-height:1.6;}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;}
+a{color:var(--teal-dark);}
+header{position:sticky;top:0;z-index:1000;background:linear-gradient(135deg,var(--teal-dark),var(--teal));color:#fff;padding:18px 24px 0 24px;box-shadow:0 2px 10px rgba(0,0,0,0.15);}
+.header-top{display:flex;align-items:center;gap:24px;flex-wrap:wrap;max-width:1200px;margin:0 auto;}
+.header-logo svg{height:48px;width:auto;display:block;}
+.header-titles{flex:1;min-width:200px;}
+.header-titles h1{margin:0;font-size:1.6rem;font-weight:600;letter-spacing:0.5px;}
+.header-titles .subtitle{font-family:'DM Sans',sans-serif;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;opacity:0.85;margin-top:4px;}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;max-width:1200px;margin:14px auto 0 auto;padding-bottom:12px;overflow-x:auto;}
+.tab-btn{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:#fff;padding:8px 16px;border-radius:8px 8px 0 0;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;display:flex;align-items:center;gap:8px;transition:all 0.2s ease;white-space:nowrap;}
+.tab-btn:hover{background:rgba(255,255,255,0.25);}
+.tab-btn.active{background:#fff;color:var(--teal-dark);border-color:#fff;}
+main{max-width:1200px;margin:0 auto;padding:32px 24px 80px 24px;}
+.tab-content{display:none;animation:fadeIn 0.3s ease;}
+.tab-content.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.intro-text p{margin:0 0 16px 0;}
+.index-section h2{color:var(--teal-dark);border-bottom:2px solid var(--border);padding-bottom:8px;margin-top:40px;}
+.index-country-block{margin-bottom:28px;}
+.index-country-title{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:var(--navy);margin-bottom:12px;}
+.index-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;}
+.index-item{display:block;text-decoration:none;color:var(--navy);background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 14px;transition:all 0.2s ease;}
+.index-item:hover{border-color:var(--teal);box-shadow:0 4px 14px rgba(10,155,170,0.15);transform:translateY(-2px);}
+.index-item .degree-name{font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:400;color:var(--navy);display:block;}
+.index-item .university-name{font-family:'Playfair Display',serif;font-size:11.5px;font-style:italic;color:#8a9aa3;display:block;margin-top:2px;}
+.action-block{margin-top:48px;background:#fff;border:2px solid var(--border);border-left:6px solid var(--teal);border-radius:12px;padding:24px;}
+.action-block h2{margin-top:0;color:var(--teal-dark);}
+.country-intro{display:flex;flex-wrap:wrap;gap:24px;align-items:center;background:#fff;border:2px solid var(--border);border-radius:12px;padding:24px;margin-bottom:28px;}
+.country-intro-text{flex:1;min-width:240px;}
+.country-intro-text h2{margin:0 0 6px 0;font-size:2rem;color:var(--navy);}
+.country-meta{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 16px 0;}
+.meta-pill{background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark);border-radius:20px;padding:6px 14px;font-size:0.85rem;font-weight:700;}
+.uni-card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px;margin-bottom:24px;transition:all 0.25s ease;}
+.uni-card:hover{border-color:var(--teal);box-shadow:0 8px 24px rgba(10,155,170,0.18);}
+.uni-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px;}
+.uni-card-title-block{flex:1;min-width:240px;}
+.uni-title{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;text-decoration:none;color:var(--navy);display:inline-flex;align-items:center;gap:10px;transition:color 0.2s ease;}
+.uni-title:hover{color:var(--teal-dark);}
+.icon-cursor{display:inline-block;transition:transform 0.2s ease;font-size:1.1rem;}
+.uni-title:hover .icon-cursor{transform:scale(1.3);}
+.uni-school{color:var(--teal-dark);font-weight:700;margin-top:4px;font-size:1rem;}
+.ranking-mini-title{color:#9aa9b1;font-size:0.78rem;margin-top:10px;margin-bottom:6px;}
+.ranking-badges{display:flex;flex-wrap:wrap;gap:8px;}
+.rank-badge{background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark);border-radius:6px;padding:4px 10px;font-size:0.78rem;font-weight:700;}
+.rank-badge.gold{background:#fff7e0;border-color:#d4a017;color:#9a7209;}
+.difficulty-badge{border-radius:8px;padding:6px 14px;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;border:2px solid;flex-shrink:0;}
+.difficulty-badge.alta-muy-alta{background:#fdeaea;color:#c0392b;border-color:#c0392b;}
+.difficulty-badge.alta{background:#fef3e6;color:#d35400;border-color:#d35400;}
+.difficulty-badge.media{background:#eafaf1;color:#1e8449;border-color:#1e8449;}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:16px 0;}
+.meta-cell{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+.meta-cell .meta-label{font-size:0.75rem;color:#8a9aa3;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}
+.meta-cell .meta-value{font-weight:700;color:var(--navy);font-size:0.95rem;}
+.map-btn{display:inline-block;margin-top:6px;background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark);border-radius:6px;padding:3px 10px;font-size:0.75rem;font-weight:700;cursor:pointer;text-decoration:none;}
+.map-btn:hover{background:var(--teal);color:#fff;}
+.desc-box{background:#eef7fa;border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:16px 18px;margin:16px 0;font-size:0.97rem;}
+.desc-box p{margin:0 0 10px 0;}
+.desc-box p:last-child{margin-bottom:0;}
+details{margin-top:14px;border:1px solid var(--border);border-radius:8px;background:var(--bg);overflow:hidden;}
+details summary{cursor:pointer;padding:12px 16px;font-weight:700;color:var(--teal-dark);list-style:none;display:flex;align-items:center;gap:8px;}
+details summary::-webkit-details-marker{display:none;}
+details summary::before{content:"▶";font-size:0.7rem;transition:transform 0.2s ease;}
+details[open] summary::before{transform:rotate(90deg);}
+.details-content{padding:4px 16px 16px 16px;}
+.details-content h4{margin:14px 0 6px 0;color:var(--navy);font-size:1rem;font-family:'DM Sans',sans-serif;font-weight:700;}
+.details-content ul{margin:6px 0;padding-left:22px;}
+.details-content li{margin-bottom:4px;}
+.deadline-box{background:#fff8d6;border:1px solid #e0c200;border-radius:8px;padding:10px 14px;margin:10px 0;font-weight:700;color:#7a6300;}
+.green-text{color:#1e8449;font-weight:700;}
+.red-text{color:#c0392b;font-weight:700;}
+.map-section{margin-top:36px;}
+.map-section h3{color:var(--navy);margin-bottom:12px;}
+.map-container{height:420px;border-radius:12px;border:2px solid var(--border);overflow:hidden;}
+.popup-content{font-family:'DM Sans',sans-serif;}
+.popup-content strong{display:block;font-family:'Playfair Display',serif;font-size:1rem;margin-bottom:4px;}
+.popup-content .popup-school{color:var(--teal-dark);font-size:0.85rem;margin-bottom:8px;}
+.popup-buttons{display:flex;flex-direction:column;gap:6px;}
+.popup-buttons a,.popup-buttons button{display:block;text-align:center;text-decoration:none;background:var(--teal);color:#fff;border:none;border-radius:6px;padding:6px 10px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.popup-buttons a:hover,.popup-buttons button:hover{background:var(--teal-dark);}
+.flag{display:inline-block;position:relative;border:1px solid rgba(0,0,0,0.1);overflow:hidden;flex-shrink:0;}
+.flag-sm{width:28px;height:20px;}
+.flag-lg{width:96px;height:64px;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.15);}
+.flag-de{display:flex;flex-direction:column;}
+.flag-de span{flex:1;display:block;}
+.flag-de span.r1{background:#000;}
+.flag-de span.r2{background:#dd0000;}
+.flag-de span.r3{background:#ffce00;}
+.flag-fr{display:flex;flex-direction:row;}
+.flag-fr span{flex:1;display:block;}
+.flag-fr span.c1{background:#002395;}
+.flag-fr span.c2{background:#fff;}
+.flag-fr span.c3{background:#ed2939;}
+.flag-nl{display:flex;flex-direction:column;}
+.flag-nl span{flex:1;display:block;}
+.flag-nl span.r1{background:#ae1c28;}
+.flag-nl span.r2{background:#fff;}
+.flag-nl span.r3{background:#21468b;}
+footer{background:var(--navy);color:#cfe6ea;padding:36px 24px;text-align:center;}
+footer .footer-logo svg{height:40px;width:auto;opacity:0.55;margin-bottom:12px;}
+footer p{font-size:0.85rem;margin:4px 0;opacity:0.8;}
+.hlw{fill:#ffffff !important;}
+@media (max-width:640px){.header-titles h1{font-size:1.2rem;}.country-intro{padding:16px;}.country-intro-text h2{font-size:1.5rem;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="header-logo"><svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #36aadc;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        opacity: .8;
+      }
+
+      .cls-2 {
+        fill: #30ac71;
+      }
+
+      .cls-5 {
+        fill: #737373;
+      }
+
+      .cls-3 {
+        fill: #32abbb;
+      }
+
+      .cls-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="Capa_3" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="hlw" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="hlw" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hlw" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="hlw" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="hlw" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hlw" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hlw" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="hlw" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hlw" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="hlw" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="hlw" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="hlw" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="hlw" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="hlw" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hlw" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="hlw" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="hlw" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="hlw" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="hlw" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="hlw" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hlw" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hlw" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="hlw" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="hlw" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="hlw" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="hlw" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hlw" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="hlw" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="hlw" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="hlw" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hlw" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hlw" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hlw" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="hlw" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="hlw" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="hlw" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="hlw" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="hlw" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hlw" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hlw" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hlw" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="hlw" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="hlw" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hlw" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hlw" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="hlw" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="hlw" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="hlw" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="hlw" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="hlw" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="hlw" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="hlw" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+    <div class="header-titles">
+      <h1>Informe Personalizado de Opciones de Grado</h1>
+      <div class="subtitle">Preparado para Ana Ojeda Valdivia</div>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="showTab('intro',this)">Introducción</button>
+    <button class="tab-btn" onclick="showTab('alemania',this)">
+      <span class="flag flag-sm flag-de"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+      Alemania
+    </button>
+    <button class="tab-btn" onclick="showTab('francia',this)">
+      <span class="flag flag-sm flag-fr"><span class="c1"></span><span class="c2"></span><span class="c3"></span></span>
+      Francia
+    </button>
+    <button class="tab-btn" onclick="showTab('paisesbajos',this)">
+      <span class="flag flag-sm flag-nl"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+      Países Bajos
+    </button>
+  </nav>
+</header>
+
+<main>
+
+<!-- INTRO -->
+<div id="tab-intro" class="tab-content active">
+  <div class="intro-text">
+    <p>Hola, Ana:</p>
+    <p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencido que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+    <p>He retomado el último informe enviado, con un par de opciones más, para reunir los mejores grados en Computer Science, Data Science &amp; AI y afines que, según conversaciones previas, más podrían interesarte. A continuación el listado completo con todos los detalles relevantes:</p>
+  </div>
+
+  <div class="index-section">
+    <h2>Índice de opciones</h2>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-de"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+        Alemania
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('alemania','card-tum');return false;"><span class="degree-name">BSc. Management and Data Science</span><span class="university-name">Technical University of Munich (TUM) · Heilbronn</span></a></li>
+      </ul>
+    </div>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-fr"><span class="c1"></span><span class="c2"></span><span class="c3"></span></span>
+        Francia
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('francia','card-essec');return false;"><span class="degree-name">BSc. in AI, Data and Management Sciences</span><span class="university-name">ESSEC Business School &amp; CentraleSupélec · Cergy / Saclay</span></a></li>
+      </ul>
+    </div>
+
+    <div class="index-country-block">
+      <div class="index-country-title">
+        <span class="flag flag-sm flag-nl"><span class="r1"></span><span class="r2"></span><span class="r3"></span></span>
+        Países Bajos
+      </div>
+      <ul class="index-list">
+        <li><a class="index-item" href="#" onclick="goTo('paisesbajos','card-uva-ba');return false;"><span class="degree-name">Business Analytics</span><span class="university-name">University of Amsterdam · Amsterdam</span></a></li>
+        <li><a class="index-item" href="#" onclick="goTo('paisesbajos','card-tue-ds');return false;"><span class="degree-name">BSc. in Data Science</span><span class="university-name">Eindhoven University of Technology (TU/e) · Eindhoven</span></a></li>
+        <li><a class="index-item" href="#" onclick="goTo('paisesbajos','card-maastricht-dsai');return false;"><span class="degree-name">BSc. in Data Science and Artificial Intelligence</span><span class="university-name">Maastricht University · Maastricht</span></a></li>
+        <li><a class="index-item" href="#" onclick="goTo('paisesbajos','card-vu-econ');return false;"><span class="degree-name">Econometrics and Data Science</span><span class="university-name">Vrije Universiteit Amsterdam · Amsterdam</span></a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="action-block">
+    <h2>¿Qué tienes que hacer ahora?</h2>
+    <p>Echa un vistazo a todas las opciones que hemos seleccionado, mira los vídeos, lee el contenido de las webs (asignaturas, especializaciones, etc.), ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+  </div>
+</div>
+
+<!-- ALEMANIA -->
+<div id="tab-alemania" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-de"><span class="r1"></span><span class="r2"></span><span class="r3"></span></div>
+    <div class="country-intro-text">
+      <h2>Alemania</h2>
+      <div class="country-meta"><span class="meta-pill">~700€/año</span><span class="meta-pill">Research University</span></div>
+      <p>La Technical University of Munich (TUM) es una de las universidades técnicas más prestigiosas de Europa y del mundo, con fuertes vínculos con la industria y un entorno académico de primer nivel.</p>
+    </div>
+  </div>
+  
+<div class="uni-card" id="card-tum">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.tum.de/en/studies/degree-programs/detail/management-and-data-science-bachelor-of-science-bsc" target="_blank">BSc. Management and Data Science <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">Technical University of Munich (TUM) · Heilbronn</div>
+      <div class="ranking-mini-title">Ranking de la universidad:</div>
+      <div class="ranking-badges"><span class="rank-badge gold">2ª de Alemania</span><span class="rank-badge"><a href="https://www.shanghairanking.com/institution/technical-university-of-munich" target="_blank" style="color:inherit;text-decoration:none;">45ª del mundo (Ranking de Shanghai)</a></span><span class="rank-badge">Computer Science &amp; Engineering: 51-75 del mundo</span></div>
+    </div>
+    <span class="difficulty-badge alta">Alta</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Heilbronn <a class="map-btn" href="#" onclick="scrollToMap('alemania','map-alemania');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Precio</div><div class="meta-value">~700€/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">Consultar TUM</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El grado <strong>BSc Management and Data Science</strong> de la Technical University of Munich (TUM) combina formación en gestión empresarial con competencias avanzadas en análisis de datos, estadística y programación. Este programa interdisciplinar está diseñado para formar profesionales capaces de interpretar grandes volúmenes de datos y utilizarlos para la toma de decisiones estratégicas en entornos empresariales. Se imparte íntegramente en inglés y proporciona una base sólida tanto en los fundamentos del management como en los principios técnicos de la ciencia de datos.</p>
+<p>El plan de estudios incluye asignaturas clave como matemáticas, estadística, economía, contabilidad, programación, machine learning, bases de datos y econometría, junto con módulos centrados en la gestión empresarial, la innovación y la estrategia. A lo largo del grado, los estudiantes desarrollan habilidades analíticas, pensamiento crítico y competencias técnicas aplicadas a contextos reales de negocio. El programa también incorpora proyectos prácticos y oportunidades de especialización en áreas como inteligencia artificial, análisis predictivo o digitalización empresarial.</p>
+<p>Gracias a su enfoque cuantitativo y orientado a la práctica, este grado prepara a los estudiantes para carreras en consultoría, análisis de datos, gestión empresarial, tecnología y finanzas, así como para continuar con estudios de máster en áreas como Data Science, Management, Business Analytics o Economía. La Technical University of Munich es una de las universidades técnicas más prestigiosas de Europa, con fuertes vínculos con la industria y un entorno internacional que favorece el desarrollo académico y profesional de sus estudiantes.</p></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content"><h4>Requisitos académicos</h4>
+<p>3 certificados GCSE más 3 certificados GCE de nivel Advanced, que cubran 6 asignaturas diferentes. Las 6 asignaturas deben tener una calificación A*, A, B o C.</p>
+<p><strong>Asignatura obligatoria:</strong> Matemáticas a nivel (I)GCE A-level.</p>
+<div style="background:#fff3cd;border:1px solid #ffc107;border-left:5px solid #e6a800;border-radius:8px;padding:12px 16px;margin:12px 0;color:#5a4200;">⚠️ <strong>Nota importante:</strong> Debemos esperar a octubre para confirmar al 100% esto, pero por lo general en universidades alemanas exigen que los certificados finales se entreguen en julio, y como los A Levels se reciben en agosto, no podremos presentar a tiempo tus notas y quizás debamos descartar esta opción.</div>
+<h4>Nivel de inglés</h4>
+<p>TUM indica que la verificación de inglés se realiza dentro del aptitude assessment y que <strong>no se requiere certificado de inglés</strong> para solicitar. Si se aporta certificado reconocido, mínimos publicados: TOEFL iBT 88; IELTS Academic 6.5; Cambridge CAE/CPE (A/B/C); Pearson PTE Academic 65.</p>
+<h4>Proceso de selección</h4>
+<p>En la <strong>fase 1</strong> del aptitude assessment se evalúan: nota global (GPA/Abitur equivalente), calificaciones específicas y experiencia relevante; en <strong>fase 2</strong> puede haber entrevista. La universidad revisa calificaciones semestrales en Inglés, Matemáticas y una ciencia natural avanzada; si no se aportan, se valora el GPA y la entrevista.</p></div>
+  </details>
+</div>
+  <div class="map-section" id="map-alemania">
+    <h3>Mapa de universidades en Alemania</h3>
+    <div id="leaflet-alemania" class="map-container"></div>
+  </div>
+</div>
+
+<!-- FRANCIA -->
+<div id="tab-francia" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-fr"><span class="c1"></span><span class="c2"></span><span class="c3"></span></div>
+    <div class="country-intro-text">
+      <h2>Francia</h2>
+      <div class="country-meta"><span class="meta-pill">83.900€ los 4 cursos</span><span class="meta-pill">Becas disponibles</span><span class="meta-pill">Programa conjunto</span></div>
+      <p>ESSEC Business School y CentraleSupélec son dos de las instituciones más selectivas y reconocidas de Europa en gestión empresarial e ingeniería respectivamente. Su programa conjunto ofrece una formación única en IA y ciencia de datos.</p>
+    </div>
+  </div>
+  
+<div class="uni-card" id="card-essec">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.essec.edu/en/program/bsc-in-business/" target="_blank">BSc. in AI, Data and Management Sciences <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">ESSEC Business School &amp; CentraleSupélec · Cergy (ESSEC) / Saclay (CentraleSupélec)</div>
+      <div class="ranking-mini-title">Ranking de la universidad:</div>
+      <div class="ranking-badges"><span class="rank-badge gold">Top instituciones de Europa</span><span class="rank-badge">Programa conjunto ESSEC + CentraleSupélec</span><span class="rank-badge">Computer Science &amp; Engineering: 151-200 del mundo (París Saclay)</span></div>
+    </div>
+    <span class="difficulty-badge alta-muy-alta">Muy alta</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Cergy (ESSEC) / Saclay (CentraleSupélec) <a class="map-btn" href="#" onclick="scrollToMap('francia','map-francia');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años (240 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Precio</div><div class="meta-value">83.900€ los cuatro cursos (posibilidad de becas)</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">Consultar ESSEC</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El grado <strong>BSc in AI, Data and Management Sciences</strong> es un programa conjunto impartido por <strong>ESSEC Business School</strong> y <strong>CentraleSupélec</strong>, dos instituciones líderes en Europa en los ámbitos de la gestión empresarial y la ingeniería. Este grado interdisciplinar combina inteligencia artificial, ciencia de datos y management, con el objetivo de formar profesionales capaces de comprender, desarrollar y aplicar soluciones basadas en datos dentro de organizaciones y entornos tecnológicos. El programa se imparte en inglés y ofrece una formación internacional en un entorno académico altamente selectivo.</p>
+<p>El plan de estudios integra asignaturas fundamentales como matemáticas, estadística, programación, machine learning, inteligencia artificial, bases de datos y análisis de datos, junto con módulos de economía, finanzas, estrategia y gestión empresarial. Esta combinación permite a los estudiantes desarrollar tanto competencias técnicas como una visión estratégica del uso de los datos en la toma de decisiones. El programa también incluye proyectos aplicados, trabajo en equipo y contacto directo con empresas, fomentando la capacidad de resolver problemas reales en contextos empresariales y tecnológicos.</p>
+<p>Gracias a su enfoque multidisciplinar, los graduados adquieren un perfil altamente demandado en sectores como consultoría, tecnología, finanzas, análisis de datos y transformación digital. El programa también proporciona una base sólida para continuar estudios de posgrado en áreas como inteligencia artificial, data science, business analytics o management. La colaboración entre ESSEC y CentraleSupélec permite a los estudiantes beneficiarse de la excelencia académica de ambas instituciones, así como de su estrecha relación con el tejido empresarial internacional.</p></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content"><h4>Requisitos académicos</h4>
+<p>3 certificados GCSE más 3 certificados GCE de nivel Advanced, que cubran 6 asignaturas diferentes. Las 6 asignaturas deben tener una calificación A*, A, B o C.</p>
+<h4>Nivel de inglés</h4>
+<p>IELTS Academic 6.5; TOEFL iBT 90; Cambridge (mínimo B2 First) 175; TOEIC L&amp;R 850. Con posible exención si se ha estudiado íntegramente en inglés los últimos 2 años.</p>
+<h4>Proceso de selección</h4>
+<p>Prueba de matemáticas, prueba de nivel de inglés (online) y entrevista, con shortlist según resultados.</p></div>
+  </details>
+</div>
+  <div class="map-section" id="map-francia">
+    <h3>Mapa de universidades en Francia</h3>
+    <div id="leaflet-francia" class="map-container"></div>
+  </div>
+</div>
+
+<!-- PAÍSES BAJOS -->
+<div id="tab-paisesbajos" class="tab-content">
+  <div class="country-intro">
+    <div class="flag flag-lg flag-nl"><span class="r1"></span><span class="r2"></span><span class="r3"></span></div>
+    <div class="country-intro-text">
+      <h2>Países Bajos</h2>
+      <div class="country-meta"><span class="meta-pill">2.695€/año (matriculados EU)</span><span class="meta-pill">Research Universities</span></div>
+      <p>Cuatro universidades de investigación holandesas de primer nivel, con programas especializados en Data Science, Business Analytics, IA y Econometría. Admisión directa cumpliendo los requisitos académicos.</p>
+    </div>
+  </div>
+  
+<div class="uni-card" id="card-uva-ba">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.uva.nl/en/programmes/bachelors/business-analytics/business-analytics.html?origin=0UW%2FNlzHRVCfgfmL3cdmVg" target="_blank">Business Analytics <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">University of Amsterdam · Amsterdam</div>
+      <div class="ranking-mini-title">Ranking de la universidad:</div>
+      <div class="ranking-badges"><span class="rank-badge gold">3-6ª de Países Bajos</span><span class="rank-badge"><a href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" style="color:inherit;text-decoration:none;">101-150 del mundo (Ranking de Shanghai)</a></span><span class="rank-badge">CS&amp;E: 151-200 del mundo</span></div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Amsterdam <a class="map-btn" href="#" onclick="scrollToMap('paisesbajos','map-paisesbajos');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Precio</div><div class="meta-value">2.695€/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de mayo</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> Si te apasionan áreas como la analítica, la inteligencia artificial (IA), el aprendizaje automático, la programación, la informática y la gestión empresarial centrada en datos, el <strong>Grado en Business Analytics</strong> de la Universidad de Ámsterdam podría ser ideal para ti. Las matemáticas y la programación desempeñan un papel fundamental en todo el programa. Desarrollarás una sólida base matemática que utilizarás para profundizar en las técnicas de IA y aprendizaje automático y aplicarlas a desafíos del mundo real. Al mismo tiempo, aprenderás cómo ayudar a las organizaciones a analizar, comprender y utilizar este "big data" para mejorar su rendimiento y tomar decisiones empresariales basadas en datos. Una profesión con una demanda cada vez mayor en el mercado laboral.</p></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content"><h4>Requisitos académicos</h4>
+<p>3 certificados GCSE más 3 certificados GCE de nivel Advanced, que cubran 6 asignaturas diferentes. Las 6 asignaturas deben tener una calificación A*, A, B o C.</p>
+<p><strong>Asignatura obligatoria:</strong> Matemáticas a nivel A-level con nota mínima de B (o si es menor, complementarse con un test externo como el OMPT-D — <a href="http://uva.nl/eb-math-businessanalytics" target="_blank">más info aquí</a>).</p>
+<h4>Nivel de inglés</h4>
+<p class="green-text">Exención de inglés por haber cursado el currículo británico completo (GCSE y A-levels) en un centro internacional fuera del Reino Unido.</p>
+<div class="deadline-box">Plazo límite para enviar matrícula: 1 de mayo</div>
+<p class="green-text">No hay proceso de selección: si se cumplen los requisitos, se envía admisión condicional y después, al entregar notas finales, la admisión definitiva.</p>
+<p><a href="https://www.uva.nl/en/programmes/bachelors/actuarial-science/study-programme/study-programme.html?origin=0UW%2FNlzHRVCfgfmL3cdmVg" target="_blank">Ver currículum del grado</a></p></div>
+  </details>
+</div>
+  
+<div class="uni-card" id="card-tue-ds">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.tue.nl/en/education/bachelor-college/bachelor-data-science/" target="_blank">BSc. in Data Science <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">Eindhoven University of Technology (TU/e) · Eindhoven</div>
+      <div class="ranking-mini-title">Ranking de la universidad:</div>
+      <div class="ranking-badges"><span class="rank-badge gold">10-11ª de Países Bajos</span><span class="rank-badge"><a href="https://www.shanghairanking.com/institution/eindhoven-university-of-technology" target="_blank" style="color:inherit;text-decoration:none;">301-400 del mundo (Ranking de Shanghai)</a></span><span class="rank-badge">CS&amp;E: 151-200 del mundo</span></div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Eindhoven <a class="map-btn" href="#" onclick="scrollToMap('paisesbajos','map-paisesbajos');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Precio</div><div class="meta-value">2.695€/año + 100€ application fee</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de mayo</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El grado <strong>BSc in Data Science</strong> de Eindhoven University of Technology (TU/e) es un programa interdisciplinar que combina matemáticas, informática y estadística con un enfoque aplicado a la resolución de problemas reales mediante el análisis de datos. El programa forma parte de la iniciativa Data Science de la universidad y está diseñado para preparar a los estudiantes para trabajar en entornos donde el uso estratégico de los datos es clave. Se imparte en inglés y proporciona una base sólida tanto en los fundamentos técnicos como en el contexto práctico y social de la ciencia de datos.</p>
+<p>El plan de estudios incluye asignaturas como cálculo, álgebra lineal, probabilidad y estadística, programación, algoritmos, bases de datos, machine learning y visualización de datos. Además, el programa integra proyectos prácticos en los que los estudiantes aplican sus conocimientos a desafíos reales, a menudo en colaboración con empresas o instituciones externas. También se abordan aspectos relacionados con la ética, la privacidad y el impacto social del uso de los datos, proporcionando una formación equilibrada entre competencias técnicas y responsabilidad profesional.</p>
+<p>Este grado prepara a los estudiantes para desarrollar carreras en ámbitos como análisis de datos, inteligencia artificial, consultoría tecnológica, investigación o desarrollo de software, así como en sectores como tecnología, salud, industria, finanzas o administración pública. Asimismo, ofrece una base excelente para continuar con estudios de máster en áreas como Data Science, Artificial Intelligence, Computer Science o Business Analytics. Eindhoven University of Technology es una universidad técnica de referencia en Europa, reconocida por su enfoque innovador, su estrecha colaboración con la industria y su fuerte orientación hacia la investigación aplicada.</p></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content"><h4>Requisitos académicos</h4>
+<p>3 certificados GCSE más 3 certificados GCE de nivel Advanced, que cubran 6 asignaturas diferentes. Las 6 asignaturas deben tener una calificación A*, A, B o C.</p>
+<h4>Nivel de inglés</h4>
+<p class="green-text">Exención de inglés por haber cursado el currículo británico completo (GCSE y A-levels) en un centro internacional fuera del Reino Unido.</p>
+<div class="deadline-box">Deadline de matriculación: 1 de mayo</div>
+<p class="red-text">APPLICATION FEE: esta universidad cobra una tasa de 100€ solo por presentar la matrícula (no reembolsable).</p>
+<p class="green-text">No hay proceso de selección: si se cumplen los requisitos, se envía admisión condicional y después, al entregar notas finales, la admisión definitiva.</p></div>
+  </details>
+</div>
+  
+<div class="uni-card" id="card-maastricht-dsai">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://www.maastrichtuniversity.nl/education/bachelor/data-science-and-artificial-intelligence" target="_blank">BSc. in Data Science and Artificial Intelligence <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">Maastricht University · Maastricht</div>
+      <div class="ranking-mini-title">Ranking de la universidad:</div>
+      <div class="ranking-badges"><span class="rank-badge gold">10-11ª de Países Bajos</span><span class="rank-badge"><a href="https://www.shanghairanking.com/institution/maastricht-university" target="_blank" style="color:inherit;text-decoration:none;">301-400 del mundo (Ranking de Shanghai)</a></span><span class="rank-badge">CS&amp;E: 301-400 del mundo</span></div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Maastricht <a class="map-btn" href="#" onclick="scrollToMap('paisesbajos','map-paisesbajos');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Precio</div><div class="meta-value">2.695€/año</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de mayo</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> El grado <strong>BSc in Data Science and Artificial Intelligence</strong> de Maastricht University es un programa interdisciplinar centrado en el desarrollo de sistemas inteligentes capaces de analizar datos, aprender de ellos y tomar decisiones de forma autónoma. El programa combina fundamentos de informática, matemáticas e inteligencia artificial con el estudio de cómo los sistemas inteligentes interactúan con las personas y su entorno. Se imparte en inglés y se caracteriza por el enfoque educativo de Maastricht University basado en el aprendizaje activo y la participación del estudiante.</p>
+<p>El plan de estudios incluye asignaturas como programación, algoritmos, estructuras de datos, álgebra lineal, probabilidad y estadística, así como áreas específicas de inteligencia artificial como machine learning, minería de datos, procesamiento del lenguaje natural, visión por ordenador y sistemas inteligentes. A lo largo del grado, los estudiantes trabajan en proyectos prácticos donde aplican estos conocimientos para diseñar y desarrollar soluciones basadas en datos. El programa utiliza la metodología de aprendizaje basada en problemas (<strong>Problem-Based Learning</strong>), que fomenta el pensamiento crítico, la autonomía y el trabajo en equipo.</p>
+<p>Este grado prepara a los estudiantes para carreras en sectores tecnológicos y científicos, incluyendo análisis de datos, desarrollo de inteligencia artificial, investigación, consultoría tecnológica y desarrollo de software. También proporciona una base sólida para continuar estudios de máster en áreas como Artificial Intelligence, Data Science, Computer Science o Business Intelligence. Maastricht University es reconocida por su enfoque innovador y su entorno internacional, ofreciendo a los estudiantes una formación orientada tanto al desarrollo técnico como a la aplicación práctica de la inteligencia artificial en distintos contextos.</p></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content"><h4>Requisitos académicos</h4>
+<p>3 certificados GCSE más 3 certificados GCE de nivel Advanced, que cubran 6 asignaturas diferentes. Las 6 asignaturas deben tener una calificación A*, A, B o C.</p>
+<p><strong>Asignatura obligatoria:</strong> Matemáticas a nivel A-level.</p>
+<h4>Nivel de inglés</h4>
+<p class="green-text">Exención de inglés por haber cursado el currículo británico completo (GCSE y A-levels) en un centro internacional fuera del Reino Unido.</p>
+<div class="deadline-box">Deadline de matriculación: 1 de mayo</div>
+<p class="green-text">No hay proceso de selección: si se cumplen los requisitos, se envía admisión condicional y después, al entregar notas finales, la admisión definitiva.</p></div>
+  </details>
+</div>
+  
+<div class="uni-card" id="card-vu-econ">
+  <div class="uni-card-header">
+    <div class="uni-card-title-block">
+      <a class="uni-title" href="https://vu.nl/en/education/bachelor/econometrics-and-data-science" target="_blank">Econometrics and Data Science <span class="icon-cursor">🖱️</span></a>
+      <div class="uni-school">Vrije Universiteit Amsterdam · Amsterdam</div>
+      <div class="ranking-mini-title">Ranking de la universidad:</div>
+      <div class="ranking-badges"><span class="rank-badge gold">7-9ª de Países Bajos</span><span class="rank-badge"><a href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" style="color:inherit;text-decoration:none;">151-200 del mundo (Ranking de Shanghai)</a></span><span class="rank-badge">CS&amp;E: 301-400 del mundo</span></div>
+    </div>
+    <span class="difficulty-badge media">Admisión directa</span>
+  </div>
+  <div class="meta-grid">
+    <div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Amsterdam <a class="map-btn" href="#" onclick="scrollToMap('paisesbajos','map-paisesbajos');return false;">🗺️ Ver mapa</a></div></div>
+    <div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años (180 ECTS)</div></div>
+    <div class="meta-cell"><div class="meta-label">Precio</div><div class="meta-value">2.695€/año + 100€ fee</div></div>
+    <div class="meta-cell"><div class="meta-label">Fecha límite</div><div class="meta-value">1 de mayo</div></div>
+  </div>
+  <div class="desc-box"><p><strong>Breve descripción del programa:</strong> Como econometrista, adquirirás excelentes habilidades matemáticas, de análisis de datos, de resolución de problemas y de presentación. Si decides estudiar <strong>Econometría y Ciencia de Datos</strong>, primero obtendrás una base sólida y amplia en matemáticas, programación y ciencia de datos. Posteriormente, te formarás en informática, econometría, aprendizaje automático y estadística. Estas son herramientas importantes en nuestra sociedad basada en datos para analizar y comprender datos financieros y económicos, y para realizar predicciones a partir de ellos.</p>
+<p>Por ejemplo: ¿cómo diseñar métodos de aprendizaje automático que garanticen que todos los clientes del sector financiero tengan un acceso equitativo a los servicios financieros? Gracias a ordenadores ultrarrápidos, el Banco de la Reserva Federal de San Luis cuenta con un gran conjunto de datos con cientos de variables macroeconómicas. ¿Qué trampas existen al analizar datos tan masivos y cómo evitarlas?</p>
+<p>Asistirás a clases teóricas, realizarás trabajos en grupo, analizarás casos prácticos y adquirirás experiencia directa con diversas empresas. Los instructores son expertos a la vanguardia de sus respectivos campos, participan activamente en la investigación y algunos también ocupan puestos en el sector empresarial. El programa de Econometría y Ciencia de Datos ha sido calificado como "topopleiding" (educación de alta calidad) por las Keuzegids Universiteiten durante cuatro años consecutivos.</p></div>
+  <details>
+    <summary>Ver requisitos de admisión</summary>
+    <div class="details-content"><h4>Requisitos académicos</h4>
+<p>3 certificados GCSE más 3 certificados GCE de nivel Advanced, que cubran 6 asignaturas diferentes. Las 6 asignaturas deben tener una calificación A*, A, B o C.</p>
+<p><strong>Asignatura obligatoria:</strong> Matemáticas a nivel A-level.</p>
+<h4>Nivel de inglés</h4>
+<p class="green-text">Exención de inglés por haber cursado el currículo británico completo (GCSE y A-levels) en un centro internacional fuera del Reino Unido.</p>
+<div class="deadline-box">Plazo límite para enviar matrícula: 1 de mayo</div>
+<p class="red-text">Para presentar la matrícula, la universidad pide un pago de 100€ fee.</p>
+<p class="green-text">No hay proceso de selección: si se cumplen los requisitos, se envía admisión condicional y después, al entregar notas finales, la admisión definitiva.</p></div>
+  </details>
+</div>
+  <div class="map-section" id="map-paisesbajos">
+    <h3>Mapa de universidades en los Países Bajos</h3>
+    <div id="leaflet-paisesbajos" class="map-container"></div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="footer-logo"><svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #36aadc;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        opacity: .8;
+      }
+
+      .cls-2 {
+        fill: #30ac71;
+      }
+
+      .cls-5 {
+        fill: #737373;
+      }
+
+      .cls-3 {
+        fill: #32abbb;
+      }
+
+      .cls-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="Capa_3" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="cls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="cls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="cls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="cls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="cls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="cls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+  <p>Educoway · Orientación universitaria en el extranjero</p>
+  <p>Informe personalizado de opciones de grado para Ana Ojeda Valdivia</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const mapsInitialized = { alemania:false, francia:false, paisesbajos:false };
+const mapData = {
+  alemania:{
+    center:[49.14,9.22],zoom:10,
+    universities:[
+      {id:'tum',name:'BSc. Management and Data Science',school:'Technical University of Munich (TUM)',lat:49.1427,lng:9.2109,webUrl:'https://www.tum.de/en/studies/degree-programs/detail/management-and-data-science-bachelor-of-science-bsc',cardId:'card-tum',mapsUrl:'https://www.google.com/maps/search/?api=1&query=TUM+Campus+Heilbronn'}
+    ]
+  },
+  francia:{
+    center:[48.9,2.3],zoom:9,
+    universities:[
+      {id:'essec',name:'BSc. in AI, Data and Management Sciences',school:'ESSEC Business School',lat:49.0345,lng:2.0801,webUrl:'https://www.essec.edu/en/program/bsc-in-business/',cardId:'card-essec',mapsUrl:'https://www.google.com/maps/search/?api=1&query=ESSEC+Business+School+Cergy'},
+      {id:'centrale',name:'BSc. in AI, Data and Management Sciences',school:'CentraleSupélec',lat:48.7098,lng:2.1679,webUrl:'https://www.essec.edu/en/program/bsc-in-business/',cardId:'card-essec',mapsUrl:'https://www.google.com/maps/search/?api=1&query=CentraleSupelec+Saclay'}
+    ]
+  },
+  paisesbajos:{
+    center:[52.2,5.2],zoom:7,
+    universities:[
+      {id:'uva-ba',name:'Business Analytics',school:'University of Amsterdam',lat:52.3650,lng:4.9042,webUrl:'https://www.uva.nl/en/programmes/bachelors/business-analytics/business-analytics.html',cardId:'card-uva-ba',mapsUrl:'https://www.google.com/maps/search/?api=1&query=University+of+Amsterdam'},
+      {id:'tue-ds',name:'BSc. in Data Science',school:'Eindhoven University of Technology (TU/e)',lat:51.4488,lng:5.4881,webUrl:'https://www.tue.nl/en/education/bachelor-college/bachelor-data-science/',cardId:'card-tue-ds',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Eindhoven+University+of+Technology'},
+      {id:'maastricht-dsai',name:'BSc. in Data Science and Artificial Intelligence',school:'Maastricht University',lat:50.8467,lng:5.6909,webUrl:'https://www.maastrichtuniversity.nl/education/bachelor/data-science-and-artificial-intelligence',cardId:'card-maastricht-dsai',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Maastricht+University'},
+      {id:'vu-econ',name:'Econometrics and Data Science',school:'Vrije Universiteit Amsterdam',lat:52.3339,lng:4.8657,webUrl:'https://vu.nl/en/education/bachelor/econometrics-and-data-science',cardId:'card-vu-econ',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Vrije+Universiteit+Amsterdam'}
+    ]
+  }
+};
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(mapData[id]&&!mapsInitialized[id]) setTimeout(()=>initMap(id),50);
+}
+function goTo(tab,anchorId){
+  const btn=Array.from(document.querySelectorAll('.tab-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+tab+"'"));
+  if(btn) showTab(tab,btn);
+  setTimeout(()=>{const el=document.getElementById(anchorId);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},100);
+}
+function scrollToCard(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+function scrollToMap(tab,mapId){
+  const tabEl=document.getElementById('tab-'+tab);
+  if(tabEl&&!tabEl.classList.contains('active')){
+    const btn=Array.from(document.querySelectorAll('.tab-btn')).find(b=>b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+tab+"'"));
+    if(btn) showTab(tab,btn);
+  }
+  setTimeout(()=>{const el=document.getElementById(mapId);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},100);
+}
+function initMap(countryId){
+  if(mapsInitialized[countryId]) return;
+  const data=mapData[countryId];
+  if(!data) return;
+  const map=L.map('leaflet-'+countryId).setView(data.center,data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+  data.universities.forEach(uni=>{
+    const icon=L.divIcon({html:'🎓',className:'uni-marker-icon',iconSize:[30,30],iconAnchor:[15,15]});
+    const marker=L.marker([uni.lat,uni.lng],{icon}).addTo(map);
+    const popup=document.createElement('div');
+    popup.className='popup-content';
+    popup.innerHTML=`<strong>${uni.name}</strong><div class="popup-school">${uni.school}</div><div class="popup-buttons"><a href="${uni.webUrl}" target="_blank">Ver grado</a><button onclick="scrollToCard('${uni.cardId}')">Ver ficha</button><a href="${uni.mapsUrl}" target="_blank">Google Maps</a></div>`;
+    marker.bindPopup(popup);
+  });
+  mapsInitialized[countryId]=true;
+  setTimeout(()=>map.invalidateSize(),100);
+}
+</script>
+</body>
+</html>
