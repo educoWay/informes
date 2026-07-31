@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe personalizado de opciones de grado — Gabriela Alonso López</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<style>
+  :root{
+    --teal:#0a9baa;
+    --teal-dark:#077a87;
+    --teal-light:#e0f5f7;
+    --navy:#0d2b3e;
+    --bg:#f4f8fa;
+    --border:#c8e0e5;
+    --gold:#c9a227;
+    --gold-light:#fbf1d6;
+    --red:#c0392b;
+    --red-light:#fdecea;
+    --orange:#c9720d;
+    --orange-light:#fdf1e2;
+    --green:#3f8f4f;
+    --green-light:#eaf6ec;
+    --yellow:#fff3c4;
+    --yellow-border:#e9c94a;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{margin:0;padding:0;}
+
+  body{
+    font-family:'DM Sans', sans-serif;
+    font-size:16px;
+    color:#1c2b33;
+    background:var(--bg);
+    line-height:1.55;
+  }
+
+  h1,h2,h3,h4{font-family:'Playfair Display', serif; margin:0;}
+
+  a{color:var(--teal-dark); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  .red-text{color:var(--red); font-weight:600;}
+  .green-text{color:var(--green); font-weight:600;}
+  .orange-text{color:var(--orange); font-weight:600;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:linear-gradient(135deg, var(--navy) 0%, #123c52 100%);
+    color:#fff;
+    box-shadow:0 3px 10px rgba(0,0,0,.18);
+  }
+  .header-inner{
+    max-width:1180px;
+    margin:0 auto;
+    padding:18px 24px 0;
+  }
+  .header-top{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    flex-wrap:wrap;
+    padding-bottom:14px;
+  }
+  .logo-wrap svg{height:34px; width:auto; display:block;}
+  .header-titles{flex:1; min-width:220px;}
+  .header-titles h1{
+    font-size:1.5rem;
+    font-weight:600;
+    color:#fff;
+    line-height:1.2;
+  }
+  .header-titles .subtitle{
+    margin-top:4px;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#bfe4ea;
+    font-weight:500;
+  }
+
+  nav.tabs{
+    display:flex;
+    gap:4px;
+    overflow-x:auto;
+    padding-bottom:0;
+    scrollbar-width:thin;
+  }
+  nav.tabs::-webkit-scrollbar{height:5px;}
+  nav.tabs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.25); border-radius:4px;}
+
+  nav.tabs button{
+    background:transparent;
+    border:none;
+    color:#cfe9ec;
+    font-family:'DM Sans', sans-serif;
+    font-size:.92rem;
+    font-weight:500;
+    padding:11px 16px;
+    cursor:pointer;
+    white-space:nowrap;
+    border-bottom:3px solid transparent;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    transition:color .2s, border-color .2s, background .2s;
+    border-radius:6px 6px 0 0;
+  }
+  nav.tabs button:hover{color:#fff; background:rgba(255,255,255,.06);}
+  nav.tabs button.active{
+    color:#fff;
+    border-bottom-color:var(--teal);
+    background:rgba(255,255,255,.09);
+  }
+
+  /* ---------- LAYOUT ---------- */
+  main{max-width:1180px; margin:0 auto; padding:32px 24px 60px;}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block; animation:fadeIn .25s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .intro-text p{margin:0 0 14px; font-size:1rem; color:#2a3c45;}
+
+  .section-title{
+    font-family:'Playfair Display', serif;
+    font-size:1.4rem;
+    color:var(--navy);
+    margin:34px 0 16px;
+    padding-bottom:8px;
+    border-bottom:2px solid var(--border);
+  }
+
+  /* ---------- INDEX (intro tab) ---------- */
+  .index-country{margin-bottom:26px;}
+  .index-country-title{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Playfair Display', serif;
+    font-size:1.15rem;
+    color:var(--teal-dark);
+    margin-bottom:10px;
+    font-weight:600;
+  }
+  .index-group-label{
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:#7a8a92;
+    font-weight:700;
+    margin:14px 0 6px 30px;
+  }
+  .index-list{list-style:none; margin:0 0 4px; padding:0;}
+  .index-list li{margin-left:30px;}
+  .index-list a{
+    display:block;
+    padding:8px 10px;
+    border-radius:8px;
+    transition:background .15s;
+  }
+  .index-list a:hover{background:var(--teal-light); text-decoration:none;}
+  .index-degree{
+    font-family:'DM Sans', sans-serif;
+    font-size:13.5px;
+    font-weight:400;
+    color:#233;
+  }
+  .index-school{
+    font-family:'Playfair Display', serif;
+    font-size:11.5px;
+    font-style:italic;
+    color:#8b98a0;
+    margin-top:1px;
+  }
+
+  .whatnow-box{
+    margin-top:36px;
+    background:var(--teal-light);
+    border:2px solid var(--border);
+    border-radius:12px;
+    padding:22px 24px;
+  }
+  .whatnow-box h3{color:var(--teal-dark); font-size:1.15rem; margin-bottom:10px;}
+  .whatnow-box p{margin:0 0 10px; color:#22343c;}
+
+  /* ---------- RESEARCH VS APPLIED TAB ---------- */
+  .rva-sub{margin:26px 0;}
+  .rva-sub h4{
+    color:var(--teal-dark);
+    font-size:1.02rem;
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .rva-sub h4::before{content:"·"; font-size:1.4rem; color:var(--teal); line-height:0;}
+  .rva-links{
+    background:#fff;
+    border:2px solid var(--border);
+    border-radius:12px;
+    padding:18px 22px;
+    margin-top:18px;
+  }
+  .rva-links p{margin:0 0 10px;}
+  .rva-links ul{margin:0; padding-left:20px;}
+  .rva-links li{margin-bottom:6px;}
+
+  /* ---------- COUNTRY INTRO BLOCK ---------- */
+  .country-hero{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    background:#fff;
+    border:2px solid var(--border);
+    border-radius:14px;
+    padding:22px 26px;
+    margin-bottom:22px;
+    flex-wrap:wrap;
+  }
+  .country-hero .flag-large{flex-shrink:0;}
+  .country-hero-text{flex:1; min-width:240px;}
+  .country-hero-text h2{
+    font-size:1.7rem;
+    color:var(--navy);
+    margin-bottom:6px;
+  }
+  .country-meta{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:10px 0 14px;
+  }
+  .country-meta span{
+    background:var(--teal-light);
+    border:1px solid var(--border);
+    color:var(--teal-dark);
+    font-size:.82rem;
+    font-weight:700;
+    padding:5px 12px;
+    border-radius:20px;
+  }
+  .country-hero-text p{margin:0; color:#2a3c45;}
+
+  .section-divider{
+    background:var(--teal);
+    color:#fff;
+    font-family:'DM Sans', sans-serif;
+    font-weight:700;
+    font-size:.85rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:10px 18px;
+    border-radius:8px;
+    margin:30px 0 18px;
+  }
+
+  /* ---------- UNIVERSITY CARD ---------- */
+  .uni-card{
+    background:#fff;
+    border:2px solid var(--border);
+    border-radius:12px;
+    padding:22px 24px;
+    margin-bottom:22px;
+    transition:border-color .2s, box-shadow .2s;
+    scroll-margin-top:150px;
+  }
+  .uni-card:hover{
+    border-color:var(--teal);
+    box-shadow:0 8px 22px rgba(10,155,170,.16);
+  }
+  .card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .card-header-main{flex:1; min-width:240px;}
+  .card-title{
+    font-family:'Playfair Display', serif;
+    font-size:1.25rem;
+    font-weight:600;
+    color:var(--navy);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:color .2s;
+  }
+  .card-title:hover{color:var(--teal-dark); text-decoration:none;}
+  .card-title .cursor-icon{display:inline-block; transition:transform .2s;}
+  .card-title:hover .cursor-icon{transform:scale(1.35);}
+  .card-school{
+    color:var(--teal);
+    font-weight:600;
+    margin-top:4px;
+    font-size:.98rem;
+  }
+
+  .difficulty-badge{
+    display:inline-block;
+    font-size:.74rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    padding:6px 12px;
+    border-radius:20px;
+    border:2px solid;
+    white-space:nowrap;
+  }
+  .diff-red{color:var(--red); border-color:var(--red); background:var(--red-light);}
+  .diff-orange{color:var(--orange); border-color:var(--orange); background:var(--orange-light);}
+  .diff-green{color:var(--green); border-color:var(--green); background:var(--green-light);}
+  .diff-gray{color:#6a7a82; border-color:#c8d4d8; background:#f1f5f6;}
+
+  .ranking-line{
+    margin-top:12px;
+    font-size:.86rem;
+    color:#6a7a82;
+  }
+  .ranking-line .label{margin-right:6px;}
+  .ranking-badge{
+    display:inline-block;
+    background:var(--teal-light);
+    border:1px solid var(--border);
+    color:var(--teal-dark);
+    font-size:.78rem;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:16px;
+    margin:4px 4px 0 0;
+  }
+  .ranking-badge.gold{
+    background:var(--gold-light);
+    border-color:var(--gold);
+    color:#8a6d0f;
+  }
+  .ranking-note{font-size:.86rem; color:#5c6d75; font-style:italic; margin-top:8px;}
+
+  .meta-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+    gap:12px;
+    margin:18px 0;
+  }
+  .meta-item{
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:10px 14px;
+  }
+  .meta-item .meta-label{
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:#7a8a92;
+    font-weight:700;
+    margin-bottom:3px;
+  }
+  .meta-item .meta-value{font-size:.94rem; color:#22343c; font-weight:600;}
+  .map-btn{
+    display:inline-block;
+    margin-top:6px;
+    background:var(--teal-light);
+    border:1px solid var(--teal);
+    color:var(--teal-dark);
+    font-size:.74rem;
+    font-weight:700;
+    padding:4px 9px;
+    border-radius:7px;
+    cursor:pointer;
+  }
+  .map-btn:hover{background:var(--teal); color:#fff;}
+
+  .desc-box{
+    background:#eef6fb;
+    border-left:4px solid var(--teal);
+    border-radius:0 10px 10px 0;
+    padding:16px 20px;
+    margin:18px 0;
+    color:#243944;
+    font-size:.96rem;
+  }
+
+  details.admission-details{
+    margin-top:16px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  details.admission-details summary{
+    cursor:pointer;
+    padding:12px 16px;
+    background:var(--teal-light);
+    color:var(--teal-dark);
+    font-weight:700;
+    font-size:.92rem;
+    list-style:none;
+  }
+  details.admission-details summary::-webkit-details-marker{display:none;}
+  details.admission-details summary::before{content:"▸ "; }
+  details.admission-details[open] summary::before{content:"▾ ";}
+  .admission-body{padding:16px 20px; font-size:.93rem; color:#28393f;}
+  .admission-body h5{
+    font-size:.8rem;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:#7a8a92;
+    margin:14px 0 5px;
+  }
+  .admission-body h5:first-child{margin-top:0;}
+  .deadline-box{
+    background:var(--yellow);
+    border:1px solid var(--yellow-border);
+    border-radius:8px;
+    padding:10px 14px;
+    margin:8px 0;
+    font-weight:700;
+  }
+  .admission-body ul{margin:4px 0; padding-left:20px;}
+  .admission-body li{margin-bottom:4px;}
+  .extra-block{margin-top:14px;}
+  .extra-block h5{margin-top:16px;}
+  .extra-block ul{margin:4px 0; padding-left:20px;}
+  .extra-block li{margin-bottom:5px;}
+  .after-links{margin-top:10px; font-size:.9rem;}
+  .after-links a{margin-right:16px; font-weight:600;}
+
+  .mini-table{
+    width:100%;
+    border-collapse:collapse;
+    margin:10px 0 4px;
+    font-size:.88rem;
+  }
+  .mini-table td{padding:6px 10px; border-bottom:1px solid var(--border);}
+  .mini-table td:last-child{text-align:right; color:#7a8a92;}
+
+  /* ---------- MAP ---------- */
+  .map-section{margin-top:34px;}
+  .map-section h3{color:var(--navy); font-size:1.2rem; margin-bottom:12px;}
+  .leaflet-map{
+    width:100%;
+    height:420px;
+    border-radius:12px;
+    border:2px solid var(--border);
+  }
+  .leaflet-popup-content{font-family:'DM Sans', sans-serif;}
+  .popup-title{font-family:'Playfair Display', serif; font-weight:600; font-size:1rem; margin-bottom:2px;}
+  .popup-school{color:var(--teal-dark); font-size:.85rem; margin-bottom:8px;}
+  .popup-buttons{display:flex; flex-direction:column; gap:5px;}
+  .popup-buttons a, .popup-buttons button{
+    font-family:'DM Sans', sans-serif;
+    font-size:.78rem;
+    font-weight:700;
+    padding:6px 10px;
+    border-radius:6px;
+    border:1px solid var(--teal);
+    background:var(--teal-light);
+    color:var(--teal-dark);
+    cursor:pointer;
+    text-align:center;
+    text-decoration:none;
+  }
+  .popup-buttons a:hover, .popup-buttons button:hover{background:var(--teal); color:#fff;}
+
+  /* ---------- FLAGS (CSS-only) ---------- */
+  .flag{display:inline-block; border:1px solid rgba(0,0,0,.12); border-radius:2px; overflow:hidden; flex-shrink:0;}
+  .flag-nl{width:26px; height:18px; display:flex; flex-direction:column;}
+  .flag-nl span{flex:1;}
+  .flag-nl .s1{background:#AE1C28;}
+  .flag-nl .s2{background:#fff;}
+  .flag-nl .s3{background:#21468B;}
+
+  .flag-be{width:26px; height:18px; display:flex;}
+  .flag-be span{flex:1;}
+  .flag-be .s1{background:#000;}
+  .flag-be .s2{background:#FAE042;}
+  .flag-be .s3{background:#ED2939;}
+
+  .flag-dk{width:26px; height:18px; background:#C8102E; position:relative;}
+  .flag-dk .cross-v{position:absolute; top:0; bottom:0; left:34%; width:16%; background:#fff;}
+  .flag-dk .cross-h{position:absolute; left:0; right:0; top:38%; height:24%; background:#fff;}
+
+  .flag-lg.flag-nl{width:70px; height:48px;}
+  .flag-lg.flag-be{width:70px; height:48px;}
+  .flag-lg.flag-dk{width:70px; height:48px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:#fff;
+    border-top:1px solid var(--border);
+    padding:30px 24px;
+    text-align:center;
+  }
+  footer svg{height:26px; opacity:.45;}
+  footer p{font-size:.78rem; color:#93a3ab; margin:10px 0 0;}
+
+  @media (max-width:640px){
+    .header-titles h1{font-size:1.2rem;}
+    .country-hero{flex-direction:column; align-items:flex-start;}
+    .card-header{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="logo-wrap">
+        <svg id="logo-header" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18" style="height:34px;">
+          <defs>
+            <style>
+              #logo-header .cls-1 { fill: #36aadc; }
+              #logo-header .cls-1, #logo-header .cls-2, #logo-header .cls-3, #logo-header .cls-4 { opacity: .8; }
+              #logo-header .cls-2 { fill: #30ac71; }
+              #logo-header .cls-5 { fill: #ffffff; }
+              #logo-header .cls-3 { fill: #32abbb; }
+              #logo-header .cls-4 { fill: #31ac9c; }
+            </style>
+          </defs>
+          <g>
+            <g>
+              <g>
+                <path class="cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+                <path class="cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+                <path class="cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+                <rect class="cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+                <path class="cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+                <path class="cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+                <path class="cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+                <path class="cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+                <path class="cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+                <rect class="cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+                <path class="cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+                <path class="cls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+                <polygon class="cls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+                <path class="cls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+                <path class="cls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+                <path class="cls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+                <rect class="cls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+                <path class="cls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+                <polygon class="cls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+                <path class="cls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+                <path class="cls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+                <path class="cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+                <path class="cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+                <rect class="cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+                <path class="cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+                <path class="cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+                <path class="cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+                <rect class="cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+                <path class="cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+                <path class="cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+                <path class="cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+                <path class="cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+                <path class="cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+                <rect class="cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+                <path class="cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+                <polygon class="cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+                <path class="cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+                <path class="cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+                <path class="cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+                <path class="cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+                <path class="cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+                <path class="cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+                <path class="cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+                <path class="cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+                <path class="cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+              </g>
+              <path class="cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+              <path class="cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+              <path class="cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+              <path class="cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+              <g>
+                <path class="cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+                <path class="cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+                <path class="cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+                <path class="cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+                <path class="cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+                <path class="cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+                <polygon class="cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+              </g>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="header-titles">
+        <h1>Informe personalizado de opciones de grado</h1>
+        <div class="subtitle">Preparado para Gabriela Alonso López</div>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs-nav">
+      <button class="tab-btn active" data-tab="intro" onclick="showTab('intro', this)">Introducción</button>
+      <button class="tab-btn" data-tab="rva" onclick="showTab('rva', this)">Research vs Applied Sciences</button>
+      <button class="tab-btn" data-tab="holanda" onclick="showTab('holanda', this)">
+        <span class="flag flag-nl"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+        Holanda
+      </button>
+      <button class="tab-btn" data-tab="belgica" onclick="showTab('belgica', this)">
+        <span class="flag flag-be"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+        Bélgica
+      </button>
+      <button class="tab-btn" data-tab="dinamarca" onclick="showTab('dinamarca', this)">
+        <span class="flag flag-dk"><span class="cross-v"></span><span class="cross-h"></span></span>
+        Dinamarca
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== TAB: INTRODUCCIÓN ===================== -->
+  <section class="tab-panel active" id="tab-intro">
+    <div class="intro-text">
+      <p>Hola Gabriela,</p>
+      <p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencida de que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+      <p>Estos días he estado trabajando en la búsqueda de los grados solicitados y afines que, según lo que hemos hablado, más podrían interesarte.</p>
+      <p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes.</p>
+    </div>
+
+    <h2 class="section-title">Índice de opciones</h2>
+
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-nl"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+        Holanda
+      </div>
+      <div class="index-group-label">Research Universities</div>
+      <ul class="index-list">
+        <li><a href="#" onclick="goTo('holanda','uni-maastricht'); return false;">
+          <span class="index-degree">Maastricht Science Programme</span>
+          <span class="index-school">Maastricht University Liberal Arts &amp; Sciences university college</span>
+        </a></li>
+        <li><a href="#" onclick="goTo('holanda','uni-groningen'); return false;">
+          <span class="index-degree">International Relations and International Organization</span>
+          <span class="index-school">University of Groningen</span>
+        </a></li>
+        <li><a href="#" onclick="goTo('holanda','uni-leiden-iro'); return false;">
+          <span class="index-degree">International Relations and Organizations</span>
+          <span class="index-school">Leiden University</span>
+        </a></li>
+        <li><a href="#" onclick="goTo('holanda','uni-leiden-is'); return false;">
+          <span class="index-degree">International Studies</span>
+          <span class="index-school">Leiden University</span>
+        </a></li>
+      </ul>
+      <div class="index-group-label">Applied Sciences Universities</div>
+      <ul class="index-list">
+        <li><a href="#" onclick="goTo('holanda','uni-han'); return false;">
+          <span class="index-degree">Life Sciences</span>
+          <span class="index-school">HAN University of Applied Sciences</span>
+        </a></li>
+        <li><a href="#" onclick="goTo('holanda','uni-nhlstenden'); return false;">
+          <span class="index-degree">European Studies</span>
+          <span class="index-school">NHL Stenden University of Applied Sciences</span>
+        </a></li>
+        <li><a href="#" onclick="goTo('holanda','uni-thuas'); return false;">
+          <span class="index-degree">European Studies</span>
+          <span class="index-school">The Hague University of Applied Sciences (THUAS)</span>
+        </a></li>
+      </ul>
+    </div>
+
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-be"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+        Bélgica
+      </div>
+      <div class="index-group-label">Research Universities</div>
+      <ul class="index-list">
+        <li><a href="#" onclick="goTo('belgica','uni-kuleuven'); return false;">
+          <span class="index-degree">European Studies</span>
+          <span class="index-school">KU Leuven</span>
+        </a></li>
+      </ul>
+    </div>
+
+    <div class="index-country">
+      <div class="index-country-title">
+        <span class="flag flag-dk"><span class="cross-v"></span><span class="cross-h"></span></span>
+        Dinamarca
+      </div>
+      <div class="index-group-label">Research Universities</div>
+      <ul class="index-list">
+        <li><a href="#" onclick="goTo('dinamarca','uni-roskilde'); return false;">
+          <span class="index-degree">Natural Sciences</span>
+          <span class="index-school">Roskilde University</span>
+        </a></li>
+      </ul>
+    </div>
+
+    <div class="whatnow-box">
+      <h3>¿Qué tienes que hacer ahora?</h3>
+      <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+      <p>¡Un saludo!</p>
+    </div>
+  </section>
+
+  <!-- ===================== TAB: RESEARCH VS APPLIED ===================== -->
+  <section class="tab-panel" id="tab-rva">
+    <h2 class="section-title">Research vs Applied Sciences</h2>
+    <div class="intro-text">
+      <p>Como creo que ya te hemos explicado, en la mayoría de países europeos tenemos que diferenciar entre 2 tipos de universidades: "<em>Research</em>" y "<em>Applied Sciences</em>". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+    </div>
+
+    <div class="rva-sub">
+      <h4>Metodología teórica vs práctica</h4>
+      <p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project/Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+    </div>
+
+    <div class="rva-sub">
+      <h4>Duración</h4>
+      <p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+      <p>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+    </div>
+
+    <div class="rva-sub">
+      <h4>Ranking / Prestigio</h4>
+      <p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.</p>
+      <p>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+    </div>
+
+    <div class="rva-sub">
+      <h4>Acceso a Másteres</h4>
+      <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. En cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research</em>, te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p>
+    </div>
+
+    <div class="rva-links">
+      <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de <em>Research</em> y otra de <em>Applied Sciences</em>):</p>
+      <ul>
+        <li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank">Applied Science vs. Research University</a></li>
+        <li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank">Types of universities in the Netherlands</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== TAB: HOLANDA ===================== -->
+  <section class="tab-panel" id="tab-holanda">
+    <div class="country-hero">
+      <span class="flag flag-lg flag-nl"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      <div class="country-hero-text">
+        <h2>Holanda</h2>
+        <div class="country-meta">
+          <span>Matrícula: 2.695 €/año</span>
+          <span>Alojamiento medio: 850–900 €</span>
+        </div>
+        <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <strong>2.695 €/año</strong>. Estas son las tasas académicas para el curso 26/27. Es probable que aumenten ligeramente para el curso 2027/28, aunque normalmente no superan los 100 €. Además, esas tasas se mantendrían fijas durante los tres años de estudio). Cabe destacar que el alojamiento en Holanda no es barato, tiene un precio <strong>medio</strong> de 850-900€.</p>
+      </div>
+    </div>
+
+    <div class="section-divider">Research Universities</div>
+    <div id="cards-holanda-research"></div>
+
+    <div class="section-divider">Applied Sciences Universities</div>
+    <div id="cards-holanda-applied"></div>
+
+    <div class="map-section">
+      <h3>Mapa de universidades — Holanda</h3>
+      <div id="map-holanda" class="leaflet-map"></div>
+    </div>
+  </section>
+
+  <!-- ===================== TAB: BÉLGICA ===================== -->
+  <section class="tab-panel" id="tab-belgica">
+    <div class="country-hero">
+      <span class="flag flag-lg flag-be"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      <div class="country-hero-text">
+        <h2>Bélgica</h2>
+        <div class="country-meta">
+          <span>Matrícula: 1.118 €/año</span>
+          <span>Alojamiento medio: 550 €</span>
+        </div>
+        <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <strong>1.118 €/año.</strong></p>
+        <p>El precio medio del alojamiento en Bélgica es de unos 550€.</p>
+      </div>
+    </div>
+
+    <div class="section-divider">Research Universities</div>
+    <div id="cards-belgica-research"></div>
+
+    <div class="map-section">
+      <h3>Mapa de universidades — Bélgica</h3>
+      <div id="map-belgica" class="leaflet-map"></div>
+    </div>
+  </section>
+
+  <!-- ===================== TAB: DINAMARCA ===================== -->
+  <section class="tab-panel" id="tab-dinamarca">
+    <div class="country-hero">
+      <span class="flag flag-lg flag-dk"><span class="cross-v"></span><span class="cross-h"></span></span>
+      <div class="country-hero-text">
+        <h2>Dinamarca</h2>
+        <div class="country-meta">
+          <span>Matrícula: 0 €/año</span>
+          <span>Alojamiento medio: 600 €</span>
+        </div>
+        <p>Los estudiantes europeos tenemos los estudios 100 % subvencionados en Dinamarca, siendo el coste anual que tenemos que pagar de <strong>0 €/año</strong>.</p>
+        <p>En Dinamarca el coste medio del alojamiento es de 600€. El resultado de las admisiones no se da a conocer hasta el día 28 de julio.</p>
+      </div>
+    </div>
+
+    <div class="section-divider">Research Universities</div>
+    <div id="cards-dinamarca-research"></div>
+
+    <div class="map-section">
+      <h3>Mapa de universidades — Dinamarca</h3>
+      <div id="map-dinamarca" class="leaflet-map"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18" style="height:26px;">
+    <defs>
+      <style>
+        .f-cls-1 { fill: #36aadc; }
+        .f-cls-1, .f-cls-2, .f-cls-3, .f-cls-4 { opacity: .8; }
+        .f-cls-2 { fill: #30ac71; }
+        .f-cls-5 { fill: #737373; }
+        .f-cls-3 { fill: #32abbb; }
+        .f-cls-4 { fill: #31ac9c; }
+      </style>
+    </defs>
+    <g>
+      <g>
+        <g>
+          <path class="f-cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        </g>
+        <path class="f-cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+        <path class="f-cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+        <path class="f-cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+        <path class="f-cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+        <g>
+          <path class="f-cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+          <path class="f-cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+          <path class="f-cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+          <path class="f-cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+          <path class="f-cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+          <path class="f-cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+          <polygon class="f-cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+        </g>
+      </g>
+    </g>
+  </svg>
+  <p>educoWay · orientación universitaria en el extranjero</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+/* ============================================================
+   DATOS DE UNIVERSIDADES
+   ============================================================ */
+const universities = [
+  // ---------------- HOLANDA · RESEARCH ----------------
+  {
+    id:"uni-maastricht", country:"holanda", type:"research",
+    degree:"Maastricht Science Programme",
+    school:"Maastricht University Liberal Arts &amp; Sciences university college",
+    schoolPlain:"Maastricht University",
+    city:"Maastricht", cityFull:"Maastricht (aproximadamente 125.666 habitantes)",
+    lat:50.8514, lng:5.6910,
+    webUrl:"https://www.maastrichtuniversity.nl/education/bachelor/programmes/maastricht-science-programme/your-future",
+    duracion:"3 años (180 ECTS)",
+    coste:'<span class="red-text">€4,465 *</span>',
+    ranking:[{text:"# 301-400 del mundo y en Ciencias Biológicas", gold:false, url:"https://www.shanghairanking.com/universities/maastricht-university", label:"Ranking de Shanghái"}],
+    difficulty:"MEDIA-BAJA", difficultyClass:"diff-green",
+    reqAcademicos:"Bachillerato español de ciencias + EVAU. Una nota media superior a 7,0 en el último curso + la Selectividad con calificación de APTO.",
+    reqIngles:"Como has estudiado y vas a seguir estudiando inglés hasta el último año de tu formación secundaria en España, cumples automáticamente con los requisitos de inglés, y no necesitas entregar un certificado oficial de inglés.",
+    fechaLimite:"1 de mayo",
+    resolucion:"mayo / junio",
+    proceso:"Para este programa, deberás completar un proceso de selección. La selección se basa en tu calidad y adecuación. Para ello, son importantes tu motivación (carta de motivación y entrevista) y tu formación previa (títulos, calificaciones, cursos de ciencias). Dado que se trata de un programa amplio en ciencias, es necesario un interés profundo por estas áreas, lo cual debe reflejarse en los cursos que hayas cursado en tu formación anterior. Se recomienda encarecidamente haber recibido formación en matemáticas que incluya cálculo, especialmente los fundamentos de diferenciación e integración.",
+    descripcion:"Es un grado innovador que elimina las barreras entre disciplinas científicas y te permite diseñar un currículo personalizado según tus intereses y objetivos. Cuenta con un asesor académico que te guía durante toda la carrera, ayudándote a tomar decisiones clave para tu futuro profesional. La enseñanza se basa en el Aprendizaje Basado en Problemas, fomentando el trabajo en equipo y la aplicación práctica de la teoría, y en el Aprendizaje Basado en Investigación, donde participarás en proyectos reales y desarrollarás tus propias investigaciones. Además, dispondrás de laboratorios modernos en instalaciones de primer nivel para una formación científica práctica y actualizada.",
+    afterLinks:[
+      {text:"Después del programa", url:"https://www.maastrichtuniversity.nl/education/bachelor/programmes/maastricht-science-programme/your-future"},
+      {text:"Curriculum (asignaturas troncales y optativas)", url:"https://courserepository.maastrichtuniversity.nl/p/program/EN/7503"}
+    ]
+  },
+  {
+    id:"uni-groningen", country:"holanda", type:"research",
+    degree:"International Relations and International Organization",
+    school:"University of Groningen",
+    schoolPlain:"University of Groningen",
+    city:"Groninga", cityFull:"Groninga (aprox. 235.000 habitantes)",
+    lat:53.2194, lng:6.5665,
+    webUrl:"https://www.rug.nl/bachelors/international-relations-and-international-organization/?lang=en#!requirements",
+    duracion:"3 años (180 ECTS)",
+    coste:"2.695€",
+    ranking:[{text:"#69 del mundo y 101-150 en Political Sciences", gold:true, url:"https://www.shanghairanking.com/universities/university-of-groningen", label:"Ranking de Shanghai"}],
+    difficulty:"Media-Alta", difficultyClass:"diff-orange",
+    difficultyNote:"(no hay garantía de plaza y el proceso de selección se basa en una lotería)",
+    reqAcademicos:"Título de Bachiller + EVAU aprobado.",
+    reqIngles:"TOEFL iBT: mínimo 90 (mínimo 21 por componente). Cambridge: C1 Advanced (CAE) o C2 Proficiency (CPE), con mínimo 180 puntos. IELTS: mínimo 6.5 global (mínimo 6.0 por componente).",
+    fechaLimite:"15 de enero",
+    resolucion:"15 abril",
+    proceso:"Numerus fixus con 300 estudiantes al año. El proceso de selección es un sorteo sin ponderación: todos los candidatos se seleccionan por sorteo, y todos tienen las mismas posibilidades de obtener una plaza. La Oficina de Admisiones revisará todas las solicitudes individuales de los candidatos que hayan superado con éxito los pasos anteriores y cumplan, en principio, los requisitos de admisión a la Universidad de Groningen en función de su formación previa.<br><br>La Oficina de Admisiones clasificará a todos estos candidatos mediante el sistema de sorteo y les asignará una posición única en la clasificación. Esta clasificación se representará con un número: 001 o superior. El 15 de abril, todos los candidatos que hayan participado con éxito en el proceso de selección por sorteo recibirán su clasificación individual.",
+    descripcion:"Este grado multidisciplinar está centrado exclusivamente en relaciones internacionales y organizaciones, no como especialización, sino como el núcleo del plan de estudios. A lo largo del programa se combinan conocimientos en política, economía, historia y derecho internacional, con formación práctica en métodos de investigación, idiomas y pensamiento crítico. Groninga ofrece un ambiente internacional, con estudiantes y profesorado de todo el mundo. Los alumnos también cursan una lengua extranjera durante dos años (español, alemán, francés, sueco, ruso, chino, italiano, holandés o perfeccionamiento de inglés). El grado prepara al estudiante para una trayectoria profesional global y con alta empleabilidad en organismos públicos, diplomacia, medios de comunicación, cooperación internacional o empresas con proyección internacional.",
+    areasClave:["Historia de las relaciones internacionales.","Derecho internacional y europeo.","Economía internacional y relaciones comerciales.","Organizaciones internacionales.","Lenguas modernas.","Teoría y metodología de las relaciones internacionales.","Gobernanza y política comparada.","Métodos de investigación y estadística aplicada."],
+    planEstudios:[
+      {anio:"Año 1: Fundamentos de la política internacional", texto:"Introducción a las disciplinas esenciales de las relaciones internacionales (historia, política, economía y derecho). Formación en habilidades académicas y primer nivel de idioma. Asignaturas destacadas: History of International Relations I &amp; II, International Politics, International and European Law, Introduction to Economics, International Organisation I &amp; II, Language Course 1A y 1B, Statistics for IR, Academic Skills."},
+      {anio:"Año 2: Profundización teórica y metodológica", texto:"Se abordan procesos de gobernanza, derecho europeo, economía monetaria internacional y teoría de las relaciones internacionales. Se continúa el estudio de idiomas. Asignaturas destacadas: Theory of International Relations, European Law, IPE of Monetary Relations, Policy and Governance, Methodology and Research Practice, Language Course 2A, 2B, 3A y 3B."},
+      {anio:"Año 3: Especialización, movilidad y tesis", texto:"Posibilidad de cursar un minor en otra disciplina, realizar un intercambio en el extranjero, y culminar el programa con el módulo central y la tesis de grado. Actividades destacadas:", lista:["Minor (30 ECTS)","IPE of Trade","International Law","Core Module IRIO + Bachelor Thesis (20 ECTS)."]}
+    ],
+    salidas:["Asesor/a de política internacional en ONGs o gobiernos.","Diplomático/a o funcionario en organismos internacionales.","Analista de riesgos y consultoría política.","Periodista internacional.","Investigador/a en think tanks o medios.","Coordinador/a de proyectos en cooperación al desarrollo.","Estudios de máster en relaciones internacionales, seguridad, derechos humanos."]
+  },
+  {
+    id:"uni-leiden-iro", country:"holanda", type:"research",
+    degree:"International Relations and Organizations",
+    school:"Leiden University",
+    schoolPlain:"Leiden University",
+    city:"La Haya", cityFull:"La Haya (550.000 habitantes)",
+    lat:52.0680, lng:4.2880,
+    webUrl:"https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/political-science/international-relations-and-organisations",
+    duracion:"3 años (180 ECTS)",
+    coste:'2.695 € + <span class="red-text">100€ tasa de matrícula</span>',
+    ranking:[{text:"#101-150 del mundo y #33 en Political Sciences", gold:false, url:"https://www.shanghairanking.com/universities/leiden-university", label:"Ranking de Shanghai"}],
+    difficulty:"Alta", difficultyClass:"diff-red",
+    difficultyNote:"(es un programa muy demandado)",
+    reqAcademicos:"Título de Bachiller con una calificación promedio de al menos 7.0 y aprobar los exámenes de la EVAU con una calificación de 6.0 en cada uno de los 4-5 exámenes comunes de la Fase General.",
+    reqIngles:"TOEFL iBT: mínimo 80 (20 por componente). Cambridge: CAE/C1 o CPE/C2 con mínimo 169 por componente. IELTS: mínimo 6.0 global y por componente.",
+    fechaLimite:"15 de enero",
+    resolucion:"15 de abril",
+    proceso:"Numerus Fixus con 400 plazas disponibles basado en los siguientes criterios de selección (no se garantiza plaza solo por cumplir requisitos):",
+    procesoLista:["30%: Media de notas.","70%: Evaluación online:"],
+    procesoSubLista:["Participa en la evaluación en línea. Esta consta de preguntas de opción múltiple. Recibirás con antelación el material de estudio y las instrucciones detalladas.","Estudia las instrucciones para la evaluación en línea. Las recibirás por correo electrónico el sobre principios de febrero, alrededor de las 18:00 CET.","Familiarízate con el material de estudio proporcionado.","Realiza la evaluación en línea. Asegúrate de tener a tu disposición un ordenador en buen estado con conexión a internet."],
+    descripcion:"Este grado ofrece una sólida formación en Ciencia Política con un enfoque especializado en relaciones internacionales y organizaciones desde el primer día. Es un programa único y completamente en inglés, que se desarrolla en la ciudad de La Haya, centro internacional de la diplomacia, el derecho y los organismos multilaterales. La metodología combina teoría, práctica, habilidades de investigación, trabajo en grupo y desarrollo profesional desde el primer año. Se imparten asignaturas clave como Historia Global, Política Comparada, Derecho Internacional y Derechos Humanos, junto con métodos cuantitativos y cualitativos. Durante el tercer año, el/la estudiante puede elegir entre prácticas, estudios en el extranjero o cursos optativos, culminando con un seminario y un proyecto de fin de grado (tesis). Leiden University es una de las más prestigiosas de Europa, con más de 400 años de historia. Cuenta con excelentes conexiones con organizaciones internacionales para prácticas, y su enfoque académico y riguroso asegura altas tasas de empleabilidad.",
+    salidas:["Funcionario/a en organizaciones internacionales (ONU, UE, ONG, ICC…).","Analista político o de relaciones internacionales.","Consultoría internacional.","Diplomacia o ministerios de asuntos exteriores.","Periodismo y comunicación internacional.","Investigador/a académico o en think tanks.","Máster en Relaciones Internacionales, Estudios Europeos, Seguridad Global."]
+  },
+  {
+    id:"uni-leiden-is", country:"holanda", type:"research",
+    degree:"International Studies",
+    school:"Leiden University",
+    schoolPlain:"Leiden University",
+    city:"La Haya", cityFull:"La Haya (aprox. 504.000 habitantes)",
+    lat:52.0730, lng:4.3130,
+    webUrl:"https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/international-studies",
+    duracion:"3 años",
+    coste:'2.695 € + <span class="red-text">Tasa de solicitud de 100 €</span>',
+    ranking:[{text:"#101-150 del mundo y #33 en Political Sciences", gold:false, url:"https://www.shanghairanking.com/universities/leiden-university", label:"Ranking de Shanghai"}],
+    difficulty:"Media-Baja", difficultyClass:"diff-green",
+    reqAcademicos:"Título de Bachiller con una calificación promedio de al menos 7.0 y aprobar los exámenes de la EVAU con una calificación de 6.0 en cada uno de los 4-5 exámenes comunes de la Fase General.",
+    reqIngles:"TOEFL iBT nota mínima: 80 (con mínimo de 20 en cada sección). Cambridge CAE (C1) / CPE (C2) (nota mínima de 169 en cada sección). IELTS nota mínima: 6.0 (con un mínimo de 6.0 en cada componente).",
+    fechaLimite:"15 de junio",
+    resolucion:"junio",
+    proceso:"Evaluación de los requisitos académicos y lingüísticos por parte de la universidad.",
+    descripcion:"La globalización está transformando el mundo y sus dinámicas sociales, políticas y económicas. El grado en Estudios Internacionales de la Universidad de Leiden, ubicada en La Haya, te ofrece una formación multidisciplinar que combina economía, política, historia y cultura para comprender estos cambios desde una perspectiva global. Este programa no solo te proporciona una base teórica sólida, sino que también se enfoca en la aplicación práctica del conocimiento, gracias a su innovador enfoque de enseñanza basado en el análisis de casos reales y colaboración con instituciones internacionales. La universidad se encuentra en el centro político y diplomático de los Países Bajos, sede de numerosas organizaciones globales, lo que permite una interacción directa con profesionales del sector. Desde el primer año, te sumergirás en un entorno académico internacional, con clases en grupos reducidos que favorecen la interacción con profesores y expertos en relaciones internacionales. Además, a lo largo de la carrera, tendrás múltiples oportunidades de networking con organismos multilaterales, empresas y ONG internacionales. El tercer año incluye el programa PRINS (Practising International Studies), un curso de consultoría donde los estudiantes aplican sus conocimientos en proyectos para organizaciones como la ONU, el Ministerio de Asuntos Exteriores de los Países Bajos, Unilever y otras instituciones de prestigio. Si buscas un programa que te prepare para trabajar en un contexto globalizado y te brinde experiencia práctica en el ámbito de las relaciones internacionales, el comercio global o la diplomacia, la Universidad de Leiden es una opción ideal.",
+    especializaciones:[
+      {region:"África", idiomas:"Árabe, bereber, francés, portugués, suajili."},
+      {region:"Asia Oriental", idiomas:"Japonés, coreano, chino mandarín."},
+      {region:"Europa", idiomas:"Alemán, francés, portugués, español, neerlandés."},
+      {region:"América Latina", idiomas:"Portugués, español."},
+      {region:"Oriente Medio", idiomas:"Árabe, hebreo moderno*, persa*, turco* (según disponibilidad)."},
+      {region:"Norteamérica", idiomas:"Francés, español."},
+      {region:"Rusia y Eurasia", idiomas:"Ruso."},
+      {region:"Asia del Sur y Sudeste Asiático", idiomas:"Hindi, indonesio."}
+    ],
+    salidas:["Diplomacia y relaciones internacionales (Ministerios de Asuntos Exteriores, embajadas, consulados).","Organismos multilaterales (ONU, UE, OCDE, UNESCO).","Empresas multinacionales y comercio exterior.","Organizaciones no gubernamentales (Amnistía Internacional, Greenpeace, Médicos Sin Fronteras).","Medios de comunicación y análisis geopolítico.","Investigación académica y consultoría internacional."]
+  },
+
+  // ---------------- HOLANDA · APPLIED ----------------
+  {
+    id:"uni-han", country:"holanda", type:"applied",
+    degree:"Life Sciences",
+    school:"HAN University of Applied Sciences",
+    schoolPlain:"HAN University of Applied Sciences",
+    city:"Nijmegen", cityFull:"Nijmegen (aprox. 180.000 habitantes)",
+    lat:51.8126, lng:5.8372,
+    webUrl:"https://www.hanuniversity.com/en/programs/bachelor/life-sciences/fulltime/program/",
+    duracion:"4 años (240 créditos)",
+    coste:"2.695 €",
+    rankingNote:"Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio.",
+    difficulty:"BAJA", difficultyClass:"diff-green",
+    reqAcademicos:"Título de bachillerato con asignaturas obligatorias de Matemáticas y Química.",
+    reqIngles:"TOEFL iBT nota mínima: 80. Cambridge: FCE (B2) / CAE (C1) / CPE (C2) con calificación mínima de 169. IELTS Academic nota mínima: 6.0 (todos los componentes con mínimo 5.0).",
+    fechaLimite:"15 de agosto",
+    resolucion:"4 semanas aprox. después de mandar la matrícula y subir los documentos.",
+    proceso:"Evaluación de los requisitos académicos y lingüísticos por parte de la entidad.",
+    descripcion:"Es un programa práctico e internacional de cuatro años, centrado en biología molecular, microbiología, bioquímica y biotecnología. Ofrece una sólida base en ciencias durante los primeros años, seguida de especialización en áreas como investigación biomédica o biología vegetal. Incluye prácticas profesionales, proyectos reales en laboratorios punteros y colaboraciones con instituciones internacionales. Con enseñanza personalizada, modernas instalaciones y un enfoque orientado al empleo o a estudios de posgrado, prepara a los estudiantes para carreras científicas a nivel global."
+  },
+  {
+    id:"uni-nhlstenden", country:"holanda", type:"applied",
+    degree:"European Studies",
+    school:"NHL Stenden University of Applied Sciences",
+    schoolPlain:"NHL Stenden University of Applied Sciences",
+    city:"Leeuwarden", cityFull:"Leeuwarden (aprox. 122.293 habitantes)",
+    lat:53.2012, lng:5.7999,
+    webUrl:"https://www.nhlstenden.com/en/courses/european-studies",
+    duracion:"4 años (240 créditos ECTS)",
+    coste:"2.695 €",
+    rankingNote:"Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio.",
+    difficulty:"BAJA", difficultyClass:"diff-green",
+    reqAcademicos:"Título de Bachiller superado.",
+    reqIngles:"TOEFL iBT: mínimo 80. Cambridge: FCE (B2) / CAE (C1) / CPE (C2) con calificación mínima de 169. IELTS: mínimo 6.0. TOEIC: 865 (Listening &amp; Reading) y 335 (Speaking &amp; Writing). LanguageCert Academic: mínimo 65 (No se acepta la versión online). Pearson PTE Academic: mínimo 61 (No se acepta la versión online).",
+    fechaLimite:"15 de agosto",
+    resolucion:"4 semanas aprox. después de mandar la matrícula y subir los documentos.",
+    proceso:"Evaluación de los requisitos académicos y lingüísticos por parte de la entidad.",
+    descripcion:"El grado en European Studies en NHL Stenden ofrece una formación interdisciplinaria en política, derecho, economía y comunicación dentro del contexto europeo e internacional. Su enfoque práctico permite a los estudiantes trabajar en proyectos reales con instituciones gubernamentales, ONGs y empresas del sector público y privado. El programa se basa en el método de Design-Based Education (DBE), que fomenta la resolución de problemas reales a través del trabajo en equipo y el aprendizaje aplicado. Los estudiantes desarrollan competencias clave en liderazgo, negociación y comunicación intercultural, esenciales para el mundo globalizado.",
+    extraNota:"Uno de los aspectos diferenciadores de este programa es su amplia experiencia internacional:",
+    extraLista:["Movilidad académica: estancias en universidades socias en Europa y otros continentes.","Prácticas internacionales: en instituciones europeas y empresas con enfoque global.","Viajes de estudio: incluyendo visitas a Bruselas para conocer las instituciones de la UE.","Enseñanza en grupos reducidos con profesores internacionales especializados.","Los graduados de European Studies tienen una alta empleabilidad en el ámbito gubernamental, organizaciones internacionales y empresas privadas con operaciones en Europa."],
+    salidas:["Instituciones de la UE (Comisión Europea, Parlamento Europeo, etc.).","Organizaciones internacionales (ONU, OTAN, ONG, think tanks).","Ministerios y gobiernos nacionales.","Consultoría en políticas públicas y relaciones internacionales.","Lobbying y asuntos públicos.","Gestión de proyectos europeos.","Empresas multinacionales con operaciones en Europa.","Medios de comunicación y periodismo internacional."]
+  },
+  {
+    id:"uni-thuas", country:"holanda", type:"applied",
+    degree:"European Studies",
+    school:"The Hague University of Applied Sciences (THUAS)",
+    schoolPlain:"The Hague University of Applied Sciences (THUAS)",
+    city:"La Haya", cityFull:"La Haya (aprox. 550.000 habitantes)",
+    lat:52.0625, lng:4.2665,
+    webUrl:"https://www.thuas.com/programmes/bachelors/european-studies-4-years",
+    duracion:"4 años (240 créditos) o 3 años (180 créditos, vía acelerada – fast track). Para cursar el programa de 3 años, se debe indicar explícitamente en la solicitud de admisión en el momento de la inscripción.",
+    coste:"2.695 €",
+    rankingNote:"Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio.",
+    difficulty:"BAJA", difficultyClass:"diff-green",
+    reqAcademicos:"Programa de 3 años: Título de Bachiller + EVAU superado. Programa de 4 años: Título de Bachiller.",
+    reqIngles:"TOEFL iBT nota mínima: 80. Cambridge: FCE (B2) / CAE (C1) / CPE (C2) con calificación mínima de 169. IELTS nota mínima: 6.",
+    fechaLimite:"1 de mayo",
+    resolucion:"4 semanas aprox. después de mandar la matrícula y subir los documentos.",
+    proceso:"Evaluación de los requisitos académicos y lingüísticos por parte de la entidad.",
+    descripcion:"Descripción del Programa: El grado en European Studies en The Hague University of Applied Sciences está diseñado para formar profesionales capaces de resolver desafíos internacionales dentro del contexto europeo. Con un enfoque interdisciplinario, este programa combina aspectos de política, derecho, negocios, cultura y comunicación, proporcionando una formación integral para la toma de decisiones en entornos internacionales. El aprendizaje se basa en un enfoque práctico y orientado a la empleabilidad, con metodologías de enseñanza activas como estudios de caso, proyectos en equipo y simulaciones. Además, los estudiantes tienen acceso a oportunidades de prácticas profesionales en empresas e instituciones europeas, así como la posibilidad de realizar intercambios académicos en universidades asociadas. El programa se distingue por su enfoque multilingüe: los estudiantes deben estudiar al menos un idioma adicional (francés, alemán, español o neerlandés) para ampliar sus oportunidades en el mercado laboral. Asimismo, cuenta con acreditaciones de calidad y está alineado con las necesidades del sector público y privado en Europa.",
+    areasClave:["Política y gobernanza en la Unión Europea.","Negocios y economía en el contexto europeo.","Derecho internacional y regulaciones de la UE.","Comunicación y diplomacia intercultural.","Idiomas extranjeros (francés, alemán, español o neerlandés).","Prácticas y experiencias en el extranjero."],
+    salidas:["Consultor en asuntos europeos y relaciones internacionales.","Analista de políticas públicas.","Gestor de proyectos internacionales.","Especialista en sostenibilidad y responsabilidad social.","Asesor en comercio y regulación europea.","Consultor en comunicación y diplomacia.","Especialista en marketing y relaciones públicas.","Oficial en organizaciones no gubernamentales (ONGs).","Coordinador de eventos y congresos europeos.","Emprendedor en negocios internacionales."]
+  },
+
+  // ---------------- BÉLGICA · RESEARCH ----------------
+  {
+    id:"uni-kuleuven", country:"belgica", type:"research",
+    degree:"European Studies",
+    school:"KU Leuven",
+    schoolPlain:"KU Leuven",
+    city:"Lovaina", cityFull:"Lovaina (100.000 habitantes)",
+    lat:50.8798, lng:4.7005,
+    webUrl:"https://onderwijsaanbod.kuleuven.be/opleidingen/e/SC_58415826/diploma_omschrijving",
+    duracion:"3 años (180 ECTS)",
+    coste:'2.225 € + <span class="red-text">Tasa de solicitud de 90 €</span>',
+    ranking:[{text:"#76 del mundo y 101-150 en Political Sciences", gold:true, url:"https://www.shanghairanking.com/universities/ku-leuven", label:"Ranking de Shanghái"}],
+    difficulty:"No especificada en el informe", difficultyClass:"diff-gray",
+    reqAcademicos:"Título de Bachiller y EVAU superado.",
+    reqIngles:"TOEFL iBT: Mínimo de 90 puntos (sin subpuntajes inferiores a 20). Cambridge English (CAE/CPE): Mínimo de 176 puntos (con ningún subpuntaje inferior a 169). IELTS Académico: Mínimo de 6.5 (con ningún subpuntaje inferior a 5.5). PTE Academic: Mínimo de 59 (con ningún subpuntaje inferior a 53).",
+    fechaLimite:"1 de abril",
+    resolucion:"junio",
+    proceso:"Además de la documentación básica que todos los candidatos deben subir:",
+    procesoLista:["Un trabajo académico de lectura y redacción (500-750 palabras);","Un vídeo de presentación en el que el candidato explique brevemente su motivación para estudiar en la BAES y su trabajo escrito (máximo 120 segundos);","Una copia del formulario de inicio de estudios universitarios cumplimentado;","Una copia del formulario de movilidad cumplimentado."],
+    descripcion:"El Bachelor of European Studies es un programa único, organizado en colaboración con nueve universidades líderes en Europa dentro de la alianza Una Europa. El programa está diseñado para proporcionar una formación interdisciplinaria sobre las sociedades, valores e instituciones europeas. A través de este enfoque, los estudiantes adquieren un conocimiento profundo de la Unión Europea y su papel en el mundo globalizado. Este programa es verdaderamente internacional: los estudiantes estudian en dos o tres destinos diferentes en Europa, sumergiéndose en diversas culturas europeas. Además, tienen la oportunidad de estudiar en varios idiomas, desarrollando habilidades transversales muy valoradas en el mercado laboral internacional.",
+    areasClave:["Multidisciplinario: Después de un curso introductorio conjunto, los estudiantes eligen una especialización principal y una menor de entre diversas disciplinas relacionadas con la política, economía, derecho, historia, filosofía, y relaciones internacionales.","Multilingüe: El programa se imparte en inglés y los estudiantes deben aprender un segundo idioma europeo, lo que les otorga una ventaja significativa en el mercado laboral europeo.","Personalizado: Los estudiantes pueden adaptar su programa a sus intereses y aspiraciones, eligiendo entre diversas áreas de especialización y opciones de movilidad."],
+    salidas:["Organizaciones internacionales (ONU, UE, etc.).","Gobiernos y administraciones públicas.","Consultoría política y económica.","ONGs y grupos de defensa de los derechos humanos.","Empresas con operaciones internacionales.","Investigación académica o en think tanks."]
+  },
+
+  // ---------------- DINAMARCA · RESEARCH ----------------
+  {
+    id:"uni-roskilde", country:"dinamarca", type:"research",
+    degree:"Natural Sciences",
+    school:"Roskilde University",
+    schoolPlain:"Roskilde University",
+    city:"Esbjerg", cityFull:"Esbjerg (52.000 habitantes)",
+    lat:55.4765, lng:8.4594,
+    webUrl:"https://ruc.dk/en/bachelor/international-bachelor-natural-sciences-int",
+    duracion:"3 años (180 ECTS)",
+    coste:"0 €",
+    rankingNote:"A pesar de no tener una valoración concreta en el ranking de Shanghái en disciplinas de ingeniería, Roskilde University (RUC) destaca por su innovador modelo de aprendizaje basado en proyectos (PBL), su enfoque interdisciplinario en ciencias naturales y su fuerte vinculación con la industria, lo que garantiza una formación altamente práctica y alineada con las demandas del mercado laboral global.",
+    difficulty:"No especificada en el informe", difficultyClass:"diff-gray",
+    reqAcademicos:"Es necesario tener el título de Bachiller y haber cursado un mínimo de horas en determinadas asignaturas durante los tres últimos años académicos (4º de ESO, 1º y 2º de Bachillerato). Los requisitos específicos son los siguientes: Inglés: mínimo 210 horas (equivalente al nivel B del sistema danés). Matemáticas: mínimo 375 horas (equivalente al nivel A danés). Además, se debe cumplir con una de las siguientes combinaciones de asignaturas científicas: Opción 1: Física: mínimo 190 horas (nivel B danés); Química: mínimo 190 horas (nivel B danés). Opción 2: Química: mínimo 190 horas (nivel B danés); Biología: mínimo 325 horas (nivel A danés); Física: mínimo 75 horas (nivel C danés).",
+    reqIngles:"Mínimo 210 horas de inglés en los últimos 3 años de estudio (equivalente al nivel B del sistema danés) con una nota de un 6 sobre 10.",
+    fechaLimite:"15 marzo",
+    resolucion:"28 de julio",
+    proceso:"En 2026, se ofrece admisión garantizada al Grado Internacional en Ciencias Naturales a los solicitantes que cumplan los requisitos de admisión y tengan un promedio mínimo de calificaciones de 2,0 en la escala de calificaciones danesa (aprobado en España).",
+    descripcion:"Este grado ofrece una formación interdisciplinar en ciencias naturales, combinando asignaturas como biología, química, física, matemáticas, biotecnología e informática para abordar retos científicos reales. El programa se basa en el aprendizaje por proyectos (PBL), con un 50 % del tiempo dedicado a investigación práctica en laboratorios avanzados. A partir del segundo año, los estudiantes se especializan en dos áreas, como bioprocesos, biología molecular, química o ciencia de datos. El grado también ofrece oportunidades de intercambio internacional. Las salidas profesionales incluyen investigación, industria farmacéutica, medio ambiente, análisis de datos y estudios de posgrado.",
+    subjectsTable:{
+      title:"Subjects and possible combinations",
+      subtitle:"The programme begins with a one year basic section of interdisciplinary studies. The last two years you will specialise in two bachelor subjects.",
+      rows:[["Bioprocess Science (int)","Mathematics (int)"],["Chemistry (int)","Molecular Biology (int)"],["Computer Science (int)","Physics (int)"],["Environmental Biology (int)",""]]
+    }
+  }
+];
+
+const countryNames = {holanda:"Holanda", belgica:"Bélgica", dinamarca:"Dinamarca"};
+
+/* ============================================================
+   RENDER DE TARJETAS
+   ============================================================ */
+function buildRankingHTML(uni){
+  if(uni.rankingNote){
+    return `<div class="ranking-line"><span class="label">Ranking de la universidad:</span></div><div class="ranking-note">${uni.rankingNote}</div>`;
+  }
+  if(uni.ranking){
+    let badges = uni.ranking.map(r=>{
+      const cls = r.gold ? "ranking-badge gold" : "ranking-badge";
+      return `<a class="${cls}" href="${r.url}" target="_blank" style="text-decoration:none;">${r.text} · ${countryNames[uni.country]} (según ${r.label})</a>`;
+    }).join("");
+    return `<div class="ranking-line"><span class="label">Ranking de la universidad:</span>${badges}</div>`;
+  }
+  return "";
+}
+
+function buildAdmissionHTML(uni){
+  let html = "";
+  html += `<h5>Requisitos académicos</h5><p>${uni.reqAcademicos}</p>`;
+  html += `<h5>Requisitos de inglés</h5><p>${uni.reqIngles}</p>`;
+  html += `<h5>Fecha límite de matrícula</h5><div class="deadline-box red-text">${uni.fechaLimite}</div>`;
+  html += `<h5>Resolución de admisión</h5><p class="red-text">${uni.resolucion}</p>`;
+  html += `<h5>Dificultad de acceso</h5><p>${uni.difficulty}${uni.difficultyNote ? " " + uni.difficultyNote : ""}</p>`;
+  html += `<h5>Proceso de selección</h5><p>${uni.proceso || ""}</p>`;
+  if(uni.procesoLista){
+    html += "<ul>" + uni.procesoLista.map(li=>`<li>${li}</li>`).join("") + "</ul>";
+  }
+  if(uni.procesoSubLista){
+    html += "<ul>" + uni.procesoSubLista.map(li=>`<li>${li}</li>`).join("") + "</ul>";
+  }
+  return html;
+}
+
+function buildExtraHTML(uni){
+  let html = "";
+  if(uni.areasClave){
+    html += `<div class="extra-block"><h5>Áreas clave del programa</h5><ul>${uni.areasClave.map(a=>`<li>${a}</li>`).join("")}</ul></div>`;
+  }
+  if(uni.planEstudios){
+    html += `<div class="extra-block"><h5>Plan de estudios</h5>`;
+    uni.planEstudios.forEach(p=>{
+      html += `<p><strong>${p.anio}</strong><br>${p.texto}</p>`;
+      if(p.lista) html += "<ul>" + p.lista.map(li=>`<li>${li}</li>`).join("") + "</ul>";
+    });
+    html += `</div>`;
+  }
+  if(uni.especializaciones){
+    html += `<div class="extra-block"><h5>Áreas de especialización por región</h5><ul>${uni.especializaciones.map(e=>`<li><strong>${e.region}:</strong> ${e.idiomas}</li>`).join("")}</ul></div>`;
+  }
+  if(uni.extraNota){
+    html += `<div class="extra-block"><p>${uni.extraNota}</p><ul>${uni.extraLista.map(li=>`<li>${li}</li>`).join("")}</ul></div>`;
+  }
+  if(uni.subjectsTable){
+    let rowsHtml = uni.subjectsTable.rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]||""}</td></tr>`).join("");
+    html += `<div class="extra-block"><h5>${uni.subjectsTable.title}</h5><p style="font-size:.85rem; color:#5c6d75;">${uni.subjectsTable.subtitle}</p><table class="mini-table">${rowsHtml}</table></div>`;
+  }
+  if(uni.salidas){
+    html += `<div class="extra-block"><h5>Salidas profesionales</h5><ul>${uni.salidas.map(s=>`<li>${s}</li>`).join("")}</ul></div>`;
+  }
+  return html;
+}
+
+function renderCard(uni){
+  const diffBadge = `<span class="difficulty-badge ${uni.difficultyClass}">${uni.difficulty}</span>`;
+  const rankingHTML = buildRankingHTML(uni);
+  const admissionHTML = buildAdmissionHTML(uni) + buildExtraHTML(uni);
+  const afterLinksHTML = uni.afterLinks ? `<div class="after-links">${uni.afterLinks.map(l=>`<a href="${l.url}" target="_blank">${l.text}</a>`).join("")}</div>` : "";
+
+  return `
+  <div class="uni-card" id="${uni.id}">
+    <div class="card-header">
+      <div class="card-header-main">
+        <a class="card-title" href="${uni.webUrl}" target="_blank">${uni.degree} <span class="cursor-icon">🖱️</span></a>
+        <div class="card-school">${uni.school} — ${uni.city}</div>
+        ${rankingHTML}
+      </div>
+      ${diffBadge}
+    </div>
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">Ciudad</div>
+        <div class="meta-value">${uni.cityFull} <button class="map-btn" onclick="scrollToMap('${uni.country}','map-${uni.country}')">🗺️ Ver mapa</button></div>
+      </div>
+      <div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">${uni.duracion}</div></div>
+      <div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">${uni.coste}</div></div>
+    </div>
+    <div class="desc-box">${uni.descripcion}</div>
+    ${afterLinksHTML}
+    <details class="admission-details">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="admission-body">${admissionHTML}</div>
+    </details>
+  </div>`;
+}
+
+// Render por país / tipo
+function renderAll(){
+  const groups = {
+    "cards-holanda-research": universities.filter(u=>u.country==="holanda" && u.type==="research"),
+    "cards-holanda-applied": universities.filter(u=>u.country==="holanda" && u.type==="applied"),
+    "cards-belgica-research": universities.filter(u=>u.country==="belgica" && u.type==="research"),
+    "cards-dinamarca-research": universities.filter(u=>u.country==="dinamarca" && u.type==="research"),
+  };
+  Object.keys(groups).forEach(containerId=>{
+    const el = document.getElementById(containerId);
+    if(el) el.innerHTML = groups[containerId].map(renderCard).join("");
+  });
+}
+renderAll();
+
+/* ============================================================
+   NAVEGACIÓN DE PESTAÑAS
+   ============================================================ */
+function showTab(id, btn){
+  document.querySelectorAll(".tab-panel").forEach(p=>p.classList.remove("active"));
+  document.getElementById("tab-"+id).classList.add("active");
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  window.scrollTo({top:0, behavior:"smooth"});
+  if(["holanda","belgica","dinamarca"].includes(id)){
+    initMap(id);
+  }
+}
+
+function goTo(tab, anchor){
+  const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+  showTab(tab, btn);
+  setTimeout(()=>scrollToCard(anchor), 120);
+}
+
+function scrollToCard(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function scrollToMap(tab, mapAnchor){
+  const activePanel = document.querySelector(".tab-panel.active").id;
+  if(activePanel === "tab-"+tab){
+    document.getElementById(mapAnchor).scrollIntoView({behavior:"smooth", block:"start"});
+  } else {
+    const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+    showTab(tab, btn);
+    setTimeout(()=>{
+      document.getElementById(mapAnchor).scrollIntoView({behavior:"smooth", block:"start"});
+    }, 150);
+  }
+}
+
+/* ============================================================
+   MAPAS LEAFLET (lazy init)
+   ============================================================ */
+const mapData = {
+  holanda:{center:[52.35,5.55], zoom:7, unis:universities.filter(u=>u.country==="holanda")},
+  belgica:{center:[50.88,4.70], zoom:9, unis:universities.filter(u=>u.country==="belgica")},
+  dinamarca:{center:[55.48,8.46], zoom:9, unis:universities.filter(u=>u.country==="dinamarca")}
+};
+let mapsInitialized = {holanda:false, belgica:false, dinamarca:false};
+let leafletMaps = {};
+
+function initMap(countryId){
+  if(mapsInitialized[countryId]) return;
+  const data = mapData[countryId];
+  if(!data) return;
+  const map = L.map('map-'+countryId).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom:19
+  }).addTo(map);
+
+  const gradIcon = L.divIcon({
+    className:'',
+    html:'<div style="font-size:26px; line-height:1; transform:translate(-50%,-90%);">🎓</div>',
+    iconSize:[0,0]
+  });
+
+  data.unis.forEach(u=>{
+    const marker = L.marker([u.lat, u.lng], {icon:gradIcon}).addTo(map);
+    const popupHtml = `
+      <div class="popup-title">${u.degree}</div>
+      <div class="popup-school">${u.schoolPlain} — ${u.city}</div>
+      <div class="popup-buttons">
+        <a href="${u.webUrl}" target="_blank">Ver grado</a>
+        <button onclick="goTo('${u.country}','${u.id}')">Ver ficha</button>
+        <a href="https://maps.google.com/?q=${encodeURIComponent(u.schoolPlain + ' ' + u.city)}" target="_blank">Google Maps</a>
+      </div>`;
+    marker.bindPopup(popupHtml);
+  });
+
+  leafletMaps[countryId] = map;
+  mapsInitialized[countryId] = true;
+  setTimeout(()=>map.invalidateSize(), 200);
+}
+</script>
+</body>
+</html>
