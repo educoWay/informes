@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe personalizado de opciones de grado — Álvaro Beltrán Ruiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<style>
+:root{
+  --teal:#0a9baa;
+  --teal-dark:#077a87;
+  --teal-light:#e0f5f7;
+  --navy:#0d2b3e;
+  --bg:#f4f8fa;
+  --border:#c8e0e5;
+  --gold:#c9a227;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--bg); color:#2a2a2a;
+  font-family:'DM Sans', sans-serif; font-size:16px; line-height:1.6;
+}
+h1,h2,h3{font-family:'Playfair Display', serif; color:var(--navy); margin:0 0 .5em;}
+p{margin:0 0 1em;}
+a{color:var(--teal-dark); text-decoration:none;}
+a:hover{text-decoration:underline;}
+strong{color:var(--navy);}
+
+/* ---------- Header ---------- */
+.site-header{
+  position:sticky; top:0; z-index:100;
+  background:linear-gradient(135deg, var(--navy), #123a52);
+  color:#fff; padding:18px 28px 0;
+  box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+.header-top{display:flex; align-items:center; gap:24px; flex-wrap:wrap; padding-bottom:14px;}
+.logo-svg-white{width:200px; height:auto; flex-shrink:0;}
+.header-titles{flex:1; min-width:220px;}
+.header-titles h1{color:#fff; font-size:1.55rem; margin:0 0 4px;}
+.header-subtitle{
+  font-family:'DM Sans', sans-serif; font-size:.72rem; letter-spacing:2px;
+  text-transform:uppercase; color:#bcd8de; margin:0;
+}
+.tabs-nav{
+  display:flex; gap:4px; overflow-x:auto; border-top:1px solid rgba(255,255,255,.15);
+  padding-top:4px;
+}
+.tab-btn{
+  background:none; border:none; color:#cfe4e8; font-family:'DM Sans', sans-serif;
+  font-size:.92rem; font-weight:500; padding:12px 18px; cursor:pointer;
+  white-space:nowrap; border-bottom:3px solid transparent; transition:all .2s;
+  display:flex; align-items:center; gap:8px;
+}
+.tab-btn:hover{color:#fff;}
+.tab-btn.active{color:#fff; border-bottom-color:var(--teal);}
+
+/* ---------- Layout ---------- */
+.container{max-width:1000px; margin:0 auto; padding:36px 24px 80px;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ---------- Flags (CSS only) ---------- */
+.flag{
+  display:inline-block; position:relative; width:26px; height:18px;
+  overflow:hidden; border-radius:2px; border:1px solid rgba(0,0,0,.15);
+  vertical-align:middle; flex-shrink:0;
+}
+.flag-lg{width:72px; height:50px; border-radius:4px;}
+.flag .stripe{position:absolute; left:0; width:100%;}
+/* Netherlands: horizontal red/white/blue */
+.flag-nl .stripe-1{top:0; height:33.4%; background:#AE1C28;}
+.flag-nl .stripe-2{top:33.3%; height:33.4%; background:#fff;}
+.flag-nl .stripe-3{top:66.6%; height:33.4%; background:#21468B;}
+/* Belgium: vertical black/yellow/red */
+.flag-be .stripe{width:33.4%; height:100%; top:0;}
+.flag-be .stripe-1{left:0; background:#000;}
+.flag-be .stripe-2{left:33.3%; background:#FDDA24;}
+.flag-be .stripe-3{left:66.6%; background:#EF3340;}
+/* Austria: horizontal red/white/red */
+.flag-at .stripe-1{top:0; height:33.4%; background:#ED2939;}
+.flag-at .stripe-2{top:33.3%; height:33.4%; background:#fff;}
+.flag-at .stripe-3{top:66.6%; height:33.4%; background:#ED2939;}
+
+/* ---------- Intro tab ---------- */
+.intro-text p{font-size:1.02rem;}
+.index-block{margin-top:28px;}
+.index-country h3{
+  display:flex; align-items:center; gap:10px; font-size:1.2rem;
+  border-bottom:2px solid var(--border); padding-bottom:8px; margin-bottom:10px;
+}
+.index-list{list-style:none; margin:0 0 26px; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:4px 24px;}
+.index-list li a{
+  display:block; padding:10px 12px; border-radius:8px; color:#2a2a2a;
+}
+.index-list li a:hover{background:var(--teal-light); text-decoration:none;}
+.index-grado{display:block; font-family:'DM Sans', sans-serif; font-size:13.5px; font-weight:500; color:var(--navy);}
+.index-uni{display:block; font-family:'Playfair Display', serif; font-size:11.5px; font-style:italic; color:#8a8a8a; margin-top:2px;}
+.next-steps{
+  margin-top:20px; background:#fff; border:2px solid var(--border); border-radius:12px;
+  padding:22px 26px;
+}
+.next-steps h3{color:var(--teal-dark);}
+
+/* ---------- Research tab ---------- */
+.research-text h3{font-size:1.15rem; margin-top:1.6em;}
+.research-links{padding-left:20px;}
+.research-links li{margin-bottom:6px;}
+
+/* ---------- Country intro ---------- */
+.country-intro{display:flex; align-items:center; gap:20px; margin-bottom:22px; flex-wrap:wrap;}
+.country-intro-text h2{margin-bottom:6px;}
+.country-intro-text p{margin:0; color:#555;}
+.section-divider{
+  background:var(--teal); color:#fff; font-weight:700; letter-spacing:1px;
+  font-size:.85rem; padding:10px 16px; border-radius:8px; margin:24px 0 20px;
+  text-transform:uppercase;
+}
+.cards-grid{display:flex; flex-direction:column; gap:22px;}
+
+/* ---------- Card ---------- */
+.card{
+  background:#fff; border:2px solid var(--border); border-radius:12px;
+  padding:22px 24px; transition:border-color .2s, box-shadow .2s;
+  box-shadow:0 1px 3px rgba(0,0,0,.04); scroll-margin-top:140px;
+}
+.card:hover{border-color:var(--teal); box-shadow:0 6px 18px rgba(10,155,170,.15);}
+.card-header{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap;}
+.card-title-block{flex:1; min-width:200px;}
+.card-title{
+  font-family:'Playfair Display', serif; font-size:1.3rem; color:var(--navy);
+  display:inline-flex; align-items:center; gap:8px; transition:color .2s;
+}
+.card-title:hover{color:var(--teal-dark); text-decoration:none;}
+.click-icon{font-size:.85rem; transition:transform .2s;}
+.card-title:hover .click-icon{transform:scale(1.3);}
+.card-school{color:var(--teal-dark); font-weight:600; margin-top:4px; font-size:.95rem;}
+
+/* badges */
+.badge{
+  display:inline-block; padding:5px 12px; border-radius:20px; font-size:.78rem;
+  font-weight:700; border:1.5px solid; white-space:nowrap;
+}
+.badge-diff-baja{color:#1a7a3c; background:#e7f7ec; border-color:#1a7a3c;}
+.badge-diff-media{color:#b5650a; background:#fff2e0; border-color:#e08a2c;}
+.badge-diff-alta{color:#c23b22; background:#fdecea; border-color:#c23b22;}
+.badge-diff-muyalta{color:#b3261e; background:#fbe7e6; border-color:#b3261e;}
+.rank-row{margin:10px 0 6px; font-size:.85rem;}
+.rank-label{color:#888; margin-right:8px;}
+.badge-rank{background:var(--teal-light); color:var(--teal-dark); border-color:var(--teal); font-weight:600;}
+.badge-rank-gold{background:#fdf3d8; color:#8a6d10; border-color:var(--gold); font-weight:700;}
+.badge-rank-gold:hover{text-decoration:none; filter:brightness(1.03);}
+
+/* meta grid */
+.meta-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px 20px; margin:16px 0;
+}
+.meta-item{display:flex; flex-direction:column; gap:2px;}
+.meta-label{font-size:.72rem; text-transform:uppercase; letter-spacing:.6px; color:#999;}
+.meta-value{font-weight:600; color:var(--navy); display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.map-btn{
+  background:var(--teal-light); border:1.5px solid var(--teal); color:var(--teal-dark);
+  font-size:.72rem; font-weight:700; padding:3px 9px; border-radius:6px; cursor:pointer;
+}
+.map-btn:hover{background:var(--teal); color:#fff;}
+
+/* description box */
+.desc-box{
+  background:#eef7fb; border-left:4px solid var(--teal); border-radius:6px;
+  padding:14px 18px; margin:14px 0; color:#333; font-size:.95rem;
+}
+
+/* admission details */
+.admission-details{margin-top:14px; border-top:1px dashed var(--border); padding-top:10px;}
+.admission-details summary{
+  cursor:pointer; font-weight:700; color:var(--teal-dark); font-size:.92rem; padding:6px 0;
+}
+.admission-body{padding:10px 4px 4px; font-size:.93rem;}
+.admission-body p{margin:0 0 10px;}
+.req-extra{font-style:italic; color:#555;}
+.deadline-box{
+  background:#fff8d6; border:1.5px solid #e8cf4d; border-radius:8px;
+  padding:10px 14px; margin:12px 0; font-size:.92rem;
+}
+.proceso-pasos{padding-left:20px; margin:6px 0;}
+.proceso-pasos li{margin-bottom:6px;}
+
+/* map */
+.map-section{margin-top:34px; scroll-margin-top:140px;}
+.map-section h3{font-size:1.1rem;}
+.leaflet-map{height:420px; border-radius:12px; border:2px solid var(--border); overflow:hidden;}
+.leaflet-popup-content{font-family:'DM Sans', sans-serif;}
+.popup-title{font-family:'Playfair Display', serif; font-weight:700; color:var(--navy); margin-bottom:2px;}
+.popup-school{color:var(--teal-dark); font-size:.85rem; margin-bottom:8px;}
+.popup-actions{display:flex; flex-direction:column; gap:6px;}
+.popup-actions a, .popup-actions button{
+  font-size:.78rem; padding:5px 8px; border-radius:5px; border:1px solid var(--teal);
+  background:var(--teal-light); color:var(--teal-dark); text-align:center; cursor:pointer;
+  font-family:'DM Sans', sans-serif; font-weight:600;
+}
+.popup-actions a:hover, .popup-actions button:hover{background:var(--teal); color:#fff; text-decoration:none;}
+
+/* footer */
+.site-footer{
+  background:#fff; border-top:1px solid var(--border); padding:34px 24px;
+  text-align:center;
+}
+.logo-svg-color{width:170px; height:auto; margin-bottom:8px;}
+.footer-note{color:#999; font-size:.82rem;}
+
+@media (max-width:640px){
+  .index-list{grid-template-columns:1fr;}
+  .site-header{padding:14px 16px 0;}
+  .logo-svg-white{width:150px;}
+  .container{padding:24px 14px 60px;}
+  .card{padding:16px 16px;}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <svg class="logo-svg logo-svg-white" viewBox="0 0 520 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="educoWay" style="opacity:1">
+  <defs>
+    <linearGradient id="w-white" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#5fbf8f"/>
+      <stop offset="50%" stop-color="#1f9fa8"/>
+      <stop offset="100%" stop-color="#4fb3e8"/>
+    </linearGradient>
+  </defs>
+  <text x="0" y="72" font-family="'Quicksand', 'DM Sans', sans-serif" font-weight="600" font-size="62" fill="#ffffff" letter-spacing="0.5">educo</text>
+  <text x="228" y="72" font-family="'Quicksand', 'DM Sans', sans-serif" font-weight="700" font-size="66" fill="url(#w-white)" letter-spacing="0.5">w</text>
+  <text x="292" y="72" font-family="'Quicksand', 'DM Sans', sans-serif" font-weight="600" font-size="62" fill="#ffffff" letter-spacing="0.5">ay</text>
+  <text x="2" y="98" font-family="'DM Sans', sans-serif" font-weight="400" font-size="15" letter-spacing="1.5" fill="#ffffff" opacity="0.85">ORIENTACIÓN UNIVERSITARIA EN EL EXTRANJERO</text>
+</svg>
+    <div class="header-titles">
+      <h1>Informe personalizado de opciones de grado</h1>
+      <p class="header-subtitle">Preparado para Álvaro Beltrán Ruiz</p>
+    </div>
+  </div>
+  <nav class="tabs-nav">
+    <button class="tab-btn active" data-tab="intro" onclick="showTab('intro', this)">Introducción</button>
+<button class="tab-btn" data-tab="research" onclick="showTab('research', this)">Research vs Applied Sciences</button>
+<button class="tab-btn" data-tab="nl" onclick="showTab('nl', this)"><span class="flag flag-nl"><span class="stripe stripe-1"></span><span class="stripe stripe-2"></span><span class="stripe stripe-3"></span></span>Holanda</button>
+<button class="tab-btn" data-tab="be" onclick="showTab('be', this)"><span class="flag flag-be"><span class="stripe stripe-1"></span><span class="stripe stripe-2"></span><span class="stripe stripe-3"></span></span>Bélgica</button>
+<button class="tab-btn" data-tab="at" onclick="showTab('at', this)"><span class="flag flag-at"><span class="stripe stripe-1"></span><span class="stripe stripe-2"></span><span class="stripe stripe-3"></span></span>Austria</button>
+  </nav>
+</header>
+
+<main class="container">
+  
+    <section id="tab-intro" class="tab-panel active">
+      <div class="intro-text">
+        <p>Hola Álvaro:</p>
+        <p>Enhorabuena de nueva por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estamos convencidos que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+        <p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p>
+      </div>
+      <div class="index-block">
+        <div class="index-country"><h3><span class="flag flag-nl"><span class="stripe stripe-1"></span><span class="stripe stripe-2"></span><span class="stripe stripe-3"></span></span> Holanda</h3><ul class="index-list">
+<li><a href="#" onclick="goTo('nl', 'zuyd-hotel'); return false;">
+                <span class="index-grado">Hotel Management</span>
+                <span class="index-uni">Hotel Management School Maastricht – Zuyd</span>
+            </a></li>
+<li><a href="#" onclick="goTo('nl', 'hz-tourism'); return false;">
+                <span class="index-grado">Tourism Management</span>
+                <span class="index-uni">HZ University of Applied Sciences</span>
+            </a></li>
+<li><a href="#" onclick="goTo('nl', 'inholland-tourism'); return false;">
+                <span class="index-grado">Tourism Management</span>
+                <span class="index-uni">Inholland University of Applied Sciences</span>
+            </a></li>
+<li><a href="#" onclick="goTo('nl', 'breda-itm'); return false;">
+                <span class="index-grado">International Tourism Management</span>
+                <span class="index-uni">Breda University of Applied Sciences (BUas)</span>
+            </a></li>
+<li><a href="#" onclick="goTo('nl', 'breda-leisure-events'); return false;">
+                <span class="index-grado">Leisure and Event Management</span>
+                <span class="index-uni">Breda University of Applied Sciences (BUas)</span>
+            </a></li>
+<li><a href="#" onclick="goTo('nl', 'breda-leisure-studies'); return false;">
+                <span class="index-grado">BSc Leisure Studies</span>
+                <span class="index-uni">Breda University of Applied Sciences (BUas)</span>
+            </a></li>
+<li><a href="#" onclick="goTo('nl', 'nhl-tourism'); return false;">
+                <span class="index-grado">Tourism Management</span>
+                <span class="index-uni">NHL Stenden</span>
+            </a></li>
+<li><a href="#" onclick="goTo('nl', 'nhl-leisure-events'); return false;">
+                <span class="index-grado">Leisure and Event Management</span>
+                <span class="index-uni">NHL Stenden</span>
+            </a></li>
+</ul></div>
+<div class="index-country"><h3><span class="flag flag-be"><span class="stripe stripe-1"></span><span class="stripe stripe-2"></span><span class="stripe stripe-3"></span></span> Bélgica</h3><ul class="index-list">
+<li><a href="#" onclick="goTo('be', 'thomas-more-itl'); return false;">
+                <span class="index-grado">International Tourism and Leisure</span>
+                <span class="index-uni">Thomas More University of Applied Sciences</span>
+            </a></li>
+</ul></div>
+<div class="index-country"><h3><span class="flag flag-at"><span class="stripe stripe-1"></span><span class="stripe stripe-2"></span><span class="stripe stripe-3"></span></span> Austria</h3><ul class="index-list">
+<li><a href="#" onclick="goTo('at', 'imc-krems'); return false;">
+                <span class="index-grado">Tourism and Leisure Management</span>
+                <span class="index-uni">IMC Krems</span>
+            </a></li>
+</ul></div>
+      </div>
+      <div class="next-steps">
+        <h3>¿Qué tienes que hacer ahora?</h3>
+        <p>Echa un vistazo a todas las opciones que hemos seleccionado, mira los vídeos, lee el contenido de las webs (asignaturas, especializaciones, etc.), ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+      </div>
+    </section>
+
+    <section id="tab-research" class="tab-panel">
+      <div class="research-text">
+        <p>En la mayoría de países europeos existen tipos de universidades que es importante conocer y diferenciar, las universidades de "Research" y de "Applied Sciences". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+        <h3>Metodología teórica vs práctica</h3>
+        <p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project/Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+        <h3>Duración</h3>
+        <p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+        <p>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+        <h3>Ranking / Prestigio</h3>
+        <p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.</p>
+        <p>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+        <h3>Acceso a Másteres</h3>
+        <p>Aquí es importante diferenciar si tu máster será en uno de los países que diferencian las 2 universidades, o en un país que no lo hace. Sen España por ejemplo, que no diferencia estas universidades, ambos títulos te dan las mismas oportunidades. Pero si se trata de Holanda, Bélgica o Alemania, por ejemplo, sí hay diferencias. Con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. Pero en cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research</em>, te pedirán cursar un pre-máster (de 1 semestre o un año de duración) para ponerte al día con las habilidades de investigación que se supone no has desarrollado aún.</p>
+        <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de <em>Research</em> y otra de <em>Applied Sciences</em>):</p>
+        <ul class="research-links">
+          <li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank" rel="noopener">Applied Science vs. Research University</a></li>
+          <li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank" rel="noopener">Types of universities in the Netherlands</a></li>
+        </ul>
+        <p>Ahora sí, habiendo comentado estos detalles, te paso las opciones de estudio más interesantes:</p>
+      </div>
+    </section>
+
+    <section id="tab-nl" class="tab-panel">
+      <div class="country-intro">
+        <div class="country-flag-big"><span class="flag flag-nl flag-lg"><span class="stripe stripe-1"></span><span class="stripe stripe-2"></span><span class="stripe stripe-3"></span></span></div>
+        <div class="country-intro-text">
+          <h2>Holanda</h2>
+          <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <strong class="fee">2.692€/año</strong>.</p>
+        </div>
+      </div>
+      <div class="section-divider">APPLIED SCIENCE UNIVERSITIES</div>
+      <div class="cards-grid">
+        
+      <article class="card" id="zuyd-hotel">
+        <div class="card-header">
+          <div class="card-title-block">
+            <a class="card-title" href="https://www.zuyd.nl/en/programmes/hotel-management" target="_blank" rel="noopener">Hotel Management <span class="click-icon">🖱️</span></a>
+            <div class="card-school">Hotel Management School Maastricht – Zuyd</div>
+          </div>
+          <span class="badge badge-diff badge-diff-baja">Dificultad de admisión: Baja</span>
+        </div>
+        
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Maastricht (125.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl', 'map-nl')">🗺️ Ver mapa</button></span>
+          </div>
+          <div class="meta-item"><span class="meta-label">Duración</span><span class="meta-value">4 años 240 ECTS</span></div>
+          <div class="meta-item"><span class="meta-label">Coste anual</span><span class="meta-value">2.692€/año</span></div>
+          
+        </div>
+        <div class="desc-box">Hotel Management en Hotel Management School Maastricht es un grado de 4 años orientado a formar futuros profesionales y líderes del sector hotelero y turístico internacional. Combina gestión empresarial, emprendimiento, gastronomía e idiomas, junto con una fuerte formación práctica en el Teaching Hotel y mediante prácticas profesionales. El programa se imparte en inglés y ofrece un entorno internacional, con estudiantes neerlandeses e internacionales.</div>
+        <details class="admission-details">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="admission-body">
+            <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+            <p><strong>Requisitos de inglés:</strong> Academic IELTS 6.0, TOEFL 80 (at test centre) o Cambridge ESOL score FCE (169 mínimo).</p>
+            
+            <div class="deadline-box"><strong>Plazo límite para enviar matrícula:</strong> 1 de junio</div>
+            <p><strong>Proceso de selección:</strong></p>
+            <p>No hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" id="hz-tourism">
+        <div class="card-header">
+          <div class="card-title-block">
+            <a class="card-title" href="https://hz.nl/en/study-programmes/tourism-management" target="_blank" rel="noopener">Tourism Management <span class="click-icon">🖱️</span></a>
+            <div class="card-school">HZ University of Applied Sciences</div>
+          </div>
+          <span class="badge badge-diff badge-diff-baja">Dificultad de admisión: Baja</span>
+        </div>
+        
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Edisonweg, Vlissingen <button class="map-btn" onclick="scrollToMap('nl', 'map-nl')">🗺️ Ver mapa</button></span>
+          </div>
+          <div class="meta-item"><span class="meta-label">Duración</span><span class="meta-value">4 años 240 ECTS</span></div>
+          <div class="meta-item"><span class="meta-label">Coste anual</span><span class="meta-value">2.692€/año</span></div>
+          
+        </div>
+        <div class="desc-box">Tourism Management en HZ University of Applied Sciences es un Bachelor de 4 años, impartido en inglés, centrado en la gestión, innovación y desarrollo sostenible del turismo. Los estudiantes aprenden a diseñar experiencias y destinos turísticos, trabajar en marketing y gestión de destinos, y desarrollar proyectos reales con empresas. El programa destaca por su enfoque práctico, incluyendo una práctica de seis meses desde el primer año, un semestre de especialización y oportunidades de estudiar en el extranjero.</div>
+        <details class="admission-details">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="admission-body">
+            <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+            <p><strong>Requisitos de inglés:</strong> Academic IELTS 6.0, TOEFL 80 (home addition accepted) o Cambridge ESOL score FCE (169 mínimo).</p>
+            
+            <div class="deadline-box"><strong>Plazo límite para enviar matrícula:</strong> 1 de junio</div>
+            <p><strong>Proceso de selección:</strong></p>
+            <p>No hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" id="inholland-tourism">
+        <div class="card-header">
+          <div class="card-title-block">
+            <a class="card-title" href="https://www.inholland.nl/inhollandcom/degree-programmes/tourism-management-eng-full-time/" target="_blank" rel="noopener">Tourism Management <span class="click-icon">🖱️</span></a>
+            <div class="card-school">Inholland University of Applied Sciences</div>
+          </div>
+          <span class="badge badge-diff badge-diff-baja">Dificultad de admisión: Baja</span>
+        </div>
+        
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Amsterdam <button class="map-btn" onclick="scrollToMap('nl', 'map-nl')">🗺️ Ver mapa</button></span>
+          </div>
+          <div class="meta-item"><span class="meta-label">Duración</span><span class="meta-value">4 años 240 ECTS</span></div>
+          <div class="meta-item"><span class="meta-label">Coste anual</span><span class="meta-value">2.692€/año</span></div>
+          
+        </div>
+        <div class="desc-box">Tourism Management en Inholland University of Applied Sciences es un Bachelor de 4 años, impartido en inglés en Ámsterdam, que combina gestión turística, marketing, creación de experiencias y desarrollo de destinos. El programa tiene un enfoque muy práctico: los estudiantes trabajan en proyectos reales con empresas y organizaciones del sector, desarrollando soluciones para promover destinos, crear experiencias innovadoras y fomentar un turismo más sostenible.</div>
+        <details class="admission-details">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="admission-body">
+            <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+            <p><strong>Requisitos de inglés:</strong> Academic IELTS 6.0, TOEFL ibt 80 o Cambridge ESOL score FCE C (169 mínimo).</p>
+            
+            <div class="deadline-box"><strong>Plazo límite para enviar matrícula:</strong> 1 de agosto</div>
+            <p><strong>Proceso de selección:</strong></p>
+            <p>No hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" id="breda-itm">
+        <div class="card-header">
+          <div class="card-title-block">
+            <a class="card-title" href="https://www.buas.nl/en/programmes/tourism-management" target="_blank" rel="noopener">International Tourism Management <span class="click-icon">🖱️</span></a>
+            <div class="card-school">Breda University of Applied Sciences (BUas)</div>
+          </div>
+          <span class="badge badge-diff badge-diff-baja">Dificultad de admisión: Baja</span>
+        </div>
+        <div class="rank-row"><span class="rank-label">Ranking de la universidad:</span> <a class="badge badge-rank badge-rank-gold" href="https://www.shanghairanking.com/universities/breda-university-of-applied-sciences" target="_blank" rel="noopener">nº 76-100 worldwide · Holanda GRAS/Shanghai Ranking</a></div>
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Breda (190.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl', 'map-nl')">🗺️ Ver mapa</button></span>
+          </div>
+          <div class="meta-item"><span class="meta-label">Duración</span><span class="meta-value">4 años 240 ECTS</span></div>
+          <div class="meta-item"><span class="meta-label">Coste anual</span><span class="meta-value">2.692€/año</span></div>
+          
+        </div>
+        <div class="desc-box">Tourism Management en BUas es un grado de 4 años orientado a la gestión y desarrollo del sector turístico. Combina marketing, gestión empresarial, diseño de experiencias turísticas, desarrollo de destinos y turismo sostenible, con un enfoque muy práctico basado en proyectos reales para empresas. El programa incluye field trips, posibilidad de especialización, intercambio internacional y un mínimo de 20 semanas de prácticas profesionales.</div>
+        <details class="admission-details">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="admission-body">
+            <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+            <p><strong>Requisitos de inglés:</strong> Academic IELTS 6.0 (overall y speaking), TOEFL 80 (overall y 20 speaking) o Cambridge ESOL score FCE (169 mínimo). *todos en centro examinador</p>
+            
+            <div class="deadline-box"><strong>Plazo límite para enviar matrícula:</strong> Rolling admision</div>
+            <p><strong>Proceso de selección:</strong></p>
+            <p>No hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" id="breda-leisure-events">
+        <div class="card-header">
+          <div class="card-title-block">
+            <a class="card-title" href="https://www.buas.nl/en/programmes/leisure-events-management" target="_blank" rel="noopener">Leisure and Event Management <span class="click-icon">🖱️</span></a>
+            <div class="card-school">Breda University of Applied Sciences (BUas)</div>
+          </div>
+          <span class="badge badge-diff badge-diff-baja">Dificultad de admisión: Baja</span>
+        </div>
+        <div class="rank-row"><span class="rank-label">Ranking de la universidad:</span> <a class="badge badge-rank badge-rank-gold" href="https://www.shanghairanking.com/universities/breda-university-of-applied-sciences" target="_blank" rel="noopener">nº 76-100 worldwide · Holanda GRAS/Shanghai Ranking</a></div>
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Breda (190.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl', 'map-nl')">🗺️ Ver mapa</button></span>
+          </div>
+          <div class="meta-item"><span class="meta-label">Duración</span><span class="meta-value">4 años 240 ECTS</span></div>
+          <div class="meta-item"><span class="meta-label">Coste anual</span><span class="meta-value">2.692€/año</span></div>
+          
+        </div>
+        <div class="desc-box">Leisure &amp; Events Management en BUas es un grado de 4 años centrado en la creación, organización y gestión de experiencias y eventos. El programa combina gestión de proyectos, marketing, diseño de experiencias, finanzas y comportamiento del consumidor, con un enfoque muy práctico basado en proyectos reales y prácticas profesionales. Los estudiantes pueden especializarse en áreas como deportes y esports, festivales y música, parques temáticos, innovación social o eventos empresariales.</div>
+        <details class="admission-details">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="admission-body">
+            <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+            <p><strong>Requisitos de inglés:</strong> Academic IELTS 6.0 (overall y speaking), TOEFL 80 (overall y 20 speaking) o Cambridge ESOL score FCE (169 mínimo). *todos en centro examinador</p>
+            
+            <div class="deadline-box"><strong>Plazo límite para enviar matrícula:</strong> Rolling admision</div>
+            <p><strong>Proceso de selección:</strong></p>
+            <p>No hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" id="breda-leisure-studies">
+        <div class="card-header">
+          <div class="card-title-block">
+            <a class="card-title" href="https://www.buas.nl/en/programmes/bachelor-of-science-leisure-studies#admission-application" target="_blank" rel="noopener">BSc Leisure Studies <span class="click-icon">🖱️</span></a>
+            <div class="card-school">Breda University of Applied Sciences (BUas)</div>
+          </div>
+          <span class="badge badge-diff badge-diff-baja">Dificultad de admisión: Baja</span>
+        </div>
+        <div class="rank-row"><span class="rank-label">Ranking de la universidad:</span> <a class="badge badge-rank badge-rank-gold" href="https://www.shanghairanking.com/universities/breda-university-of-applied-sciences" target="_blank" rel="noopener">nº 76-100 worldwide · Holanda GRAS/Shanghai Ranking</a></div>
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Breda (190.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl', 'map-nl')">🗺️ Ver mapa</button></span>
+          </div>
+          <div class="meta-item"><span class="meta-label">Duración</span><span class="meta-value">3 años 180 ECTS</span></div>
+          <div class="meta-item"><span class="meta-label">Coste anual</span><span class="meta-value">2.692€/año</span></div>
+          
+        </div>
+        <div class="desc-box">Bachelor of Science Leisure Studies en BUas es un grado académico de 3 años centrado en comprender el ocio y su impacto en la sociedad. El programa analiza cómo las personas utilizan su tiempo libre y cómo las experiencias de turismo, cultura, deporte y entretenimiento pueden contribuir al bienestar y al desarrollo social. Combina investigación, análisis de datos y conocimientos sobre comportamiento humano, con un enfoque internacional y científico.</div>
+        <details class="admission-details">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="admission-body">
+            <p><strong>Requisitos académicos:</strong> Título de bachillerato + EVAU</p>
+            <p><strong>Requisitos de inglés:</strong> Academic IELTS 6.0 (overall y speaking), TOEFL 80 (overall y 20 speaking) o Cambridge ESOL score FCE (169 mínimo). *todos en centro examinador</p>
+            
+            <div class="deadline-box"><strong>Plazo límite para enviar matrícula:</strong> Rolling admision</div>
+            <p><strong>Proceso de selección:</strong></p>
+            <p>No hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" id="nhl-tourism">
+        <div class="card-header">
+          <div class="card-title-block">
+            <a class="card-title" href="https://www.nhlstenden.com/en/courses/tourism-management" target="_blank" rel="noopener">Tourism Management <span class="click-icon">🖱️</span></a>
+            <div class="card-school">NHL Stenden</div>
+          </div>
+          <span class="badge badge-diff badge-diff-baja">Dificultad de admisión: Baja</span>
+        </div>
+        
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Leeuwarden <button class="map-btn" onclick="scrollToMap('nl', 'map-nl')">🗺️ Ver mapa</button></span>
+          </div>
+          <div class="meta-item"><span class="meta-label">Duración</span><span class="meta-value">4 años 240 ECTS</span></div>
+          <div class="meta-item"><span class="meta-label">Coste anual</span><span class="meta-value">2.692€/año</span></div>
+          
+        </div>
+        <div class="desc-box">Tourism Management en NHL Stenden es un grado de 4 años centrado en la gestión y el desarrollo sostenible de destinos turísticos. Los estudiantes trabajan desde el primer año en proyectos reales con empresas, desarrollando conocimientos en innovación turística, marketing, emprendimiento, gestión de destinos y nuevas tecnologías como la IA. Además, incluye field trips, prácticas y oportunidades de intercambio internacional, preparando a los estudiantes para trabajar en el sector turístico a nivel global.</div>
+        <details class="admission-details">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="admission-body">
+            <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+            <p><strong>Requisitos de inglés:</strong> Academic IELTS 6.0 (with an advised minimum of 5.0 for each skill)., TOEFL 80 (0-120 scale) o Cambridge ESOL score FCE-B (Scale 173-175) o FCE C (169-172) *todos en centro examinador</p>
+            <p class="req-extra">English Language Course: If you haven't met the English language requirements mentioned above, NHL Stenden offers an English language course that you can participate in before starting your Bachelor's or Master's program at NHL Stenden. <a href="https://www.nhlstenden.com/en/short-courses/english-preparatory-course" target="_blank" rel="noopener">For more details, check this link.</a></p>
+            <div class="deadline-box"><strong>Plazo límite para enviar matrícula:</strong> 15 de agosto</div>
+            <p><strong>Proceso de selección:</strong></p>
+            <p>No hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          </div>
+        </details>
+      </article>
+
+      <article class="card" id="nhl-leisure-events">
+        <div class="card-header">
+          <div class="card-title-block">
+            <a class="card-title" href="https://www.nhlstenden.com/en/courses/leisure-and-events-management" target="_blank" rel="noopener">Leisure and Event Management <span class="click-icon">🖱️</span></a>
+            <div class="card-school">NHL Stenden</div>
+          </div>
+          <span class="badge badge-diff badge-diff-baja">Dificultad de admisión: Baja</span>
+        </div>
+        
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Leeuwarden <button class="map-btn" onclick="scrollToMap('nl', 'map-nl')">🗺️ Ver mapa</button></span>
+          </div>
+          <div class="meta-item"><span class="meta-label">Duración</span><span class="meta-value">4 años 240 ECTS</span></div>
+          <div class="meta-item"><span class="meta-label">Coste anual</span><span class="meta-value">2.692€/año</span></div>
+          
+        </div>
+        <div class="desc-box">Leisure &amp; Events Management en NHL Stenden es un grado de 4 años centrado en la organización de eventos y el desarrollo de experiencias de ocio. Los estudiantes aprenden sobre gestión, marketing, creatividad, emprendimiento y diseño de experiencias, trabajando en proyectos reales y colaborando con empresas del sector. El programa también ofrece oportunidades de especialización, prácticas profesionales y experiencias internacionales.</div>
+        <details class="admission-details">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="admission-body">
+            <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+            <p><strong>Requisitos de inglés:</strong> Academic IELTS 6.0 (with an advised minimum of 5.0 for each skill)., TOEFL 80 (0-120 scale) o Cambridge ESOL score FCE-B (Scale 173-175) o FCE C (169-172) *todos en centro examinador</p>
+            <p class="req-extra">English Language Course: If you haven't met the English language requirements mentioned above, NHL Stenden offers an English language course that you can participate in before starting your Bachelor's or Master's program at NHL Stenden. <a href="https://www.nhlstenden.com/en/short-courses/english-preparatory-course" target="_blank" rel="noopener">For more details, check this link.</a></p>
+            <div class="deadline-box"><strong>Plazo límite para enviar matrícula:</strong> 15 de agosto</div>
+            <p><strong>Proceso de selección:</strong></p>
+            <p>No hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          </div>
+        </details>
+      </article>
+      </div>
+      <div class="map-section" id="map-nl">
+        <h3>Mapa de universidades — Holanda</h3>
+        <div id="leaflet-nl" class="leaflet-map"></div>
+      </div>
+    </section>
+
+    <section id="tab-be" class="tab-panel">
+      <div class="country-intro">
+        <div class="country-flag-big"><span class="flag flag-be flag-lg"><span class="stripe stripe-1"></span><span class="stripe stripe-2"></span><span class="stripe stripe-3"></span></span></div>
+        <div class="country-intro-text">
+          <h2>Bélgica</h2>
+          <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <strong class="fee">1187€/año</strong>.</p>
+        </div>
+      </div>
+      <div class="section-divider">APPLIED SCIENCE UNIVERSITIES</div>
+      <div class="cards-grid">
+        
+      <article class="card" id="thomas-more-itl">
+        <div class="card-header">
+          <div class="card-title-block">
+            <a class="card-title" href="https://thomasmore.be/en/educations/degree-students/international-tourism-and-leisure/international-tourism-and-leisure/mechelen/full-programme" target="_blank" rel="noopener">International Tourism and Leisure <span class="click-icon">🖱️</span></a>
+            <div class="card-school">Thomas More University of Applied Sciences</div>
+          </div>
+          <span class="badge badge-diff badge-diff-baja">Dificultad de admisión: Baja</span>
+        </div>
+        
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Mechelen <button class="map-btn" onclick="scrollToMap('be', 'map-be')">🗺️ Ver mapa</button></span>
+          </div>
+          <div class="meta-item"><span class="meta-label">Duración</span><span class="meta-value">3 años, 180 ECTS</span></div>
+          <div class="meta-item"><span class="meta-label">Coste anual</span><span class="meta-value">1187€/año</span></div>
+          
+        </div>
+        <div class="desc-box">International Tourism and Leisure en Thomas More es un Bachelor de 3 años, impartido completamente en inglés, que combina turismo, hospitality, leisure, viajes y gestión de destinos. Tiene un enfoque muy práctico, con proyectos reales, laboratorios, experiencias internacionales y una práctica profesional internacional de 15 semanas. Los estudiantes también desarrollan conocimientos en marketing, gestión, tecnología turística, sostenibilidad e idiomas, preparándose para carreras internacionales en turismo, viajes y hospitality.</div>
+        <details class="admission-details">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="admission-body">
+            <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+            <p><strong>Requisitos de inglés:</strong> IELTS 6.0 · Cambridge FCE 160 · TOEFL / TOEFL iBT Special Home Edition 79 · Duolingo 110</p>
+            
+            <div class="deadline-box"><strong>Plazo límite para enviar matrícula:</strong> Rolling admision</div>
+            <p><strong>Proceso de selección:</strong></p>
+            <p>No hay proceso de selección: si cumples los requisitos de diploma y lengua, serás aceptado, aunque pueden cerrar las solicitudes de determinados países cuando alcanzan un límite.</p>
+          </div>
+        </details>
+      </article>
+      </div>
+      <div class="map-section" id="map-be">
+        <h3>Mapa de universidades — Bélgica</h3>
+        <div id="leaflet-be" class="leaflet-map"></div>
+      </div>
+    </section>
+
+    <section id="tab-at" class="tab-panel">
+      <div class="country-intro">
+        <div class="country-flag-big"><span class="flag flag-at flag-lg"><span class="stripe stripe-1"></span><span class="stripe stripe-2"></span><span class="stripe stripe-3"></span></span></div>
+        <div class="country-intro-text">
+          <h2>Austria</h2>
+          <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Austria, siendo el coste anual que tenemos que pagar de <strong class="fee">363€/trimestre</strong>.</p>
+        </div>
+      </div>
+      <div class="section-divider">APPLIED SCIENCE UNIVERSITIES</div>
+      <div class="cards-grid">
+        
+      <article class="card" id="imc-krems">
+        <div class="card-header">
+          <div class="card-title-block">
+            <a class="card-title" href="https://www.imc.ac.at/en/study/bachelor/business/tourism-and-leisure-management/" target="_blank" rel="noopener">Tourism and Leisure Management <span class="click-icon">🖱️</span></a>
+            <div class="card-school">IMC Krems</div>
+          </div>
+          <span class="badge badge-diff badge-diff-media">Dificultad de admisión: Media</span>
+        </div>
+        
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Ciudad</span>
+            <span class="meta-value">Krems <button class="map-btn" onclick="scrollToMap('at', 'map-at')">🗺️ Ver mapa</button></span>
+          </div>
+          <div class="meta-item"><span class="meta-label">Duración</span><span class="meta-value">3 años / 180 ECTS</span></div>
+          <div class="meta-item"><span class="meta-label">Coste anual</span><span class="meta-value">363€/trimestre</span></div>
+          
+        </div>
+        <div class="desc-box">Tourism and Leisure Management en IMC Krems es un Bachelor de 3 años, impartido completamente en inglés, que combina gestión empresarial, turismo y ocio. El programa tiene un fuerte enfoque internacional y práctico, con asignaturas de marketing, sostenibilidad, transformación digital e IA aplicada al turismo, además de gestión de destinos, eventos y experiencias. Incluye un semestre obligatorio de prácticas de 22 semanas, con posibilidad de realizarlo en el extranjero, y permite especializarse en áreas como hospitality, destination management, wellness, deporte o turismo de aventura.</div>
+        <details class="admission-details">
+          <summary>Ver requisitos de admisión y fechas</summary>
+          <div class="admission-body">
+            <p><strong>Requisitos académicos:</strong> Título de Bachillerato + EVAU aprobado</p>
+            <p><strong>Requisitos de inglés:</strong> La universidad evalúa el nivel de inglés durante la entrevista.</p>
+            
+            <div class="deadline-box"><strong>Plazo límite para enviar matrícula:</strong> 15 de abril</div>
+            <p><strong>Proceso de selección:</strong></p>
+            <p>El proceso de admisión se basa principalmente en conocer al candidato y evaluar su motivación. Consta de los siguientes pasos:</p><ul class="proceso-pasos"><li><strong>Carta de motivación:</strong> responder a preguntas sobre tus intereses, experiencia y razones para estudiar el programa.</li><li><strong>Essay:</strong> elegir uno de los temas propuestos, investigar sobre él y presentar tus propios argumentos y punto de vista.</li><li><strong>Entrevista de admisión:</strong> conversación con el director del programa, normalmente online por Microsoft Teams o presencial. Se hablará sobre tu motivación y sobre el tema y argumentos de tu ensayo.</li><li><strong>Evaluación final:</strong> se valoran la carta de motivación, el ensayo y tu desempeño durante la entrevista, incluyendo la calidad de tus argumentos y la forma de expresarte.</li></ul>
+          </div>
+        </details>
+      </article>
+      </div>
+      <div class="map-section" id="map-at">
+        <h3>Mapa de universidades — Austria</h3>
+        <div id="leaflet-at" class="leaflet-map"></div>
+      </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+  <svg class="logo-svg logo-svg-color" viewBox="0 0 520 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="educoWay" style="opacity:0.55">
+  <defs>
+    <linearGradient id="w-color" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#5fbf8f"/>
+      <stop offset="50%" stop-color="#1f9fa8"/>
+      <stop offset="100%" stop-color="#4fb3e8"/>
+    </linearGradient>
+  </defs>
+  <text x="0" y="72" font-family="'Quicksand', 'DM Sans', sans-serif" font-weight="600" font-size="62" fill="#8a9aa2" letter-spacing="0.5">educo</text>
+  <text x="228" y="72" font-family="'Quicksand', 'DM Sans', sans-serif" font-weight="700" font-size="66" fill="url(#w-color)" letter-spacing="0.5">w</text>
+  <text x="292" y="72" font-family="'Quicksand', 'DM Sans', sans-serif" font-weight="600" font-size="62" fill="#8a9aa2" letter-spacing="0.5">ay</text>
+  <text x="2" y="98" font-family="'DM Sans', sans-serif" font-weight="400" font-size="15" letter-spacing="1.5" fill="#8a9aa2" opacity="0.85">ORIENTACIÓN UNIVERSITARIA EN EL EXTRANJERO</text>
+</svg>
+  <p class="footer-note">educoWay · orientación universitaria en el extranjero</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+
+const mapData = {
+  "nl": {
+    "lat": 52.15,
+    "lng": 5.3,
+    "zoom": 7,
+    "universities": [
+      {
+        "id": "zuyd-hotel",
+        "name": "Hotel Management",
+        "school": "Hotel Management School Maastricht – Zuyd",
+        "lat": 50.8514,
+        "lng": 5.691,
+        "webUrl": "https://www.zuyd.nl/en/programmes/hotel-management",
+        "mapsUrl": "https://maps.google.com/?q=50.8514,5.691"
+      },
+      {
+        "id": "hz-tourism",
+        "name": "Tourism Management",
+        "school": "HZ University of Applied Sciences",
+        "lat": 51.4426,
+        "lng": 3.5736,
+        "webUrl": "https://hz.nl/en/study-programmes/tourism-management",
+        "mapsUrl": "https://maps.google.com/?q=51.4426,3.5736"
+      },
+      {
+        "id": "inholland-tourism",
+        "name": "Tourism Management",
+        "school": "Inholland University of Applied Sciences",
+        "lat": 52.3676,
+        "lng": 4.9041,
+        "webUrl": "https://www.inholland.nl/inhollandcom/degree-programmes/tourism-management-eng-full-time/",
+        "mapsUrl": "https://maps.google.com/?q=52.3676,4.9041"
+      },
+      {
+        "id": "breda-itm",
+        "name": "International Tourism Management",
+        "school": "Breda University of Applied Sciences (BUas)",
+        "lat": 51.5719,
+        "lng": 4.7683,
+        "webUrl": "https://www.buas.nl/en/programmes/tourism-management",
+        "mapsUrl": "https://maps.google.com/?q=51.5719,4.7683"
+      },
+      {
+        "id": "breda-leisure-events",
+        "name": "Leisure and Event Management",
+        "school": "Breda University of Applied Sciences (BUas)",
+        "lat": 51.5719,
+        "lng": 4.7683,
+        "webUrl": "https://www.buas.nl/en/programmes/leisure-events-management",
+        "mapsUrl": "https://maps.google.com/?q=51.5719,4.7683"
+      },
+      {
+        "id": "breda-leisure-studies",
+        "name": "BSc Leisure Studies",
+        "school": "Breda University of Applied Sciences (BUas)",
+        "lat": 51.5719,
+        "lng": 4.7683,
+        "webUrl": "https://www.buas.nl/en/programmes/bachelor-of-science-leisure-studies#admission-application",
+        "mapsUrl": "https://maps.google.com/?q=51.5719,4.7683"
+      },
+      {
+        "id": "nhl-tourism",
+        "name": "Tourism Management",
+        "school": "NHL Stenden",
+        "lat": 53.2012,
+        "lng": 5.7999,
+        "webUrl": "https://www.nhlstenden.com/en/courses/tourism-management",
+        "mapsUrl": "https://maps.google.com/?q=53.2012,5.7999"
+      },
+      {
+        "id": "nhl-leisure-events",
+        "name": "Leisure and Event Management",
+        "school": "NHL Stenden",
+        "lat": 53.2012,
+        "lng": 5.7999,
+        "webUrl": "https://www.nhlstenden.com/en/courses/leisure-and-events-management",
+        "mapsUrl": "https://maps.google.com/?q=53.2012,5.7999"
+      }
+    ]
+  },
+  "be": {
+    "lat": 51.0259,
+    "lng": 4.4776,
+    "zoom": 11,
+    "universities": [
+      {
+        "id": "thomas-more-itl",
+        "name": "International Tourism and Leisure",
+        "school": "Thomas More University of Applied Sciences",
+        "lat": 51.0259,
+        "lng": 4.4776,
+        "webUrl": "https://thomasmore.be/en/educations/degree-students/international-tourism-and-leisure/international-tourism-and-leisure/mechelen/full-programme",
+        "mapsUrl": "https://maps.google.com/?q=51.0259,4.4776"
+      }
+    ]
+  },
+  "at": {
+    "lat": 48.4103,
+    "lng": 15.6132,
+    "zoom": 11,
+    "universities": [
+      {
+        "id": "imc-krems",
+        "name": "Tourism and Leisure Management",
+        "school": "IMC Krems",
+        "lat": 48.4103,
+        "lng": 15.6132,
+        "webUrl": "https://www.imc.ac.at/en/study/bachelor/business/tourism-and-leisure-management/",
+        "mapsUrl": "https://maps.google.com/?q=48.4103,15.6132"
+      }
+    ]
+  }
+};
+const mapsInitialized = {};
+let leafletMaps = {};
+
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('tab-' + id);
+  if (panel) panel.classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo({top:0, behavior:'instant'});
+  if (['nl','be','at'].includes(id)) {
+    setTimeout(() => initMap(id), 50);
+  }
+}
+
+function goTo(tab, anchor) {
+  const btn = document.querySelector('.tab-btn[data-tab="' + tab + '"]');
+  showTab(tab, btn);
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 80);
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.style.transition = 'box-shadow .3s';
+    el.style.boxShadow = '0 0 0 3px var(--teal)';
+    setTimeout(() => { el.style.boxShadow = ''; }, 1500);
+  }
+}
+
+function scrollToMap(tab, anchor) {
+  const currentActive = document.querySelector('.tab-panel.active');
+  if (currentActive && currentActive.id === 'tab-' + tab) {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  } else {
+    goTo(tab, anchor);
+  }
+}
+
+function initMap(countryId) {
+  if (mapsInitialized[countryId]) return;
+  const data = mapData[countryId];
+  if (!data) return;
+  const el = document.getElementById('leaflet-' + countryId);
+  if (!el || typeof L === 'undefined') return;
+  const map = L.map(el).setView([data.lat, data.lng], data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(map);
+
+  const gradIcon = L.divIcon({
+    className: 'custom-marker',
+    html: '<div style="font-size:26px; line-height:1; filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));">🎓</div>',
+    iconSize: [30,30],
+    iconAnchor: [15,26]
+  });
+
+  data.universities.forEach(u => {
+    const marker = L.marker([u.lat, u.lng], {icon: gradIcon}).addTo(map);
+    const popupHtml = `
+      <div class="popup-title">${u.name}</div>
+      <div class="popup-school">${u.school}</div>
+      <div class="popup-actions">
+        <a href="${u.webUrl}" target="_blank" rel="noopener">Ver grado</a>
+        <button onclick="scrollToCard('${u.id}')">Ver ficha</button>
+        <a href="${u.mapsUrl}" target="_blank" rel="noopener">Google Maps</a>
+      </div>`;
+    marker.bindPopup(popupHtml);
+  });
+
+  leafletMaps[countryId] = map;
+  mapsInitialized[countryId] = true;
+  setTimeout(() => map.invalidateSize(), 100);
+}
+
+</script>
+</body>
+</html>
