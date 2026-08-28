@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe personalizado de opciones de grado — Héctor Beltrán Ruiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<style>
+
+:root{
+  --teal:#0a9baa;
+  --teal-dark:#077a87;
+  --teal-light:#e0f5f7;
+  --navy:#0d2b3e;
+  --bg:#f4f8fa;
+  --border:#c8e0e5;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; padding:0; background:var(--bg); color:var(--navy);
+  font-family:'DM Sans', sans-serif; font-size:16px; line-height:1.6;
+}
+h1,h2,h3, .serif{ font-family:'Playfair Display', serif; }
+a{ color:var(--teal-dark); }
+
+/* ---------- HEADER ---------- */
+header.site-header{
+  position:sticky; top:0; z-index:1000;
+  background:linear-gradient(135deg, var(--navy), #123a52);
+  color:#fff;
+  padding:18px 28px 0 28px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.18);
+}
+.header-top{
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+  flex-wrap:wrap; padding-bottom:14px;
+}
+.header-brand{ display:flex; align-items:center; gap:18px; }
+.logo-header{ height:34px; width:auto; filter:brightness(0) invert(1); }
+.header-titles h1{
+  margin:0; font-size:1.55rem; font-weight:700; color:#fff; line-height:1.2;
+}
+.header-titles .subtitle{
+  margin-top:4px; font-size:0.72rem; letter-spacing:.14em; text-transform:uppercase;
+  color:#bcd9df; font-weight:600;
+}
+
+/* ---------- TABS ---------- */
+nav.tabs{
+  display:flex; gap:4px; overflow-x:auto; padding-bottom:0;
+  scrollbar-width:thin;
+}
+nav.tabs::-webkit-scrollbar{height:5px;}
+nav.tabs::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.3); border-radius:4px;}
+.tab-btn{
+  background:transparent; border:none; color:#cfe6ea; cursor:pointer;
+  padding:10px 16px; font-family:'DM Sans',sans-serif; font-size:0.88rem; font-weight:600;
+  white-space:nowrap; border-radius:8px 8px 0 0; display:flex; align-items:center; gap:8px;
+  transition:background .15s, color .15s;
+}
+.tab-btn:hover{ background:rgba(255,255,255,0.08); color:#fff; }
+.tab-btn.active{ background:var(--bg); color:var(--navy); }
+
+/* ---------- LAYOUT ---------- */
+main{ max-width:960px; margin:0 auto; padding:32px 20px 80px 20px; }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+.intro-text p{ margin:0 0 16px 0; }
+
+.section-divider{
+  background:var(--teal); color:#fff; font-family:'Playfair Display',serif;
+  text-align:center; padding:10px 14px; border-radius:8px; margin:34px 0 20px 0;
+  font-size:1.05rem; letter-spacing:.03em;
+}
+
+/* ---------- COUNTRY INTRO ---------- */
+.country-hero{
+  display:flex; align-items:center; gap:20px; background:#fff; border:2px solid var(--border);
+  border-radius:12px; padding:22px; margin-bottom:22px; flex-wrap:wrap;
+}
+.country-hero h2{ margin:0 0 6px 0; font-size:1.7rem; color:var(--teal-dark); }
+.country-meta{ display:flex; gap:18px; flex-wrap:wrap; margin-top:8px; font-size:0.9rem; }
+.country-meta .pill{
+  background:var(--teal-light); border:1px solid var(--border); border-radius:20px;
+  padding:5px 14px; font-weight:600; color:var(--navy);
+}
+.country-text{ margin-top:8px; }
+
+/* ---------- INDEX (Introduccion tab) ---------- */
+.index-country{ margin-bottom:22px; }
+.index-country h3{ color:var(--teal-dark); border-bottom:2px solid var(--border); padding-bottom:6px; margin-bottom:10px;}
+.index-list{ display:grid; grid-template-columns:1fr 1fr; gap:10px 20px; }
+@media(max-width:680px){ .index-list{ grid-template-columns:1fr; } }
+.index-entry{
+  display:block; text-decoration:none; padding:8px 10px; border-radius:8px;
+  border:1px solid transparent; transition:background .15s, border-color .15s;
+}
+.index-entry:hover{ background:var(--teal-light); border-color:var(--border); }
+.index-entry .deg{ font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:400; color:var(--navy); display:block; }
+.index-entry .uni{ font-family:'Playfair Display',serif; font-size:11.5px; font-style:italic; color:#8a97a1; display:block; margin-top:2px; }
+
+/* ---------- CARDS ---------- */
+.uni-card{
+  background:#fff; border:2px solid var(--border); border-radius:12px; padding:22px;
+  margin-bottom:22px; transition:border-color .18s, box-shadow .18s; scroll-margin-top:200px;
+}
+.uni-card:hover{ border-color:var(--teal); box-shadow:0 6px 20px rgba(10,155,170,0.18); }
+.card-header{ display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap; }
+.card-title-block{ flex:1; min-width:240px; }
+.card-title-block h4{ margin:0; font-family:'Playfair Display', serif; font-size:1.28rem; }
+.card-title-block h4 a{
+  color:var(--navy); text-decoration:none; transition:color .15s;
+}
+.card-title-block h4 a:hover{ color:var(--teal-dark); }
+.card-title-block h4 a .click-icon{ display:inline-block; transition:transform .15s; margin-left:4px; }
+.card-title-block h4 a:hover .click-icon{ transform:scale(1.3); }
+.card-school{ color:var(--teal-dark); font-weight:700; margin-top:4px; font-size:0.98rem; }
+
+.difficulty-badge{
+  border-radius:20px; padding:5px 14px; font-size:0.78rem; font-weight:700;
+  white-space:nowrap; border:1.5px solid; align-self:flex-start;
+}
+.diff-baja{ background:#e7f7ec; color:#1c7a3c; border-color:#1c7a3c; }
+.diff-media{ background:#fff3e0; color:#b5620c; border-color:#b5620c; }
+.diff-alta{ background:#fde8e8; color:#c0281c; border-color:#c0281c; }
+
+.ranking-block{ margin-top:12px; }
+.ranking-label{ font-size:0.78rem; color:#8a97a1; margin-bottom:6px; }
+.ranking-badges{ display:flex; flex-wrap:wrap; gap:8px; }
+.rank-badge{
+  background:var(--teal-light); border:1px solid var(--border); border-radius:8px;
+  padding:5px 10px; font-size:0.78rem; font-weight:600; color:var(--navy);
+}
+.rank-badge.gold{ background:#fff4d6; border-color:#e0b940; color:#8a6d00; }
+
+.meta-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+  gap:10px; margin:16px 0;
+}
+.meta-cell{
+  background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px;
+}
+.meta-cell .meta-label{ font-size:0.72rem; text-transform:uppercase; letter-spacing:.05em; color:#8a97a1; font-weight:700; }
+.meta-cell .meta-value{ margin-top:3px; font-size:0.92rem; font-weight:600; }
+.map-btn{
+  background:var(--teal-light); border:1px solid var(--teal); border-radius:6px;
+  font-size:0.72rem; font-weight:700; color:var(--teal-dark); padding:3px 8px; margin-left:8px;
+  cursor:pointer; display:inline-block;
+}
+.map-btn:hover{ background:var(--teal); color:#fff; }
+
+.desc-box{
+  background:#eef6fb; border-left:4px solid var(--teal); border-radius:0 8px 8px 0;
+  padding:14px 16px; margin:16px 0; font-size:0.95rem;
+}
+
+details.admission{
+  margin-top:14px; border:1px solid var(--border); border-radius:8px; overflow:hidden;
+}
+details.admission summary{
+  cursor:pointer; padding:10px 14px; background:var(--teal-light); font-weight:700;
+  color:var(--teal-dark); font-size:0.92rem; list-style:none;
+}
+details.admission summary::-webkit-details-marker{ display:none; }
+details.admission summary::before{ content:"▸ "; }
+details.admission[open] summary::before{ content:"▾ "; }
+details.admission .admission-body{ padding:14px 16px; font-size:0.92rem; }
+details.admission ul{ margin:6px 0; padding-left:20px; }
+.deadline-box{
+  background:#fff6cc; border:1px solid #e0c440; border-radius:6px; padding:8px 12px;
+  margin:10px 0; font-weight:700; display:inline-block;
+}
+.text-red{ color:#c0281c; font-weight:700; }
+.text-green{ color:#1c7a3c; font-weight:700; }
+
+.diff-block{
+  background:#fffceb; border:1px solid #e0c440; border-radius:10px; padding:18px 20px; margin:22px 0;
+}
+.diff-block h4{ margin-top:0; color:#8a6d00; }
+
+/* ---------- MAP ---------- */
+.map-container{ margin-top:28px; }
+.map-container h3{ color:var(--teal-dark); }
+.leaflet-map{ width:100%; height:420px; border-radius:12px; border:2px solid var(--border); }
+.popup-btns{ display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+.popup-btns a{
+  background:var(--teal); color:#fff !important; text-decoration:none; font-size:0.75rem;
+  padding:4px 8px; border-radius:6px; font-weight:600;
+}
+.popup-btns a:hover{ background:var(--teal-dark); }
+
+/* ---------- NEXT STEPS ---------- */
+.nextsteps{
+  background:#fff; border:2px solid var(--border); border-radius:12px; padding:22px; margin-top:30px;
+}
+.nextsteps h3{ color:var(--teal-dark); margin-top:0; }
+
+/* ---------- FOOTER ---------- */
+footer.site-footer{
+  background:var(--navy); color:#cfe6ea; text-align:center; padding:34px 20px;
+  margin-top:40px;
+}
+.logo-footer{ height:40px; width:auto; opacity:0.55; }
+footer.site-footer p{ margin-top:14px; font-size:0.8rem; color:#8ea9b3; }
+
+.flag{ display:inline-block; overflow:hidden; border:1px solid rgba(0,0,0,0.18); box-shadow:0 1px 3px rgba(0,0,0,0.18); vertical-align:middle; flex-shrink:0; }
+.flag-sm{ width:26px; height:17px; border-radius:2px; }
+.flag-lg{ width:70px; height:46px; border-radius:5px; }
+
+.flag-nl{ display:flex; flex-direction:column; }
+.flag-nl span{ flex:1; }
+.flag-nl .b1{ background:#AE1C28; } .flag-nl .b2{ background:#FFFFFF; } .flag-nl .b3{ background:#21468B; }
+
+.flag-de{ display:flex; flex-direction:column; }
+.flag-de span{ flex:1; }
+.flag-de .b1{ background:#000000; } .flag-de .b2{ background:#DD0000; } .flag-de .b3{ background:#FFCE00; }
+
+.flag-be{ display:flex; flex-direction:row; }
+.flag-be span{ flex:1; }
+.flag-be .b1{ background:#000000; } .flag-be .b2{ background:#FAE042; } .flag-be .b3{ background:#ED2939; }
+
+.flag-at{ display:flex; flex-direction:column; }
+.flag-at span{ flex:1; }
+.flag-at .b1{ background:#ED2939; } .flag-at .b2{ background:#FFFFFF; } .flag-at .b3{ background:#ED2939; }
+
+.grad-marker{ font-size:24px; text-align:center; line-height:28px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="header-brand">
+      <img class="logo-header" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABwgAAAGxCAMAAABBWBIzAAAByFBMVEVMaXEsq7tzdHRzdHQrq5Usq8ErrJwpqtwvrHEsq7ZzdHRzdHRzdHRzdHRzdHRzdHRzdHRzdHRzdHRzdHRzdHRzdHRzdHQrrK4sq8EvrHEoqtwpqtwoqtwvrHEvrHEpqtwvrHEpqtwurLcpqtwvrHEvrHErq5YvrHEoqtwvrHEvrHEsq8Arq7ssq7oqq78pqtwrrJssrJktrJYsq7wpqtwtq7ksq7srq5surK8rq5QqrIwrq7wvrHEvrHEpqtwtq7gvrHEvrHEpq74rq7wrrJcpqtwrrJwrrJwrq7wsq7ssrJghq84rq7wuq7guq7ctrLQsq7spqtwqq78pqtwrrJYrrJwrrJwhq9EurHgqrJcvrHEurH0rrJEpqtwoq8Ymq8opqtwsrJoqrKgvrHEsq7siq9UrrJ0srKwsq7ksq7otq7kuq7ErrJ4rq7wurHQnqtorq70sq7wsrIYrq8Qoq6AqrKQtrIEqq54kqtgrrJwrrJwrrJwtrLIrrJwrrJwtq7Msq7sqrIwqq8QrrKUrrJErrI0qq78rrIwnq8crq6wvrIMqq8ItrK8rrJAtrIEsrKsrq6surLEoq8ggq84sq8ErrKIrrKNzdHSpN+g1AAAAl3RSTlMAzIBA9fXMzMz1wPAQoGAgMODQsJBQcA3yDTMNgIAaGrOz8sBNZvLATTOa7NAa5WYa3OdmmuF/0Ofy6EymWnPaQI3bs48mTbQmwOHg0+fs8DNA4KZbwIDa0uxz1+9a7OeN1d0mQNYy4aaN1uxmmc/P13Pi8NHW28/RQJpzhSamv1qAwdnWqOhpnKbeX3HDPI5R1YO4PUq+F31rHQAAAAlwSFlzAAA1sgAANbIBs2/FbgAAIABJREFUeJztnXe7LEd17ud0773POT05HgmhAJIIMgLZwrIBiZxtsIgGbGwwGGMMtnE24IRzvNc37a97n+kw02GtVbm6Z/f7+8P40dnT1VVdtd4Kb1VNQF8ktwQJPgcAAICRACEEAAAwaiCEAAAARg2EEAAAwKiBEAIAABg1EEIAAACjBkIIAABg1EAIAQAAjBoIIQAAgFEDIQQAADBqIIQAAABGDYQQAADAqIEQAgAAGDUQQgAAAKMGQggAAGDUQAgBAACMGgghAACAUQMhBAAAMGoghAAAAEYNhBAAAMCogRACAAAYNRBCAAAAowZCCAAAYNRACAEAAIwaCCEAAIBRAyEEAAAwaiCEAAAARg2EEAAAwKiBEAIAABg1EEIAAACjBkIIAABg1EAIAQAAjBoIIQAAgFEDIQQAADBqIIQAAABGDYQQAADAqIEQAgAAGDUQQgAAAKMGQggAAGDUQAgBAACMGgghAACAUQMhBAAAMGoghAAAAEYNhBAAAMCogRACAAAYNRBCAAAAowZCCAAAYNRACAEAAIwaCCEAAIBRAyEEAAAwaiCEAAAARg2EEAAAwKiBEAIAABg1EEIAAACjBkIIAABg1EAIAQAAjBoIIQAAgFEDIQQAADBqIIQAAABGDYQQAADAqIEQAgAAGDUQQgAAAKMGQggAAGDUQAgBAODuMUsb3M0v3MrkzPY5EELgjVmaHpIkmWcFSZIk+7vaAAEYKKs02WUbKrBvsnmysBeLIZHukzmfyf3K9FUhhL2zyrsyhyRZHP/X+AsOgnSR0LUyJ9ta1Exw6aTpotYt2iZJcnDosgMNVotdxjbDE9Ms2S8vtjhnabJdqzO5mR9M+uAQwr6YpYdkm1FfdG3VpemL1WLOS2BDDnd7RMFRsEyTOR+Pj92iyw3Dw2V12E61GmLBdHu4vM7pbL/TCzZVXUt0xTCsEPYvsylZPDHfgGC52GXqOruZL4ZeU5eLuUnbu73d7PYDeG0QjjTRqNr5oMSgv77LCDDHUGO/0xgkdb/CfHFBfdNVYiSCVR63WnmEEEbGrN823R4G23leHmzqpW7FBJfHKtGYl6uR6Y5JyMdi8bkiNeyONriQ5riyUvqS7UL5fAhhRGZ7mxq73g2w72upgiXbvseFb3/t+SdfeOGFJ59/7e2Ph0vlxde//fLLL3/79RfDJTGZPPGGgidCJqLBfm4TqfQqN4SQZ5k4KETZHNU60S8zp2hzm499FfUMQhiL2WJr/RmHpoV7+6yUTHe9jXSfeu2FB3Veff5bAVL55Ct/85nPPiz47Gf+5pVPBkhj8rF3vfvZ+xXPvvvrHwuRiA6rnf2YZJ0oq4I3IdwnJNFbF/0aFpExdW6JOT02RzWruZc8ZqLcQwgjvYfL7MWR9WEoMxizg3MXtPgKvQwLP9hUwYJXn/ObyIuvfODND5u8+QM/eeQ3kaff/6b7bd70rqf9JqKDe39dNUPgTwiZ9AOVDAcZlSzi0sK14OuJD3SEnZpNt0usBSmEEEbAk3SoRvdx8pI4KnoNqWKG4YPPEDJ45BmPUvjidz/7kOLN3/UohU+/saOCBW+MLIVL1y5ezlpcqfI3Nco0xMjjIWYYZ9gcFn46pCfkIVM/eM4jH3EghMHxEymKF++71zbb+cpKQVwpfIoaDVa84GuC9Ce0DB757O96SuMJTgaPvD/icqGnqbnj7FzCS6E/ISQjUuwNY0umMRg9xLcM5m8wsFFh6nHEW2WRiTgQwsAs/Uxwq75jFHyOBk8ZijdB+txbBR188ODBaz4Sef17rAwe+YCXtcLPPSvo4P37b3qDj0Q08DhtJUqhPyH0okGuML1Jk8Dot+TPDGmCdBUmj/S+GwhhUDzL4JFNb1V14V8Gb9mK6Z8nZRl88ODBk+5p/kd7bbDNr/yHeyLvF2XwyLv8F1+XpbfRYAXXzfPoGmXeOWajmjHtSN8E4L/kz8wHYpvxPflUY0eUNIQwIDP/MngbUTmarPxPU1RQFdM3j0vTohWvuu6l+K5CBo/8xDGNJ76g1MH7998YphRrhAlUdN32KISMXWbup1C0WLi+wiFMj7RkeohYFiz7kHkkpoAhhOEIMJFYMo/uIA3YPzu2veDzo4+/qqGDzkr4Nxo6+PDhvzqloaWD4ZUw0PQA3SvyuY+QWVqL2KKYN9Dt3gaaMayx6d2VNws45M3p1DIIYbCUAyxmn4jdawuamSPbwIHoQ1o66Dg7qqeDDx/+D4c0NHUwsBIuAwZjorvuUwgZu0y8BuW4dyLscDB6aZAEHQ4WtMUeQhiGsCOoYx5iTuWHzkzwQeHXNHXwwYPn7RP5iaYOPnzosE74bk0dDLpOyIiJL3bt9HwKYe92Gae9E7Pgw8GCrM9dyxHCze3ttFngEMIwyYYeQcUcFAZcHazTCX/++KC2Dj548HbbVP+ntg4+/JXv2Cai9smcCeUdDTkcLNi0enlej1hjFu5j2WWchDiNMRzMmfbmyVvGCTetRVkIYQiidGliDQojzFMUtMOfN55S7Jto8IzlMuGLv6cvhA//2zJrbzDQwfvPhtlPGGx1sEZrfsCrEDJTk7HsMi47GQ/+S5qnp+nReFrfGPZCCP0TrUsT3mMSTdSL/ATqheouEDpNjuouEBbYWUef6B6qJhFkmTCME7pDI0r4PXS7X7uM/d6JQCZ0lphO2hOMpTYMm3OpQwi9E20EFXY6sSC4fatJkOMC3m6kgw8ePGWTiMHEaD45+pJNIu8y0sH79/0fwj2L1clrOKP9CiEzropzVIX93gnTop9m2fx8nvc2Iy8BF9nEXyiM2O3Oy+hkmYEQ+iawkaBF4LpqHPcarW+bGa8mheiF6uwgrGPlHP0dMyG02kPxtHygTJd32+REYhWxk1er2n6FcMak57uwSJgGpd6wsNLXsfU22ZMPnKWLZGugh9GV0HDMO822SbJP0/RYF1bH/z0GHaN7+qtyghB6xmr6Ylrev23R3V6H3PNjEvc28ySl3iXd691ZXuJfCU0HhA/earFK+H1DHbQaEpo4ZQo8H8BtszxY1W1zh805DHu+j5BpozF2z1nvndBtipvdXqleaaJ7OXiwZXsag+C5mR/YCjBL9eW+UkIIoVcMR1DZPNmnrbqWpsnORDkCLhRq6+Bml8qtb7nQvrbVu3FbfbRaG4ubKP7bVAgtNhM+YTog9L1KaLR+s9kmi3bdXqb7ZK6viCcl9CyEPdplmFCvnJbVa4rbg7ZwrRKtUDWNubdeVwc3ica3Xy701L7MIYTQJwY6uNktpDq23CfaASPU4oamDm7FG3Rqj9O8ts7zfMzjxjr44FXjRL5jrIMPf8c4kbcZ6+D9Z40TEdDur6+F3vokr9w7s6rg+4Z6ulM2DT8RaLt3QqcpbkxvLF3qNMiIs6N69Us33BzZ61z8U+QQQugRXR1cz9XTF0f2O71hVBjLjJYOZgbVcjJZJjoZ8tv2njMXQvO9hP9qLoQP/69pIrpnytT5nGkiPJo6mB20BhEzrcpdVgXfQsgMbcPbZSz3Tmg0RbvLSlc75ZOjKaFO/doYhZsjC/V4Is8hhNAfeiOo9c6kyq60tDDEpI5GbqY78yWEvcZA12vbM9s7UWBql3n0ixZCaGqX+ZiFDt5/v2EiPFo6aBaoNCp3URV8CyFz/0N4u4zd3gllU5wm1mt5M+W9hpGUUF2/pnYXYyyVYr+FEPpEZzw4tei4pRohyL8SqnVwLdykKqFxNdXWY0ZMNtOfMLTLfPFXLITwM4YZke7iZfHmG9WohDb9ImXlzsXJtxD2ZZex2zuhaorSlcZab6WQwij7CZVnBTjkUnmPagIh9IeGDq5NZ/FLNC7E9V1ZZ6p+4tRhHkkthf6y85SNDpre0fv/LHTw4cPXjdJ4wkYH7983ywiLWgdtr4xWVe55CCFc0WmF3pZrtXeCu77wVEDuzk6FFAbfraz2YTkeKKmqZHsIoS/UOpi5LEEoJzD8Hsqiyo1rJ1R5XKW3SmK8eSLnGaM0vvP3VkL4u0aJfN1OCP3sqVf6RW1lsHi6WLmTAELISNLU5ZFqrPZOKJqinyuTZvLu5+AnWCkGva7hRnksz3QJIfSE6gQW4nIZM+Ro4XmdX5GbrXsnVHUsua8MPW8lhGZ2mS+b7qYv+N4jk0TMTlc74eXkbZUOOsngRHV15z6AEPZil7HaOyE2RX8n74td09CbKBTzTx7CzTHiSD2KDELoB8XUkXOkUAzvPTdguX+49tJBVHRCfbU9SyE0scs8urETwp9/2SARo+O2PQuhsr/unoR0bdmUDtJOQsjMNwY9c8pq74TYSrzud5dW6QLbiGSx9zYelcqSrA8QQlMUXWb3kX3OkqswnnVwL2bG2x268vVOaz/J6N9E2MTALvPFG5OLJ2pC+BGDfFhZZfzcSqhYpPJ0CYpQGzb+hZDruYY8ScVm74TYFD2v3UmHuAVdJhSNMj6v7Da9UA5CaAiz9l7iZxo/Z0/WVc86uJQCn8+DbOR5ez9fyfSg0QoDu8wnbIXw3re107C0yngRQjF6eKwPhqf0uglhD3YZi1svpKbo/0gp6YT9gNcTStHTxZNHYXaoN4TQDHmK22t+ibrqu66Igc+jqE9Uh1d6Wf+wFUJ9u8x3bqyFUN8uY2mV8bGjXu6t+BxCmXXYHUMzvSYW0C5js3dCKBDPLbGA1wlPEzQUQib9n6RsdFwuhNAMaYrb+6dsf0nvC9lSx3zuuzmIZ+r7yJnlGqGBXeaj9kJ470XdRCytMh7WCMVZf89t2ejGPUchjG6XYdwoUk9CaIqBtrnzXztY2I6cSZOLBCCERkhT3D5nuEua/WbvOsh4vHMCTBxJ7nAf7cBaCD+kmcBLNzc3NgfLPHz4vXv3dO0ytlYZdyGMOzlncge762QdnTGfZzk0YCYApVgkNEXvPdIKXgkDLZ8KE6NhdvIbHAgNITRB6mIEWXKoT49610FpmjdIb3km+LY9FN9rtkKoez/v929uLF2j37t3T9cuY2uVcd9QL3ydIDeApdoddlchZKYBQ9llmMGu0JcQmmLAw15YJQzkqOUrWKhM6ishhNAEoVhDzbOc2rD/DT7CanKo3AjzYe7Zs9tQf+R5vQQ+cXNz81tWQnjv3j1Nu8zT1jr4JrfS62FyTnvqylUImd0MgcITcxuwtHeCL/ugh56xShjEL8OPQMNlUlsJIYQG8JM5AW8KLKuPfx0UJirCrZ7wSui+f8niFqYSPbvMX97c3Nz8qY0OfvYohHp2mXdZC+E33EpPqA7BzmLWVULnuEyPRZRXItnBqJpgCOPLPvDhn1xEC1Ey/NackJnUVUIIoT78GkrQ4xgWgVLgJypCHrrBK6G7c/QZayX8oM7jP3oUwhsbIfz5oxDq2WWsrTL33+ZWeHx1CHgngaYSOgshMxgJ0301vwKRLfvg10FwzTFACGBHvWHFXlMJIYT6sI7RwMcSLYKkwE9UhD18iq2X7pel2u6o17PLvJTroJVt9AO5EOrYZT5nrYP3n3YqO746BA3GekroPlMX0S5jvneCLfsI1yIxzdH/kJAdRoS+EUtPCSGEbs/PCbgDNWcRYCMRP1ER+AB6vl469ww/aC2EOnaZ7xdCaLFI+OZcB+99SiML37DWQbdbmPjqEDgYaymhewOLaJcx3jvBOmVCn/s5ET68994wN/YMuGuxRDw1pAJCqA0bwMPfdh2AniYqxHrpHJasLiTM0bDLfKIQwj8xF8JiZvTevfcp07C3yjjOjLLGqeBxSj6qqcBdCBm7jLeDrM+Y751gm2LwmyAm/MluvoeEzAcIfzGkZhWDEOrCzl8EaEzhYUcAEWZj2Hrp/LHs50bVdpm/vCkx30n4jlIIf6BMxN4q86xTwbFhKsKgRHnvk5cpF3pdI4ApxHjvBNsUI0VPpg/keZqLGxBGiZ4aVQxCqAs3fxHlUmfvcPVyGvIo4grWfeva+Oyu5s15TvXsH1VCaHwj4WfvVSjtMvZWmfc7FRzr1ogxKFEfCukhKDMDH++rGuZ7J7gBYdDrMepvTEc2v+unTLGEO9SgifoYIwihJlynIsIIKgDsCCDKbAxrO3L+WrbHjT548ILiyS/dnPgVQyH8wEkIf6hIpC+rDLv8HacBK90MPuSKDvfeu7FMJ48f+HADwihd0hymj+A1fUbt3Q1yeihuQYQQ6sOUZIz17ABwnfBIw1t2Nsg14oWzy/z4LISGh8u8+aSDSrvMu6110M0qww0IIw1KlG4GH0LIhGLfkdh47wQ3IIy44kJ/fq+mOeYLx+l36ywTQgj14AaEF2mUYYUovIOrhBuCOAux/VbCr8kP/tJZCA3tMj9/FkKFXaYvqwz3NWL11xW3YvoRwjh2GSYnfL3mmmKsidEJWzQ+10+Z8Bkxk6qLvyCEejADwkhT3L7hakXofSBnuEl71/kY64O3H7xVfO7Hb2qY2WXeURNC2S7zfmsddLPKcAPCaP11+d5yT/Uyil3GeO8E1xSjTYxO2Nbo8fMzk98RM6maHIUQasF09OLN4/uFqRQRfT9cR9h1PiaUXeZHdSE0sst85l4d0S7zrLUQOt3Jyy0YR+zlKW7G9yKEMewyTFEKUYhpilEjJ/Pa/sIBMzHZvzwEeJe7LYRMR+8id06wExXRZsJCvsOHrIVQssu8dNPAxC7zgYYQSnaZt1nroJtVhhmdD6E6lPgRqwh2GeO9E0Noitx7+7u5mLYkRM6kPOsAIdSB6eiFPhwoFIysx+2FMrMlrouuYewyP24KoYFd5s0NHbz3qUd8IvZWGafztjlne9xennAHlC8hpA2dPsMxM7AVpl+ZbMe2HtABztvcKF0sceMN75T3+zJ3Wgjj7DmNBVMjAp3Fz8FMVTh3LoLYZb7UFEIDu8zPN4VQsMs4WGU+51JgjOE/ci9PtPX5aWiM4nsUHeO9E8Noipwg+xos05PSsUe98n5VCKEOdI8mprHLJ0yFiN0LNfYV6BHCLvPxmxb6dpl3tITwu2wi9lYZt5sImVWq2L08ac+zp3ehk/Co+L72TsT3opNa5UuP6XKPPCBULERDCDWIdSpFJOjmGr0XygwJh2iX+VFbCLVvJfzMvTaf5BLpySrDfIbovTxp5spTS2Oy6m0rsPHeiaE0Re5NPJUMLUDxjYbSFgoIoQZ0j+ZSB4TMJFT8Xmig21Lt7TKvMk/8q7YO6ttlPtARwleYRAZmlYnfyxOGhL5eJrBdxniOg2mKfXjwyGkiPy9C9w96OJpS6mtBCDWgezSXOiCkZ0Z76IUG6qC/3X5I+C36iV/uCqHmZUxv7ugga5fpySoznGl/IUz5amph7TLmeycG4aYsIDXZzwYaOpd9hE+hrwUhVEP3aC51QMh0i/vohdLGUeejneztMk+Sz3v0pa4Q/rmeELatMrxd5mP2A0Inq8yApv35MOXrbcLaZYz3TsQ6/1QL6l38bKAgc9nH9K/kyIIQqqEr+GUersZVhl56ofQmKucm8pq1EL71cep5HavMjbZdpm2V4e0yb7TWQTerDF25ewlTEW6+DmmXMd87wcTlfo4vJsdtPl6FHigHvv6bgd+kAyFUQ1Zwf7tNI0NPVPTTCw2ziv64tRDSdpm/poRQyy7TtcrcY+wyT/RklWE+QT+9PPYWCm9CyGitF98Gs3dCKEravNHT7mRyasBHPaC7u/2oPX9uA4RQCd1v66dH4wE62gyoF+o+S/uktRBSdhnCKqNrl/keKYSUXcbBKvOES1HRytDL/IAQpvxN1AaajZ/Y7J1gXqav46pCFQw5Cu9lykHaQQEhVEL32y7z+iVumaSnekn3MZyX6P3aZQirjKZdhrDKcHaZL1jr4BudimpI8wPhbuc6Q2utj+kd891AzIplXxecUtOGPibUyA5CX+MIdh0aQqiEnFfuSTncoc0RffVC6V6082N92mUoq4ymXYayyhz5204iDlaZNziVFD0o6csQzYUpf+/DaK2HKUDmKEth1pVuir1daENGcPfH0kuEfdUw9sIvCKESstwudmaUHgL0dYsGva7i3Ep82mVIq4yeXYayyhz5SOeF+7LKhL+JzgguTHkMm6H2BDN7JyRZC7QwYAsZP90DA/lN+3NYcJMOEEKrx17szCg9BOjt9HB6btS52vi0y3yCE0KlXYa2yhx5vZWGg1Xm604FRc8U9tfLY8KURyFknJrOAd/iOGJ6NN7bzW7kTK17yZPC0N89rtwdFBBCFWTGLtYzSq9L9Bf5yLlR92Zib5d5pvWk73A6eHPzewohpK0ylF2mL6vMgPY6F0Q45iaMXcZ87wQz1dTjjTZUW3SP4OTKUn/313GGLAihCrIL0ZObwJ2hjW/JSOzezXCwy7y9+STGKqNhl2GsMjktu0xfVhlaFXrs5UXY3h/GLsPEV2ntkW6KPa65UJLl/jpkD6G/rhZ3fhGEUAU5ZrnU3fSDG9/Skc99euhVayFs2mUe8Tp48+fyDoruMaOcXeYN9gNCN6sMPSjpb96KM1L6jJvM2M3x7j3zvRPM+ri3OwDNoWKDc/ykv2gPuatgLluBECqgP2RvE/mukOPbwUU+92jwnP2QsGGX+aIghLJd5s2cVaZrl+nLKsMMSvqbt+KO/vA6gKCng93agM1NKvQ0cF+bJ5hRrXP8JEumzxvNmdl3CKHNUy92iZCeC+sz8pEv5F5vHn+rtRC+Vn8Oa5VR2mV4q0zbLvOE/YDwbW6lRA9K+jSC0Zt2vQohMznm1Lc13zvBaH6fEkGGOteHklWsz5UlZhIbQqiA/JA9DqEcIStBn/dokP1zD+Xrxy4jWGVUdhneKtO2y3zdWgefdbPKhFqhdYAeWvmtoPSo0yVWWeydYJpinxJB5sL1of3rQgvGNgwhVEDGij4/pBN0LejzjcgOmofdn9+yFsK6XUawyijsMp8VdfDevRfPibzJWggdrTK0JPR6rQo9Ve5XCP2f9W6xd4IRzz4nZ0hpdl0EIqtYrzfY0d8KQqiA/JA9rmi7MbgZ+3DS7MMuI1llbmS7jGSVOfLyKREHq8zHHMuI9I3028sjp8o9B07fdhmbvRNRxr6GhHghMn72arHwPyHQ4K4KIdkwL9YrQ36lfveCkNXSg2XAh11GtMrcSHYZ0Spzr2GXsbfKfMG1jMiy77eXR3oZPMuDb7uMxd4J7kc9emXoWOda9GQuPb2vHbRbBkKoYHgf0oUBTvSGGgI42GWer54hWmWO/ImdVebIt8s0+rPKDPLQJDKOeBZC33YZi70TgzyogxorhRDCfg9qpv1YEEIZcs2i17lEJ4Y3Y08b7nyMStztMn+p0kHeLiNbZY78bplIf1YZRggdHxrinXzXUHp2zHZ9zmbvBDMw6XV9liwWxx3TZJ+j31zSW5chhD08tD/ICDDAIYCPivOUtRA++GDxhI+qhZCxy6isMvfOdpn+rDJ00ffcyyPXjH0LoV+7DLMzTTHApC+1SfokwBlrA4yfdL8FQmjx0Iu9eoK2CfT7SuT+FC8V5wVrIfxQ/vuX1DrI3c+rssrcO9llerTK0G22714e9U7e5yzoyUy7ZKz2TnCj0sERQgj7XYuhvxeEUIbsO17s7okhrniSn82Lf8fBLvPU8fff1xHC3yGtMho6WNplvmGtg85WGXoo03cvj9Io70JIrxPZ1Tr6Wcp3Zo76Ghp3TwjpIAghlBncflA3QhSRIwEnTxztMkqrzA1nl+Fu5G1ytMs8bT8gdLXKMIOSvit3CMdGB2YUZ+XZtNk7wW5nGxyO1WGI8ZMsYgihTAwTWzwGuHRN25H8vNPXrIXwGT2rzA1jl1HtnSg42mXeZa2Dz7qXz3iFkDkTzcYuY7V3YtxC2POVBeRYHEIoc7eEcJDWn3Dv5GaX0bDK3NB2GR2rzL3CLmNvlXm/e/kM0ENM7/Dx/060ddDGLkPfb6jYOzFuIey5ioXt/0EIL4BBWn+od/K008jFLqNllbkh7TI6VpkjP5x8zloH7z/tXjxk17jvyk21uADv5MsuY7d3AkLYIxBCCwbZabZmiEvXIQ08LnYZLavMDWWX0bLKHPmUg1Xm3R6Khyz5kQihL7uM3d4JCGGPQAgtgBAGh+ybe0rUwS6jZZW5oewyelaZI/9uPyB0t8qMWwhpu4x6RlPrMTqCSv9wcEAIDYEQXgCDFEKyiD09294u82u6Otg9cFTPKnPkp9Y66MEqM24hZOwypj4Oy70TEMIegRBaEDJKx2d0Qmhvl3nvz2oL4d/bWWXu3bv32F/YCqEHq8zIhZBe3DM9V4feO6HzFPKHw8PxsEMIod+n6xBPCPs9k8yB0Qnh5EOWOviVq6/qDwmbdhldq8y9ex++/iVbIfRglRm5EDJ2GbO2bbt34nKE0LHoIYR+n64DpkaVjE8IP2gphH90dfUL2kLYsMtoW2Xu3fuZ68csddCHVWbsQkie7Wdol2H2Tuj8lPzl8IAQGgIhvAAGKYRhzz99xk4I33N19WltIWzYZfStMu+4vr7+VTsh9GGVGbsQ0pfhG9ll6Ful9VoU/dPBASE0BPsIL4CxbZ+YTCbPW+ngn11dXb1Ff260bpfRt8q88/r6+jesdPBNfsqG7IKMRgiZnQ8mdhnrvROXI4SOd5AP8WQZMp8QQhlsqA8O9U7+ru60s8u89+rq6srKLqO+kffEY9fX19dWdpl3+SmbQU53xBNCZ7sMPabUnF2lfzs47Is3B2eNxs8xhFDJyI5Yy7Gxy3zlqIN2dhkTq8yR37QRQi9WGUYIba+n9QW1rSFQg6PtMvpjIPu9E6MRQvIoOwhhUOIJYd+xwpohHrod+p1s7DJ/lAuhjV3GyCpz5LE/MNfBb3gqmhEfup1D22X0Z0hoIdUcUl7GfYSu1zQPcA4KF/PaMIL7CHu+kjz4KNXCLvOeQgj17TJ/bmeVubazy3zOU8mQe8pHJIQzcpFUy/M5cds7cTFCGORic9xQHxSyf4cb6huQdaDfVwp3MW+JuV3mzwodvHoEuS2iAAAgAElEQVSL/pDwF62sMtdWdhlPVpkx31Bf4maXoaVMV0fJX0+zgeEa6khfbb9VjJ4HuENCGKRZD3JVzZ6wWxWsCF5xzO0yv14KoYFd5k/trDJHfttUCD1ZZSCEzPYHzRJw2Tsx1ML3D5VL7TF3EOiVXQihDGkM63ky0YEB+gTDV5wnDXXwK5UOmttlvqetgx+udNDcLuPJKsNdyufr6XaQPc9gNZTeEK9nl3HZO8HVe39u6aEwvCpGD+QhhAqG9yFdICuB43GCg3+ltxsK4XtPQnj1TW0h/C0rq4yNXcaXVYZbLXHcOeYIufAWTAjpZT6t+UCnvRMD7YUEgOxq9Nr1pi1OEEIF5IfsN1Y4MMBtPRFuhzWzy/z+e85C+HPaQvjnZlaZX74+Y2iX8WWV4WL5ACcIgr0SbZfRGpc57Z1geyEXuzOLg+zn9rmjnunAQAgV3K0z1sgy2vb6SmS1NL0WTuY1IyH8s7MOmtplzK0y5nYZb1aZ4DuqrIjc3uj5TZ0JCae9E2xA7vnQFf/shlbF6A5IYCGMuvZLNiHnNxji0Qj2kLWg14UJul76TeNxIyH89ZoQmtll9K0y73isJoRmdpmveywYssn02y+KfOwb7XjRKAK3vRMTLqeXa0hnGJwniBnJQwgVkBW+31jhAN3u/Y6/zAiy6aWNiV3mK3UdNLPL2FhljO0yT3gsF3IjYa/9IvrG94AzMLZ2Gbe9E+wTLteHx0B2dPu0jdIXMt8lISTnKpzfYHhjKCfIStCnW4acm/Ld0TCxy7y3IYQmdhkrq0yOgV3mjT7Lhe4d97kCTg+0AgohnaAyLDrunZhwk4a9dkpDQPdseqxi9FXK/oQwSs9ehMyf+xvcrepKdoD7nOkluy/eX0jfLlO3yhjaZfQHhL/c1EGT+3nf4LNY6HnpwfWLgq7J29llHPdOTNiN3f1auANA5rK/pVCmB+Mv5PQ+BHbaHCtASsfFVldyYqDH+ZhIU2H6dpl/u2qhb5f5ibYQvrMlhH+srYM+rTKcYcPnsT6m0BaUkEJID8wUDZx2m5qVHN0LuXOLhOQMcH9VjFkiDCyEMbfF0Pty3IWQ7Pv1GSucoOtBfwNcembK+8zJ42/VFcJfbwuhtl3my5/U1cGmVcbILuPTKsPpTo8T/3S/KKgQ0kkqJucZq4zZe5KPuHOLhGRHo78qRq8JBxfCiBGWDvHuQkjOYFzsIuHQJsPIEWqAiQRdu8yvtXVQ/37e70y+qymEH27roL5dxqdVhnUOrPwmYgA9XRh2uxJte5H7YvRvDEXM5VibyyFSV1cTpqflczUmfg1uQtdNdyGkp1wvtboObTKMnGIKYMr9lqYQvrcjhLp2mb+eTN6nKYSdAaG2XcarVYYVnv6uGWMsfUHDiIVdhgmnhitf9KTsxd7xxkDHz75yyfS0ggthxEVRetbeg12HfPDFVleyG9qbnZmezw5RuK9q6eDvd3VQ1y7z8cnk0ae0dPAPuzqoa5fxapVho1Rv03PMqR+B+9PmlzHREmY6TURX/js3N0oWb187CbmZUY9C2LMfkXEDeSjwoflL3LDyBgQjnknwOS0h7FhlrnTtMl96NJlMXtESwrZVRt8u8wXvxUJ3H/ua72CW3gILId0kpD48XWqmwY6R/bs2N0qP8vuxJbAzox6VKsx+dm2YMa+HFxjWJLcrdDe0p7lRxnwXIik9u0zHKqNtl/nyMREtu8w7CB3UtMu8zXux0D2RvvbTcP31sEJIR0chcjB6bRzb6exe7rXfNEOafuc8oz5LvedrRZjVBQ9CSLeTS62udDd02k8HjY4oYc7t0bHLdK0y2naZv8oT0bHLfJ4UQh27zLOerTLsF+jJC8b21wNbDUztMvTfm3cm/cywDp0hTb/Tu3NuvcZzWvijBVjmwAAfQ1Ky43ax1ZXuhvazw5WOKGE6izp2GcIqo2mX+esiER27DGGVOfIXaiH0bZXhp+f6mSqnhSG8ENKzJOyOPkavzb22zPnPd21P/XCm37mpd69C2K8xn67LfoRwWMtqrtCzA7100JiIEqiJqO0ylFVG0y7z8SINDbsMZZXRtMt8LECp0P2iXg7TZSbKI5jPyYECa5eh44FNpAlm8BsU9PR7HycH0B3vHH9CSPctY2WXOfLIS6WyPqF+kDCuoj5ulqI/Wqixttou80eMEKrtMrlV5sgPlUJIWWX07DL+rTL82vqw+uuhKyfdOeRmSWj5splT8XBQ2wVAf9ceVmOYEXiOx6UuslsVa6TBdSa99K7omeVLra50bnrQdWZaLlTfSW2XIa0yRz6tEsIvV4m8qNJB2ipzrXM/r3+rDD8q78M9xS/ghBZCI7uMx2VVZh7rYs+tomHaefzVGGFA6FMIabtKHLlgO5NehJDuMF5qdWVWYuLrOmPhCnauydcUOkhbZbTsMi+dEvmBQghpq4yOXSaAVWbCOzXjVwdhASf4dIVJ7KL/1i6QMv33OzYkpEssustCGhD6FEJ6kiWO7rNa70UI465lhYaZG42u68ySULj28ZRCCBmrzJV6B8WPzomo7DKMVUbDLhPAKjPh9Sd+N48fEIYXQoNNRUwwsJvoY+ZG79iQ0P0SYy9IA0KfQkgLbpQpN36fpJ+FZ19+6WHARJzYJ0yGviq6ywuiDn6F10GVXebjtaRkuwxnldGwy4SwyginucTu5gkDwggL2LRdhlI3r9ND3KVA/Z32GgKmikUeEooDQq9hh04hxpooZ5XxJYRMI73QISGjQJHNasv400KyXYa1yijtMl+qJyLbZf5JEELZLvPuUKUyjFHJTBgQRhBCfbsM/Z62ysXk+o4ZR5kqFndIKFUwv0JITwVHyC3vu/ZVo+6Uz5kbP8c1jjKNI2iZinYZ1iqjtMv8uJ6GaJfhrTJKu0wQq8xE6CnHrQ78mR9RXoUetBBWP8+3vXGHQN+tvYSMKSiqcVSsYH6FkP6oEXyjQh49xVUmhQutrswpPFGnKrjwG7TfJNlleKuM0i7zUiMRyS7DW2WO/Iagg8+GKxXGLhN1ayk3P1AQQZPpfll3oOe5t8/14Xs66ikUzGgs4vFccgXz+yo93KqZIwwIfQkhk7X1ZVZX7vSBmMfGMdE37D0Ykl1GsMoo7DI/aiYi2WUEq4zCLvP+cKXCrc7FPA6S6ZvFCiFcx6wzP0wHAocuJLeqc7duqueGKvHWQkWnjO/YR+t+8MUG9mQmjzNtTH290OrKTZfHq5dcywisxbxdRrLKXMl2mY+3EvmIlVXmWrbLPB2wVJjqMI23Bs51zUpizNLq2WXoeutQa/s6X7VF4B4958iKtrjE3kPo4RN26WeHGm8Z9VjSw1hX8wU3Bog2G8a55ULXFd4uI1plriS7zJfaibxsZZU58lh8q8xE6JVEC1PSnE6sVqa3+4vuM7jICDcWjjo5up8GXuXhBr6RZh1WigrmWQj72aEmDnq9tWXmS17mXD4beCJNjs64+3aCzx6wdpn3qISQtcv8uJ0Ga5eRrTLXkl0mmFVmIlWHWJOjqnmrGEKoZZcJcIkZ6+qPeNbTcQEtbNNnRytRJqHYeHPGb/b72KEm7T/yKITcl7xM5yhrL4ozwmW3uwSfjHue0cE/U+kgb5d5qZPI71pZZa4Fu0xAq8xEqg5x5sqV81ZRaqXOJdH08M2tlNheQLQl+0IntkH79FwuN/1urwtU2OFux2VRzKr4S5orzIu8mJAttSjrQmzfJfzeNc4uo7DKXPF2mY92E/m2nVXmmrfLBLTKTKTqEMUNxs6Tn4gihBp2GeMrfO3TvY1oSi9D2yZkt4fNZYT9qvJYqcBvGOeGTQG/qGw38yiE7OC+n6v8HGHHABF6aHzgi6DCH7Kyyhz5Ki2Ef0kkQttlPqzWQc4uE9IqM5FCRYRVY9UCYbR5CvX6X5hTJNkQNo0zID/FgqALhezAN/j8u3ykTInn8QzzTcOtpKlmVTwORjntCF9dV/5T4KNP8B4av6MnxmEmH7SzylxxdplPUInQdpmf0RBC2i4T1CqTwx67EfybaKzfRBJCujdQj9NkKTlvv+XdflEcCPVsB5ze6m3gqzbKBMg5l9tQC7/KWRWPQshPJwZWwtU0QAr8dEHg0McHvjh2/WesrDJXnF3m+1QapF1GbZW55uwynwteKnyYCj31r5jSyYkjhHQDr+kcXUjuBcTv/4owP9MMBAEXCtmFurDxU08HvVdzrmcZZv5QPavic3mS1Y7wXzJACvzRe0FDnzAAiLPaStll1FaZK84u07XKTBi7DHcjbxPKLvOmCMXCGzfDTv1r+BiibVJS2WXof3eXDiGMBVfCdlALt1AoDHwDxk9NHfQefDixCJJXjVkVrz4dNliE/5L+UxBmzgOGPuGTRTqmh7LLaFhlrmi7DGGVmTB2GQ2rzJHf7grhuyIUi3AEVUgl1NLBWEJIzy+dZkjoDRY+JlAEN0dgJeyWf7iFQv4kzHDxU1cH/ffCuYFGiA+qMaviVQj76NMspqFSEEov2NhM6rrE8sh17TI6Vpkr2i5DWWUmpF1GxypzTd/PG9oqkyMc2BtOCfV0MNqxFXTtrCIX7Ufw0i6FjZQhvZwzMgaEav3CBSOh4qe2DvrPdET/mU4r8rtzI36fZhEuBWleOdA6oaSD0fYPd+0yWlaZI9/Ussoc+Vsrq8yRx/6grYPfiFMuwrcJpYSaOhhNCOngVcVIMo77CTDSkdABh0vMJw+1UCgcpBcmk6m2DgZQ/2j+M61W5HkLo9BzCxIs6nn0Xlckx+08RFtYCVeCRTyip22X+X0tq8wVdeAoaZU58sjOKnNN2WXCW2VyJONZkI7RTFcHowmhaJeh1xI8zWNIbXEaqB+yYGUi1ChUmsILkEmd/YMV/oUwlh1RrxV5FkKp5+b/AO7WAMq7EkonWwWYyt5L/bOIN1q17TJ6Vpkjb2nvoKCtMkdesbLKXBN2mRhWmRzpxrYAgwSdfRMl0U70pYPKnv83b1eXiafMhTjbn54WLQk0OyqaG71nUrufdRsmx/wn9aiEM9XxhCW+D7WRjsnPPNv/OwN730oo1sup7+gj3owZ8WDFyeMtIRRv5G3Ssst8mU/k9daAUNMqc921y8SwyhSIHSPfe1v0l28iCiE9Ks4rJ22V8bYbXDbAey99YTgY8igw8ZaRzGtna6nfz7oNI4SCHdHbMEM7l94/qdTN8Gu4InYX+VZC+fYbr3VD7rnEvdjxSSurzFXXLvMdIZGmXUbXKnPdtctEscrkiJeXenYTKs8XrRPvjhe6li65F/Y4oS+3Rc/ToyuxNQZcphBHaT6rmDj9RBBiDCxk1tPks/4iqP++jSjB/maQ6IVs30ooXeXodYirqJfxLkI88nabvRMFDbsMa5WZdOwyulaZ645dJpJVJkc+jMrjurHuhE5JPCHk7TLk+rbP1R5xxsRrY1Qtzob0qcojGF/xU5r3XZNBL4QQSqN8Lz0bRZWp418I5TkMTz23GadQvpVQrpdTT9VjqdjoEvMu9EnLLqNvlblq22W+KKXRsMv8soEOtuwyb4hXLKqWtfYlSPy83JTUm4i3fnJ2GXrS1OuMpaJz4KsxzhLFMCLoCQqKGXE/8fMgJbIiK3mQVVFxlO8s+kaTvwFmuxWfMvPQaoUJfM9KqDqbZ+MjBqlaXowzRhu8ZmWVuWrbZR6JidTtMvpWmSN/3IdVpkDRY/EyKFwKEX9P/ltEIaR7oHt6mstvdFG6h9YeVGK5U82mhXDm1FBZOd3jZyqW44Lu7YWxB4WcCTYYDgZa9lV9yrljP1H+kJ6VUHla69a117sQNk3kRLmSrEHdLmNglblq2mUEq8ykaZcxscpcN+0yX49bMqpg7D4sYSc7bvNw1LcQ0odmbOkOo2ers9o/5KoSqdpJGbxXKi/HOMdPqZtVZC+iEApnCOSf0z6Wp6qo2k7Ka75KlPtTXD5lqlo+8Xw2tXqzjVPFVGanl0v+z3YZE6vMVdMuI1llJg27jIlV5rppl3kiUolUKI/vdRuWyPNyc2Z+MKIQMhOUZPD0tneiQsNJ61D8s4XGXFqE2RkNMbb+4Cqlz7ihVKANI6pxhmVsVUdVKuP+UXZqbreWn3KhzqHvAZSGf29u23NRjgajXbrW5GyXMbLKXNXtMqJV5sj7rKwyOSe7zBsjF4xOMLaPxYrlqWPN7l0IDXZh+1/a1kl8nVgFz73ONR9RZmd0NpBmVnVMGT3z7MUUQo1Bk3nlNpfBYDtiNPZqrg/GdWp20Bjv+q+qWkfVWVTMZaKRnV508GyX+X1THTzbZUSrzJFHn7KyylzX7+eNapUp0BmWJDaVcKWoaHnN7l0IabsMWXUDiIaeDG8XZknPFlu9XPndyse+jo7LY7ozjAzLnTLcFLEzqhBqRNeN0ddUj+vJ/IXaGqp1aoFZfe2vy6aVmencaEVkttDKTl/3+z9XCuG/GQthZZf5kmyVmdTsMmZWmeva6TKRrTIFWlvdzWrDsZOnar/FlH//QqhtQggyi6g7IN0udMeFaaLtLozlWtM8VGitr4VLZfU6d7rjCqHKDJyjrRT7ubJxbifUfw12RoLm+T3bg1Z9nS3UGcwJcgaobmam871e8suDngr2poOTx99qZZW5OttlFFaZI58shdDQKnN9tstEtsqU6B36YtAz0qkPZZTqXwj5O2ZahLlHWn9qdj1XieFqsTOZRYvn3haPbqgz3R6UYjjbq8eCt7XJp8hCqKn6WaKq5XoisZnFFUL9juN6Ln/L2b7/Lpv+sXxZohDD1WKub2jqSwcru4ypVebqPDf6VxqJfDfXwT8018FqbjS2VaZE9/gzzTClNRNWPqh/IdS6Mz9gaDE5Kvp2mu0OafcbzNJ9MjddSYpzMXaByR64aZYsmBowSw9z3SedFmEiC6HBobrZjstoutDM5/GMLvLR4fJnVGGzeZJ285juk62JDTbcFh+jA2rXx5rZlcNVejDqgPo/ztSAb1nOjFYX1f+1TlLvs5wZreZG41tlSgwOAp1myZ5Rw2WqXb1PUWoAQigfdnYi2DHxJqewVmRZlu2SJNkd/x/zn99G75QaHLleMM2yJEkWacE+z6rJ789rSrGFUO3EFjK6SJJ5pq8ReTui/iGgEBofZ5dLSJZtkyRJsiwzrQlhq6rZ9sycadX65la56csnU/KqlWf0SL5I+HGdNAq7jLFn9HjMWi6EH4tRECSmwXidzZPkUDbeNEmSrUHrrVeFAQghf5NcI8fh0rdRQleiN0ZjJXSj5q2ILoTsxY+BviL1LyGFULxfL0Amw4YDowGuD0Jeva1BbpcxOl6t4pt6VplJZZex0MHr67+4f//+F3osnqhxqlYVhiCEWp3CkMcCRhaJaHbRZiaNZqEcqXsr4gthrA9a9maofwoqhKZnBzvh/yaWFpH7oT00vQZHu4z55omr0i2jYZWZlHYZmyXCwi3ztlhlQSHeV+eXuhN6CEKoY5cJfAxETJGIvDx4xmIWypKdMtnAJRBFCatRPfVvYYUw4rcMfALgxPwGr8HnR8GTDx78mpUQflrTKnPkB7ZC+Kv37z/bk1WmIlbdbjihhyCEOnaZ0A5L8b5Az6z7mpuxWFyyoXWSdx9CGGP8e5pXof4xtBAa3AjlgufL4BjiTVbEyY/MtxyEUMsqMynsMp+3EsJf6tEqUxEnTjVD0CCEUMMuE3p+Jt660u2uv7mZKJlsr8H0IoTh+5XneRXqX4MLYZQpJN9337NE6qIFn+bV4lV7IdSyyuR8yl4I+7PKVCgOMPZBu0s0CCFU22XCxxX5dHJ/eLtby47wmezofE9CGDi41qYoqH+OUGGDq8c04nV9EUJfXysSHZ578EeWQqhplTnyQ2sh7NMqcyJ4N7bdJRqGECrP340yo2F6w4AFvi45HGwmibmnvoQwZHBtzP5SfxBDCANPKTrfg2SGeKmlD3p2i9Z4q+2I8Mf6abxoLYS9WmVOhJ286oafYQjhTPHeAfdONF4jdD/E9cY4L5kMOSikTuLqTQjD9SubMZX6iyhCqLpC0IV19NU01XXybvTfBT3zNTsh/NmblwwS+YHpHUwFv9q3VeZEuGBMzcoNQwhVrs1oczRBZ2h83CHug2DRk5727VEIJ6sg37M1+0v9SSQhDOXy6kc29uFmKyIPb2WeshPCb/7IJJH3WW6f6N0qcyJUMCavsBiIEKbim8e8QjPY1OFQZHASahqKC559CmGIrHbknvqjaEKoumvNijBHbGsQIC9HNgNqe0desBLCX9C3yhyx21D/B08Hy7U5IXpGzO3cAxFC2S4Td++PxqWeFsU/rKYYYBKYDZ79CqHvqWBC7qk/iyeE/qWwzwn8ELLudrd5CJ6zOVnmLV8ye5Mf2ujgY+8eVkn57seyM/5DEULRLhO7YXqXQtt7wwOy9Gu0EIJnz0LoN6tUPqm/iymER/nwVmOnfa9j+5bC4cngZDKxOWv05wysMkdetDlr9DeHYZU547U6CDP+QxFCyS6zjf86yttYTUp/N6T1iTPLnbcqJgbP3oXQnxTS++rIv4yav2ON9bKgYncFuGc8yvptNoAd9AT/aCGEP2tilTnyUwsh/NUo2TdidvBUHaZS5R6KEEp2mV6GU6mv2DnEDmmJnyqmEvoBCOFRCt1Vf87476m/jS6Ek8nKOYvbwaiGH1mfcl+sd/7LQgi1T5Wp+HcLIRyOVaaOj3HJWr6MezBCuOJz0MPbTLQu+Vey0bsnvEf2rp71jfKy90EIobPqC3JP/XkPQphfqG+fwYHV1aXe7c9ShpQ1s0c+bayDXzWzyhz5J2Md/I0hWWXquPbylH28wQjhhFWdHodUS61LjhmGr4I5M4fu1nqn0eUeiBA6taZMCqrkD2Lmq87eKo+DrKupwZXzF5GhGh81FsIb80T+xVgI/3e4HLsyW1j32deJujIMRwi5e8li7p0gWB5sZmmm88VFqGDB8mBTx9Y7vZm04QhhrhPmwVUVVKnf9CaER71PzO5rH3BdXVn1RLfD74I+eouhDr7l++aJfPIxQx187A0h8uoNKy3U6qwPSQi5e8X7vzdlkhpFlvX8MNSlCYG9WcjJ9PM4KCE8BleTrs1UI6iS5RMnLyzpYa7zPTfD77DNzGpmlgzPoU1hapf5pv4xo2c+YiiEP42UeQcMa4N2mBqOENKvEn/vBEN6mKvj52abpANemFAwS5NMY15tur2QWCOQHrbqkeHFZzRdJFvui2ZZsriY3M3SRK3r02y3uJwe6KOvmg0IzVcIzYeEfzzsAWHFbK8Tp6aX0iVqw1zP28PeCeEd00Uyz7qCmGXb5JBe0GQozyw9JEQOc9bZLrkbuczhdWKdzS+5R9Nimab75MwhTS9wxiLPxyHZduvmNMvmyeLiPpfZKuEn7BIxWyX8F995DMgyTeYZ3ZnNW+/lhinmrJOhqvoqLbjMmKKmFT336d0RhhbLNE0bGb07Un9nKRvfRX+qfzDQwZ/VvZm+xaN3Gujgh8PlNRizRuO9E2GKHuz2tXcCAAAC8h39c9a++kXb1/g/+pOjFzIxetdhTKMD3o4OAADW/LOuDr7lo/aJvKKthEM7XG2k0GvhPe+dAACAQPxdeB3UXyb8X/jKQ4C5h2kAeycAACAEWkropoOTyU+1xoTQwWHAnA0F3wIA4K6ioYSuOjh59AO1Ej72MqrYILiEvRMAAOCVL6ocMz9n7ZM584rqQqZ3vg9fdRhc2N4JAADwwEvyLor/NL17ieTbHxaHgz+1ObUGhAB7JwAAY+Sff44fDv6zp/J49AN+Q+Hn/x3Vbihg7wQAYJw8/lFaCj/9dx5Haq9/l5TCxz7/QwwHhwP2TgAARsvf/Wd7rfA9/+lhcbDB6z/5cOuCwsf+6d6/QwYHBPZOAADGzOP//I//8OvVjOg//KNvFcx59L5XPvX5d/5MwTs//5GXP4kqNyiwdwIAAL71X1/8r6fClsLr33755Zdf/tvXIYKDA3snAAAAjBrsnQAAADBq6L0Tm7EXCwAAgJGAvRMAAABGDbN3YuzFAgAAYCQweycSfH8AAACjAHsnAAAAjBlm78QclQIAAMAowN4JAAAAowZ7JwAAAIwZ7J0AAAAwarB3AgAAwJjB3gkAAACjBnsnAAAAjBnsnQAAADBqsHcCAADAqMHeCQAAAGMGeycAAACMGuydAAAAMGawdwIAAMCo2dJCiL0TAAAARgH2TgAAABg1O1oIsXcCAADAKJhh7wQAAIAxg70TAAAARs2a1EHsnQAAADAOsHcCAADAqGH2TszGXi4AAADGAfZOAAAAGDXM3onV2MsFAADAOGD2TmT4/AAAAEYB9k4AAAAYNfTeifXYiwUAAMBIwN4JAAAAowZ7JwAAAIwZ7J0AAAAwarB3AgAAwJjB3gkAAACjBnsnAAAAjBrsnQAAADBmsHcCAADAqMHeCQAAAGMGeycAAACMGuydAAAAMGawdwIAAMCowd4JAAAAowZ7JwAAAIwZ7J0AAAAwarB3AgAAwJjB3gkAAACjBnsnAAAAjBnsnQAAADBqsHcCAADAqMHeCQAAAGOG2TtxQKUAAAAwCui9E1PsnQAAADAKsHcCAADAqFlkJMuxlwsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD4ONwemS7x6QGIRHZscwlKG3hmv51ukhlKtWKR3WYLrb+cTXMh3Md4q17QL4rLYK1yQDoAAB2xSURBVDlfr+dD7bbss+kG8V0NhNAjKYJ/xSIP5tkwXmYA7PLy2Om8yDb/0zmK4kJYTgc8gEc71ARC6I99Xuk2dyU7Tqzzsri9Sx1/F5ZFcdxqRMs0/8P1ne1PGRTFZTC/HXDPpZhduMPTC76AEPoDwf9EFe36rlnLZJtltz2/xKmPdHubKv9yttb8w0slvb1jsTm7lUZdiyTL1r01g9VA2uHwGawQ9luBrCgr3d2Z9LFnKEJYRN2eX8JICJO7HrhGJoT9BlgIoS6DFcILHKqi0p1ZDyPaDUUIq46BcsJzdeen10c2NdpzHFvrdsDGDoTQH5gaPbMfxrrJUISwHOipq0Ze7aerKO/UE4s71kqKyewN08fpOY4NpB0OHwihP1ZTVLoTq3m27T/YDUYIJ/ttNlf3y4sthIcob9Qb6Tbb3qUhyizJMtYs3nccG0Y7HD4QQo8s59md2iB1+QxHCLUonPgwu98h4Ea8DCCE4A5zYUKYbyGcYifqHQJx7DKAEII7zIUJIbhzII5dBhBCcIeBEIJ+QRy7DCCE4A4DIQT9gjh2GUAIQc5qn+TszfZ3LdM0TW23hM3SQ5FoarQstsx/luoYD82EsHhwsjC1NFqWXZeyPA5m5TFZpotj6oa/8k+6z0uvhx2CszSxKLnZsfJKW1VOFdT0i5wxi2NlTdob759xaofFh0sSsSyM36hsFIatKU3z4vb2JqtFolWk7nqjm5Ihpi+mURNs49xksvL4dU7B36jaHnOneO/qQ1i0h/28PJPwyFq2+SfnD3P62bTr0Fbu450dNre1RHdS4dYeVn/VzY7N6i0H+0rpfH3+yeZQPjlTbkdulh2XDbUizw7ZLfECNLXXqr/3RixFEel7sS9fqwvL2ueczsWDFKikZreiX3YvbStZ7ja6JVfLyflXzC9WjccKNbRWCq3/SMK922yxrdWk7aKUXo2y329d2uFie0719ADHqZRVvTGd80KRnj/8stYEpuKPNGmUqFwrHYVQK6XyfCnqaxQn0ddPbtevQLWakAoRucQsztW+TqOiyF9HWZjNYKcb/M+/4n/R+BDyg7u/rVfa4gFClTkVe9r42bpV8OwnL5jNO9834//69LDOq3LX37C1iEmkWwbbvAxVQtj9HZ0NVWAhykO62ef0Wp30M0splApHLYTL9uu3q4MyqeIBXJYz/l87SVefTsxJq7znnWadZp3HcpnyIoSzZNr6u2mxN1FZ9nu3dkgn6ySE3bKbdgv49Me3ZajtfMip44TgoRvX+Cc6CWHSTYmsKkUOCVt4KZH1sGshhGmj5zal+o2mce70dTr1cyrcs6QozG5dv93winNbvVrzV2Sg6z5YUJUWq037t/nv2ShcFfuu/ZNmuZ9en+TQeWEx0fJh5KvSwwTq8fwrLYmod3u7m6mEMO1Uq+p3nb/M/4V7DlMeimab0u9t15r5wtEQQqrRZmw7IZMqzpZjTqNY8v9IxwvqE9Rzsm+X97r1h53aXbChSsiHEHZe6LYKZYqy7/agnNvhsRvsIISzLfFMOixPaqGWepWNwxzcimyba64oHISQjgJUSrMigHUmPor9w81Tqs2FsFNnO9kxj3PV16Hq55r9OnJhknXdIvh3fkB/iK3ezMKBKe0pJ9FFsc+6mtR8r1umZCdsUzkmyvygeNiC/hEZH5kE6Feiv0z+pUUh5Ooq0X7FwDIj6+fxQeIIKV3Q7211thFbOGohJOrCrXRQHJ1U/hBmD+WOe7slnTQbQsucdGtSs9UyOer+Ya0UqP9IQr1Xd1RbfsqZQgi7b9oqQq7kJlI73DkI4YppTFzPqAi1TBOwP2yQi2tcfLYXQpOUysJp/0vxEZsnDJsKIVGC7ejBxItjY1EIIVM/uWkfqTCJua8CTnHyf0y71arTnWA6r6yqNDi/1TpLkmSXndNjcpkX+64bKVr5vmVKthFmplm+qqlMNP+n+qtmWXZ+AyrwM2VCvtI5LE6z3fF1Th2L6UoSwvoL7Rpl122/UmCpBbPNNkmSbW21jQkEWbNApuoCUSF8L4UQ1iblj68hlUIBnZRwBGlxZz9xEvm5dayPBSd/gnNOujrYUo+TQKyLClqrEkQ8dxbCmiBtjgnOzzFtMxPL3lM7LOpdLdm5tRCey3YzT9p5oX6Qp7SpvYpWHVJxbht5k663Kbp1WAuhWUpl8TQ/SHeB0EIIuzrYTt4mzslfh9MIoTC7wX+teFr+T8R8Ab24clu12lrF0zjYuPrxNDlVuHQu/zwv9vK11sXP0t2005cn37VZFDVTzmpXZZTsFtTzv1mUFWa2r7LKn82p056r+jE9r6wuq0n/6ZrNxqns1smpBp+y0Wm/woucymNzWoCeLaqsMYGgsdR88nrsq4Bq0aD576USwk7xnUqBOYiaSYpTO14jl9N20kfvklRyae2FbwtLw3KxaT97UTWKWmhaVitO3eeSQlihE2BPNWlxSvCUjY1Y9l7aYXY2PpxqEJusgqqA1zUD0qmdkvWB+CSNFmhlmdl1s3b6gLQS2grh3DAlYpmQWCA0erF6TZiea0J7QEjEuVW1psbGOebr8I1B9c6b9rPqwZ9UnPobFKU8O1bTdtkS4XivkLIz1ai+ue65rFoD2X5qwe/8s1nSFiP+AeXbteaEZ2XdnVKzgeckmzPv5aQw+ZviD9TtedXJTJHNWhdEKodps4zLbHSavPAiZZhoGZSqhW/6qvqzEDZX5atfmfej+YzqCWFjVa6a/qDbApMUO//JzZpWkbxlxKiqLxV2a+26Nu2cbpt/taYeWxkNum3KVQirmt988rI+b0n8qt4OT//RpB1uqRY1WWVysjJV16SV4apabokf1z5Jwx42S/jfqFiQWTtNDVJh0VIIjVPqLhPOiAVCoxcjW2GnJlTl3Ixzs3pfVhbCbSPKltJB+7z5d66CfzNAVW9B6ur5DWpznMttK+ZXT2imWjUixcRCqQHdRc/yO5K9sVPJsauI59cnF+TIpnIs8ylbtOem0nqjslqxc4EauxbW7TIuqS3OUtkoa0g32h6zQfxX9kUSOmenOkMGglO0ak/UccvxStiMaglhp/jKAEH2UJikWEdMygSKHRdsysSJ0HJu18L0MevbOfZyiIc6CmFKf8n6VJZZ2Tdgv+uBq3eJmKzMhgs7ZWUmQsbpk0zbH5KcRtShlONuiZatg+o42wmhRUqdZcKiLbNXkJoIoTDwqeJc59PUTEWiELZ7WGU+yCTZd95zja98GlUKpzfgbjqrvWfXVFH1VMSJhYx9fvleVLQ4FbtcQbk/mfHlxxctH73KmsgNCdVCmHBNtzabTeV0zRbQakqUKPsiSy5np1BFpZ6xBVJWeOO9pNInVQohG/nIbi6XVNF765Yds7Oi7MZRfT1Whk/tWlpGPTDvke9SIv6joxAKNekUA7hUndshlexCSlbkwDam8p+IeFR9EuJXB+WnoilaB/Wp+I6znRBm7BvyKS2a9ZZcIDR6sVNNkCYAd3ZxLuWfXeSDFHDuncvgROVGHfwlHSwbETkJRPuTujmhJ+FTLpScil1RabiSTYTKXTT8tpP9XBZUoReZEL3ZUnte8tG0ihVCNuhvszLZPjFnG231b0R5VELIz/5xEy0sUkxVCiEVaNfcu7NJ7el6NWNKKBMa/4KpZVW7FhtVniuDMbWbEC6EFzpJEpeq+vJKuQLT9S4RkpUoGgwzDTVn3rb6JNSHLEK06SphKpRoGfW7cc1KCMWU2B5p2ayLXwmb7HVfTCciF3GO/jRLIc6lwrO3XAbZdxaD/1QO/uLs5qJepOS/SUODtfQJ2Hcui50dytdfv/vsGZfd2rO78ye3Ql7WUthSCuFOCiZVLSCKqGjy+uMu7kWWwhesAgERIkohJOvGRiphFqkuqISQVN0D+4ZsUrR2MpViJURytpEKX7SVYDQhFEfw1Tohl6pjO+ScKBmfrITYKeV6RuUnIT/knokHMlu+bfDz3lZCKKbE9khLMc5zvFSOV7SFUGzyYpzbK4WQrGUr9pncO0+lYHdggl35chqzKsyH2PFBKkfcwlw9u/vSZbGraidTsgs5Dq3pVxLibZlN5nlKIRR1uYpDXDYM2g33IjuxMNlgz0/JiDN7Ag5CSIfTGdtM2KQOZGEwAVQ+imZJpy5F3ROJMqwQf28rhMwwuKSalOBSVa+giRWYm0ur5mQVz24jd8EWdLDi556q5mk4uyGcvjCp6s20859thHApR1gmpdM04EFrSV9bCEVnpBznMpUQ0rVsw7Ul5p3lSlc09O7jboUgU7IXP0TRBaM+RMFOjCTsWxfFrowTTPnl0sL3Yg/0K0ttJbUK4SV7+dOsuGqwlYtW/0X4PQM5c0bUMjqo5Cy1AmQbByFkYk7G/RubVBH2W02BO2Z0Koa7ouQ6AUZs1xWK9trBSQjncivfKYTQth1m8o/nNkK4VJTbmiyK4pMwXRP6K8oc5LjGNA8bIVSktGIb6WmZkD1zzeTFNGqCIs7xzSKVns32GJl33srvuaDrXPFuYglw7oLGg9mhGyPAqn9PRPU9wZQsE9UqlnTduZXkwkUIdwpB2zAPN+6pMi+yUsSOlPl3MY4pylj4kZ0QMr/acUGM/xE1ymNu7eejTMGefGexXVcsNZpeHSchZOZAWu/Cpar+zFI75F9rbyOEqqkIukJwVTwnUbRPiq0irm3IrNsIYaYTQckvVC4TCnY4gxfTiMiqOMeukqVSRaHbGP/OU7nGzuiXuJW7GxN1p3gm/vtMEYO5whOD3xn6r1JVptakdotfeip8KpUQsqOWEiazK70yUL+IchpzTedcfG+r5Q4HIWSemHC9Fz6pVfdDcxNdzNzBiRkplCnztCbleGiqeXa9ixAW2RPWGeQN9eoNo1I7FH48tRBClQLtyU8mhgSbA24U4baIa53XtGk0U50ISla2xsl4cqq6QqhWU6Has3t4NebbiOhFv7Oq71rU9c6XK/oM/K+qBwuNaM6FoomOJu3pPxCD3xm6AA+qTNFFeCvVbammqBqS+GC+HjCDeAHmRZRTP8wfiK0jshByFYztLwpJZZ1YuWNaDx3OakypVMThx4mTje52PV+oxdBFCNlYUsEugbu3Q2mklVkoED3UOrMknyk2UQshpHtANQ5kk7JoNMz0lSqlnNrRmYqZX10hFB+iqvas3on1kxnCce9Md4RqzPngL/ZdleFY/ANlW2CyKQa/M8KP85MxGeh1BLHL4yyEQl9KKgOjpQvmRfJ3lyY1mK80JCE0duwKSXWX56ZMEsXksFCTyO662ME90zzhN9vJaugihMpWeLAq+zOWFVhTZrtJbYRPQgqHbyEsfiK8xYYMYBaNRi8lppRPO2Pkrd76R6xJf8EqlvIP5A9gJoR6wb8jebd6BSBJkjgWVTckJxGgf8wdEN4kmhAqR8VuZaB+EWUtt/ndBQthxzzEGle4CzvkmqScEizp3Fcj3RPrIoTKmmRX9mfows773tJ42loIlZCDdOvtT9xPlLR/Zi2EximVVOdgqiqjphCKNUE578C2Se9CqKSTkfwH4lq4rZTp/pqeAndqgHbhK7AQmmdDGUd0U1KtMoxOCNsrX6wj30UImRdu/mU3Ae7S7wsUQs1t/sqnd5NSAiFs/Fr5Bf0JofQXdDUZjhCKkzj54rQ4eSo9Q118tOkJQlgKodHRT5IQSlsyxyaELW/Miq4P2jWJnhplXrj9KofOHUdr8lPdRSFkF3hVSSkZhhB2+lbBhJDJ2skuo/L9jk0IO+MLLpFWcqJrVnoGpkbtpwwwNVrgXwhb++r4XfN6QkibZZiku8z27Wve2NN3L0sIlX3ocFOj5L0s0YXQh1nGSQjPt+cp5kbHJoRmwf/8YLepUdGVSv/afZF+nSigt5IEEELlInLvQshMUd1dISx+VXaTi+/D3x+XqWpSW0Jt7PirRf36W+7QQRchlFohO0c5ULPMXPVJ2r8KI4Sqt+jMclsLoXFKObWbRRRuGR9CqD5jI5oQeg7+5wdLBSDmXzkaYowF7g3QcINscNeoua2YtfIpHtT5z1tVYTK70u+uEDZOVDvwf2pz5oidEE7yoeG8MpJ2p7Lct08IKbOK5KFDKvxsa1FQtONbhW8htDtYyabRKPfFCT8t77nL/69sNvAhhEUtEJZgFNsnxMdqC6HNurOWECrDsTjRr9yFyDzeqQGqbZoGDytxEcK8qy/MLjORWNd8qHwRZccgf0HDI4LthZCpDXbB2FII66fR5qGV9kXbdalshXByupeXO2LC8mMoj2ZgN/SFbYdri4JSHbRC41sI7Q5Wsmo0dinVbg09Hzrq8mIaNYE5l+ME2+P0KYTmUVNMxODBO7HfpziXZsLsgnFqgPxJzBYPK3ERwrlYQlXH2PiEKu0XSRW9Eebs6ABCKO2GnscUwtqBo9IJiXatykUIq3v3O1/L6Yg1xWF9RYPxLoSqY6VWbLICNtOpAYTQTo9DHLHGUl4OOGvfTWj3Yho1QRXnshhCaNlxUAuhfPKY8jRRxXG/KRPsnRrghN7NavmwAhchVFyGUZ702P13xfGx+i9yK/dGuIPR/Quh1KjZ87ZCCGHNIMMcM1p7iumlrU5CWB5j32lwTkKoqEmHMEKoaof8Wd8CqoNzabwLYcK0GRmbRlOkZHrPS+MOwsbdhCRehNA2zvkVQsVJ74aJ6D9YceS4fAFM2Uno1ie3Biis+pg/rPailkJY9IzZ3LBX3ZheUMC+SNEQuB7hjLucwr8QClONC7tgbCuEy6peyrfciCrJ4SaEzIqtkxDqXE0TQAjZwyVzhNufJMSrQTm8CyG/5UbCptHYpdS4g7B+NyGNFyFUxLl5HCEMEPwL5NvZSynjQ4V4ueyeKzq3BriUv8iefttgQlhWAXFTG/XP8r2mBi+SiuWx5T6wfyHc8wVhGYxthfDUv5PvCZPvIJvQ082agZVLk86vWgiFWZuZeFlp5TjXfpcOYjvkhoQ7PlmJRBZ14ZP4FMJitMtemr2ke5326wlsFGBSmjTuIFQuE6o3yenUBG6Np3gHNs75FcKZWOkmqUXwLx8shuODqq+RCO9V9gmJ9N0aYKk8zHdfTTdk/Q0nhMUfMEW44StIIhUukQf2RTKhPBbsy/kXQr7PaBuMrYWwmsmgbieswV4dUzxjS31TvcA6n0p3XZsJoeZGBXqO93Tmqc2DC7hCKiIj/dbVjeWmCrSUGtNkR6fmXwgXbFXOh2BTUpCtGs1CigJcSrtmKamWCdnbzE7o1ISiIOn+1kyIc16FsAz+TCkvpxuyEDSEsCxT+kOsWCmrKJY8yDYo3Jzs2AD56ejilckYZC2EaodzERA2VA057XklUi47CmT8mhO9UbZClbtyqW502VGjRNK/EJYF0W26p23DxG/CCGE5xaa4TrMM17RmHWsS1afSCqxz7qmM+U4thNKi+IwfEpQNNIgQLoV6NxWSFUn4xpQH/DnxL/6FsOzA0n2LuU2LYik+ED1em9PFW1sgPP+dMK5UX3KgVRMyuzjnVwjLSWFyzuAoOVMqKugIoRCOy0YkeprKb9LtOy/LPgIVDhwbYNlYqM5SOuVCn7UQqo1K5bfp1pDZ+ewHKuWy7LpN+/i77tP4CrXlItKifDPqRwGEMKV1ZS9FxUBCWMbTW50ru0jNKofSBv2RGoWJjGqsc/pLiUJY1BNpDr30w3QfsDrpYAAhrKY/u/lMp1KyImXQocLtjqvMAYSw7LsRYbHs4BPK5dJoqOctmZTqC4SNd+KKYKGsQFo1wTLO+RXCanaJaFwru+BfceA+edmI2JnygrIM1q1kDmVTIAXEtQFWE47tcpqVLZN6ZbEsxCrcccd1nr6gyyCtnSbC7+jmftepb3yFqrr9re7IqTjIsUkAIax0pVEVZ7VjkYifBBLC2TlRjT7MtP031dURRDzWCaxl5c/abzjjuu6iEJ6sP6f/0PmT8nWz1r8czoIUQgirCbF2N7h+EJby6W1SulGcWhOhTQGEsBL5domeipS7zcS80ZQpbbVTIlRv1dHGOuoKpFcTDlZxzrMQVsF/16p0UrRThouccjzRnl0Vvngj/aoU6q1+UXVE6bkFZyGsrj1d1y+2WVUnd/idGi0ralUMs8W6m6mqR5TVJCCt/iN5vWvxrA3xu33GlJ1QoaqZqGntQLBlUkVB+guGEMLqu2xP2Z0dzmOSmEJ4nqyR7UjVrG39C0z2c+G3OoH1NDOY1SvorGoWzIYitrzXjVq9nHe/6Kkmzc8V4JSc3daVM3xhU/Xu9MVtbqifnMPt7byW5GxRtQpqdiOEEFZ9i3rWJstTbWYPcTdvNHRKSZVSpx/XWiAsKPviTJNQViDNmkDGuerLcHHOtxDOyOC/q5qc7dRovRGdBWSmkDLq57freZKm6T7ZnvqhzI+dG2BtDWJ7TDNND/NTwKUHQGJZiFV4WX38dJIu8l5Dt0d+DrvbZJ+maXJ+nV3Gp3wuu+p357IzGBHWy2OzO6RpWj/bkunJhBDC2l2h2+Ohf7vTedNRN9RPagqnqsCnN57Oi5pU+wRrqiZpBdb67eH5B0kP57O3iVguC2G5FLBLV8s02ZBPaFeAfbI9twersj+j1Q7LenfO5dT8EMGSU2Naz/Oiqx9bTq5QBRHCc9vcJIu01abIJT3bRiOm1HleZ4GwQFwm7FSgdmHpnnxcj3N5YznHuQUX53wLYSP479vBn4x2Qg2u05Wyc8XT2G48OzW5NtyP3RtgffGjBRm9XIRw0skfka859zqLiSCEQtl1V13FCtW8EL0GbTsLJYT1k4CbJca9fCghPPl1VSfH7LmSu83IqKIXWJcb7qlkLJeFcNZ5RWI3DpfgdGVX9mekwmbb4WZpv+HywDyTiyhBhFBom3S0tW80JinNmElQcZlQWYG0rwCwiHPehXCyYhuXTfCvwTYizc9KX47BhmAfDZCtPO2pY62HyVV42a5GVL+LjqfH6XRJCJvLOLUUiIUtuUIx5UHvJVHm2bpNV/6cJodJfCEsJVldzZhmNbXdTlOSMAJL7smQhbDbvSByNaPvJzsmZ1X2Z8TCZurdbuZy8kBKyysXUcIIIXvpT8b0rewbjUFKGff9xWXCTgVqOSD178Ih27cY5/wLYd2d04CyFEuJdGGkTHcH/5J4Me6lPDXAyWRPtJaOPUHvYapjjVsfv7OCPqE/zjSZTVRCqF92qhZNlMdaWOANJIQnn0mruLiXDyaEM8Fn3YLqjMy5HoR2YF3OiccyX0QhhJ1ARo6MiBvxC1+DVdmfURQ2oVp5M3Q5gmdGBKSiNZFvYFWHNOjWZalNOTQa7ZTKSU6qJMpxNP2h2oPsVgUyuBSOjHMTIc4FEEK6q2QZ/Jusuh+Cr3gEy12j1a8717jV8dMAJ5NFszc63QmJig9TVeHGx59zTzkvcOdsysVchRB2frc+0OWubtH7ZnlsRREIJYRHm1CtLkzLlWfu5YMJoeK8+AazRXNUKFVfg8B6tniovohKCBsix79do+Rvp1VNtSr7M8rCbta76ou7nUXXahSn1kQRTAhrDrzqCwp37Tg1Gr2UypVv+mMUX4FZJpQrkNHtqIZxLogQdoLddC6sgShrcJ3Wh9gw4Vh4wGGe5ewWiuNql8cVTvWp/7l3QX6L4/3fxyLbZPOD/EDxYavjP4ovvVwUmdsxJ7id/izZHv9snpz/bqXOxvHmVmXZzfIsyM+ZpUX62TaRX1SRZ3WByBy9IVmWJeePwr28WBfYLGtUjeLH2ndLLBe7LLcRqKqvzmeo/3VStgrxiyzV5b0qvuw2UdTzQ1GTdofzO1qVfe2RGoWdJlWyp+eZFRTBMaAct0hnmaIyi1/a+TWOTWp6e7vOtt0bXxu4NhqNlPIvxmW1yCkf5IQKpFkTzn+/yNu3VpyTPwD3yhq9ijz4T52DP/X3lZQlKikDAAAAwuA2vAYAAAAuHAghAACAUQMhBAAAMGoghAAAAEYNhBAAAMCoybcw6GwCBgAAAO4iRlv/AAAAgLsGhBAAAMCYKY6jwW52AAAAIyU/H3GKrw8AAGBMLM/3eedemS2+PgAAgDExr+58KW/zhGkUAADAmJjllz3Mk6S8V4K5RwMAAAC4m7TvoMR2egAAAKOiddfuBl8fAADAqEgaF+JmmBgFAAAwMmaH06BwDaMMAACAMbJcJEmSLAwuy++TyWTy/wHHNIDje4ecKQAAAABJRU5ErkJggg==" alt="educoWay">
+      <div class="header-titles">
+        <h1>Informe personalizado de opciones de grado</h1>
+        <div class="subtitle">Preparado para Héctor Beltrán Ruiz</div>
+      </div>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab-btn active" id="tabbtn-intro" onclick="showTab('intro', this)"><span>Introducción</span></button>
+<button class="tab-btn" id="tabbtn-research" onclick="showTab('research', this)"><span>Research vs Applied Sciences</span></button>
+<button class="tab-btn" id="tabbtn-holanda" onclick="showTab('holanda', this)"><span class="flag flag-sm flag-nl"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span><span>Holanda</span></button>
+<button class="tab-btn" id="tabbtn-alemania" onclick="showTab('alemania', this)"><span class="flag flag-sm flag-de"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span><span>Alemania</span></button>
+<button class="tab-btn" id="tabbtn-belgica" onclick="showTab('belgica', this)"><span class="flag flag-sm flag-be"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span><span>Bélgica</span></button>
+<button class="tab-btn" id="tabbtn-austria" onclick="showTab('austria', this)"><span class="flag flag-sm flag-at"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span><span>Austria</span></button>
+  </nav>
+</header>
+
+<main>
+
+<section id="tab-intro" class="tab-panel active">
+  <div class="intro-text">
+    <p>Enhorabuena de nueva por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estamos convencidos que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+<p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p>
+  </div>
+  <h2 class="serif">Índice de opciones</h2>
+  
+    <div class="index-country">
+      <h3><span class="flag flag-sm flag-nl"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span> Holanda</h3>
+      <div class="index-list"><a class="index-entry" href="#" onclick="goTo('holanda','fontys-ict'); return false;"><span class="deg">Information &amp; Communication Technology</span><span class="uni">FONTYS UAS</span></a><a class="index-entry" href="#" onclick="goTo('holanda','zuyd-adsai'); return false;"><span class="deg">Applied Data Science &amp; Artificial Intelligence</span><span class="uni">Zuyd</span></a><a class="index-entry" href="#" onclick="goTo('holanda','zuyd-cs'); return false;"><span class="deg">Computer Science</span><span class="uni">Zuyd</span></a><a class="index-entry" href="#" onclick="goTo('holanda','breda-adsai'); return false;"><span class="deg">Applied Data Science &amp; Artificial Intelligence</span><span class="uni">Breda University</span></a><a class="index-entry" href="#" onclick="goTo('holanda','nhl-it'); return false;"><span class="deg">Information Technology</span><span class="uni">NHL Stenden</span></a><a class="index-entry" href="#" onclick="goTo('holanda','nhl-cs'); return false;"><span class="deg">Computer Science</span><span class="uni">NHL Stenden</span></a></div>
+    </div>
+
+    <div class="index-country">
+      <h3><span class="flag flag-sm flag-de"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span> Alemania</h3>
+      <div class="index-list"><a class="index-entry" href="#" onclick="goTo('alemania','thi-csai'); return false;"><span class="deg">Computer Science &amp; Artificial Intelligence</span><span class="uni">Technische Hochschule Ingolstadt</span></a></div>
+    </div>
+
+    <div class="index-country">
+      <h3><span class="flag flag-sm flag-be"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span> Bélgica</h3>
+      <div class="index-list"><a class="index-entry" href="#" onclick="goTo('belgica','howest-cyber'); return false;"><span class="deg">Bachelor Cybersecurity</span><span class="uni">Howest University of Applied Sciences</span></a><a class="index-entry" href="#" onclick="goTo('belgica','howest-creative'); return false;"><span class="deg">Bachelor Creative Technologies and Artificial Intelligence</span><span class="uni">Howest University of Applied Sciences</span></a><a class="index-entry" href="#" onclick="goTo('belgica','thomasmore-ai'); return false;"><span class="deg">Applied Computer Science/ Artificial Intelligence</span><span class="uni">Thomas More University of Applied Sciences</span></a><a class="index-entry" href="#" onclick="goTo('belgica','thomasmore-digital'); return false;"><span class="deg">Applied Computer Science/ Digital Innovation</span><span class="uni">Thomas More University of Applied Sciences</span></a></div>
+    </div>
+
+    <div class="index-country">
+      <h3><span class="flag flag-sm flag-at"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span> Austria</h3>
+      <div class="index-list"><a class="index-entry" href="#" onclick="goTo('austria','imc-krems'); return false;"><span class="deg">Informatics</span><span class="uni">IMC Krems</span></a></div>
+    </div>
+  <div class="nextsteps">
+    <h3 class="serif">¿Qué tienes que hacer ahora?</h3>
+    <p>Echa un vistazo a todas las opciones que hemos seleccionado, mira los vídeos, lee el contenido de las webs (asignaturas, especializaciones, etc.), ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+  </div>
+</section>
+
+
+<section id="tab-research" class="tab-panel">
+  <h2 class="serif">Universidades de Research vs Applied Science</h2>
+  <p>En la mayoría de países europeos existen tipos de universidades que es importante conocer y diferenciar, las universidades de “Research” y de “Applied Sciences”. Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+  <h3>Metodología teórica vs práctica</h3><p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project/Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p><h3>Duración</h3><p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.<br>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p><h3>Ranking / Prestigio</h3><p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.<br>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p><h3>Acceso a Másteres</h3><p>Aquí es importante diferenciar si tu máster será en uno de los países que diferencian las 2 universidades, o en un país que no lo hace. Sen España por ejemplo, que no diferencia estas universidades, ambos títulos te dan las mismas oportunidades. Pero si se trata de Holanda, Bélgica o Alemania, por ejemplo, sí hay diferencias. Con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. Pero en cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research,</em> te pedirán cursar un pre-máster (de 1 semestre o un año de duración) para ponerte al día con las habilidades de investigación que se supone no has desarrollado aún.</p>
+  <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de Research y otra de Applied Sciences):</p>
+  <ul><li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank" rel="noopener">Applied Science vs. Research University</a></li><li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank" rel="noopener">Types of universities in the Netherlands</a></li></ul>
+  <p>Ahora sí, habiendo comentado estos detalles, te paso las opciones de estudio más interesantes:</p>
+</section>
+
+
+<section id="tab-holanda" class="tab-panel">
+  <div class="country-hero">
+    <span class="flag flag-lg flag-nl"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span>
+    <div>
+      <h2>Holanda</h2>
+      <div class="country-text">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <strong>2.692€/año</strong>.</div>
+    </div>
+  </div>
+  <div class="section-divider">APPLIED SCIENCE UNIVERSITIES</div>
+
+    <article class="uni-card" id="card-fontys-ict">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://fontys.edu/Study-at-Fontys/Programmes/Information-Communication-Technology-Eindhoven.htm" target="_blank" rel="noopener">Information &amp; Communication Technology <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">FONTYS UAS — Eindhoven</div>
+        </div>
+        <span class="difficulty-badge diff-baja">Dificultad: Baja / admisión directa</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Eindhoven (223.000 hab)<span class="map-btn" onclick="scrollToMap('holanda')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años 240 ECTS</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">1 de agosto</div></div></div>
+      <div class="desc-box">La tecnología de la información y la comunicación (TIC) es un amplio programa de licenciatura de 4 años. En el año 1, comenzará con una orientación amplia sobre cinco programas de estudio principales, que deberás escoger como especialización a partir del año 2:<ul><li><a href="https://fontys.edu/Bachelors-and-Masters/Bachelors/29-Fontys-Hogeschool-ICT/Information-Communication-Technology-Eindhoven/Structure-and-tracks-Courses-redesign/Bachelor-ICT-Business.htm" target="_blank" rel="noopener">Bachelor ICT &amp; Business</a></li><li><a href="https://fontys.edu/Bachelors-and-Masters/Bachelors/Information-Communication-Technology-Eindhoven/Courses/Bachelor-ICT-Infrastructure-1.htm" target="_blank" rel="noopener">Bachelor ICT &amp; Infrastructure</a></li><li><a href="https://fontys.edu/Bachelors-and-Masters/Bachelors/Information-Communication-Technology-Eindhoven/Courses/Bachelor-ICT-Media-Design-1.htm" target="_blank" rel="noopener">Bachelor ICT &amp; Media Design</a></li><li><a href="https://fontys.edu/Bachelors-and-Masters/Bachelors/Information-Communication-Technology-Eindhoven/Courses/Bachelor-ICT-Software-Engineering.htm" target="_blank" rel="noopener">Bachelor ICT &amp; Software Engineering</a></li><li><a href="https://fontys.edu/Bachelors-and-Masters/Bachelors/Information-Communication-Technology-Eindhoven/Courses/Bachelor-ICT-Technology-1.htm" target="_blank" rel="noopener">Bachelor ICT &amp; Technology</a></li></ul></div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>Academic IELTS 6.0 (con un mínimo de 5.0 en cada parte), TOEFL 80 (internet based) o Cambridge ESOL score FCE-C (169 mínimo).</li></ul>
+          <p><strong>Proceso de selección:</strong> no hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          <p><strong>Dificultad de admisión:</strong> Baja</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: 1 de agosto</div>
+        </div>
+      </details>
+    </article>
+    
+
+    <article class="uni-card" id="card-zuyd-adsai">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://www.zuyd.nl/en/programmes/applied-data-science-and-artificial-intelligence" target="_blank" rel="noopener">Applied Data Science &amp; Artificial Intelligence <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">Zuyd — Maastricht</div>
+        </div>
+        <span class="difficulty-badge diff-baja">Dificultad: Baja / admisión directa</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Maastricht (125.000 habitantes)<span class="map-btn" onclick="scrollToMap('holanda')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años 240 ECTS</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">1 de junio</div></div></div>
+      <div class="desc-box">Applied Data Science & Artificial Intelligence es un grado internacional impartido completamente en inglés que combina tecnología, análisis de datos e inteligencia artificial. Durante el programa, los estudiantes aprenden a desarrollar soluciones inteligentes para problemas complejos, desde la detección temprana de enfermedades hasta la transición energética. Además, se presta especial atención al impacto de la IA en la sociedad, incluyendo aspectos éticos y la relación entre las personas y las máquinas.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>Academic IELTS 6.0 , TOEFL 80 (at test centre) o Cambridge ESOL score FCE (169 mínimo).</li></ul>
+          <p><strong>Proceso de selección:</strong> no hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          <p><strong>Dificultad de admisión:</strong> Baja</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: 1 de junio</div>
+        </div>
+      </details>
+    </article>
+    
+
+    <article class="uni-card" id="card-zuyd-cs">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://www.zuyd.nl/en/programmes/computer-science" target="_blank" rel="noopener">Computer Science <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">Zuyd — Maastricht</div>
+        </div>
+        <span class="difficulty-badge diff-baja">Dificultad: Baja / admisión directa</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Maastricht (125.000 habitantes)<span class="map-btn" onclick="scrollToMap('holanda')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años 240 ECTS</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">1 de junio</div></div></div>
+      <div class="desc-box">Computer Science se centra en el desarrollo de software capaz de controlar y conectar diferentes componentes tecnológicos. Por ejemplo, aprenderás a programar un dron para que utilice sus sensores y cámaras, evite obstáculos y siga una ruta de forma autónoma. El programa combina programación, tecnología y resolución de problemas, con aplicaciones en áreas como la industria, la automatización del hogar o los equipos médicos.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>Academic IELTS 6.0 , TOEFL 80 (at test centre) o Cambridge ESOL score FCE (169 mínimo).</li></ul>
+          <p><strong>Proceso de selección:</strong> no hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          <p><strong>Dificultad de admisión:</strong> Baja</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: 1 de junio</div>
+        </div>
+      </details>
+    </article>
+    
+<div class="diff-block"><h4>Differencias entre Applied Data Science y AI y Computer Science Zuyd:</h4><ul>
+       <li>Applied Data Science &amp; AI → mejor opción si el estudiante quiere centrarse en IA, machine learning, datos y predicciones.</li>
+       <li>Computer Science → mejor opción si le interesa más programar, desarrollar software y crear sistemas tecnológicos.</li>
+       </ul>
+       <p>Los dos tienen una buena base informática, pero ADSAI es más especializado en datos e inteligencia artificial, mientras que Computer Science ofrece una formación más amplia en informática y desarrollo tecnológico.</p>
+       <p>Si el objetivo profesional es ser AI Engineer / Data Scientist, elegiría Applied Data Science &amp; AI. Si quiere mantener más opciones dentro de la informática —por ejemplo, software, sistemas, IoT, robótica o desarrollo tecnológico— elegiría Computer Science.</p></div>
+
+    <article class="uni-card" id="card-breda-adsai">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://www.buas.nl/en/programmes/applied-data-science-artificial-intelligence" target="_blank" rel="noopener">Applied Data Science &amp; Artificial Intelligence <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">Breda University — Breda</div>
+        </div>
+        <span class="difficulty-badge diff-baja">Dificultad: Baja / admisión directa</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Breda (190.000 habitantes)<span class="map-btn" onclick="scrollToMap('holanda')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años 240 ECTS</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">Rolling admision</div></div></div>
+      <div class="desc-box">Applied Data Science & AI combina programación, análisis de datos e inteligencia artificial con proyectos reales desde el primer año. Los estudiantes trabajan en soluciones aplicadas a ámbitos como la medicina, el deporte y los videojuegos, colaborando con empresas y otras disciplinas. Al finalizar el grado, podrán trabajar como Data Scientist, Data Engineer o Analytics Translator, entre otras profesiones.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de bachillerato * (sin EVAU- 4 años) Titulo de Bachiller + EVAU (3 años)</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>Academic IELTS 6.0 (overall y speaking) , TOEFL 80 (overall y 20 speaking) o Cambridge ESOL score FCE (169 mínimo). *todos en centro examinador</li></ul>
+          <p><strong>Proceso de selección:</strong> no hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          <p><strong>Dificultad de admisión:</strong> Baja</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: Rolling admision</div>
+        </div>
+      </details>
+    </article>
+    
+
+    <article class="uni-card" id="card-nhl-it">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://www.nhlstenden.com/en/courses/information-technology" target="_blank" rel="noopener">Information Technology <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">NHL Stenden — Emmen</div>
+        </div>
+        <span class="difficulty-badge diff-baja">Dificultad: Baja / admisión directa</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Emmen (57.000 habitantes)<span class="map-btn" onclick="scrollToMap('holanda')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años 240 ECTS</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">15 agosto</div></div></div>
+      <div class="desc-box">Information Technology en NHL Stenden es un programa práctico que combina programación, desarrollo de software, tecnologías web, redes e inteligencia artificial. Los estudiantes trabajan en proyectos reales con empresas y pueden especializarse en áreas como IA, desarrollo de software o ciberseguridad. Además, el programa ofrece un entorno internacional y buenas oportunidades laborales al finalizar los estudios.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>Academic IELTS 6.0 (with an advised minimum of 5.0 for each skill)., TOEFL 80 (0-120 scale) o Cambridge ESOL score FCE- B (Scale 173-175) o FCE C (169-172) *todos en centro examinador</li><li>English Language Course: If you haven't met the English language requirements mentioned above, NHL Stenden offers an English language course that you can participate in before starting your Bachelor's or Master's program at NHL Stenden. <a href="https://www.nhlstenden.com/en/short-courses/english-preparatory-course" target="_blank" rel="noopener">For more details, check this link.</a></li></ul>
+          <p><strong>Proceso de selección:</strong> no hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          <p><strong>Dificultad de admisión:</strong> Baja</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: 15 agosto</div>
+        </div>
+      </details>
+    </article>
+    
+
+    <article class="uni-card" id="card-nhl-cs">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://www.nhlstenden.com/en/courses/computer-science" target="_blank" rel="noopener">Computer Science <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">NHL Stenden — Emmen</div>
+        </div>
+        <span class="difficulty-badge diff-baja">Dificultad: Baja / admisión directa</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Emmen (57.000 habitantes)<span class="map-btn" onclick="scrollToMap('holanda')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">4 años 240 ECTS</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">15 agosto</div></div></div>
+      <div class="desc-box">Computer Science en NHL Stenden es un grado enfocado en la tecnología inteligente y la resolución de problemas. Los estudiantes desarrollan conocimientos en programación, digitalización, ciencia de datos y hardware, trabajando en proyectos reales relacionados con sectores como la salud, las finanzas, la logística y la electrónica. Además, ofrece especializaciones en áreas como ciberseguridad y un entorno internacional con atención personalizada.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de bachillerato</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>Academic IELTS 6.0 (with an advised minimum of 5.0 for each skill)., TOEFL 80 (0-120 scale) o Cambridge ESOL score FCE- B (Scale 173-175) o FCE C (169-172) *todos en centro examinador</li><li>English Language Course: If you haven't met the English language requirements mentioned above, NHL Stenden offers an English language course that you can participate in before starting your Bachelor's or Master's program at NHL Stenden. <a href="https://www.nhlstenden.com/en/short-courses/english-preparatory-course" target="_blank" rel="noopener">For more details, check this link.</a></li></ul>
+          <p><strong>Proceso de selección:</strong> no hay, si cumples los requisitos tienes el acceso practicamente garantizado.</p>
+          <p><strong>Dificultad de admisión:</strong> Baja</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: 15 agosto</div>
+        </div>
+      </details>
+    </article>
+    
+<div class="diff-block"><h4>Diferencias entre Information Technology y Computer Science NHL Stenden</h4><ul>
+       <li><strong>Information Technology:</strong> Es una opción más orientada a utilizar la tecnología para resolver necesidades concretas de empresas y organizaciones. Tiene bastante peso en software, desarrollo web, redes, IA y ciberseguridad.<br>🖐 Lo recomendaría a alguien que piensa: “Quiero trabajar desarrollando soluciones tecnológicas para empresas”.</li>
+       <li><strong>Computer Science:</strong> Tiene un enfoque algo más técnico y tecnológico, con mayor atención a programación, algoritmos, digitalización, Data Science, IA y hardware. También permite trabajar con tecnologías como robótica o dispositivos inteligentes.<br>🖐 Lo recomendaría a alguien que piensa: “Quiero entender y crear la tecnología y los sistemas que están detrás de las soluciones digitales”.</li>
+       </ul></div>
+  <div class="map-container" id="map-anchor-holanda">
+    <h3>Mapa de universidades en Holanda</h3>
+    <div class="leaflet-map" id="leaflet-holanda"></div>
+  </div>
+</section>
+
+
+<section id="tab-alemania" class="tab-panel">
+  <div class="country-hero">
+    <span class="flag flag-lg flag-de"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span>
+    <div>
+      <h2>Alemania</h2>
+      <div class="country-text">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Alemania, siendo el coste anual que tenemos que pagar de unos <strong>700€/año</strong>.</div>
+    </div>
+  </div>
+  <div class="section-divider">APPLIED SCIENCE UNIVERSITIES</div>
+
+    <article class="uni-card" id="card-thi-csai">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://www.thi.de/en/computer-science/degree-programmes/computer-science-and-artificial-intelligence-bsc/" target="_blank" rel="noopener">Computer Science &amp; Artificial Intelligence <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">Technische Hochschule Ingolstadt — Ingolstadt</div>
+        </div>
+        <span class="difficulty-badge diff-media">Dificultad: Media</span>
+      </div>
+      <div class="ranking-block">
+          <div class="ranking-label">Ranking de la universidad:</div>
+          <div class="ranking-badges"><span class="rank-badge">Al ser una universidad técnica y de “applied sciences”, no aparece en los rankings internacionales.</span></div>
+        </div>
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Ingolstadt (142.400 habitantes)<span class="map-btn" onclick="scrollToMap('alemania')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3,5 años</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">15 de julio</div></div></div>
+      <div class="desc-box">En el programa de Grado en Informática e Inteligencia Artificial, los estudiantes adquieren conocimientos actualizados sobre informática aplicada y diseño de sistemas informáticos. Los módulos fundamentales de informática incluyen, por ejemplo, programación, ingeniería de software, tecnologías web, sistemas de bases de datos y big data, visualización de datos e interfaces persona-ordenador. Además, el programa abarca temas centrales de IA, como la visión por ordenador, la comprensión del lenguaje natural, los sistemas expertos, la optimización heurística, los agentes inteligentes, el aprendizaje automático y las redes neuronales. Además, los estudiantes se ocupan de cuestiones éticas, privacidad de los datos y problemas de seguridad asociados al uso de sistemas de procesamiento de la información. Son capaces de trabajar científicamente en equipo y de trasladar los resultados científicos a la práctica profesional, así como de comunicar y presentar dichos resultados de forma convincente.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de bachillerato + EVAU</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>Aparentemente aceptan el inglés de 2º de bachiller como suficiente (por confirmar con la universidad).</li></ul>
+          <p><strong>Proceso de selección:</strong> Sí hay proceso de selección: la universidad usará la nota final de bachiller para elegir a los estudiantes admitidos</p>
+          <p><strong>Dificultad de admisión:</strong> Media</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: 15 de julio</div>
+        </div>
+      </details>
+    </article>
+    
+  <div class="map-container" id="map-anchor-alemania">
+    <h3>Mapa de universidades en Alemania</h3>
+    <div class="leaflet-map" id="leaflet-alemania"></div>
+  </div>
+</section>
+
+
+<section id="tab-belgica" class="tab-panel">
+  <div class="country-hero">
+    <span class="flag flag-lg flag-be"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span>
+    <div>
+      <h2>Bélgica</h2>
+      <div class="country-text">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <strong>1187 €/año.</strong></div>
+    </div>
+  </div>
+  <div class="section-divider">APPLIED SCIENCE UNIVERSITIES</div>
+
+    <article class="uni-card" id="card-howest-cyber">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://www.howest.be/en/programmes/bachelor/cybersecurity" target="_blank" rel="noopener">Bachelor Cybersecurity <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">Howest University of Applied Sciences — Brujas</div>
+        </div>
+        <span class="difficulty-badge diff-baja">Dificultad: Baja / admisión directa</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Brujas (aprox. 119.541 habitantes)<span class="map-btn" onclick="scrollToMap('belgica')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años/180 ECTS</div></div><div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">1.181,40 € y tasa de matrícula 50€ no reembolsables</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">1 de julio</div></div></div>
+      <div class="desc-box">Estudiar Ciberseguridad en Howest te prepara para proteger el mundo digital frente a amenazas cada vez más sofisticadas. Aprenderás a diseñar, implementar y gestionar sistemas seguros, desarrollando habilidades prácticas en defensa contra ciberataques, análisis forense digital y protección de datos. Este programa combina teoría y práctica desde el primer día, para que estés listo para enfrentar los desafíos reales del sector tecnológico.<br><br>Además, tendrás la oportunidad de trabajar en proyectos innovadores y realizar prácticas profesionales que te abrirán las puertas al mercado laboral. Si quieres formar parte de un campo en constante crecimiento y alta demanda, donde tu trabajo marcará la diferencia en la seguridad de empresas y personas, este programa es ideal para ti.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>IELTS 6.5</li><li>Cambridge FCE 160</li><li>TOEFL / TOEFL iBT Special Home Edition 80</li><li>Duolingo 110</li></ul>
+          <p><strong>Proceso de selección:</strong> No hay proceso de selección: si cumples los requisitos de diploma y lengua, serás aceptado, aunque pueden cerrar las solicitudes de determinados países cuando alcanzan un límite</p>
+          <p><strong>Dificultad de admisión:</strong> Baja</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: 1 de julio</div>
+        </div>
+      </details>
+    </article>
+    
+
+    <article class="uni-card" id="card-howest-creative">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://www.howest.be/en/programmes/bachelor/creative-technologies-and-artificial-intelligence" target="_blank" rel="noopener">Bachelor Creative Technologies and Artificial Intelligence <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">Howest University of Applied Sciences — Kortrijk</div>
+        </div>
+        <span class="difficulty-badge diff-baja">Dificultad: Baja / admisión directa</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Kortrijk (aprox. 76.000 habitantes)<span class="map-btn" onclick="scrollToMap('belgica')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años/180 ECTS</div></div><div class="meta-cell"><div class="meta-label">Coste</div><div class="meta-value">1.181,40 € y tasa de matrícula 50€ no reembolsables</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">1 de julio</div></div></div>
+      <div class="desc-box">Este grado te permitirá sumergirte en un mundo donde la creatividad se une con la tecnología más avanzada. Aprenderás a diseñar y desarrollar soluciones innovadoras usando inteligencia artificial aplicada a áreas como el arte digital, la interacción multimedia y las experiencias creativas. Este programa te ofrece un enfoque práctico desde el primer día, para que puedas experimentar y crear proyectos que realmente marquen la diferencia.<br><br>Además, tendrás la oportunidad de trabajar con herramientas punteras y colaborar en proyectos reales, preparándote para un mercado laboral en auge donde la creatividad tecnológica es clave. Si quieres combinar tu pasión por la tecnología y la innovación con un enfoque artístico, este programa te brindará las habilidades y la experiencia que necesitas para destacar.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>IELTS 6.5</li><li>Cambridge FCE 160</li><li>TOEFL / TOEFL iBT Special Home Edition 80</li><li>Duolingo 110</li></ul>
+          <p><strong>Proceso de selección:</strong> No hay proceso de selección: si cumples los requisitos de diploma y lengua, serás aceptado, aunque pueden cerrar las solicitudes de determinados países cuando alcanzan un límite</p>
+          <p><strong>Dificultad de admisión:</strong> Baja</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: 1 de julio</div>
+        </div>
+      </details>
+    </article>
+    
+
+    <article class="uni-card" id="card-thomasmore-ai">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://thomasmore.be/en/educations/degree-students/applied-computer-science/artificial-intelligence/geel/full-programme" target="_blank" rel="noopener">Applied Computer Science/ Artificial Intelligence <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">Thomas More University of Applied Sciences — Geel</div>
+        </div>
+        <span class="difficulty-badge diff-baja">Dificultad: Baja / admisión directa</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Geel (42.000 habitantes)<span class="map-btn" onclick="scrollToMap('belgica')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años, 180 ECTS</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">Rolling admision</div></div></div>
+      <div class="desc-box">Artificial Intelligence en Thomas More es una especialización del grado Applied Computer Science, impartida en inglés en el campus de Geel. El programa combina una sólida base en informática con una especialización en inteligencia artificial, Data Science y Machine Learning. Los estudiantes aprenden programación, desarrollo de software, análisis y visualización de datos, además de tecnologías como IoT, cloud y DevOps. El enfoque es muy práctico, con proyectos para empresas reales y unas 13 semanas de prácticas profesionales.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>IELTS 6.0</li><li>Cambridge FCE 160</li><li>TOEFL / TOEFL iBT Special Home Edition 79</li><li>Duolingo 110</li></ul>
+          <p><strong>Proceso de selección:</strong> No hay proceso de selección: si cumples los requisitos de diploma y lengua, serás aceptado, aunque pueden cerrar las solicitudes de determinados países cuando alcanzan un límite</p>
+          <p><strong>Dificultad de admisión:</strong> Baja</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: Rolling admision</div>
+        </div>
+      </details>
+    </article>
+    
+
+    <article class="uni-card" id="card-thomasmore-digital">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://thomasmore.be/en/educations/degree-students/applied-computer-science/digital-innovation/geel/full-programme" target="_blank" rel="noopener">Applied Computer Science/ Digital Innovation <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">Thomas More University of Applied Sciences — Geel</div>
+        </div>
+        <span class="difficulty-badge diff-baja">Dificultad: Baja / admisión directa</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Geel (42.000 habitantes)<span class="map-btn" onclick="scrollToMap('belgica')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años, 180 ECTS</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">Rolling admision</div></div></div>
+      <div class="desc-box">Digital Innovation en Thomas More es una especialización del grado Applied Computer Science, impartida en inglés en Geel. El programa combina una base amplia de informática con proyectos prácticos de programación, desarrollo web, IoT, cloud, DevOps, redes y ciberseguridad. A partir del segundo año, los estudiantes pueden orientarse hacia el perfil profesional que más les interese y trabajan cada vez más con proyectos reales para empresas, terminando con unas 13 semanas de prácticas profesionales.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>IELTS 6.0</li><li>Cambridge FCE 160</li><li>TOEFL / TOEFL iBT Special Home Edition 79</li><li>Duolingo 110</li></ul>
+          <p><strong>Proceso de selección:</strong> No hay proceso de selección: si cumples los requisitos de diploma y lengua, serás aceptado, aunque pueden cerrar las solicitudes de determinados países cuando alcanzan un límite</p>
+          <p><strong>Dificultad de admisión:</strong> Baja</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: Rolling admision</div>
+        </div>
+      </details>
+    </article>
+    
+  <div class="map-container" id="map-anchor-belgica">
+    <h3>Mapa de universidades en Bélgica</h3>
+    <div class="leaflet-map" id="leaflet-belgica"></div>
+  </div>
+</section>
+
+
+<section id="tab-austria" class="tab-panel">
+  <div class="country-hero">
+    <span class="flag flag-lg flag-at"><span class="b1"></span><span class="b2"></span><span class="b3"></span></span>
+    <div>
+      <h2>Austria</h2>
+      <div class="country-text">Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <strong>363 TRIMESTRE</strong>.</div>
+    </div>
+  </div>
+  <div class="section-divider">APPLIED SCIENCE UNIVERSITIES</div>
+
+    <article class="uni-card" id="card-imc-krems">
+      <div class="card-header">
+        <div class="card-title-block">
+          <h4><a href="https://www.imc.ac.at/en/study/bachelor/science-technology/informatics/#application-accordion" target="_blank" rel="noopener">Informatics <span class="click-icon">🖱️</span></a></h4>
+          <div class="card-school">IMC Krems — Krems</div>
+        </div>
+        <span class="difficulty-badge diff-media">Dificultad: Media</span>
+      </div>
+      
+      <div class="meta-grid"><div class="meta-cell"><div class="meta-label">Ciudad</div><div class="meta-value">Krems<span class="map-btn" onclick="scrollToMap('austria')">🗺️ Ver mapa</span></div></div><div class="meta-cell"><div class="meta-label">Duración</div><div class="meta-value">3 años / 180 ECTS</div></div><div class="meta-cell"><div class="meta-label">Plazo límite matrícula</div><div class="meta-value">15 de abril</div></div></div>
+      <div class="desc-box">Informatics en IMC Krems es un grado en inglés que combina informática, tecnología y ciencia de datos para desarrollar soluciones innovadoras. Los estudiantes adquieren conocimientos en software, inteligencia artificial, análisis de datos y sistemas informáticos, con especializaciones en Data Science, Business Informatics y Bioinformatics. Al finalizar, podrán trabajar como desarrolladores de software, científicos de datos, ingenieros de IA o gestores de proyectos IT, entre otros.</div>
+      <details class="admission">
+        <summary>Ver requisitos de admisión y fechas</summary>
+        <div class="admission-body">
+          <p><strong>Requisitos académicos:</strong> Título de Bachillerato + EVAU aprobado</p>
+          <p><strong>Requisitos de inglés:</strong></p>
+          <ul><li>la universidad evalua el nivel de ingles durante la entrevista</li></ul>
+          <p><strong>Proceso de selección:</strong> El proceso de admisión se basa principalmente en conocer al candidato y evaluar su motivación. Consta de los siguientes pasos: <ul><li><strong>Carta de motivación:</strong> responder a preguntas sobre tus intereses, experiencia y razones para estudiar el programa.</li><li><strong>Essay:</strong> elegir uno de los temas propuestos, investigar sobre él y presentar tus propios argumentos y punto de vista.</li><li><strong>Entrevista de admisión:</strong> conversación con el director del programa, normalmente online por Microsoft Teams o presencial. Se hablará sobre tu motivación y sobre el tema y argumentos de tu ensayo.</li><li><strong>Evaluación final:</strong> se valoran la carta de motivación, el ensayo y tu desempeño durante la entrevista, incluyendo la calidad de tus argumentos y la forma de expresarte.</li></ul></p>
+          <p><strong>Dificultad de admisión:</strong> Media</p>
+          <div class="deadline-box">Plazo límite para enviar matrícula: 15 de abril</div>
+        </div>
+      </details>
+    </article>
+    
+  <div class="map-container" id="map-anchor-austria">
+    <h3>Mapa de universidades en Austria</h3>
+    <div class="leaflet-map" id="leaflet-austria"></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <img class="logo-footer" src="data:image/png;base64,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" alt="educoWay">
+  <p>educoWay — orientación universitaria en el extranjero</p>
+</footer>
+
+
+<script>
+const mapData = {"holanda": {"center": [52.3, 5.5], "zoom": 7, "unis": [{"id": "fontys-ict", "name": "Information & Communication Technology", "school": "FONTYS UAS", "lat": 51.4416, "lng": 5.4697, "webUrl": "https://fontys.edu/Study-at-Fontys/Programmes/Information-Communication-Technology-Eindhoven.htm", "mapsUrl": "https://maps.google.com/?q=51.4416,5.4697"}, {"id": "zuyd-adsai", "name": "Applied Data Science & Artificial Intelligence", "school": "Zuyd", "lat": 50.8514, "lng": 5.691, "webUrl": "https://www.zuyd.nl/en/programmes/applied-data-science-and-artificial-intelligence", "mapsUrl": "https://maps.google.com/?q=50.8514,5.691"}, {"id": "zuyd-cs", "name": "Computer Science", "school": "Zuyd", "lat": 50.8474, "lng": 5.696, "webUrl": "https://www.zuyd.nl/en/programmes/computer-science", "mapsUrl": "https://maps.google.com/?q=50.8474,5.696"}, {"id": "breda-adsai", "name": "Applied Data Science & Artificial Intelligence", "school": "Breda University", "lat": 51.5719, "lng": 4.7683, "webUrl": "https://www.buas.nl/en/programmes/applied-data-science-artificial-intelligence", "mapsUrl": "https://maps.google.com/?q=51.5719,4.7683"}, {"id": "nhl-it", "name": "Information Technology", "school": "NHL Stenden", "lat": 52.7791, "lng": 6.9061, "webUrl": "https://www.nhlstenden.com/en/courses/information-technology", "mapsUrl": "https://maps.google.com/?q=52.7791,6.9061"}, {"id": "nhl-cs", "name": "Computer Science", "school": "NHL Stenden", "lat": 52.7751, "lng": 6.9101, "webUrl": "https://www.nhlstenden.com/en/courses/computer-science", "mapsUrl": "https://maps.google.com/?q=52.7751,6.9101"}]}, "alemania": {"center": [48.7665, 11.4257], "zoom": 11, "unis": [{"id": "thi-csai", "name": "Computer Science & Artificial Intelligence", "school": "Technische Hochschule Ingolstadt", "lat": 48.7665, "lng": 11.4257, "webUrl": "https://www.thi.de/en/computer-science/degree-programmes/computer-science-and-artificial-intelligence-bsc/", "mapsUrl": "https://maps.google.com/?q=48.7665,11.4257"}]}, "belgica": {"center": [51.0, 3.9], "zoom": 8, "unis": [{"id": "howest-cyber", "name": "Bachelor Cybersecurity", "school": "Howest University of Applied Sciences", "lat": 51.2093, "lng": 3.2247, "webUrl": "https://www.howest.be/en/programmes/bachelor/cybersecurity", "mapsUrl": "https://maps.google.com/?q=51.2093,3.2247"}, {"id": "howest-creative", "name": "Bachelor Creative Technologies and Artificial Intelligence", "school": "Howest University of Applied Sciences", "lat": 50.828, "lng": 3.2649, "webUrl": "https://www.howest.be/en/programmes/bachelor/creative-technologies-and-artificial-intelligence", "mapsUrl": "https://maps.google.com/?q=50.828,3.2649"}, {"id": "thomasmore-ai", "name": "Applied Computer Science/ Artificial Intelligence", "school": "Thomas More University of Applied Sciences", "lat": 51.1642, "lng": 4.9903, "webUrl": "https://thomasmore.be/en/educations/degree-students/applied-computer-science/artificial-intelligence/geel/full-programme", "mapsUrl": "https://maps.google.com/?q=51.1642,4.9903"}, {"id": "thomasmore-digital", "name": "Applied Computer Science/ Digital Innovation", "school": "Thomas More University of Applied Sciences", "lat": 51.1602, "lng": 4.9943, "webUrl": "https://thomasmore.be/en/educations/degree-students/applied-computer-science/digital-innovation/geel/full-programme", "mapsUrl": "https://maps.google.com/?q=51.1602,4.9943"}]}, "austria": {"center": [48.4103, 15.6132], "zoom": 12, "unis": [{"id": "imc-krems", "name": "Informatics", "school": "IMC Krems", "lat": 48.4103, "lng": 15.6132, "webUrl": "https://www.imc.ac.at/en/study/bachelor/science-technology/informatics/#application-accordion", "mapsUrl": "https://maps.google.com/?q=48.4103,15.6132"}]}};
+const mapsInitialized = {};
+let leafletMaps = {};
+
+function showTab(id, btn){
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  (btn || document.getElementById('tabbtn-' + id)).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+  if (mapData[id]) {
+    setTimeout(() => initMap(id), 60);
+  }
+}
+
+function goTo(tab, anchor){
+  const btn = document.getElementById('tabbtn-' + tab);
+  showTab(tab, btn);
+  setTimeout(() => {
+    const el = document.getElementById('card-' + anchor);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 120);
+}
+
+function scrollToCard(id){
+  // find which country this card belongs to
+  for (const cid in mapData){
+    if (mapData[cid].unis.some(u => u.id === id)){
+      goTo(cid, id);
+      return;
+    }
+  }
+}
+
+function scrollToMap(tab){
+  const activePanel = document.querySelector('.tab-panel.active');
+  const isActive = activePanel && activePanel.id === 'tab-' + tab;
+  if (isActive){
+    const el = document.getElementById('map-anchor-' + tab);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    initMap(tab);
+  } else {
+    const btn = document.getElementById('tabbtn-' + tab);
+    showTab(tab, btn);
+    setTimeout(() => {
+      const el = document.getElementById('map-anchor-' + tab);
+      if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 150);
+  }
+}
+
+function initMap(countryId){
+  if (mapsInitialized[countryId]) return;
+  const data = mapData[countryId];
+  if (!data) return;
+  const el = document.getElementById('leaflet-' + countryId);
+  if (!el || el.offsetParent === null) return;
+  mapsInitialized[countryId] = true;
+  const map = L.map(el).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+  const gradIcon = L.divIcon({
+    html: '🎓',
+    className: 'grad-marker',
+    iconSize: [28,28]
+  });
+  data.unis.forEach(u => {
+    const marker = L.marker([u.lat, u.lng], {icon: gradIcon}).addTo(map);
+    const popupHtml = `<div style="font-family:'DM Sans',sans-serif;">
+      <div style="font-weight:700; margin-bottom:2px;">${u.name}</div>
+      <div style="color:#0a9baa; font-size:0.85rem; margin-bottom:6px;">${u.school}</div>
+      <div class="popup-btns">
+        <a href="${u.webUrl}" target="_blank" rel="noopener">Ver grado</a>
+        <a href="#" onclick="scrollToCard('${u.id}'); return false;">Ver ficha</a>
+        <a href="${u.mapsUrl}" target="_blank" rel="noopener">Google Maps</a>
+      </div>
+    </div>`;
+    marker.bindPopup(popupHtml);
+  });
+  leafletMaps[countryId] = map;
+  setTimeout(() => map.invalidateSize(), 200);
+}
+</script>
+
+<script>
+// init first map lazily if user lands directly on a country tab via hash (not used by default)
+</script>
+</body>
+</html>
