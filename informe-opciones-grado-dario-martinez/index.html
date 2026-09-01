@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Personalizado de Opciones de Grado — Dario Martínez de Azcona</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<style>
+:root{
+  --teal:#0a9baa;
+  --teal-dark:#077a87;
+  --teal-light:#e0f5f7;
+  --navy:#0d2b3e;
+  --bg:#f4f8fa;
+  --border:#c8e0e5;
+  --gold:#c99a2e;
+  --gold-bg:#fbf1d9;
+  --red:#c0392b;
+  --orange:#d97a1f;
+  --green:#2e8b57;
+  --yellow-bg:#fff3c4;
+  --yellow-border:#e8c85a;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'DM Sans', sans-serif;
+  font-size:16px;
+  color:var(--navy);
+  background:var(--bg);
+  line-height:1.6;
+}
+h1,h2,h3,h4,h5{font-family:'Playfair Display', serif; color:var(--navy); margin:0 0 .4em;}
+a{color:var(--teal-dark);}
+p{margin:0 0 1em;}
+ul{margin:.3em 0 1em; padding-left:1.3em;}
+li{margin-bottom:.35em;}
+
+/* ---------- Flags (pure CSS, nested spans) ---------- */
+.flag{
+  display:inline-flex; flex-direction:column; width:26px; height:18px;
+  border-radius:2px; overflow:hidden; border:1px solid rgba(13,43,62,.25);
+  flex-shrink:0; position:relative; box-shadow:0 1px 2px rgba(0,0,0,.15);
+}
+.flag.flag-lg{width:64px; height:44px; border-radius:4px;}
+.flag span{flex:1; display:block;}
+.flag-nl span:nth-child(1){background:#AE1C28;}
+.flag-nl span:nth-child(2){background:#FFFFFF;}
+.flag-nl span:nth-child(3){background:#21468B;}
+.flag-de span:nth-child(1){background:#000000;}
+.flag-de span:nth-child(2){background:#DD0000;}
+.flag-de span:nth-child(3){background:#FFCE00;}
+.flag-be{flex-direction:row;}
+.flag-be span:nth-child(1){background:#000000;}
+.flag-be span:nth-child(2){background:#FFD90F;}
+.flag-be span:nth-child(3){background:#EF3340;}
+.flag-dk{background:#C8102E;}
+.flag-dk .h{position:absolute; left:0; right:0; top:38%; height:24%; background:#fff; display:block;}
+.flag-dk .v{position:absolute; top:0; bottom:0; left:28%; width:20%; background:#fff; display:block;}
+
+/* ---------- Header ---------- */
+.site-header{
+  position:sticky; top:0; z-index:50;
+  background:var(--navy);
+  box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+.header-top{
+  display:flex; align-items:center; gap:22px;
+  max-width:1180px; margin:0 auto; padding:18px 24px 10px;
+}
+.edu-logo{height:40px; width:auto; flex-shrink:0;}
+.logo-grey{fill:#737373;}
+.logo-tagline{fill:#737373;}
+/* Header version: white wordmark */
+.logo-header .logo-grey, .logo-header .logo-tagline{fill:#ffffff;}
+.logo-header .logo-w{fill:#ffffff !important;}
+/* Footer version: original colours, reduced opacity */
+.logo-footer{opacity:.55; height:30px;}
+.header-text h1{
+  font-size:1.45rem; color:#fff; margin:0; line-height:1.2;
+}
+.header-subtitle{
+  font-family:'DM Sans', sans-serif; font-size:.72rem; letter-spacing:1.5px;
+  text-transform:uppercase; color:#aad4da; margin-top:4px;
+}
+.tabs{
+  display:flex; flex-wrap:wrap; gap:4px;
+  max-width:1180px; margin:0 auto; padding:0 24px 12px;
+}
+.tab-btn{
+  background:rgba(255,255,255,.06); color:#dcecef; border:1px solid rgba(255,255,255,.12);
+  padding:8px 16px; border-radius:20px; font-family:'DM Sans',sans-serif; font-size:.88rem;
+  cursor:pointer; display:flex; align-items:center; gap:8px; transition:.15s;
+}
+.tab-btn:hover{background:rgba(255,255,255,.14);}
+.tab-btn.active{background:var(--teal); color:#fff; border-color:var(--teal);}
+.tab-btn .flag{width:20px; height:14px;}
+
+/* ---------- Main / tabs ---------- */
+main{max-width:1180px; margin:0 auto; padding:32px 24px 60px;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+.lead-block p{font-size:1.02rem;}
+.index-title{margin-top:2em;}
+
+.index-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px;
+  margin-bottom:1.5em;
+}
+.index-country{
+  background:#fff; border:2px solid var(--border); border-radius:12px; padding:16px 18px;
+}
+.index-country-head{
+  display:flex; align-items:center; gap:10px; font-family:'Playfair Display',serif;
+  font-size:1.1rem; margin-bottom:10px; color:var(--teal-dark);
+}
+.index-list{display:flex; flex-direction:column; gap:10px;}
+.index-entry{
+  display:flex; flex-direction:column; text-decoration:none; padding:6px 8px; border-radius:6px;
+}
+.index-entry:hover{background:var(--teal-light);}
+.index-degree{font-size:13.5px; font-weight:500; color:var(--navy);}
+.index-school{font-family:'Playfair Display',serif; font-style:italic; font-size:11.5px; color:#8a97a0;}
+
+.whatnow-box{
+  background:var(--teal-light); border-left:4px solid var(--teal); padding:18px 22px; border-radius:8px;
+  margin-top:2em;
+}
+
+/* ---------- Research vs applied ---------- */
+.rva-section{margin-bottom:1.4em;}
+.rva-section h3{font-size:1.1rem; color:var(--teal-dark);}
+.link-list{list-style:none; padding-left:0;}
+.link-list li{margin-bottom:.5em;}
+.link-list a{font-weight:600;}
+
+/* ---------- Country pages ---------- */
+.country-hero{display:flex; align-items:center; gap:18px; margin-bottom:14px;}
+.country-hero h2{font-size:2rem; margin-bottom:2px;}
+.country-meta{color:#5c7480; font-size:.85rem;}
+.country-intro{
+  background:#fff; border:2px solid var(--border); border-radius:12px; padding:18px 22px; margin-bottom:22px;
+}
+.cost-highlight{color:var(--green); font-weight:700;}
+
+.info-note{
+  background:#fff; border:2px dashed var(--teal); border-radius:12px; padding:18px 22px; margin-bottom:22px;
+}
+.info-note h3{color:var(--teal-dark);}
+.note-item{margin-top:.7em;}
+
+.section-sep{
+  background:var(--teal); color:#fff; font-family:'DM Sans',sans-serif; font-weight:600;
+  letter-spacing:.5px; padding:9px 18px; border-radius:8px; margin:26px 0 16px; font-size:.9rem;
+}
+
+.cards-grid{display:flex; flex-direction:column; gap:20px;}
+
+/* ---------- University card ---------- */
+.uni-card{
+  background:#fff; border:2px solid var(--border); border-radius:12px; padding:20px 24px;
+  transition:.18s; scroll-margin-top:140px;
+}
+.uni-card:hover{border-color:var(--teal); box-shadow:0 6px 22px rgba(10,155,170,.16);}
+.card-header{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap;}
+.card-title-block{flex:1; min-width:200px;}
+.card-title{
+  font-family:'Playfair Display',serif; font-size:1.28rem; text-decoration:none; color:var(--navy);
+  display:inline-flex; align-items:center; gap:8px; transition:.15s;
+}
+.card-title:hover{color:var(--teal-dark);}
+.click-icon{display:inline-block; transition:.15s; font-size:.9em;}
+.card-title:hover .click-icon{transform:scale(1.3);}
+.card-school{color:var(--teal-dark); font-size:.92rem; margin-top:2px;}
+
+.diff-badge{
+  padding:5px 14px; border-radius:20px; font-size:.78rem; font-weight:700; border:1.5px solid; white-space:nowrap;
+}
+.diff-red{background:#fbe2df; color:var(--red); border-color:var(--red);}
+.diff-orange{background:#fbeadb; color:var(--orange); border-color:var(--orange);}
+.diff-green{background:#e2f2e7; color:var(--green); border-color:var(--green);}
+
+.ranking-row{margin-top:10px; display:flex; flex-wrap:wrap; align-items:center; gap:8px;}
+.ranking-mini-label{color:#8a97a0; font-size:.78rem;}
+.badge-rank, .badge-gold{
+  font-size:.78rem; padding:4px 10px; border-radius:14px; text-decoration:none; font-weight:600;
+}
+.badge-rank{background:var(--teal-light); color:var(--teal-dark); border:1px solid var(--teal);}
+.badge-gold{background:var(--gold-bg); color:#8a6a10; border:1px solid var(--gold);}
+.rank-note{font-size:.8rem; color:#8a97a0; font-style:italic;}
+
+.meta-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin:16px 0;
+}
+.meta-cell{background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:8px 12px;}
+.meta-label{display:block; font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:#8a97a0;}
+.meta-value{display:block; font-size:.92rem; margin-top:2px;}
+.fee-red{color:var(--red); font-weight:600;}
+.map-btn{
+  background:var(--teal-light); border:1px solid var(--teal); color:var(--teal-dark); font-weight:700;
+  font-size:.72rem; padding:2px 8px; border-radius:6px; margin-left:6px; cursor:pointer;
+}
+
+.desc-box{
+  background:#f0f7fb; border-left:4px solid var(--teal); padding:14px 18px; border-radius:0 8px 8px 0;
+  margin-bottom:14px; font-size:.95rem;
+}
+.card-extra{font-size:.92rem; color:#3a4d58;}
+
+.admission-details{margin-top:8px; border-top:1px solid var(--border); padding-top:10px;}
+.admission-details summary{
+  cursor:pointer; font-weight:600; color:var(--teal-dark); font-size:.92rem; padding:4px 0;
+}
+.admission-content{padding-top:10px; font-size:.92rem;}
+.req-subtitle{font-weight:700; margin-bottom:.2em; font-size:.9rem;}
+.deadline-box{
+  background:var(--yellow-bg); border:1.5px solid var(--yellow-border); border-radius:8px;
+  padding:10px 14px; margin-top:12px; font-size:.92rem;
+}
+
+/* DTU extra */
+.dtu-extra{margin-top:14px;}
+.spec-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:12px 0;}
+.spec-card{background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px 14px;}
+.spec-card h4{font-size:.95rem; color:var(--teal-dark); margin-bottom:4px;}
+.spec-card p{font-size:.85rem; margin:0; color:#3a4d58;}
+.masters-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:12px 0;}
+.masters-col h5{font-size:.85rem; color:var(--navy); background:var(--teal-light); padding:4px 8px; border-radius:6px;}
+.masters-col ul{font-size:.8rem; padding-left:1.1em;}
+
+/* ---------- Map ---------- */
+.map-wrap{margin-top:30px; scroll-margin-top:140px;}
+.map-wrap h3{margin-bottom:10px;}
+.leaflet-map{height:420px; border-radius:12px; border:2px solid var(--border); overflow:hidden;}
+.popup-actions{display:flex; flex-direction:column; gap:6px; margin-top:8px;}
+.popup-actions a, .popup-actions button{
+  font-size:.78rem; padding:5px 10px; border-radius:6px; text-align:center; text-decoration:none;
+  border:1px solid var(--teal); color:var(--teal-dark); background:var(--teal-light); cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+}
+
+/* ---------- Footer ---------- */
+footer{
+  border-top:1px solid var(--border); margin-top:40px; padding:28px 24px; text-align:center;
+}
+footer .edu-logo{margin-bottom:8px;}
+footer p{font-size:.8rem; color:#8a97a0; margin:0;}
+
+@media (max-width:640px){
+  .header-text h1{font-size:1.1rem;}
+  .edu-logo{height:30px;}
+  main{padding:22px 14px 50px;}
+  .card-header{flex-direction:column;}
+}
+
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <svg class="edu-logo logo-header" viewBox="0 0 1000 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="educoway">
+  <defs>
+    <linearGradient id="wGradHeader" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5cb98a"/>
+      <stop offset="50%" stop-color="#1e97a0"/>
+      <stop offset="100%" stop-color="#4ba9e0"/>
+    </linearGradient>
+  </defs>
+  <text x="0" y="150" font-family="'DM Sans', sans-serif" font-weight="500" font-size="130" letter-spacing="-2">
+    <tspan class="logo-grey">educo</tspan><tspan class="logo-w" dx="2" fill="url(#wGradHeader)">w</tspan><tspan class="logo-grey">ay</tspan>
+  </text>
+  <text x="4" y="205" font-family="'DM Sans', sans-serif" font-weight="400" font-size="30" letter-spacing="1.5" class="logo-tagline">orientación universitaria en el extranjero</text>
+</svg>
+    <div class="header-text">
+      <h1>Informe Personalizado de Opciones de Grado</h1>
+      <div class="header-subtitle">Preparado para Dario Martínez de Azcona</div>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="intro" onclick="showTab('intro', this)">Introducción</button>
+<button class="tab-btn" data-tab="research-applied" onclick="showTab('research-applied', this)">Research vs Applied Sciences</button>
+<button class="tab-btn" data-tab="nl" onclick="showTab('nl', this)"><span class="flag flag-nl"><span></span><span></span><span></span></span> Holanda</button>
+<button class="tab-btn" data-tab="dk" onclick="showTab('dk', this)"><span class="flag flag-dk"><span class="h"></span><span class="v"></span></span> Dinamarca</button>
+<button class="tab-btn" data-tab="de" onclick="showTab('de', this)"><span class="flag flag-de"><span></span><span></span><span></span></span> Alemania</button>
+<button class="tab-btn" data-tab="be" onclick="showTab('be', this)"><span class="flag flag-be"><span></span><span></span><span></span></span> Bélgica</button>
+  </nav>
+</header>
+
+<main>
+
+<section id="intro" class="tab-content active">
+  <h2>Informe Personalizado de Opciones de Grado</h2>
+  <div class="lead-block"><p>Hola Dario,</p><p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencida de que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p><p>Estos días he estado trabajando en la búsqueda de los grados solicitados y afines que, según lo que hemos hablado, más podrían interesarte.</p><p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes.</p></div>
+  <h3 class="index-title">Índice de opciones</h3>
+  <div class="index-grid"><div class="index-country">
+            <div class="index-country-head"><span class="flag flag-nl"><span></span><span></span><span></span></span><span>Holanda</span></div>
+            <div class="index-list"><a class="index-entry" href="#" onclick="goTo('nl','nl-tudelft-aero');return false;"><span class="index-degree">Aerospace Engineering</span><span class="index-school">TU Delft</span></a><a class="index-entry" href="#" onclick="goTo('nl','nl-tue-me');return false;"><span class="index-degree">Mechanical Engineering</span><span class="index-school">TU/e Eindhoven</span></a><a class="index-entry" href="#" onclick="goTo('nl','nl-tue-ap');return false;"><span class="index-degree">Applied Physics</span><span class="index-school">TU/e Eindhoven</span></a><a class="index-entry" href="#" onclick="goTo('nl','nl-twente-me');return false;"><span class="index-degree">Mechanical Engineering</span><span class="index-school">Twente University</span></a><a class="index-entry" href="#" onclick="goTo('nl','nl-groningen-physics');return false;"><span class="index-degree">Physics</span><span class="index-school">University of Groningen</span></a><a class="index-entry" href="#" onclick="goTo('nl','nl-groningen-ap');return false;"><span class="index-degree">Applied Physics</span><span class="index-school">University of Groningen</span></a><a class="index-entry" href="#" onclick="goTo('nl','nl-inholland-aero');return false;"><span class="index-degree">Aeronautical Engineering</span><span class="index-school">Inholland University of Applied Sciences</span></a><a class="index-entry" href="#" onclick="goTo('nl','nl-hanze-me');return false;"><span class="index-degree">Mechanical Engineering</span><span class="index-school">Hanze University of Applied Sciences</span></a><a class="index-entry" href="#" onclick="goTo('nl','nl-fontys-me');return false;"><span class="index-degree">Mechanical Engineering</span><span class="index-school">Fontys University of Applied Sciences</span></a><a class="index-entry" href="#" onclick="goTo('nl','nl-fontys-mecha');return false;"><span class="index-degree">Mechatronics</span><span class="index-school">Fontys University of Applied Sciences</span></a></div>
+        </div><div class="index-country">
+            <div class="index-country-head"><span class="flag flag-dk"><span class="h"></span><span class="v"></span></span><span>Dinamarca</span></div>
+            <div class="index-list"><a class="index-entry" href="#" onclick="goTo('dk','dk-sdu-beng-me');return false;"><span class="index-degree">BEng in Mechanical Engineering</span><span class="index-school">University of Southern Denmark (SDU)</span></a><a class="index-entry" href="#" onclick="goTo('dk','dk-sdu-bsc-me');return false;"><span class="index-degree">BSc in Mechanical Engineering</span><span class="index-school">University of Southern Denmark (SDU)</span></a><a class="index-entry" href="#" onclick="goTo('dk','dk-sdu-beng-mecha');return false;"><span class="index-degree">BEng in Mechatronics</span><span class="index-school">University of Southern Denmark (SDU)</span></a><a class="index-entry" href="#" onclick="goTo('dk','dk-sdu-bsc-mecha');return false;"><span class="index-degree">BSc in Mechatronics</span><span class="index-school">University of Southern Denmark (SDU)</span></a><a class="index-entry" href="#" onclick="goTo('dk','dk-via-me');return false;"><span class="index-degree">BEng in Mechanical Engineering</span><span class="index-school">VIA University College</span></a><a class="index-entry" href="#" onclick="goTo('dk','dk-dtu-ge');return false;"><span class="index-degree">Bachelor of Science (BSc) in General Engineering</span><span class="index-school">DTU</span></a></div>
+        </div><div class="index-country">
+            <div class="index-country-head"><span class="flag flag-de"><span></span><span></span><span></span></span><span>Alemania</span></div>
+            <div class="index-list"><a class="index-entry" href="#" onclick="goTo('de','de-tum-aero');return false;"><span class="index-degree">Aerospace</span><span class="index-school">Technical University of Munich</span></a></div>
+        </div><div class="index-country">
+            <div class="index-country-head"><span class="flag flag-be"><span></span><span></span><span></span></span><span>Bélgica</span></div>
+            <div class="index-list"><a class="index-entry" href="#" onclick="goTo('be','be-kuleuven-et');return false;"><span class="index-degree">BSc Engineering Technology</span><span class="index-school">KU Leuven</span></a></div>
+        </div></div>
+</section>
+
+<section id="research-applied" class="tab-content">
+  <h2>Research vs Applied Sciences</h2>
+  <p class="lead">Como creo que ya te hemos explicado, en la mayoría de países europeos tenemos que diferenciar entre 2 tipos de universidades: "Research" y "Applied Sciences". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+  <div class="rva-section"><h3>Metodología teórica vs práctica</h3><p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project/Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p></div><div class="rva-section"><h3>Duración</h3><p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.<br><br>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p></div><div class="rva-section"><h3>Ranking / Prestigio</h3><p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.<br><br>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p></div><div class="rva-section"><h3>Acceso a Másteres</h3><p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. En cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research,</em> te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p></div>
+  <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de Research y otra de Applied Sciences):</p>
+  <ul class="link-list"><li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank" rel="noopener">Applied Science vs. Research University</a></li><li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank" rel="noopener">Types of universities in the Netherlands</a></li></ul>
+</section>
+
+<section id="nl" class="tab-content">
+  <div class="country-hero">
+    <span class="flag flag-nl flag-lg"><span></span><span></span><span></span></span>
+    <div>
+      <h2>Holanda</h2>
+      <div class="country-meta">Coste de matrícula y alojamiento detallados a continuación</div>
+    </div>
+  </div>
+  <div class="country-intro">Los estudiantes europeos tenemos los <u>estudios</u> parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <span class="cost-highlight">2.695 €/año</span>. Estas son las tasas académicas para el curso 2025/26. Es probable que aumenten ligeramente para el curso 2027/28, aunque normalmente no superan los 100 €. Además, esas tasas se mantendrían fijas durante los tres años de estudio).<br><br>Cabe destacar que el <u>alojamiento</u> en Holanda no es barato, tiene un precio medio de <strong>900€</strong>.</div>
+  
+  <div class="section-sep">RESEARCH UNIVERSITIES</div><div class="cards-grid">
+<article class="uni-card" id="nl-tudelft-aero">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/ae/bsc-aerospace-engineering" target="_blank" rel="noopener">Aerospace Engineering <span class="click-icon">🖱️</span></a>
+      <div class="card-school">TU Delft · Delft</div>
+    </div>
+    <span class="diff-badge diff-orange">Alta</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Holanda):</span> <a class="badge-gold" href="https://www.shanghairanking.com/universities/delft-university-of-technology" target="_blank" rel="noopener"># 10 en Ingeniería Aeroespacial</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/delft-university-of-technology" target="_blank" rel="noopener"># 151-200 del mundo</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Delft (aproximadamente 105.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 € <span class="fee-red">(application fee 100 €)</span></span></div></div>
+  <div class="desc-box">Es un grado que combina teoría, práctica y trabajo en equipo para formar ingenieros especializados en aviación y tecnología espacial. El plan de estudios incluye asignaturas como aerodinámica, estructuras, propulsión, sistemas de control, diseño por ordenador y simulación de vuelo. La formación se imparte mediante clases magistrales, prácticas de laboratorio y proyectos aplicados, como el diseño completo de un avión o un satélite. El alumnado trabaja en instalaciones punteras, como túneles de viento, simuladores de vuelo y un avión real adaptado como aula. Es un grado con un enfoque muy práctico y estrechamente vinculado a la industria aeroespacial y a la investigación tecnológica.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>Título de Bachiller Internacional (Mathematics: AA HL + Physics HL)</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>TOEFL iBT nota mínima: 90</li><li>Cambridge CAE (C1) (no se requiere nota mínima)</li><li>IELTS nota mínima: 6.5</li><li>Applicants with an International Baccalaureate (Diploma Programme) if the language of instruction was English or when English A Literature or English A Language and Literature (either HL or SL), is one of the IB exam subjects</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>El Grado en Ingeniería Aeroespacial tiene un límite de plazas (numerus clausus) para el número de estudiantes nuevos que pueden ser admitidos cada año. Para el curso académico 2026-27, el cupo está fijado en 440 plazas (las plazas del curso 27-28 aún no han sido publicadas). Para obtener una plaza, deberás participar en un procedimiento de selección. <a href="https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/ae/bsc-aerospace-engineering/from-application-to-enrolment/selection-procedure" target="_blank" rel="noopener">Más información</a><br>Consiste en:<ul><li>Matching phase: online (febrero) — <a href="https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/ae/bsc-aerospace-engineering/about-the-programme/is-this-programme-right-for-me/mini-mooc" target="_blank" rel="noopener">Mini mooc</a></li><li>Apptitud assessment (marzo)</li><li>Examen mate y fisica (marzo)</li></ul></div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de enero</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="nl-tue-me">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.tue.nl/en/education/bachelor-college/bachelor-mechanical-engineering" target="_blank" rel="noopener">Mechanical Engineering <span class="click-icon">🖱️</span></a>
+      <div class="card-school">TU/e Eindhoven · Eindhoven</div>
+    </div>
+    <span class="diff-badge diff-orange">Alta</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Holanda):</span> <a class="badge-rank" href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener"># 76-100 en Ingeniería Mecánica</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener"># 301-400 del mundo</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Eindhoven (aproximadamente 249.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 € <span class="fee-red">(application fee 100 €)</span></span></div></div>
+  <div class="desc-box">Este grado combina teoría avanzada y práctica aplicada. El plan de estudios cubre áreas clave como mecánica, termodinámica, ciencia de los materiales, control de sistemas, robótica y diseño asistido por ordenador, integrando asignaturas de matemáticas, física y química. El enfoque pedagógico es project-based, es decir, se aprende resolviendo problemas reales en colaboración con la industria. El programa incluye prácticas frecuentes en laboratorios modernos y talleres, donde los estudiantes diseñan, prototipan y prueban, fomentando habilidades de resolución, creatividad y emprendimiento. Gracias a su estrecha vinculación con el entorno industrial de Eindhoven y sus colaboraciones, la formación ofrece ocasiones de prácticas, intercambios internacionales y contactos profesionales, preparándote para trabajar sectores como automoción, aeroespacial, energía o fabricación avanzada.</div>
+  <p class="card-extra">Estudiarás en Eindhoven, el centro de la región tecnológica Brainport, conocida por su fuerte vínculo entre industria y academia, lo que facilita numerosas oportunidades profesionales en sectores como ingeniería, sostenibilidad e I+D. Es una opción ideal si buscas una formación aplicada y conectada con el mercado laboral actual.</p>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>Título de Bachiller Internacional (Mathematics A&amp;A HL y Physics HL)</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>TOEFL iBT nota mínima: 90 (mínimo 21 en cada sección)</li><li>Cambridge C2 (CPE) con un mínimo de 180 puntos totales y 169 en cada sección, o el examen C1 (CAE) con un mínimo de 176 puntos totales y 169 en cada sección.</li><li>IELTS nota mínima: 6.5 (mínimo 6.0 en cada sección)</li><li>IB: If not fully in English, exemption is possible with English A HL with a minimum score of 5.</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>El Grado en Ingeniería Mecánica tiene un límite de plazas (numerus clausus). La información sobre el proceso de admisión para el curso 2027-2028 se publicará como muy tarde el 1 de octubre de 2026, y el día de selección está previsto para el 21 de marzo de 2027. <a href="https://www.tue.nl/en/education/bachelor-college/selection" target="_blank" rel="noopener">Más información</a><br>El programa de grado utiliza los siguientes instrumentos en el proceso de selección:<ul><li>Actividades de reflexión sobre la elección de estudios y motivación – son obligatorias, pero no se utilizan para el ranking.</li><li>Prueba de habilidades cognitivas basada en una actividad relacionada con el contenido del programa.</li><li>Prueba de matemáticas</li><li>Prueba de física</li></ul></div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de enero</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="nl-tue-ap">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.tue.nl/en/education/bachelor-college/bachelor-applied-physics" target="_blank" rel="noopener">Applied Physics <span class="click-icon">🖱️</span></a>
+      <div class="card-school">TU/e Eindhoven · Eindhoven</div>
+    </div>
+    <span class="diff-badge diff-green">Baja</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Holanda):</span> <a class="badge-rank" href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener"># 301-400 en Physics</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener"># 301-400 del mundo</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Eindhoven (aproximadamente 249.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.601 € <span class="fee-red">(application fee 100 €)</span></span></div></div>
+  <div class="desc-box">El grado combina una base teórica sólida con un fuerte enfoque práctico e innovador para resolver problemas reales de la industria y la sociedad. Los estudiantes exploran áreas como fotónica, materiales avanzados, energía sostenible y física médica, aprendiendo a traducir fenómenos físicos en aplicaciones tecnológicas concretas. El programa destaca por su estrecha colaboración con empresas líderes en el Brainport Eindhoven, uno de los hubs tecnológicos más importantes de Europa, ofreciendo proyectos reales, prácticas y una clara orientación hacia la empleabilidad. Además, TU/e fomenta un ambiente internacional, clases reducidas y acompañamiento personalizado, preparando a los graduados para carreras en investigación, desarrollo tecnológico o estudios de máster especializados.</div>
+  <p class="card-extra">Estudiarás en Eindhoven, el centro de la región tecnológica Brainport, conocida por su fuerte vínculo entre industria y academia, lo que facilita numerosas oportunidades profesionales en sectores como ingeniería, sostenibilidad e I+D. Es una opción ideal si buscas una formación aplicada y conectada con el mercado laboral actual.</p>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>Título de Bachiller Internacional (Mathematics A&amp;A HL Physics HL)</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>TOEFL iBT nota mínima: 90 (mínimo 21 en cada sección)</li><li>Cambridge C2 (CPE) con un mínimo de 180 puntos totales y 169 en cada sección, o el examen C1 (CAE) con un mínimo de 176 puntos totales y 169 en cada sección.</li><li>IELTS nota mínima: 6.5 (mínimo 6.0 en cada sección)</li><li>IB: If not fully in English, exemption is possible with English A HL with a minimum score of 5.</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>No hay proceso de selección: si cumples con los requisitos la admisión está prácticamente guarentizada.</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>1 de mayo</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="nl-twente-me">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.utwente.nl/en/education/bachelor/programmes/mechanical-engineering/#why-study-mechanical-engineering" target="_blank" rel="noopener">Mechanical Engineering <span class="click-icon">🖱️</span></a>
+      <div class="card-school">Twente University · Enschede</div>
+    </div>
+    <span class="diff-badge diff-green">Media</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Holanda):</span> <a class="badge-gold" href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener"># 32 en Ingeniería Mecánica</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener"># 501-600 del mundo</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Enschede (aproximadamente 162.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 € <span class="fee-red">(application fee 100 €)</span></span></div></div>
+  <div class="desc-box">Durante el primer y segundo año, estudiarás módulos sobre Diseño, Energía, Materiales y Mecánica, combinando teoría, proyectos y formación académica. En el tercer año, podrás elegir un minor de 30 ECTS (que incluso puedes hacer en el extranjero) y deberás completar un trabajo de fin de grado de 15 ECTS. Las clases se imparten en inglés y las evaluaciones incluyen exámenes, trabajos orales y prácticos, con opciones para recuperar en cada trimestre.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>Mathematics: AA HL + Physics HL</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>IELTS (Academic): Puntuación global mínima: 6.0 y por sección: 5.5 (entregar antes del 1 de mayo)</li><li>TOEFL iBT: Puntuación global mínima: 80 y por sección: 18</li><li>Cambridge C1 Advanced (CAE): Puntuación global mínima: 169 y por sección: 162</li><li>Cambridge C2 Proficiency (CPE): Puntuación global mínima: 169 y por sección: 162</li><li>IB English Language A: Literature – Standard Level or Higher Level</li><li>English Language A: Language and Literature – Standard Level or Higher Level</li><li>English Language B – Standard Level or Higher Level</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>El matching en la Universidad de Twente es una prueba diseñada para confirmar si la carrera elegida encaja con tus aptitudes e intereses. Es obligatorio para quienes se inscriben antes del 1 de mayo; de no participar, podrían denegarte el acceso. El proceso, que puede incluir cuestionarios, entrevistas o jornadas de prueba, concluye con una recomendación orientativa —puede ser positiva, incluir sugerencias de mejora, o incluso aconsejar reconsiderar la elección—, pero no determina directamente tu admisión.</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>1 de mayo</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="nl-groningen-physics">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.rug.nl/bachelors/physics/?lang=en" target="_blank" rel="noopener">Physics <span class="click-icon">🖱️</span></a>
+      <div class="card-school">University of Groningen · Groninga</div>
+    </div>
+    <span class="diff-badge diff-green">Baja</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Holanda):</span> <a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#84 del mundo</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#76-100 en Física</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Groninga (aprox. 235.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 € <span class="fee-red">(Tasa de solicitud de 100 €)</span></span></div></div>
+  <div class="desc-box">El grado combina fundamentos teóricos como mecánica, relatividad especial y electromagnetismo con formación práctica. Desde el primer año se puede elegir entre cuatro especialidades: Biofísica y Física Médica, Energía y Física Ambiental, Nanofísica o Física de Partículas. El programa destaca por su enfoque riguroso y cuantitativo para describir y predecir fenómenos naturales mediante modelos y leyes. La empleabilidad es alta, con salidas como investigación, consultoría o análisis en empresas e institutos. Además, la universidad ofrece enseñanza de prestigio internacional, con el Zernike Institute entre los 15 mejores del mundo, y es la única en Países Bajos que imparte este grado en inglés, contando con premios Nobel como Ben Feringa y Frits Zernike en su historia.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB (Se requiere tener conocimientos suficientes en Matemáticas y Física).</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>TOEFL iBT: mínimo 90 (mínimo 21 por componente).</li><li>Cambridge: C1 Advanced (CAE) o C2 Proficiency (CPE), con mínimo 180 puntos</li><li>IELTS Academic: mínimo 6.5 global (mínimo 6.0 por componente).</li><li>Si el idioma de instrucción del Bachillerato Internacional es el inglés estás exento de presentar certificado oficial de inglés</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>No hay proceso de selección: si cumples con los requisitos la admisión está prácticamente guarentizada.</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>1 de mayo</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="nl-groningen-ap">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.rug.nl/bachelors/applied-physics/" target="_blank" rel="noopener">Applied Physics <span class="click-icon">🖱️</span></a>
+      <div class="card-school">University of Groningen · Groninga</div>
+    </div>
+    <span class="diff-badge diff-green">Baja</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Holanda):</span> <a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#84 del mundo</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#76-100 en Física</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Groninga (aprox. 235.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 € <span class="fee-red">(Tasa de solicitud de 100 €)</span></span></div></div>
+  <div class="desc-box">El grado combina teoría y práctica para aplicar principios físicos en soluciones técnicas, con énfasis en diseño, construcción y un enfoque interdisciplinar que abarca nanotecnología, nuevos materiales y sistemas de control. Enseña no solo a entender los fenómenos físicos, sino también a utilizarlos de forma práctica, desarrollando habilidades de presentación, trabajo en equipo, investigación y pensamiento crítico. Además, ofrece la posibilidad de explorar tanto Física como Física Aplicada durante el primer año antes de elegir una especialización, algo único en Países Bajos. Las clases están a cargo de investigadores de prestigio internacional vinculados al Zernike Institute, situado entre los 15 mejores del mundo.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB (Se requiere tener conocimientos suficientes en Matemáticas y Física).</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>TOEFL iBT: mínimo 90 (mínimo 21 por componente).</li><li>Cambridge: C1 Advanced (CAE) o C2 Proficiency (CPE), con mínimo 180 puntos</li><li>IELTS Academic: mínimo 6.5 global (mínimo 6.0 por componente).</li><li>Si el idioma de instrucción del Bachillerato Internacional es el inglés estás exento de presentar certificado oficial de inglés</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>No hay proceso de selección: si cumples con los requisitos la admisión está prácticamente guarentizada.</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>1 de mayo</strong></div>
+    </div>
+  </details>
+</article></div><div class="section-sep">UNIVERSITIES OF APPLIED SCIENCES</div><div class="cards-grid">
+<article class="uni-card" id="nl-inholland-aero">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.inholland.nl/inhollandcom/degree-programmes/aeronautical-engineering-eng-full-time/" target="_blank" rel="noopener">Aeronautical Engineering <span class="click-icon">🖱️</span></a>
+      <div class="card-school">Inholland University of Applied Sciences · Delft</div>
+    </div>
+    <span class="diff-badge diff-green">Baja</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Holanda):</span> <span class="rank-note">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio.</span></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Delft (aprox. 105.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 créditos)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 €</span></div></div>
+  <div class="desc-box">Este grado combina asignaturas técnicas fundamentales con proyectos prácticos que te permiten aplicar lo aprendido. Podrás elegir entre dos especializaciones: Diseño y Desarrollo o Estructuras Ligeras, adaptadas a tus intereses y objetivos profesionales. Además, realizarás prácticas profesionales y de especialización, con la opción de hacerlas en el extranjero gracias a las colaboraciones de la universidad con empresas internacionales como Airbus y Boeing.<br><br>El programa también enfatiza el desarrollo de habilidades investigadoras y el uso de software avanzado de diseño y pruebas, preparándote para una carrera en la industria aeronáutica o para continuar con estudios de máster.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB superado (incluyendo matemáticas y física)</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>IELTS: average score of 6</li><li>TOEFL internet-based: overall score of 80</li><li>Cambridge certificate: CAE, CPE or FCE overall score C (169-172)</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Si cumples con los requisitos la admisión está prácticamente guarentizada.</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de agosto</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="nl-hanze-me">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.hanze.nl/en/programmes/full-time/bachelor/mechanical-engineering?tab=tab2" target="_blank" rel="noopener">Mechanical Engineering <span class="click-icon">🖱️</span></a>
+      <div class="card-school">Hanze University of Applied Sciences · Groningen</div>
+    </div>
+    <span class="diff-badge diff-green">Baja</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Holanda):</span> <span class="rank-note">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio.</span></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Groningen (aprox. 245.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS) — esta es una excepción dentro de los grados de universidades de applied sciences, que suelen durar siempre 4 años</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 €</span></div></div>
+  <div class="desc-box">Este grado tiene un enfoque especial en la energía y la transición energética. Durante el programa, trabajarás en proyectos prácticos, realizarás una práctica profesional y podrás elegir un minor en Holanda o en el extranjero. El último semestre incluye un proyecto de graduación en una empresa nacional o internacional. Al finalizar, obtendrás el título de Bachelor of Science (BSc) y podrás acceder a másteres relacionados, como Renewable Energy o Smart Systems Engineering. Los graduados suelen trabajar en sectores como plantas de energía, ingeniería de mantenimiento, I+D o gestión técnica, y muchos reciben ofertas laborales de sus prácticas o proyectos finales.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB superado (incluyendo Matemáticas y Física en HL)</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>IELTS: average score of 6</li><li>TOEFL internet-based: overall score of 80</li><li>Cambridge certificate: CAE, CPE or FCE overall score C (169-172)</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Si cumples con los requisitos la admisión está prácticamente guarentizada.</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de agosto</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="nl-fontys-me">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.fontys.nl/en/Study-at-Fontys/Programmes/Mechanical-Engineering.htm" target="_blank" rel="noopener">Mechanical Engineering <span class="click-icon">🖱️</span></a>
+      <div class="card-school">Fontys University of Applied Sciences · Eindhoven</div>
+    </div>
+    <span class="diff-badge diff-green">Baja</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Holanda):</span> <span class="rank-note">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio.</span></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Eindhoven (aproximadamente 249.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 €</span></div></div>
+  <div class="desc-box">Este grado destaca por su enfoque práctico e innovador, trabajando en proyectos reales con empresas líderes y utilizando laboratorios modernos con tecnologías avanzadas como impresión 3D y robótica. Además, el programa fomenta tu desarrollo personal y profesional, mejorando habilidades como trabajo en equipo, comunicación y planificación.</div>
+  <p class="card-extra">Estudiarás en Eindhoven, el centro de la región tecnológica Brainport, conocida por su fuerte vínculo entre industria y academia, lo que facilita numerosas oportunidades profesionales en sectores como ingeniería, sostenibilidad e I+D. Es una opción ideal si buscas una formación aplicada y conectada con el mercado laboral actual.</p>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB (nota mínima 24): Physics y Mathematics obligatorias (SL/HL)</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>Cambridge FCE 169 (mínimo 169 en cada sección, como máximo una con 160)</li><li>IELTS Academic 6.0 (mínimo 6 en cada parte, como máximo una sección 5,5)</li><li>TOEFL (mínimo: total 80, Reading: 18, Listening: 17, Speaking: 20 y Writing: 17).</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Si cumples con los requisitos la admisión está prácticamente guarentizada.</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de junio</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="nl-fontys-mecha">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.fontys.nl/en/Study-at-Fontys/Programmes/Mechatronics.htm" target="_blank" rel="noopener">Mechatronics <span class="click-icon">🖱️</span></a>
+      <div class="card-school">Fontys University of Applied Sciences · Eindhoven / Venlo</div>
+    </div>
+    <span class="diff-badge diff-green">Baja</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Holanda):</span> <span class="rank-note">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio.</span></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Eindhoven / Venlo (Eindhoven aprox. 249.000 habitantes; Venlo aprox. 104.000 habitantes) <button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 €</span></div></div>
+  <div class="desc-box">El programa se imparte en dos campus, Eindhoven y Venlo, y se centra en el diseño y control de sistemas automatizados y robots, combinando teoría con práctica en proyectos reales con la industria. Los estudiantes cuentan con orientación personalizada y trabajan en entornos innovadores como el Roboticalab en Venlo.<br><br>Los graduados tienen amplias oportunidades en sectores como automatización, robótica y desarrollo de productos, colaborando con empresas líderes como VDL, Philips, Bosch y Siemens. Además, el enfoque práctico y la atmósfera dinámica preparan para los retos de la cuarta revolución industrial.</div>
+  <p class="card-extra">Estudiarás en Eindhoven, el centro de la región tecnológica Brainport, conocida por su fuerte vínculo entre industria y academia, lo que facilita numerosas oportunidades profesionales en sectores como ingeniería, sostenibilidad e I+D. Es una opción ideal si buscas una formación aplicada y conectada con el mercado laboral actual.</p>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB (nota mínima 24): Physics y Mathematics obligatorias (SL/HL)</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>Cambridge FCE 169 (mínimo 169 en cada sección, como máximo una con 160)</li><li>IELTS Academic 6.0 (mínimo 6 en cada parte, como máximo una sección 5,5)</li><li>TOEFL (mínimo: total 80, Reading: 18, Listening: 17, Speaking: 20 y Writing: 17).</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Si cumples con los requisitos la admisión está prácticamente guarentizada.</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de junio</strong></div>
+    </div>
+  </details>
+</article></div>
+  <div class="map-wrap" id="map-nl">
+    <h3>Mapa de universidades — Holanda</h3>
+    <div class="leaflet-map" id="leaflet-nl"></div>
+  </div>
+</section>
+
+<section id="dk" class="tab-content">
+  <div class="country-hero">
+    <span class="flag flag-dk flag-lg"><span class="h"></span><span class="v"></span></span>
+    <div>
+      <h2>Dinamarca</h2>
+      <div class="country-meta">Coste de matrícula y alojamiento detallados a continuación</div>
+    </div>
+  </div>
+  <div class="country-intro">Los estudiantes europeos tenemos los <u>estudios</u> 100 % subvencionados en Dinamarca, siendo el coste anual que tenemos que pagar de <span class="cost-highlight">0 €/año</span>.<br><br>En Dinamarca el coste medio del <u>alojamiento</u> es de <strong>600€</strong>. El resultado de las admisiones no se da a conocer hasta el día 28 de julio.</div>
+  <div class="info-note"><h3>BEng vs BSc de SDU ¿en qué se diferencia?</h3><p>Ambos grados son casi idénticos durante la mayor parte de los semestres, pero tienen diferencias importantes en la duración, prácticas profesionales y típicas salidas tras graduarse:</p><div class="note-item"><strong>❖ BEng</strong> – Dura 7 semestres (3,5 años) e incluye prácticas profesionales obligatorias en el 6º semestre.<br>Programa más práctico que BSc.<br>Salida habitual → Mercado laboral ("first job guarantee")</div><div class="note-item"><strong>❖ BSc</strong> – Dura 6 semestres (3 años) y no incluye prácticas.<br>Programa más teórico que BEng.<br>Salida habitual → Máster</div></div>
+  <div class="section-sep">RESEARCH UNIVERSITIES</div><div class="cards-grid">
+<article class="uni-card" id="dk-sdu-beng-me">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.sdu.dk/en/uddannelse/ingenioer/mechanical-engineering" target="_blank" rel="noopener">BEng in Mechanical Engineering <span class="click-icon">🖱️</span></a>
+      <div class="card-school">University of Southern Denmark (SDU) · Sonderborg</div>
+    </div>
+    <span class="diff-badge diff-green">Admisión directa</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Dinamarca):</span> <a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#301-400 universidad del mundo</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#301-400 en Mechanical Engineering</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Sonderborg (aprox. 28 333 habitantes) <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3,5 años (210 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">Ver tasas del país</span></div></div>
+  <div class="desc-box">El programa ofrece una formación práctica y teórica sólida, centrada en sistemas mecatrónicos, mecánica y sistemas hidráulicos inteligentes, con cada semestre dedicado a temas clave como el desarrollo de productos y la conversión de energía. Trabajarás en proyectos reales en grupo, realizarás unas prácticas obligatorias y un proyecto final junto a empresas, adquiriendo experiencia directa en diseño y prototipado. Además, cuenta con una garantía de empleo de seis meses tras la finalización de los estudios y un entorno internacional con estudiantes de más de 50 países, preparándote para trabajar en equipos globales y adaptarte a diferentes contextos profesionales y culturales.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB Diploma — English 210 horas, Mathematics 375 horas, Física 190 horas, Química 75 horas</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>Siempre cumplirás con el requisito general de inglés con una educación IB.</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Sí hay proceso de selección:<ul><li><a href="https://www.sdu.dk/en/uddannelse/bachelor/bachelor-admission/admission-requirements/admission-test" target="_blank" rel="noopener">uniTest</a> (razonamiento crítico, cuantitativo y lingüístico) que se suele hacer en los meses de marzo o abril y una entrevista personal.</li><li>Si tienes buen resultado en el uniTest la universidad te guarentiza plaza (15 de abril)</li><li>Si apruebas el examen, la resolución de admisión es el 28 de julio.</li></ul></div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="dk-sdu-bsc-me">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.sdu.dk/en/uddannelse/bachelor/mechanical-engineering" target="_blank" rel="noopener">BSc in Mechanical Engineering <span class="click-icon">🖱️</span></a>
+      <div class="card-school">University of Southern Denmark (SDU) · Sonderborg</div>
+    </div>
+    <span class="diff-badge diff-green">Admisión directa</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Dinamarca):</span> <a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#301-400 universidad del mundo</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#301-400 en Mechanical Engineering</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Sonderborg (aprox. 28 333 habitantes) <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">Ver tasas del país</span></div></div>
+  <div class="desc-box">El programa ofrece una formación práctica y teórica sólida, centrada en sistemas mecatrónicos, mecánica y sistemas hidráulicos inteligentes, con cada semestre dedicado a temas clave como el desarrollo de productos y la conversión de energía. Trabajarás en proyectos reales en grupo, realizarás unas prácticas obligatorias y un proyecto final junto a empresas, adquiriendo experiencia directa en diseño y prototipado. Además, cuenta con una garantía de empleo de seis meses tras la finalización de los estudios y un entorno internacional con estudiantes de más de 50 países, preparándote para trabajar en equipos globales y adaptarte a diferentes contextos profesionales y culturales.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB Diploma — English 210 horas, Mathematics 375 horas, Física 190 horas, Química 75 horas</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>Siempre cumplirás con el requisito general de inglés con una educación IB.</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Sí hay proceso de selección:<ul><li><a href="https://www.sdu.dk/en/uddannelse/bachelor/bachelor-admission/admission-requirements/admission-test" target="_blank" rel="noopener">uniTest</a> (razonamiento crítico, cuantitativo y lingüístico) que se suele hacer en los meses de marzo o abril y una entrevista personal.</li><li>Si tienes buen resultado en el uniTest la universidad te guarentiza plaza (15 de abril)</li><li>Si apruebas el examen, la resolución de admisión es el 28 de julio.</li></ul></div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="dk-sdu-beng-mecha">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.sdu.dk/en/uddannelse/ingenioer/mekatronik" target="_blank" rel="noopener">BEng in Mechatronics <span class="click-icon">🖱️</span></a>
+      <div class="card-school">University of Southern Denmark (SDU) · Sonderborg</div>
+    </div>
+    <span class="diff-badge diff-green">Admisión directa</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Dinamarca):</span> <a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#301-400 universidad del mundo</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#301-400 en Mechanical Engineering</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Sonderborg (aprox. 28 333 habitantes) <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3,5 años (210 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">Ver tasas del país</span></div></div>
+  <div class="desc-box">El programa combina mecánica, electrónica e informática para crear sistemas inteligentes. Destaca por su enfoque práctico desde el primer semestre, proyectos reales, laboratorios avanzados y estrecha colaboración con empresas internacionales. Ofrece un entorno multicultural, grupos reducidos y oportunidades de intercambio y prácticas en el extranjero, preparando a los estudiantes para carreras globales en automatización, robótica y energías renovables con alta empleabilidad.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB Diploma — English 210 horas, Mathematics 375 horas, Física 190 horas, Química 75 horas</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>Siempre cumplirás con el requisito general de inglés con una educación IB.</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Sí hay proceso de selección:<ul><li><a href="https://www.sdu.dk/en/uddannelse/bachelor/bachelor-admission/admission-requirements/admission-test" target="_blank" rel="noopener">uniTest</a> (razonamiento crítico, cuantitativo y lingüístico) que se suele hacer en los meses de marzo o abril y una entrevista personal.</li><li>Si tienes buen resultado en el uniTest la universidad te guarentiza plaza (15 de abril)</li><li>Si apruebas el examen, la resolución de admisión es el 28 de julio.</li></ul></div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="dk-sdu-bsc-mecha">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.sdu.dk/en/uddannelse/bachelor/mechatronics" target="_blank" rel="noopener">BSc in Mechatronics <span class="click-icon">🖱️</span></a>
+      <div class="card-school">University of Southern Denmark (SDU) · Sonderborg</div>
+    </div>
+    <span class="diff-badge diff-green">Admisión directa</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Dinamarca):</span> <a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#301-400 universidad del mundo</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#301-400 en Mechanical Engineering</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Sonderborg (aprox. 28 333 habitantes) <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">Ver tasas del país</span></div></div>
+  <div class="desc-box">El programa combina mecánica, electrónica e informática para diseñar soluciones inteligentes y sostenibles. Su enfoque basado en proyectos reales desde el primer semestre ofrece experiencia práctica relevante, con acceso a laboratorios avanzados y una estrecha colaboración con la industria local e internacional.<br><br>SDU ofrece un entorno multicultural con clases reducidas y atención personalizada. Los estudiantes desarrollan habilidades para afrontar retos en automatización, robótica y energías renovables, preparándose para una carrera internacional o estudios de máster. La formación práctica y las oportunidades de intercambio y prácticas en el extranjero aseguran alta empleabilidad en un sector en constante crecimiento.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB Diploma — English 210 horas, Mathematics 375 horas, Física 190 horas, Química 75 horas</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>Siempre cumplirás con el requisito general de inglés con una educación IB.</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Sí hay proceso de selección:<ul><li><a href="https://www.sdu.dk/en/uddannelse/bachelor/bachelor-admission/admission-requirements/admission-test" target="_blank" rel="noopener">uniTest</a> (razonamiento crítico, cuantitativo y lingüístico) que se suele hacer en los meses de marzo o abril y una entrevista personal.</li><li>Si tienes buen resultado en el uniTest la universidad te guarentiza plaza (15 de abril)</li><li>Si apruebas el examen, la resolución de admisión es el 28 de julio.</li></ul></div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="dk-via-me">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://en.via.dk/programmes/bachelor/mechanical-engineering" target="_blank" rel="noopener">BEng in Mechanical Engineering <span class="click-icon">🖱️</span></a>
+      <div class="card-school">VIA University College · Horsens</div>
+    </div>
+    <span class="diff-badge diff-green">Admisión directa</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Dinamarca):</span> <span class="rank-note">Las universidades de Applied Science no entran en el ranking de Shanghái por su metodología de estudio.</span></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Horsens <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3,5 años (210 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">Ver tasas del país</span></div></div>
+  <div class="desc-box">El programa ofrece una formación práctica y teórica sólida, centrada en sistemas mecatrónicos, mecánica y sistemas hidráulicos inteligentes, con cada semestre dedicado a temas clave como el desarrollo de productos y la conversión de energía. Trabajarás en proyectos reales en grupo, realizarás unas prácticas obligatorias y un proyecto final junto a empresas, adquiriendo experiencia directa en diseño y prototipado. Además, cuenta con una garantía de empleo de seis meses tras la finalización de los estudios y un entorno internacional con estudiantes de más de 50 países, preparándote para trabajar en equipos globales y adaptarte a diferentes contextos profesionales y culturales.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB Diploma — English 210 horas, Mathematics 375 horas, Física 190 horas, Química 75 horas</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>Siempre cumplirás con el requisito general de inglés con una educación IB.</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Sí hay proceso de selección: el proceso de selección para el Bachelor of Engineering in Mechanical Engineering de VIA University College se basa en una evaluación global de la candidatura: además de cumplir los requisitos académicos mínimos VIA valora:<ul><li>el vídeo de motivación</li><li>las calificaciones obtenidas en secundaria, especialmente las de Matemáticas e Inglés</li><li>la experiencia laboral</li><li>cursos relevantes y otras cualificaciones documentadas, como IB, deporte de élite o voluntariado; por tanto, no depende únicamente de la nota media, sino del conjunto del perfil del candidato.</li></ul></div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+    </div>
+  </details>
+</article>
+<article class="uni-card" id="dk-dtu-ge">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.dtu.dk/english/education/undergraduate/general-engineering" target="_blank" rel="noopener">Bachelor of Science (BSc) in General Engineering <span class="click-icon">🖱️</span></a>
+      <div class="card-school">DTU · Kongens Lyngby</div>
+    </div>
+    <span class="diff-badge diff-green">Media</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Dinamarca):</span> <a class="badge-gold" href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" rel="noopener">3ª de Dinamarca, 151-200 del mundo</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Kongens Lyngby (115.000 habitantes) <button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">Ver tasas del país</span></div></div>
+  <div class="desc-box">Este programa de estudios es interdisciplinario, se centra en las competencias amplias y generales de la ingeniería. Proporciona una base sólida en matemáticas, física y química, y al mismo tiempo te enseña a trabajar en todas las disciplinas y aplicarlas para resolver problemas reales. Los ingenieros encuentran respuestas a algunas de las cuestiones que les rodean a diario, desde los grandes retos hasta los pequeños pero significativos detalles. Aprenden a desglosar los problemas y a encontrar soluciones específicas y prácticas. Trabajan con la energía eólica, la IA, la medicina, las infraestructuras y muchas otras áreas que influyen en nuestra vida cotidiana. Aprenderás las habilidades necesarias para ayudar a dar forma al futuro y adquirirás una lista de competencias generales en el campo de la ingeniería y podrás especializarte en los temas que elijas. Esta combinación te permite conocer a fondo las matemáticas, la física, la química y la biotecnología al tiempo que te sumerges en tu materia favorita. De este modo, obtendrás el mejor punto de partida para una carrera como ingeniero.<br><br>Adquirirás profundos conocimientos teóricos y, durante los numerosos proyectos de diseño y construcción, plasmarás esos conocimientos en soluciones concretas. Los proyectos están orientados a la práctica y diseñados para desarrollar tus competencias de trabajo en un entorno interdisciplinar y de colaboración.</div>
+  <div class="dtu-extra">
+    <p>DTU te recomienda elegir una de las siguientes especializaciones durante la licenciatura en ingeniería general:</p>
+    <div class="spec-grid"><div class="spec-card"><h4>Sistemas vivos</h4><p>trabajarás con todo lo vivo, desde la ingeniería acuática hasta la alimentación y campos afines como la medicina, la sanidad y la química.</p></div><div class="spec-card"><h4>Materiales avanzados</h4><p>es la opción adecuada si quieres desarrollar nuevos materiales sostenibles y funcionales y quieres desarrollar tu carrera profesional en cualquier campo, desde la fabricación a la nanotecnología, la modelización, la acústica o la física.</p></div><div class="spec-card"><h4>Cibersistemas</h4><p>trabajarás con ordenadores, IA, analítica, modelización, hardware y software.</p></div><div class="spec-card"><h4>Energía del futuro</h4><p>te permitirá crear un mundo más sostenible desarrollando tecnologías energéticas dentro de la energía eólica o solar, la electrólisis, la química aplicada y el espíritu empresarial.</p></div></div>
+    <p>Ve a qué programas de máster puedes optar en función de tu especialización:</p>
+    <div class="masters-grid"><div class="masters-col"><h5>Living Systems</h5><ul><li>Biomedical Engineering</li><li>Biotechnology</li><li>Applied Chemistry</li><li>Biomaterial Engineering for Medicine</li><li>Bioinformatics and Systems biology</li><li>Chemical and Biochemical Engineering</li><li>Engineering Acoustics</li><li>Environmental Engineering</li><li>Food Technology</li><li>Ocean Engineering</li><li>Sustainable Fisheries and Aquaculture</li><li>Technology Entrepreneurship</li></ul></div><div class="masters-col"><h5>Cyber Systems</h5><ul><li>Computer Science and Engineering</li><li>Business Analytics</li><li>Communication Technologies and System Design</li><li>Engineering Acoustics</li><li>Human-Centered Artificial Intelligence</li><li>Industrial Engineering and Management</li><li>Mathematical Modelling and Computation</li><li>Technology Entrepreneurship</li></ul></div><div class="masters-col"><h5>Advanced Materials</h5><ul><li>Materials and Manufacturing Engineering</li><li>Earth and Space Physics and Engineering</li><li>Engineering Acoustics</li><li>Engineering Light</li><li>Industrial Engineering and Management</li><li>Mathematical Modelling and Computation</li><li>Technology Entrepreneurship</li><li>Wind Energy</li></ul></div><div class="masters-col"><h5>Future Energy</h5><ul><li>Sustainable Energy Technologies</li><li>Applied Chemistry</li><li>Earth and Space Physics and Engineering</li><li>Engineering Acoustics</li><li>Engineering Light</li><li>Engineering Physics</li><li>Sustainable Energy Systems</li><li>Technology Entrepreneurship</li><li>Wind Energy</li></ul></div></div>
+    <p class="card-extra">Si continúas tus estudios con un máster, obtendrás una combinación de amplias cualificaciones técnico-científicas y especializadas muy demandadas por las empresas de alta tecnología en Dinamarca y en el extranjero.</p>
+  </div>
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>English: 210 horas y un 6 de media · Mathematics: 375 horas · Physics: 200 horas · Chemistry: 200 horas</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>IELTS 6,5</li><li>TOEFL 88</li><li>Cambridge CAE (mínimo 180)</li><li>IBDP diploma</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>144 plazas. Carta de Motivación, CV (otros estudios, voluntariado, etc.)</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>15 de marzo</strong></div>
+    </div>
+  </details>
+</article></div>
+  <div class="map-wrap" id="map-dk">
+    <h3>Mapa de universidades — Dinamarca</h3>
+    <div class="leaflet-map" id="leaflet-dk"></div>
+  </div>
+</section>
+
+<section id="de" class="tab-content">
+  <div class="country-hero">
+    <span class="flag flag-de flag-lg"><span></span><span></span><span></span></span>
+    <div>
+      <h2>Alemania</h2>
+      <div class="country-meta">Coste de matrícula y alojamiento detallados a continuación</div>
+    </div>
+  </div>
+  <div class="country-intro">En Alemania los estudiantes europeos tenemos gratis los <em>tuition fees</em> (coste de matrícula), pero sí que nos piden pagar una "tasa de mantenimiento" de la universidad, cuyo coste es de aproximadamente <span class="cost-highlight">700€/año</span>.</div>
+  
+  <div class="section-sep">RESEARCH UNIVERSITIES</div><div class="cards-grid">
+<article class="uni-card" id="de-tum-aero">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://www.tum.de/en/studies/degree-programs/detail/aerospace-bachelor-of-science-bsc" target="_blank" rel="noopener">Aerospace <span class="click-icon">🖱️</span></a>
+      <div class="card-school">Technical University of Munich · Munich</div>
+    </div>
+    <span class="diff-badge diff-orange">Media-Alta</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Alemania):</span> <a class="badge-gold" href="https://www.shanghairanking.com/universities/technical-university-of-munich" target="_blank" rel="noopener">#45 universidad del mundo</a><a class="badge-gold" href="https://www.shanghairanking.com/universities/technical-university-of-munich" target="_blank" rel="noopener">#36 en Aerospace Engineering</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Munich (aprox. 1.590.000 habitantes) <button class="map-btn" onclick="scrollToMap('de','map-de')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">Ver tasas del país</span></div></div>
+  <div class="desc-box">En la actualidad, las tecnologías aeroespaciales y de observación de la Tierra están experimentando una transformación interactiva que está revolucionando toda la industria y que continuará durante las próximas décadas. Empresas emergentes y consolidadas siguen encontrando nuevas respuestas a preguntas sobre la movilidad del futuro, mientras China y EE.UU. compiten por el dominio del espacio. Para resolver problemas técnicamente complejos en el campo aeroespacial, es esencial una comprensión exhaustiva del sistema global y un enfoque holístico. Por lo tanto, la Licenciatura Aeroespacial ofrece una educación interdisciplinaria con sólidos conocimientos básicos, que también incluye disciplinas relacionadas con la ingeniería y la navegación, para proporcionar a los futuros ingenieros aeroespaciales la base perfecta para iniciar una carrera en el campo profesional internacional de la investigación y la industria aeroespacial. Los graduados del programa están perfectamente preparados para avanzar en soluciones técnicas complejas y, sobre todo, sostenibles para la movilidad en tiempos de retos ecológicos, económicos y políticos globales.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB Diploma aprobado (se debe dar una combinación de asignaturas específicas que tú sí cumples - Mathematics, English, additional science or computer science)</p>
+      
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>IELTS (mínimo 5,5)</li><li>TOEFL iBT (mínimo 72)</li><li>Cambridge FCE (mínimo C)</li></ul>
+      <p class="req-subtitle">Requisitos de alemán:</p><ul><li><a href="https://www.dkfa.de/en/external-and-internal-dsh/" target="_blank" rel="noopener">DSI I (or Higher)</a></li><li><a href="https://www.kmk.org/themen/deutsches-sprachdiplom-dsd.html" target="_blank" rel="noopener">DSD I (or Higher)</a></li><li>TELC DEUTSCH A2 HOCHSCHULE</li><li><a href="https://www.goethe.de/en/spr/prf.html" target="_blank" rel="noopener">ÖSD CERTIFICATE A2</a></li><li><a href="https://www.goethe.de/en/spr/prf.html" target="_blank" rel="noopener">GOETHE CERTIFICATE A2</a></li></ul>
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Superar el Aptitude Assessment. El programa de estudios requiere acreditar unas prácticas previas de al menos ocho semanas.<br><br>Deberás presentar el justificante de estas prácticas al inicio de los estudios (como muy tarde el 31 de octubre de tu primer año en la universidad). Es posible presentar la solicitud sin haber aportado aún el justificante. En ese caso, recibirás el requisito obligatorio de entregarlo como máximo dos semanas antes de finalizar el primer año académico. <a href="https://collab.dvb.bayern/spaces/TUMedschooloffice/pages/73389997/Studieninteressierte%2BProspective%2BStudents%2B-%2BB.Sc.%2BAerospace%23Studieninteressierte/ProspectiveStudentsB.Sc.Aerospace-NachweiseinesVorpraktikums" target="_blank" rel="noopener">Más información</a>.</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>31 de mayo</strong></div>
+    </div>
+  </details>
+</article></div>
+  <div class="map-wrap" id="map-de">
+    <h3>Mapa de universidades — Alemania</h3>
+    <div class="leaflet-map" id="leaflet-de"></div>
+  </div>
+</section>
+
+<section id="be" class="tab-content">
+  <div class="country-hero">
+    <span class="flag flag-be flag-lg"><span></span><span></span><span></span></span>
+    <div>
+      <h2>Bélgica</h2>
+      <div class="country-meta">Coste de matrícula y alojamiento detallados a continuación</div>
+    </div>
+  </div>
+  <div class="country-intro">En Bélgica los estudiantes europeos tenemos los <em>tuition fees</em> (coste de matrícula) a <span class="cost-highlight">1.181 €/año</span>.</div>
+  
+  <div class="section-sep">RESEARCH UNIVERSITIES</div><div class="cards-grid">
+<article class="uni-card" id="be-kuleuven-et">
+  <div class="card-header">
+    <div class="card-title-block">
+      <a class="card-title" href="https://onderwijsaanbod.kuleuven.be/opleidingen/e/SC_55554488.htm?faseIds=1%2C2%2C3&ids=5555449055555473" target="_blank" rel="noopener">BSc Engineering Technology <span class="click-icon">🖱️</span></a>
+      <div class="card-school">KU Leuven · Leuven</div>
+    </div>
+    <span class="diff-badge diff-green">Media</span>
+  </div>
+  <div class="ranking-row"><span class="ranking-mini-label">Ranking de la universidad (Bélgica):</span> <a class="badge-rank" href="https://www.shanghairanking.com/universities/ku-leuven" target="_blank" rel="noopener">#87 universidad del mundo</a><a class="badge-rank" href="https://www.shanghairanking.com/universities/ku-leuven" target="_blank" rel="noopener">#101-150 en Engineering</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span><span class="meta-value">Leuven <button class="map-btn" onclick="scrollToMap('be','map-be')">🗺️ Ver mapa</button></span></div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">1.181 €</span></div></div>
+  <div class="desc-box">El Bachelor of Engineering Technology de KU Leuven es un grado de 3 años con una base común en matemáticas, física, química y pensamiento computacional, combinada con proyectos prácticos y trabajo de laboratorio. A partir del segundo año puedes especializarte en Electromechanical Engineering Technology o Electronics and ICT Engineering Technology, entre otras opciones. El programa tiene un fuerte enfoque práctico y culmina con el diseño de un producto tecnológico integrado.</div>
+  
+  <details class="admission-details">
+    <summary>Ver requisitos de admisión y fechas</summary>
+    <div class="admission-content">
+      <p class="req-subtitle">Requisitos académicos:</p>
+      <p>IB Diploma aprobado (se debe dar una combinación de asignaturas específicas que tú sí cumples - Mathematics, English and Science)</p>
+      <p class="req-subtitle">Math Proficiency:</p><ul><li>la SOWISO <a href="https://www.omptest.org/" target="_blank" rel="noopener">OMPT-D</a> test with a minimum score of 60% con la matrícula (o) realizar un <a href="https://www.ijkingstoets.be/opleidingen/engineering-technology" target="_blank" rel="noopener">examen</a> en julio (presencial)</li></ul>
+      <p class="req-subtitle">Requisitos de inglés:</p>
+      <ul><li>TOEFL: internet based test (iBT) 85 (mín. subscores 20, o las nuevas puntuaciones equivalentes de TOEFL a partir del 21/01/2026: Reading 4, Listening 4.5, Speaking 4, Writing 4)</li><li>IELTS Academic certificate: 6.5 (mín. subscores 6)</li><li>Cambridge English: Advanced (CAE) o Cambridge English: Proficiency (CPE): 176 (mín. subscores 169)</li><li>Applicants having obtained an International Baccalaureate® (IB) Diploma Programme (DP) with at least half of the courses of their diploma programme taught in the English language.</li></ul>
+      
+      <p class="req-subtitle">Proceso de selección:</p>
+      <div>Cumplir con los requisitos, CV y carta de motivación.</div>
+      <div class="deadline-box">📅 Fecha límite para presentar la matrícula: <strong>1 de junio</strong></div>
+    </div>
+  </details>
+</article></div>
+  <div class="map-wrap" id="map-be">
+    <h3>Mapa de universidades — Bélgica</h3>
+    <div class="leaflet-map" id="leaflet-be"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <svg class="edu-logo logo-footer" viewBox="0 0 1000 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="educoway">
+  <defs>
+    <linearGradient id="wGradFooter" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5cb98a"/>
+      <stop offset="50%" stop-color="#1e97a0"/>
+      <stop offset="100%" stop-color="#4ba9e0"/>
+    </linearGradient>
+  </defs>
+  <text x="0" y="150" font-family="'DM Sans', sans-serif" font-weight="500" font-size="130" letter-spacing="-2">
+    <tspan class="logo-grey">educo</tspan><tspan class="logo-w" dx="2" fill="url(#wGradFooter)">w</tspan><tspan class="logo-grey">ay</tspan>
+  </text>
+  <text x="4" y="205" font-family="'DM Sans', sans-serif" font-weight="400" font-size="30" letter-spacing="1.5" class="logo-tagline">orientación universitaria en el extranjero</text>
+</svg>
+  <p>Informe elaborado por educoWay · orientación universitaria en el extranjero</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+<script>
+const mapData = {
+  "nl": {
+    center: [52.05, 5.35],
+    zoom: 8,
+    unis: [
+      {id:"nl-tudelft-aero",name:"Aerospace Engineering",school:"TU Delft",lat:52.0116,lng:4.3571,webUrl:"https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/ae/bsc-aerospace-engineering",mapsUrl:"https://maps.google.com/?q=52.0116,4.3571"},
+      {id:"nl-tue-me",name:"Mechanical Engineering",school:"TU/e Eindhoven",lat:51.4416,lng:5.4697,webUrl:"https://www.tue.nl/en/education/bachelor-college/bachelor-mechanical-engineering",mapsUrl:"https://maps.google.com/?q=51.4416,5.4697"},
+      {id:"nl-tue-ap",name:"Applied Physics",school:"TU/e Eindhoven",lat:51.4416,lng:5.4697,webUrl:"https://www.tue.nl/en/education/bachelor-college/bachelor-applied-physics",mapsUrl:"https://maps.google.com/?q=51.4416,5.4697"},
+      {id:"nl-twente-me",name:"Mechanical Engineering",school:"Twente University",lat:52.2215,lng:6.8937,webUrl:"https://www.utwente.nl/en/education/bachelor/programmes/mechanical-engineering/#why-study-mechanical-engineering",mapsUrl:"https://maps.google.com/?q=52.2215,6.8937"},
+      {id:"nl-groningen-physics",name:"Physics",school:"University of Groningen",lat:53.2194,lng:6.5665,webUrl:"https://www.rug.nl/bachelors/physics/?lang=en",mapsUrl:"https://maps.google.com/?q=53.2194,6.5665"},
+      {id:"nl-groningen-ap",name:"Applied Physics",school:"University of Groningen",lat:53.2194,lng:6.5665,webUrl:"https://www.rug.nl/bachelors/applied-physics/",mapsUrl:"https://maps.google.com/?q=53.2194,6.5665"},
+      {id:"nl-inholland-aero",name:"Aeronautical Engineering",school:"Inholland University of Applied Sciences",lat:52.0116,lng:4.3571,webUrl:"https://www.inholland.nl/inhollandcom/degree-programmes/aeronautical-engineering-eng-full-time/",mapsUrl:"https://maps.google.com/?q=52.0116,4.3571"},
+      {id:"nl-hanze-me",name:"Mechanical Engineering",school:"Hanze University of Applied Sciences",lat:53.2194,lng:6.5665,webUrl:"https://www.hanze.nl/en/programmes/full-time/bachelor/mechanical-engineering?tab=tab2",mapsUrl:"https://maps.google.com/?q=53.2194,6.5665"},
+      {id:"nl-fontys-me",name:"Mechanical Engineering",school:"Fontys University of Applied Sciences",lat:51.4416,lng:5.4697,webUrl:"https://www.fontys.nl/en/Study-at-Fontys/Programmes/Mechanical-Engineering.htm",mapsUrl:"https://maps.google.com/?q=51.4416,5.4697"},
+      {id:"nl-fontys-mecha",name:"Mechatronics",school:"Fontys University of Applied Sciences",lat:51.4416,lng:5.4697,webUrl:"https://www.fontys.nl/en/Study-at-Fontys/Programmes/Mechatronics.htm",mapsUrl:"https://maps.google.com/?q=51.4416,5.4697"}
+    ]
+  },
+  "dk": {
+    center: [55.55, 10.6],
+    zoom: 7,
+    unis: [
+      {id:"dk-sdu-beng-me",name:"BEng in Mechanical Engineering",school:"University of Southern Denmark (SDU)",lat:54.9092,lng:9.7897,webUrl:"https://www.sdu.dk/en/uddannelse/ingenioer/mechanical-engineering",mapsUrl:"https://maps.google.com/?q=54.9092,9.7897"},
+      {id:"dk-sdu-bsc-me",name:"BSc in Mechanical Engineering",school:"University of Southern Denmark (SDU)",lat:54.9092,lng:9.7897,webUrl:"https://www.sdu.dk/en/uddannelse/bachelor/mechanical-engineering",mapsUrl:"https://maps.google.com/?q=54.9092,9.7897"},
+      {id:"dk-sdu-beng-mecha",name:"BEng in Mechatronics",school:"University of Southern Denmark (SDU)",lat:54.9092,lng:9.7897,webUrl:"https://www.sdu.dk/en/uddannelse/ingenioer/mekatronik",mapsUrl:"https://maps.google.com/?q=54.9092,9.7897"},
+      {id:"dk-sdu-bsc-mecha",name:"BSc in Mechatronics",school:"University of Southern Denmark (SDU)",lat:54.9092,lng:9.7897,webUrl:"https://www.sdu.dk/en/uddannelse/bachelor/mechatronics",mapsUrl:"https://maps.google.com/?q=54.9092,9.7897"},
+      {id:"dk-via-me",name:"BEng in Mechanical Engineering",school:"VIA University College",lat:55.8607,lng:9.8503,webUrl:"https://en.via.dk/programmes/bachelor/mechanical-engineering",mapsUrl:"https://maps.google.com/?q=55.8607,9.8503"},
+      {id:"dk-dtu-ge",name:"Bachelor of Science (BSc) in General Engineering",school:"DTU",lat:55.7717,lng:12.5039,webUrl:"https://www.dtu.dk/english/education/undergraduate/general-engineering",mapsUrl:"https://maps.google.com/?q=55.7717,12.5039"}
+    ]
+  },
+  "de": {
+    center: [48.1351, 11.582],
+    zoom: 11,
+    unis: [
+      {id:"de-tum-aero",name:"Aerospace",school:"Technical University of Munich",lat:48.1351,lng:11.582,webUrl:"https://www.tum.de/en/studies/degree-programs/detail/aerospace-bachelor-of-science-bsc",mapsUrl:"https://maps.google.com/?q=48.1351,11.582"}
+    ]
+  },
+  "be": {
+    center: [50.8798, 4.7005],
+    zoom: 12,
+    unis: [
+      {id:"be-kuleuven-et",name:"BSc Engineering Technology",school:"KU Leuven",lat:50.8798,lng:4.7005,webUrl:"https://onderwijsaanbod.kuleuven.be/opleidingen/e/SC_55554488.htm?faseIds=1%2C2%2C3&ids=5555449055555473",mapsUrl:"https://maps.google.com/?q=50.8798,4.7005"}
+    ]
+  }
+};
+const mapsInitialized = {};
+
+function showTab(id, btn){
+  document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(el){ el.classList.remove('active'); });
+  var target = document.getElementById(id);
+  if(target){ target.classList.add('active'); }
+  if(btn){ btn.classList.add('active'); }
+  else {
+    var b = document.querySelector('.tab-btn[data-tab="'+id+'"]');
+    if(b){ b.classList.add('active'); }
+  }
+  window.scrollTo({top:0, behavior:'instant'});
+  if(mapData[id] && !mapsInitialized[id]){
+    setTimeout(function(){ initMap(id); }, 60);
+  } else if(mapsInitialized[id] && mapsInitialized[id].map){
+    setTimeout(function(){ mapsInitialized[id].map.invalidateSize(); }, 60);
+  }
+}
+
+function goTo(tab, anchor){
+  var btn = document.querySelector('.tab-btn[data-tab="'+tab+'"]');
+  showTab(tab, btn);
+  setTimeout(function(){
+    var el = document.getElementById(anchor);
+    if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
+  }, 120);
+}
+
+function scrollToCard(id){
+  var card = document.getElementById(id);
+  if(!card) return;
+  var section = card.closest('.tab-content');
+  if(section && !section.classList.contains('active')){
+    goTo(section.id, id);
+  } else {
+    card.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+}
+
+function scrollToMap(tab, anchor){
+  var section = document.getElementById(tab);
+  if(section && section.classList.contains('active')){
+    var el = document.getElementById(anchor);
+    if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
+    if(mapData[tab] && !mapsInitialized[tab]){ initMap(tab); }
+  } else {
+    goTo(tab, anchor);
+  }
+}
+
+function initMap(countryId){
+  if(mapsInitialized[countryId]) return;
+  var cfg = mapData[countryId];
+  if(!cfg) return;
+  var mapEl = document.getElementById('leaflet-' + countryId);
+  if(!mapEl) return;
+  var map = L.map(mapEl).setView(cfg.center, cfg.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(map);
+
+  var icon = L.divIcon({
+    html: '<div style="font-size:22px;line-height:1;">🎓</div>',
+    className: 'grad-marker',
+    iconSize: [26,26],
+    iconAnchor: [13,13]
+  });
+
+  cfg.unis.forEach(function(u){
+    var marker = L.marker([u.lat, u.lng], {icon: icon}).addTo(map);
+    var popupHtml = '<div style="font-family:\'DM Sans\',sans-serif;min-width:170px;">'
+      + '<div style="font-family:\'Playfair Display\',serif;font-weight:600;font-size:13.5px;margin-bottom:2px;">' + u.name + '</div>'
+      + '<div style="font-size:11.5px;color:#8a97a0;font-style:italic;margin-bottom:6px;">' + u.school + '</div>'
+      + '<div class="popup-actions">'
+      + '<a href="' + u.webUrl + '" target="_blank" rel="noopener">Ver grado</a>'
+      + '<button onclick="scrollToCard(\'' + u.id + '\')">Ver ficha</button>'
+      + '<a href="' + u.mapsUrl + '" target="_blank" rel="noopener">Google Maps</a>'
+      + '</div></div>';
+    marker.bindPopup(popupHtml);
+  });
+
+  mapsInitialized[countryId] = {map: map};
+}
+
+</script>
+</body>
+</html>
