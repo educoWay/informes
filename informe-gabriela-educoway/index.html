@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe personalizado de opciones de grado — Gabriela Alonso López</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+
+:root{
+  --teal:#0a9baa;
+  --teal-dark:#077a87;
+  --teal-light:#e0f5f7;
+  --navy:#0d2b3e;
+  --bg:#f4f8fa;
+  --border:#c8e0e5;
+  --gold:#c9a227;
+  --gold-light:#fbf3d9;
+  --red:#c0392b;
+  --orange:#d9822b;
+  --green:#2f9e5b;
+  --yellow-bg:#fff6d8;
+  --yellow-border:#e8cf6a;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'DM Sans', sans-serif;
+  font-size:16px;
+  color:var(--navy);
+  background:var(--bg);
+  line-height:1.6;
+}
+h1,h2,h3,h4{font-family:'Playfair Display', serif; margin:0 0 .4em 0;}
+a{color:var(--teal-dark); text-decoration:none;}
+a:hover{text-decoration:underline;}
+p{margin:0 0 1em 0;}
+ul{margin:.3em 0 1em 0; padding-left:1.4em;}
+li{margin-bottom:.35em;}
+.clr-green{color:var(--green); font-weight:700;}
+.clr-red{color:var(--red); font-weight:700;}
+
+/* ---------- Layout ---------- */
+.page-wrap{max-width:1080px; margin:0 auto; padding:0 20px 60px;}
+
+/* ---------- Header ---------- */
+header.site-header{
+  position:sticky; top:0; z-index:100;
+  background:linear-gradient(135deg, var(--navy) 0%, #123c52 100%);
+  color:#fff;
+  box-shadow:0 2px 14px rgba(0,0,0,.18);
+}
+.header-inner{
+  max-width:1080px; margin:0 auto; padding:18px 20px 0;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap:6px;
+}
+.brand-logo{width:220px; height:auto; display:block;}
+header .brand-logo .logo-letters{fill:#ffffff;}
+.report-title{font-size:1.5rem; color:#fff; letter-spacing:.3px; margin-top:6px;}
+.report-subtitle{
+  font-size:.72rem; letter-spacing:2.5px; text-transform:uppercase;
+  color:#bcd8de; margin-bottom:14px; font-weight:600;
+}
+
+/* ---------- Nav tabs ---------- */
+nav.tabs{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:4px;
+  border-top:1px solid rgba(255,255,255,.15);
+  padding:8px 10px; background:rgba(0,0,0,.12);
+}
+nav.tabs button{
+  font-family:'DM Sans', sans-serif;
+  background:transparent; border:none; color:#dceef1;
+  padding:9px 16px; border-radius:8px 8px 0 0; cursor:pointer;
+  font-size:.86rem; font-weight:600; display:flex; align-items:center; gap:7px;
+  transition:background .15s, color .15s;
+  white-space:nowrap;
+}
+nav.tabs button:hover{background:rgba(255,255,255,.12);}
+nav.tabs button.active{background:var(--bg); color:var(--teal-dark);}
+
+/* ---------- Flags ---------- */
+.flag{display:inline-flex; align-items:center; justify-content:center; overflow:hidden;
+  border-radius:3px; box-shadow:0 0 0 1px rgba(0,0,0,.12); flex:none;}
+.flag .flag-inner{position:relative; width:100%; height:100%; display:flex;}
+.flag.flag-sm{width:22px; height:15px;}
+.flag.flag-lg{width:64px; height:44px; border-radius:6px;}
+.flag-nl .flag-inner, .flag-at .flag-inner{flex-direction:column;}
+.flag-nl .stripe, .flag-at .stripe{flex:1 1 0;}
+.flag-nl .s1{background:#ae1c28;} .flag-nl .s2{background:#fff;} .flag-nl .s3{background:#21468b;}
+.flag-at .s1{background:#ed2939;} .flag-at .s2{background:#fff;} .flag-at .s3{background:#ed2939;}
+.flag-be .flag-inner{flex-direction:row;}
+.flag-be .stripe{flex:1 1 0;}
+.flag-be .s1{background:#000;} .flag-be .s2{background:#fdda24;} .flag-be .s3{background:#ef3340;}
+.flag-dk .flag-inner{background:#c60c30;}
+.flag-dk .cross-h{position:absolute; left:0; right:0; top:42%; height:16%; background:#fff;}
+.flag-dk .cross-v{position:absolute; top:0; bottom:0; left:32%; width:16%; background:#fff;}
+
+/* ---------- Tab panels ---------- */
+.tab-panel{display:none; padding-top:26px; animation:fade .25s ease;}
+.tab-panel.active{display:block;}
+@keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+
+/* ---------- Intro ---------- */
+.intro-block p{font-size:1rem;}
+.index-title{margin-top:2.2em;}
+.index-country{margin:1.6em 0 .6em;}
+.index-country h4{
+  display:flex; align-items:center; gap:10px; color:var(--navy);
+  border-bottom:2px solid var(--border); padding-bottom:6px; font-size:1.05rem;
+}
+.index-list{list-style:none; padding:0; margin:.6em 0 0 0; display:grid; grid-template-columns:1fr 1fr; gap:4px 24px;}
+@media(max-width:640px){.index-list{grid-template-columns:1fr;}}
+.index-item a{
+  display:block; padding:8px 10px; border-radius:8px; color:var(--navy);
+  border:1px solid transparent;
+}
+.index-item a:hover{background:var(--teal-light); border-color:var(--border); text-decoration:none;}
+.index-grade{font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:500;}
+.index-school{font-family:'Playfair Display',serif; font-size:11.5px; font-style:italic; color:#7a8a92;}
+
+.next-steps{
+  margin-top:2.6em; padding:22px 24px; background:#fff; border:2px solid var(--border);
+  border-radius:12px; border-left:6px solid var(--teal);
+}
+.next-steps h3{color:var(--teal-dark);}
+
+/* ---------- Section banner ---------- */
+.section-banner{
+  background:var(--teal); color:#fff; font-weight:700; letter-spacing:1px;
+  padding:10px 18px; border-radius:8px; margin:0 0 18px 0; font-size:1rem;
+}
+.subsection-banner{
+  color:var(--teal-dark); font-weight:700; letter-spacing:.5px; text-transform:uppercase;
+  font-size:.85rem; margin:2em 0 1em; padding-bottom:6px; border-bottom:2px solid var(--border);
+}
+
+/* ---------- Country header ---------- */
+.country-head{display:flex; align-items:center; gap:16px; margin-bottom:6px;}
+.country-head h2{font-size:1.9rem; margin:0;}
+.country-meta{display:flex; gap:22px; flex-wrap:wrap; margin:14px 0 18px; font-size:.92rem;}
+.country-meta .pill{
+  background:#fff; border:1px solid var(--border); border-radius:20px; padding:6px 14px;
+  display:flex; align-items:center; gap:6px;
+}
+.country-meta .pill b{color:var(--teal-dark);}
+.country-intro-text{margin-bottom:1.6em;}
+
+/* ---------- Research vs Applied ---------- */
+.rva-block h3{color:var(--teal-dark); margin-top:1.6em; font-size:1.15rem;}
+.rva-links{background:#fff; border:2px solid var(--border); border-radius:12px; padding:16px 20px; margin-top:1.2em;}
+.rva-links ul{margin:.4em 0 0;}
+
+/* ---------- Cards ---------- */
+.uni-card{
+  background:#fff; border:2px solid var(--border); border-radius:12px;
+  padding:22px 24px; margin-bottom:26px; transition:border-color .18s, box-shadow .18s;
+  scroll-margin-top:190px;
+}
+.uni-card:hover{border-color:var(--teal); box-shadow:0 8px 24px rgba(10,155,170,.14);}
+.card-head{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap;}
+.card-title-link{display:inline-flex; align-items:baseline; gap:8px; color:var(--navy);}
+.card-title-link h3{font-size:1.32rem; margin:0; transition:color .15s;}
+.card-title-link .link-icon{font-size:.85rem; display:inline-block; transition:transform .15s;}
+.card-title-link:hover{text-decoration:none;}
+.card-title-link:hover h3{color:var(--teal-dark);}
+.card-title-link:hover .link-icon{transform:scale(1.35);}
+.uni-line{color:var(--teal-dark); font-weight:600; margin:2px 0 10px; font-size:.98rem;}
+
+.diff-badge{
+  flex:none; font-size:.72rem; font-weight:700; letter-spacing:.4px; text-transform:uppercase;
+  padding:5px 12px; border-radius:20px; border:1.5px solid; white-space:nowrap;
+}
+.diff-red{color:var(--red); background:#fdecea; border-color:var(--red);}
+.diff-orange{color:var(--orange); background:#fdf1e2; border-color:var(--orange);}
+.diff-green{color:var(--green); background:#e9f8ee; border-color:var(--green);}
+
+.rank-mini-title{font-size:.76rem; color:#8b9aa1; margin:2px 0 6px;}
+.rank-badges{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
+.rank-badge{
+  font-size:.78rem; font-weight:600; padding:5px 11px; border-radius:8px;
+  background:var(--teal-light); color:var(--teal-dark); border:1px solid #bfe4e8;
+}
+.rank-badge.gold{background:var(--gold-light); color:#8a6d10; border-color:var(--gold);}
+.rank-note{font-size:.84rem; color:#697980; font-style:italic; margin-bottom:14px;}
+
+.meta-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px;
+  margin-bottom:16px;
+}
+.meta-cell{
+  background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:9px 12px;
+}
+.meta-cell .meta-label{font-size:.7rem; color:#7c8b92; text-transform:uppercase; letter-spacing:.5px; display:block; margin-bottom:2px;}
+.meta-cell .meta-value{font-size:.92rem; font-weight:600;}
+.map-btn{
+  margin-top:6px; display:inline-flex; align-items:center; gap:4px;
+  background:var(--teal-light); border:1px solid var(--teal); color:var(--teal-dark);
+  font-size:.72rem; font-weight:700; padding:3px 9px; border-radius:14px; cursor:pointer;
+}
+.map-btn:hover{background:#c9ebee;}
+
+.desc-box{
+  background:#eef7fb; border-left:5px solid var(--teal); border-radius:0 10px 10px 0;
+  padding:14px 18px; margin-bottom:14px; font-size:.96rem;
+}
+
+details.reqs{
+  border:1px solid var(--border); border-radius:10px; padding:10px 16px; background:#fbfdfe;
+}
+details.reqs summary{
+  cursor:pointer; font-weight:700; color:var(--teal-dark); padding:6px 0; font-size:.94rem;
+  list-style:revert;
+}
+details.reqs[open] summary{margin-bottom:8px;}
+.reqs-block{margin-bottom:12px;}
+.reqs-block h5{margin:0 0 5px; font-size:.82rem; text-transform:uppercase; letter-spacing:.4px; color:#5f6f76;}
+.deadline-box{
+  background:var(--yellow-bg); border:1.5px solid var(--yellow-border); border-radius:8px;
+  padding:9px 14px; margin:10px 0; font-size:.92rem; display:inline-block;
+}
+
+.extra-block{margin-top:16px;}
+.extra-block h5{color:var(--teal-dark); font-size:.92rem; text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px;}
+.plan-step{margin-bottom:10px;}
+.plan-step b{display:block; margin-bottom:2px;}
+
+.subjects-title{font-family:'Playfair Display', serif; font-weight:700; font-size:1.1rem; margin-top:14px;}
+.subjects-sub{font-size:.82rem; color:#697980; text-align:center; margin-bottom:12px;}
+.subjects-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px 24px;}
+@media(max-width:520px){.subjects-grid{grid-template-columns:1fr;}}
+.subject-item{
+  display:flex; justify-content:space-between; border:1px solid var(--border); border-radius:6px;
+  padding:8px 12px; font-size:.88rem; background:#fff;
+}
+
+/* ---------- Map ---------- */
+.map-section{margin-top:30px;}
+.map-section h3{color:var(--teal-dark); margin-bottom:10px;}
+.leaflet-map{
+  width:100%; height:420px; border-radius:12px; border:2px solid var(--border);
+}
+.popup-title{font-weight:700; margin-bottom:2px; font-family:'Playfair Display',serif;}
+.popup-school{font-size:.82rem; color:var(--teal-dark); margin-bottom:8px;}
+.popup-actions{display:flex; flex-direction:column; gap:5px;}
+.popup-actions a, .popup-actions button{
+  font-size:.78rem; font-weight:600; padding:5px 8px; border-radius:6px; text-align:center;
+  border:1px solid var(--teal); background:var(--teal-light); color:var(--teal-dark); cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+}
+.popup-actions a:hover, .popup-actions button:hover{background:var(--teal); color:#fff; text-decoration:none;}
+.grad-icon-marker{font-size:22px; text-align:center; line-height:30px;}
+
+/* ---------- Footer ---------- */
+footer.site-footer{
+  margin-top:60px; padding:26px 20px 40px; text-align:center; color:#8b9aa1; font-size:.82rem;
+}
+footer .brand-logo{width:150px; opacity:.4; margin-bottom:10px;}
+
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <svg class="brand-logo" viewBox="0 0 1800 433" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="educoway">
+  <defs>
+    <linearGradient id="logoWGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2fac71"/>
+      <stop offset="35%" stop-color="#2bab8f"/>
+      <stop offset="50%" stop-color="#2baab5"/>
+      <stop offset="65%" stop-color="#2aaac1"/>
+      <stop offset="100%" stop-color="#29aadc"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(0.000000,433.000000) scale(0.100000,-0.100000)">
+    <path class="logo-letters" fill="#737373" d="M3790 3855 l0 -475 -82 83 c-94 94 -191 151 -324 189 -68 20 -101 23 -244 23 -127 0 -181 -4 -235 -18 -97 -26 -238 -96 -311 -156 -114 -93 -214 -252 -256 -409 -30 -111 -37 -358 -13 -473 68 -340 297 -572 623 -635 108 -21 289 -18 388 6 153 36 289 114 388 220 30 33 57 60 60 60 4 0 6 -63 6 -140 l0 -140 100 0 100 0 0 1170 0 1170 -100 0 -100 0 0 -475z m-429 -412 c263 -90 419 -321 419 -618 0 -193 -60 -345 -186 -471 -55 -56 -90 -81 -155 -112 -113 -54 -173 -67 -304 -67 -183 1 -327 58 -446 176 -171 169 -225 471 -134 740 30 87 55 129 120 198 125 134 285 194 495 187 84 -3 122 -9 191 -33z M9670 3679 c-282 -33 -514 -194 -640 -447 -68 -136 -84 -211 -84 -407 -1 -202 11 -260 84 -410 80 -164 180 -267 342 -351 141 -72 213 -87 413 -88 156 0 177 2 258 27 299 92 492 299 564 604 27 115 24 328 -6 448 -71 287 -278 509 -553 594 -60 18 -242 43 -287 40 -9 -1 -50 -5 -91 -10z m284 -215 c167 -43 320 -169 394 -324 97 -204 97 -440 0 -638 -42 -86 -159 -205 -245 -250 -133 -70 -345 -94 -488 -57 -370 95 -561 480 -430 866 107 317 435 489 769 403z M655 3663 c-306 -65 -549 -303 -631 -618 -23 -87 -26 -338 -5 -430 53 -241 207 -445 413 -549 120 -61 215 -85 359 -93 250 -13 476 56 655 198 66 52 128 122 122 138 -1 5 -34 34 -73 65 l-69 55 -47 -49 c-197 -205 -594 -265 -852 -128 -86 46 -194 155 -239 243 -34 65 -68 171 -68 209 0 15 66 16 726 16 l726 0 -5 173 c-4 137 -9 187 -26 247 -65 222 -218 391 -433 477 -147 60 -394 80 -553 46z m385 -199 c163 -37 297 -138 364 -275 41 -85 66 -174 66 -236 l0 -43 -625 0 -625 0 0 21 c0 41 32 145 66 217 40 84 128 183 211 238 64 42 166 81 251 94 71 11 206 4 292 -16z M14940 3670 c-365 -46 -642 -297 -721 -655 -22 -96 -16 -323 10 -420 79 -297 299 -522 586 -601 93 -26 315 -30 412 -9 149 33 301 120 401 230 l52 57 0 -141 0 -141 105 0 105 0 0 835 0 835 -105 0 -105 0 0 -139 0 -139 -80 79 c-131 129 -302 200 -510 212 -47 3 -114 2 -150 -3z m286 -220 c180 -46 315 -153 393 -311 57 -116 74 -192 74 -319 0 -194 -57 -337 -187 -465 -132 -131 -256 -179 -461 -179 -102 1 -132 5 -201 27 -163 54 -285 160 -359 311 -82 167 -96 348 -41 522 67 211 232 367 442 418 90 22 245 20 340 -4z M7552 3659 c-30 -5 -88 -21 -130 -35 -262 -87 -448 -289 -518 -562 -47 -182 -33 -415 36 -581 75 -182 206 -323 380 -411 141 -71 209 -85 410 -85 171 0 177 1 270 33 109 38 222 103 301 172 l54 49 -71 71 -71 72 -64 -52 c-129 -103 -263 -151 -424 -151 -305 0 -545 174 -621 451 -28 102 -26 303 5 400 70 226 216 363 451 421 71 18 103 21 200 16 168 -8 276 -48 402 -151 l55 -45 69 70 69 70 -40 35 c-115 101 -268 180 -407 208 -84 17 -267 20 -356 5z M4730 3125 c0 -611 2 -630 75 -780 120 -246 349 -375 668 -375 203 0 363 59 489 180 l68 65 0 -112 0 -113 105 0 105 0 0 835 0 835 -104 0 -105 0 -3 -517 -3 -518 -28 -78 c-69 -196 -208 -321 -403 -362 -88 -19 -153 -19 -250 0 -201 38 -334 158 -390 350 -15 53 -18 124 -21 593 l-5 532 -99 0 -99 0 0 -535z M16425 3599 c4 -12 151 -375 326 -807 176 -432 319 -791 319 -797 0 -6 -67 -167 -150 -358 -82 -191 -150 -352 -150 -358 0 -6 41 -9 111 -7 l110 3 480 1115 c263 613 490 1141 504 1173 l25 58 -116 -3 -116 -3 -190 -445 c-105 -245 -234 -555 -288 -688 l-97 -244 -90 224 c-50 122 -173 433 -274 690 l-184 468 -113 0 c-111 0 -113 0 -107 -21z M4124 678 c-15 -24 -31 -49 -37 -55 -7 -10 -2 -13 20 -13 24 0 36 8 59 42 48 71 48 68 15 68 -25 0 -35 -8 -57 -42z M12990 455 l0 -265 25 0 25 0 0 265 0 265 -25 0 -25 0 0 -265z M992 698 c-28 -28 -1 -75 38 -63 14 4 20 15 20 35 0 36 -33 53 -58 28z M3712 701 c-18 -11 -12 -51 10 -64 21 -14 48 7 48 38 0 30 -31 44 -58 26z M6382 701 c-18 -11 -12 -51 10 -64 21 -14 48 7 48 38 0 30 -31 44 -58 26z M8462 698 c-32 -32 8 -80 48 -58 34 18 19 70 -20 70 -9 0 -21 -5 -28 -12z M10032 698 c-28 -28 -1 -75 38 -63 14 4 20 15 20 35 0 36 -33 53 -58 28z M16322 698 c-28 -28 -1 -75 36 -63 26 8 34 41 15 60 -18 18 -35 19 -51 3z M2347 673 c-4 -3 -7 -28 -7 -55 l0 -48 -40 0 c-36 0 -40 -2 -40 -25 0 -22 4 -25 40 -25 l40 0 0 -139 c0 -158 10 -185 76 -197 41 -8 114 11 114 29 -1 28 -16 38 -44 27 -82 -31 -96 -9 -96 151 l0 129 60 0 c57 0 60 1 60 25 0 24 -3 25 -60 25 l-60 0 0 55 c0 47 -3 55 -18 55 -10 0 -22 -3 -25 -7z M8763 673 c-8 -3 -13 -24 -13 -54 l0 -49 -35 0 c-31 0 -35 -3 -35 -25 0 -22 4 -25 34 -25 l34 0 4 -135 c3 -117 6 -138 24 -162 28 -38 72 -49 129 -33 49 14 51 17 33 43 -11 15 -18 16 -45 5 -23 -9 -38 -9 -56 -1 -30 14 -37 50 -37 186 l0 97 65 0 c63 0 65 1 65 25 0 24 -2 25 -65 25 l-65 0 0 55 c0 55 -5 61 -37 48z M14533 673 c-8 -3 -13 -24 -13 -54 l0 -49 -35 0 c-31 0 -35 -3 -35 -25 0 -22 4 -25 34 -25 l34 0 4 -134 c3 -118 6 -138 24 -163 28 -38 72 -49 129 -33 49 14 51 17 33 43 -11 15 -18 16 -45 5 -23 -9 -38 -9 -56 -1 -30 14 -37 50 -37 186 l0 97 65 0 c63 0 65 1 65 25 0 24 -2 25 -65 25 l-65 0 0 55 c0 55 -5 61 -37 48z M136 546 c-58 -35 -86 -88 -86 -164 0 -122 69 -197 184 -197 40 0 74 7 99 19 101 50 131 215 55 302 -44 50 -77 64 -150 64 -48 0 -72 -6 -102 -24z m179 -45 c58 -32 83 -128 50 -191 -46 -89 -159 -104 -230 -30 -22 23 -29 42 -33 83 -11 130 100 202 213 138z M610 380 l0 -190 25 0 25 0 0 115 c0 175 30 224 129 211 41 -5 50 -4 55 11 17 43 -92 60 -152 23 -40 -25 -42 -25 -42 0 0 13 -7 20 -20 20 -19 0 -20 -7 -20 -190z M990 380 l0 -190 25 0 25 0 0 190 0 190 -25 0 -25 0 0 -190z M1330 563 c-120 -45 -154 -225 -62 -322 72 -76 198 -80 275 -11 29 26 31 30 16 45 -15 15 -19 14 -54 -9 -50 -34 -99 -42 -149 -25 -42 15 -86 66 -86 100 0 18 11 19 160 19 l160 0 0 49 c0 56 -27 103 -79 138 -27 19 -47 23 -100 22 -36 0 -73 -3 -81 -6z m136 -52 c44 -20 74 -54 74 -83 0 -16 -12 -18 -135 -18 -91 0 -135 4 -135 11 0 27 38 73 75 90 50 23 70 23 121 0z M1760 380 l0 -190 25 0 25 0 0 110 c0 123 11 164 55 198 40 32 114 30 152 -2 28 -24 28 -25 31 -165 l4 -141 24 0 24 0 0 136 c0 154 -10 190 -65 224 -44 27 -138 28 -183 0 -40 -25 -42 -25 -42 0 0 15 -7 20 -25 20 l-25 0 0 -190z M2744 551 c-18 -10 -45 -36 -60 -57 -26 -34 -29 -45 -29 -114 0 -66 4 -82 27 -117 14 -22 43 -48 65 -58 55 -27 138 -26 186 3 46 27 47 27 47 2 0 -15 7 -20 25 -20 l25 0 0 190 0 190 -25 0 c-20 0 -25 -5 -25 -25 l0 -26 -31 23 c-43 32 -160 38 -205 9z m174 -48 c44 -27 63 -72 59 -136 -3 -46 -9 -63 -32 -87 -104 -109 -269 -16 -241 135 18 93 132 140 214 88z M3295 546 c-56 -34 -87 -92 -87 -165 0 -102 49 -167 146 -193 54 -14 119 -1 168 34 l30 21 -20 20 -20 20 -27 -21 c-60 -47 -141 -37 -196 25 -29 34 -31 40 -27 101 4 59 7 67 41 98 49 45 113 50 176 13 30 -18 36 -19 49 -5 13 13 13 18 2 31 -43 51 -166 62 -235 21z M3710 380 l0 -190 25 0 25 0 0 190 0 190 -25 0 -25 0 0 -190z M4031 553 c-43 -22 -88 -83 -96 -133 -25 -150 100 -269 243 -231 152 41 192 251 67 347 -32 24 -49 29 -109 32 -52 2 -80 -2 -105 -15z m172 -51 c29 -18 67 -84 67 -120 0 -39 -32 -102 -63 -124 -43 -31 -121 -31 -164 0 -68 48 -78 153 -21 218 48 54 115 64 181 26z M4490 380 l0 -190 25 0 25 0 0 110 c0 123 11 164 55 198 20 16 42 22 77 22 41 0 54 -5 79 -29 l29 -29 0 -136 0 -136 25 0 25 0 0 143 c0 156 -7 179 -66 218 -41 26 -138 26 -182 -1 -40 -25 -42 -25 -42 0 0 15 -7 20 -25 20 l-25 0 0 -190z M5312 426 c3 -157 9 -173 71 -220 38 -28 132 -27 181 3 36 23 36 23 36 2 0 -16 6 -21 25 -21 l25 0 0 190 0 190 -24 0 c-24 0 -24 0 -28 -129 -4 -150 -15 -176 -87 -200 -36 -11 -48 -11 -79 1 -59 22 -72 59 -72 206 l0 122 -26 0 -26 0 4 -144z M5850 380 l0 -190 25 0 25 0 0 120 c0 135 10 169 60 195 34 18 89 20 123 4 44 -20 51 -46 55 -186 l4 -133 25 0 25 0 -4 143 c-3 130 -5 145 -26 175 -13 18 -36 39 -52 47 -42 22 -128 19 -173 -5 -20 -11 -39 -20 -42 -20 -3 0 -5 9 -5 20 0 13 -7 20 -20 20 -19 0 -20 -7 -20 -190z M6380 380 l0 -190 25 0 25 0 0 190 0 190 -25 0 -25 0 0 -190z M6592 561 c2 -5 37 -90 78 -190 70 -168 77 -181 101 -181 24 0 31 12 103 183 42 100 76 186 76 190 0 5 -12 7 -27 5 -24 -3 -32 -16 -87 -150 -33 -80 -63 -145 -66 -143 -3 2 -32 69 -64 149 -58 141 -61 146 -89 146 -16 0 -27 -4 -25 -9z M7153 541 c-49 -35 -71 -73 -79 -133 -25 -185 185 -298 328 -177 30 25 32 29 17 44 -15 15 -19 15 -54 -9 -50 -34 -99 -42 -149 -25 -42 15 -86 66 -86 100 0 18 11 19 161 19 l161 0 -4 55 c-5 59 -24 94 -72 129 -21 16 -46 22 -104 24 -73 4 -79 2 -119 -27z m189 -37 c26 -13 58 -60 58 -84 0 -6 -47 -10 -135 -10 -88 0 -135 4 -135 10 0 30 35 73 73 91 45 21 89 19 139 -7z M7620 380 l0 -190 25 0 25 0 0 110 c0 123 11 164 55 198 29 23 74 28 104 12 15 -7 20 -4 29 16 11 22 9 26 -14 34 -49 19 -110 12 -143 -16 l-31 -26 0 26 c0 21 -5 26 -25 26 l-25 0 0 -190z M8038 554 c-35 -19 -48 -43 -48 -92 0 -54 22 -70 136 -101 115 -31 137 -51 104 -94 -37 -47 -128 -47 -196 0 -34 23 -38 23 -53 8 -15 -15 -13 -19 18 -45 86 -73 248 -59 288 24 31 66 -2 116 -94 141 -149 40 -148 40 -151 66 -7 63 112 89 190 41 l37 -23 11 22 c13 23 11 25 -42 54 -36 20 -164 19 -200 -1z M8470 380 c0 -183 1 -190 20 -190 19 0 20 7 20 190 0 183 -1 190 -20 190 -19 0 -20 -7 -20 -190z M9155 547 c-57 -32 -85 -86 -85 -165 0 -103 46 -169 133 -193 53 -14 117 -4 161 26 l36 24 0 -24 c0 -20 5 -25 25 -25 l25 0 0 190 0 190 -25 0 c-20 0 -25 -5 -25 -24 l0 -25 -42 24 c-58 33 -146 34 -203 2z m178 -44 c18 -9 37 -32 49 -60 58 -132 -55 -252 -184 -195 -58 25 -82 72 -76 149 9 109 108 159 211 106z M9650 380 l0 -190 25 0 25 0 0 123 c0 103 3 127 20 154 27 44 54 56 110 49 40 -5 49 -3 54 11 17 43 -92 60 -152 23 -40 -25 -42 -25 -42 0 0 13 -7 20 -20 20 -19 0 -20 -7 -20 -190z M10030 380 l0 -190 25 0 25 0 0 190 0 190 -25 0 -25 0 0 -190z M10370 563 c-36 -14 -72 -48 -92 -86 -26 -51 -28 -148 -5 -194 51 -98 188 -131 281 -68 l36 24 0 -24 c0 -20 5 -25 25 -25 l25 0 0 190 0 190 -25 0 c-20 0 -25 -5 -25 -24 l0 -25 -42 24 c-33 19 -57 25 -103 24 -33 0 -67 -3 -75 -6z m153 -60 c31 -15 66 -82 67 -123 0 -44 -42 -113 -80 -133 -41 -21 -106 -17 -146 9 -65 43 -77 157 -23 219 48 55 111 64 182 28z M11195 552 c-92 -59 -120 -167 -69 -270 21 -43 34 -56 80 -78 45 -22 63 -26 104 -21 50 6 101 27 133 55 22 20 22 29 -3 42 -16 9 -24 7 -42 -10 -52 -48 -143 -50 -197 -5 -29 25 -55 78 -44 89 4 3 78 6 165 6 l158 0 0 38 c-1 52 -32 115 -71 143 -47 33 -169 39 -214 11z m177 -50 c23 -14 58 -65 58 -86 0 -3 -63 -6 -139 -6 l-140 0 10 29 c28 81 130 111 211 63z M11650 380 l0 -190 25 0 25 0 0 120 c0 135 10 169 60 195 34 17 102 20 132 4 36 -19 48 -70 48 -199 l0 -120 25 0 25 0 0 133 c0 150 -11 186 -69 224 -45 30 -130 32 -184 3 l-37 -20 0 20 c0 15 -7 20 -25 20 l-25 0 0 -190z M12533 545 c-111 -67 -112 -259 -2 -332 36 -24 53 -28 108 -28 70 1 114 17 151 57 l20 21 -20 14 c-18 13 -24 12 -50 -10 -32 -28 -94 -42 -138 -32 -36 7 -88 60 -97 98 l-7 27 167 0 168 0 -6 51 c-13 104 -78 159 -188 159 -50 0 -73 -6 -106 -25z m187 -44 c14 -9 33 -33 42 -52 l18 -34 -136 -3 c-75 -1 -139 -1 -141 2 -7 7 23 59 45 79 43 39 123 43 172 8z M13593 545 c-109 -65 -112 -259 -6 -329 75 -50 181 -43 248 16 35 30 35 31 15 45 -18 13 -23 12 -50 -10 -32 -28 -94 -42 -138 -32 -36 7 -88 60 -97 98 l-7 27 167 0 168 0 -6 51 c-13 104 -78 159 -188 159 -50 0 -73 -6 -106 -25z m187 -44 c14 -9 33 -33 42 -52 l18 -34 -136 -3 c-75 -1 -139 -1 -141 2 -7 7 23 59 45 79 43 39 123 43 172 8z M14000 565 c0 -3 29 -44 65 -92 40 -53 62 -90 57 -97 -80 -105 -102 -135 -117 -158 l-17 -28 30 0 c25 0 38 11 86 75 31 41 58 75 59 75 2 0 28 -34 58 -75 48 -67 57 -74 88 -75 25 0 31 3 24 13 -74 96 -133 177 -133 183 0 5 26 42 58 84 80 103 79 100 40 100 -29 -1 -39 -9 -84 -71 l-52 -70 -52 71 c-43 59 -57 70 -81 70 -16 0 -29 -2 -29 -5z M14870 380 l0 -190 25 0 25 0 0 115 c0 129 11 171 55 199 22 14 38 17 77 12 40 -6 49 -4 55 10 18 47 -99 61 -161 19 l-36 -24 0 24 c0 18 -5 25 -20 25 -19 0 -20 -7 -20 -190z M15305 552 c-69 -44 -95 -93 -95 -174 0 -61 30 -129 68 -157 67 -47 162 -49 227 -5 l35 23 0 -24 c0 -20 5 -25 25 -25 l25 0 0 190 0 190 -25 0 c-20 0 -25 -5 -25 -25 l0 -26 -31 23 c-43 32 -161 38 -204 10z m175 -51 c77 -54 79 -181 4 -240 -104 -82 -245 17 -220 154 18 95 136 142 216 86z M15790 380 l0 -190 25 0 25 0 0 120 c0 135 10 169 60 195 33 17 102 20 131 5 39 -21 49 -62 49 -195 l0 -125 25 0 25 0 0 133 c0 150 -11 186 -69 224 -45 30 -126 31 -181 3 l-40 -20 0 20 c0 15 -7 20 -25 20 l-25 0 0 -190z M16320 330 c0 -230 -1 -241 -21 -261 -11 -11 -27 -18 -36 -15 -46 18 -60 17 -66 -3 -7 -27 18 -41 72 -41 97 0 101 11 101 315 l0 245 -25 0 -25 0 0 -240z M16635 547 c-22 -12 -50 -40 -63 -62 -19 -34 -22 -52 -20 -116 3 -65 7 -81 31 -112 15 -20 41 -44 57 -52 73 -38 175 -27 233 25 30 27 31 30 15 46 -16 16 -19 16 -36 1 -25 -22 -86 -47 -118 -47 -60 0 -134 62 -134 113 0 15 14 17 159 17 89 0 162 4 166 9 10 17 -7 91 -29 124 -38 56 -80 77 -155 77 -50 0 -76 -6 -106 -23z m147 -29 c43 -13 88 -58 88 -89 0 -18 -8 -19 -135 -19 -91 0 -135 4 -135 11 0 26 37 71 75 89 47 23 55 24 107 8z M17090 380 l0 -190 25 0 25 0 0 103 c0 56 5 119 10 139 19 68 95 107 150 78 15 -8 21 -6 31 12 10 18 8 24 -7 35 -30 22 -106 16 -148 -12 l-36 -24 0 24 c0 20 -5 25 -25 25 l-25 0 0 -190z M17528 550 c-55 -30 -90 -95 -90 -170 0 -75 24 -125 81 -165 36 -26 52 -30 104 -30 127 0 203 82 195 209 -4 71 -34 122 -92 157 -43 26 -147 25 -198 -1z m176 -48 c36 -21 66 -76 66 -120 0 -136 -152 -199 -245 -102 -22 23 -29 42 -33 83 -10 129 101 202 212 139z"/>
+    <path class="logo-w" fill="url(#logoWGradient)" d="M11373 3629 c-142 -27 -239 -170 -212 -313 4 -24 118 -314 252 -647 134 -332 252 -625 261 -651 21 -58 106 -139 163 -156 22 -7 65 -12 95 -12 72 0 168 46 207 100 15 21 86 182 156 357 71 175 130 320 132 323 7 8 18 -17 149 -341 107 -267 135 -328 166 -360 52 -54 93 -72 174 -77 61 -4 80 -1 125 20 57 26 96 58 122 99 8 13 135 320 281 681 228 565 266 665 266 709 0 74 -18 124 -64 176 -86 98 -211 121 -327 60 -41 -21 -73 -46 -91 -72 -15 -22 -84 -179 -153 -349 -69 -170 -129 -315 -134 -323 -6 -12 -164 366 -263 630 -13 35 -78 101 -120 123 -18 9 -63 19 -99 22 -124 9 -216 -43 -268 -151 -16 -34 -80 -188 -142 -342 -61 -154 -114 -283 -118 -287 -3 -4 -46 93 -95 215 -163 404 -185 453 -224 493 -60 62 -152 90 -239 73z"/>
+  </g>
+</svg>
+    <h1 class="report-title">Informe personalizado de opciones de grado</h1>
+    <div class="report-subtitle">Preparado para Gabriela Alonso López</div>
+  </div>
+  <nav class="tabs"><button class="tab-btn active" data-tab="intro" onclick="showTab('intro', this)">Introducción</button><button class="tab-btn" data-tab="rva" onclick="showTab('rva', this)">Research vs Applied Sciences</button><button class="tab-btn" data-tab="nl" onclick="showTab('nl', this)"><span class="flag flag-nl flag-sm"><span class="flag-inner"><span class="stripe s1"></span><span class="stripe s2"></span><span class="stripe s3"></span></span></span> Holanda</button><button class="tab-btn" data-tab="be" onclick="showTab('be', this)"><span class="flag flag-be flag-sm"><span class="flag-inner"><span class="stripe s1"></span><span class="stripe s2"></span><span class="stripe s3"></span></span></span> Bélgica</button><button class="tab-btn" data-tab="dk" onclick="showTab('dk', this)"><span class="flag flag-dk flag-sm"><span class="flag-inner"><span class="cross-h"></span><span class="cross-v"></span></span></span> Dinamarca</button><button class="tab-btn" data-tab="at" onclick="showTab('at', this)"><span class="flag flag-at flag-sm"><span class="flag-inner"><span class="stripe s1"></span><span class="stripe s2"></span><span class="stripe s3"></span></span></span> Austria</button></nav>
+</header>
+
+<main class="page-wrap">
+  
+<section id="tab-intro" class="tab-panel active">
+  <div class="intro-block">
+    <p>Hola Gabriela,</p>
+    <p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este
+    gran paso. Estoy convencida de que estás tomando una decisión súper acertada, de la que te alegrarás y
+    acordarás toda la vida.</p>
+    <p>Estos días he estado trabajando en la búsqueda de los grados solicitados y afines que, según lo que
+    hemos hablado, más podrían interesarte.</p>
+    <p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación
+    el listado completo con todos los detalles relevantes.</p>
+  </div>
+
+  <h3 class="index-title">Contenido</h3>
+  <div class="index-country">
+            <h4><span class="flag flag-nl flag-sm"><span class="flag-inner"><span class="stripe s1"></span><span class="stripe s2"></span><span class="stripe s3"></span></span></span> Holanda</h4>
+            <ul class="index-list"><li class="index-item"><a href="#" onclick="goTo('nl','nl-bio-groningen'); return false;">
+                <span class="index-grade">Biology</span>
+                <span class="index-school">University of Groningen</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-bio-radboud'); return false;">
+                <span class="index-grade">Biology</span>
+                <span class="index-school">Radboud University</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-mbls-utrecht'); return false;">
+                <span class="index-grade">Molecular and Biophysical Life Science</span>
+                <span class="index-school">Utrecht University</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-mls-radboud'); return false;">
+                <span class="index-grade">Molecular Life Science</span>
+                <span class="index-school">Radboud University</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-biomed-maastricht'); return false;">
+                <span class="index-grade">Biomedical Sciences</span>
+                <span class="index-school">Maastricht University</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-msp-maastricht'); return false;">
+                <span class="index-grade">Maastricht Science Programme</span>
+                <span class="index-school">Maastricht University Liberal Arts &amp; Sciences university college.</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-irio-groningen'); return false;">
+                <span class="index-grade">International Relations and International Organization</span>
+                <span class="index-school">University of Groningen</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-iro-leiden'); return false;">
+                <span class="index-grade">International Relations and Organizations</span>
+                <span class="index-school">Leiden University</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-is-leiden'); return false;">
+                <span class="index-grade">International Studies</span>
+                <span class="index-school">Leiden University</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-ls-han'); return false;">
+                <span class="index-grade">Life Sciences</span>
+                <span class="index-school">HAN University of Applied Sciences</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-es-nhlstenden'); return false;">
+                <span class="index-grade">European Studies</span>
+                <span class="index-school">NHL Stenden University of Applied Sciences</span>
+            </a></li><li class="index-item"><a href="#" onclick="goTo('nl','nl-es-thuas'); return false;">
+                <span class="index-grade">European Studies</span>
+                <span class="index-school">The Hague University of Applied Sciences (THUAS)</span>
+            </a></li></ul>
+        </div><div class="index-country">
+            <h4><span class="flag flag-be flag-sm"><span class="flag-inner"><span class="stripe s1"></span><span class="stripe s2"></span><span class="stripe s3"></span></span></span> Bélgica</h4>
+            <ul class="index-list"><li class="index-item"><a href="#" onclick="goTo('be','be-es-kuleuven'); return false;">
+                <span class="index-grade">European Studies</span>
+                <span class="index-school">KU Leuven</span>
+            </a></li></ul>
+        </div><div class="index-country">
+            <h4><span class="flag flag-dk flag-sm"><span class="flag-inner"><span class="cross-h"></span><span class="cross-v"></span></span></span> Dinamarca</h4>
+            <ul class="index-list"><li class="index-item"><a href="#" onclick="goTo('dk','dk-ns-roskilde'); return false;">
+                <span class="index-grade">Natural Sciences</span>
+                <span class="index-school">Roskilde University</span>
+            </a></li></ul>
+        </div><div class="index-country">
+            <h4><span class="flag flag-at flag-sm"><span class="flag-inner"><span class="stripe s1"></span><span class="stripe s2"></span><span class="stripe s3"></span></span></span> Austria</h4>
+            <ul class="index-list"><li class="index-item"><a href="#" onclick="goTo('at','at-mpt-krems'); return false;">
+                <span class="index-grade">Medical and Pharmaceutical Technology</span>
+                <span class="index-school">IMC Krems University Applied Sciences</span>
+            </a></li></ul>
+        </div>
+
+  <div class="next-steps">
+    <h3>¿Qué tienes que hacer ahora?</h3>
+    <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas,
+    especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan
+    más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones
+    y resolver dudas.</p>
+    <p>¡Un saludo!</p>
+  </div>
+</section>
+  
+<section id="tab-rva" class="tab-panel">
+  <div class="rva-block">
+  <p>Como creo que ya te hemos explicado, en la mayoría de países europeos tenemos que diferenciar entre 2
+  tipos de universidades: "<i>Research</i>" y "<i>Applied Sciences</i>". Los dos tipos de universidad comparten
+  muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus
+  principales diferencias:</p>
+
+  <h3>Metodología teórica vs práctica</h3>
+  <p>Las universidades de <i>Applied Sciences</i> destacan por usar una metodología muy práctica llamada PBL
+  (<i>Project/Problem Based Learning</i>). Se trata de imitar desde el primer año un entorno de trabajo real
+  por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y
+  consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante
+  (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales
+  que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de
+  prácticas profesionales obligatorio de 1 semestre. Las universidades de <i>Research</i> no tienen este
+  enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de
+  investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran
+  habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas
+  dentro del grado.</p>
+
+  <h3>Duración</h3>
+  <p>Las universidades de <i>Applied Sciences</i> duran un año más (4 años, 240 ECTS) porque incluyen prácticas
+  en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.
+  Las de <i>Research</i> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con
+  un máster de 1 o 2 años.</p>
+
+  <h3>Ranking / Prestigio</h3>
+  <p>El principal motivo por el cual se podría escoger una universidad de <i>Research</i> es por el mayor
+  ranking y prestigio que estas universidades tienen.<br>
+  Las universidades de <i>Applied Sciences</i> (<i>Hogeschools</i> en holandés) a veces son infravaloradas
+  entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación
+  que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+
+  <h3>Acceso a Másteres</h3>
+  <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos
+  títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <i>Research</i>
+  podrás acceder a másteres tanto en universidades de <i>Research</i> como <i>Applied Sciences</i>. En cambio,
+  con tu título de <i>Applied Sciences</i> podrás acceder a másteres en universidades de <i>Applied Sciences</i>,
+  pero si quieres acceder a universidades de <i>Research,</i> te pedirán cursar un pre-máster (de 1 semestre o
+  un año de duración).</p>
+
+  <div class="rva-links">
+    <p style="margin-bottom:.4em;">Para que tengas más información, te dejo dos enlaces interesantes de 2
+    fuentes distintas (una universidad de <i>Research</i> y otra de <i>Applied Sciences</i>):</p>
+    <ul>
+      <li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank" rel="noopener">Applied Science vs. Research University</a></li>
+      <li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank" rel="noopener">Types of universities in the Netherlands</a></li>
+    </ul>
+  </div>
+
+  <p style="margin-top:1.4em;">Ahora sí, habiendo comentado estos detalles, te paso las opciones de estudio
+  más interesantes para tu caso particular:</p>
+  </div>
+</section>
+  
+<section id="tab-nl" class="tab-panel">
+  <div class="country-head"><span class="flag flag-nl flag-lg"><span class="flag-inner"><span class="stripe s1"></span><span class="stripe s2"></span><span class="stripe s3"></span></span></span><h2>Holanda</h2></div>
+  <div class="country-meta"><div class="pill">🎓 Tasas académicas: <b>2.695 €/año</b></div></div>
+  <div class="country-intro-text"><p>LOs estudiantes europeos tenemos los <u>estudios</u> parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <span class="clr-green">2.695 €/año</span>. Estas son las tasas académicas para el curso 26/27. Es probable que aumenten ligeramente para el curso 2027/28, aunque normalmente no superan los 100 €. Además, esas tasas se mantendrían fijas durante los tres años de estudio).</p><p>Cabe destacar que el <u>alojamiento</u> en Holanda no es barato, tiene un precio <b>medio</b> de 850-900€.</p></div>
+  <div class="subsection-banner">Research universities</div>
+<article class="uni-card" id="nl-bio-groningen">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.rug.nl/bachelors/biology/" target="_blank" rel="noopener">
+      <h3>Biology</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-green">Dificultad: Media</span>
+  </div>
+  <div class="uni-line">University of Groningen — Groningen</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-badges"><a href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener" class="rank-badge"># 54-75 en Ciencias Biológicas</a><a href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener" class="rank-badge gold"># 84 del mundo</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Groningen <span style="font-weight:400;">(aproximadamente 245.000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">100€ application fee ( no reembolsable)</span></div></div>
+  <div class="desc-box">El grado en Biología en la Universidad de Groningen ofrece una formación científica amplia con una base sólida en matemáticas, química y física. Tras un primer semestre común, los estudiantes eligen una de cinco especializaciones (como ecología, neurociencias o biología molecular). El programa combina teoría, prácticas e investigación, y permite hacer un semestre en el extranjero o un minor en el tercer año.</div>
+  
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Bachillerato español con Matemáticas, Biología, Química y Física.</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT nota mínima: 90 (al menos 21 en Reading, Listening y Speaking, y 24 en Writing)</li><li>Cambridge CAE (C1) y/o CPE (C2) (no especifica nota mínima)</li><li>IELTS nota mínima: 6.5 (al menos 6.5 en cada componente)</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> 1 de mayo</div></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p>Media</p></div></details>
+</article>
+
+<article class="uni-card" id="nl-bio-radboud">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.ru.nl/en/education/bachelors/biology" target="_blank" rel="noopener">
+      <h3>Biology</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-green">Dificultad: Baja</span>
+  </div>
+  <div class="uni-line">Radboud University — Nijmegen</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-badges"><a href="https://www.shanghairanking.com/universities/radboud-university-nijmegen" target="_blank" rel="noopener" class="rank-badge"># 101-150 en Ciencias Biológicas</a><a href="https://www.shanghairanking.com/universities/radboud-university-nijmegen" target="_blank" rel="noopener" class="rank-badge"># 150-200 del mundo</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Nijmegen <span style="font-weight:400;">(aproximadamente 189 000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2695€</span></div></div>
+  <div class="desc-box">El primer año ofrece una introducción amplia a la biología y la biología médica, abarcando diversas áreas como la evolución, la bioquímica, la ecología y la biodiversidad. En el segundo año se completa la fase general y, a partir del segundo semestre, los estudios se especializan, permitiendo al estudiante elegir y combinar diferentes trayectorias según sus intereses. En el tercer año se continúa con la especialización elegida, con la opción de estudiar en el extranjero, y se realizan prácticas en un departamento de investigación.</div>
+  
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Título de Bachiller ciencias de la salud + EVAU<br>Asignaturas: Biología, Física, Química y Matemáticas (mínima nota 6 en cada)<br>EVAU: Biología, química y matemáticas (mínimo nota 6.0 de cada)</p></div><div class="reqs-block">*para deficiencias de asignaturas, la universidad permite examinar con los exámenes Boswell-Beta o <a href="https://www.ccvx.nl/index%20-%20EN.html" target="_blank" rel="noopener">CCVX</a> (para física, biología o química) y para Mathematics, tienes la opción de <a href="https://omptest.org/" target="_blank" rel="noopener">Online Mathematics Placement Test</a> (OMPT). Depending on the test you will be taking, we require the following minimum scores:<ul><li>Boswell-Bèta: 6.0 out of 10.0</li><li>CCVX: 6.0 out of 10.0</li><li>OMPT: OMPT-A with minimum 60% or OMPT-D with minimum 55%</li></ul></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT nota mínima: 90 (al menos 20 en cada sección)</li><li>Cambridge C1 Advanced (mínimo 176 puntos en total y 169 en cada componente) y C2 Proficiency (mínimo 180 puntos en total y 169 en cada componente).</li><li>IELTS Academic con una puntuación global mínima de 6,5 y al menos 6,0 en cada sección,</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> 1 de julio</div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>cumplir con los requisitos requeridos y la admisión es prácticamente garantizada</p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p>Baja</p></div></details>
+</article>
+
+<article class="uni-card" id="nl-mbls-utrecht">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.uu.nl/en/bachelors/molecular-and-biophysical-life-sciences" target="_blank" rel="noopener">
+      <h3>Molecular and Biophysical Life Science</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-green">Dificultad: Baja</span>
+  </div>
+  <div class="uni-line">Utrecht University — Utrecht</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-badges"><a href="https://www.shanghairanking.com/universities/utrecht-university" target="_blank" rel="noopener" class="rank-badge gold"># 44 en Ciencias Biológicas</a><a href="https://www.shanghairanking.com/universities/utrecht-university" target="_blank" rel="noopener" class="rank-badge gold"># 60 del mundo</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Utrecht <span style="font-weight:400;">(aproximadamente 490.000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695€</span></div></div>
+  <div class="desc-box">Este grado combina biología, química, física y ciencias farmacéuticas para estudiar la vida a nivel molecular. Ofrece formación en laboratorio, bioinformática y modelado, con especialización en cuatro áreas y un proyecto final de investigación. Se imparte en inglés en un entorno innovador y prepara para másteres en ciencias biomédicas y biotecnología.</div>
+  
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Bachillerato español con Matemáticas, Biología, Química y Física + EVAU aprobado</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT nota mínima: 83</li><li>Cambridge CAE (C1) con nota mínima de 169 o CPE (C2) con nota mínima de 180.</li><li>IELTS nota mínima: 6.0</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> 1 de mayo</div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>Evaluación de la documentación y requisitos académicos por parte de la Oficina de Admisiones. Decisión comunicada en un plazo de hasta 3 semanas tras la recepción de la solicitud completa. Si cumples con los requisitos, la admisión está prácticamente garantizada.</p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p>Baja</p></div></details>
+</article>
+
+<article class="uni-card" id="nl-mls-radboud">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.ru.nl/en/education/bachelors/molecular-life-sciences" target="_blank" rel="noopener">
+      <h3>Molecular Life Science</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-green">Dificultad: Baja</span>
+  </div>
+  <div class="uni-line">Radboud University — Nijmegen</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-badges"><a href="https://www.shanghairanking.com/universities/radboud-university-nijmegen" target="_blank" rel="noopener" class="rank-badge"># 101-150 en Ciencias Biológicas</a><a href="https://www.shanghairanking.com/universities/radboud-university-nijmegen" target="_blank" rel="noopener" class="rank-badge"># 150-200 del mundo</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Nijmegen <span style="font-weight:400;">(aproximadamente 189 000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695€</span></div></div>
+  <div class="desc-box">El grado en Molecular Life Sciences combina biología, química, física y matemáticas para estudiar procesos moleculares en organismos multicelulares. En el primer año se adquieren bases sólidas en ciencias exactas y técnicas experimentales. A partir del segundo año, el enfoque se desplaza hacia la investigación biomédica y el estudiante elige una especialización (biología médica o bioquímica). El programa incluye asignaturas optativas, un minor opcional (en áreas como educación, informática o nanociencia) y cursos adicionales en ciencias naturales. Todo orientado a formar profesionales capaces de innovar en el ámbito médico y biomolecular.</div>
+  
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Título de Bachiller ciencias de la salud + EVAU<br>Asignaturas: Biología, Física, Química y Matemáticas (mínima nota 6 en cada)<br>EVAU: Biología, química y matemáticas (mínimo nota 6.0 de cada)</p></div><div class="reqs-block">*para deficiencias de asignaturas, la universidad permite examinar con los exámenes Boswell-Beta o <a href="https://www.ccvx.nl/index%20-%20EN.html" target="_blank" rel="noopener">CCVX</a> (para física, biología o química) y para Mathematics, tienes la opción de <a href="https://omptest.org/" target="_blank" rel="noopener">Online Mathematics Placement Test</a> (OMPT). Depending on the test you will be taking, we require the following minimum scores:<ul><li>Boswell-Bèta: 6.0 out of 10.0</li><li>CCVX: 6.0 out of 10.0</li><li>OMPT: OMPT-A with minimum 60% or OMPT-D with minimum 55%</li></ul></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT TOEFL iBT (≥ 90, con al menos 20 en cada parte)</li><li>IELTS Academic (≥ 6,5 global y ≥ 6,0 en cada componente)</li><li>Cambridge C1 Advanced (mín. 176) / C2 Proficiency (mín. 180), con al menos 169 en cada sección.</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> 1 de julio</div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>cumplir con los requisitos requeridos y la admisión es prácticamente garantizada</p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p>Baja</p></div></details>
+</article>
+
+<article class="uni-card" id="nl-biomed-maastricht">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.maastrichtuniversity.nl/education/bachelor/programmes/biomedical-sciences" target="_blank" rel="noopener">
+      <h3>Biomedical Sciences</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-orange">Dificultad: Media-alta</span>
+  </div>
+  <div class="uni-line">Maastricht University — Maastricht</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-badges"><a href="https://www.shanghairanking.com/universities/maastricht-university" target="_blank" rel="noopener" class="rank-badge"># 101-150 en Ciencias Biológicas</a><a href="https://www.shanghairanking.com/universities/maastricht-university" target="_blank" rel="noopener" class="rank-badge"># 301-400 del mundo</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Maastricht <span style="font-weight:400;">(aproximadamente 125.666 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 €</span></div></div>
+  <div class="desc-box">Este grado inicia con cursos obligatorios en genética, fisiología, estadística y métodos de investigación. En el segundo año, se profundiza en procesos biológicos como el sistema inmunitario, el envejecimiento y técnicas modernas de imagen, permitiendo personalizar el plan de estudios. El tercer año se centra en la especialización, asignaturas optativas o secundarias (en la UM o en otra universidad) y concluye con un proyecto de investigación y la redacción de la tesis final.</div>
+  
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Bachillerato español con Matemáticas, Biología, Química y Física + Título de Bachiller (con Matemáticas, Biología, Química y Física y una nota media superior a 7,0 en el último curso + la Selectividad con calificación de APTO.</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>Como has estudiado y vas a seguir estudiando inglés hasta el último año de tu formación secundaria en España, cumples automáticamente con los requisitos de inglés, y no necesitas entregar un certificado oficial de inglés</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> 1 de mayo</div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>El proceso de selección para Biomedical Sciences en Maastricht University es competitivo porque el programa tiene un número limitado de plazas. Primero, la universidad comprueba que el estudiante cumple los requisitos académicos y, si la solicitud está completa y presentada dentro del plazo, se le invita al proceso de selección. Este proceso incluye un cuestionario online sobre los estudios previos, las notas y la afinidad con Biomedical Sciences y con el sistema de aprendizaje basado en problemas (PBL), seguido de una prueba online que evalúa, entre otras cosas, las aptitudes relacionadas con las competencias del programa. Los resultados de las distintas partes se combinan para establecer un ranking de candidatos, y las plazas se ofrecen según la posición obtenida.</p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p>Media-alta</p></div></details>
+</article>
+
+<article class="uni-card" id="nl-msp-maastricht">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.maastrichtuniversity.nl/education/bachelor/programmes/maastricht-science-programme/your-future" target="_blank" rel="noopener">
+      <h3>Maastricht Science Programme</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-green">Dificultad: Media-baja</span>
+  </div>
+  <div class="uni-line">Maastricht University Liberal Arts &amp; Sciences university college. — Maastricht</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-badges"><a href="https://www.shanghairanking.com/universities/maastricht-university" target="_blank" rel="noopener" class="rank-badge"># 301-400 del mundo y en Ciencias Biológicas</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Maastricht <span style="font-weight:400;">(aproximadamente 125.666 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value"><span class="clr-red">€4,465 *</span></span></div></div>
+  <div class="desc-box">Es un grado innovador que elimina las barreras entre disciplinas científicas y te permite diseñar un currículo personalizado según tus intereses y objetivos. Cuenta con un asesor académico que te guía durante toda la carrera, ayudándote a tomar decisiones clave para tu futuro profesional. La enseñanza se basa en el Aprendizaje Basado en Problemas, fomentando el trabajo en equipo y la aplicación práctica de la teoría, y en el Aprendizaje Basado en Investigación, donde participarás en proyectos reales y desarrollarás tus propias investigaciones. Además, dispondrás de laboratorios modernos en instalaciones de primer nivel para una formación científica práctica y actualizada.</div><div class="desc-box" style="background:#fff; border-left-color:var(--border);"><p><a href="https://www.maastrichtuniversity.nl/education/bachelor/programmes/maastricht-science-programme/your-future" target="_blank" rel="noopener">Después del programa</a></p><p><a href="https://courserepository.maastrichtuniversity.nl/p/program/EN/7503" target="_blank" rel="noopener">Curriculum</a> (asignaturas troncales y optativas)</p></div>
+  
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Bachillerato español de ciencias + EVAU.<br>una nota media superior a 7,0 en el último curso + la Selectividad con calificación de APTO.</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>Como has estudiado y vas a seguir estudiando inglés hasta el último año de tu formación secundaria en España, cumples automáticamente con los requisitos de inglés, y no necesitas entregar un certificado oficial de inglés</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> <span class="clr-red">1 de mayo</span></div><div class="deadline-box"><b>Resolución de admisión:</b> <span class="clr-red">mayo / junio</span></div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>Para este programa, deberás completar un proceso de selección. La selección se basa en tu calidad y adecuación. Para ello, son importantes tu motivación (carta de motivación y entrevista) y tu formación previa (títulos, calificaciones, cursos de ciencias). Dado que se trata de un programa amplio en ciencias, es necesario un interés profundo por estas áreas, lo cual debe reflejarse en los cursos que hayas cursado en tu formación anterior. Se recomienda encarecidamente haber recibido formación en matemáticas que incluya cálculo, especialmente los fundamentos de diferenciación e integración</p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p>Media-baja</p></div></details>
+</article>
+
+<article class="uni-card" id="nl-irio-groningen">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.rug.nl/bachelors/international-relations-and-international-organization/?lang=en#!requirements" target="_blank" rel="noopener">
+      <h3>International Relations and International Organization</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-orange">Dificultad: Media-alta</span>
+  </div>
+  <div class="uni-line">University of Groningen — Groninga</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-badges"><a href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener" class="rank-badge gold">#69 del mundo</a><a href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener" class="rank-badge">101-150 en Political Sciences</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Groninga <span style="font-weight:400;">(aprox. 235.000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695€</span></div></div>
+  <div class="desc-box">Este grado multidisciplinar está centrado exclusivamente en relaciones internacionales y organizaciones, no como especialización, sino como el núcleo del plan de estudios. A lo largo del programa se combinan conocimientos en política, economía, historia y derecho internacional, con formación práctica en métodos de investigación, idiomas y pensamiento crítico. Groninga ofrece un ambiente internacional, con estudiantes y profesorado de todo el mundo. Los alumnos también cursan una lengua extranjera durante dos años (español, alemán, francés, sueco, ruso, chino, italiano, holandés o perfeccionamiento de inglés). El grado prepara al estudiante para una trayectoria profesional global y con alta empleabilidad en organismos públicos, diplomacia, medios de comunicación, cooperación internacional o empresas con proyección internacional.</div>
+  <div class="extra-block"><h5>Plan de estudios</h5><div class="plan-step"><b>Año 1: Fundamentos de la política internacional</b>Introducción a las disciplinas esenciales de las relaciones internacionales (historia, política, economía y derecho). Formación en habilidades académicas y primer nivel de idioma. Asignaturas destacadas: <i>History of International Relations I &amp; II, International Politics, International and European Law, Introduction to Economics, International Organisation I &amp; II, Language Course 1A y 1B, Statistics for IR, Academic Skills.</i></div><div class="plan-step"><b>Año 2: Profundización teórica y metodológica</b>Se abordan procesos de gobernanza, derecho europeo, economía monetaria internacional y teoría de las relaciones internacionales. Se continúa el estudio de idiomas. Asignaturas destacadas: <i>Theory of International Relations, European Law, IPE of Monetary Relations, Policy and Governance, Methodology and Research Practice, Language Course 2A, 2B, 3A y 3B.</i></div><div class="plan-step"><b>Año 3: Especialización, movilidad y tesis</b>Posibilidad de cursar un minor en otra disciplina, realizar un intercambio en el extranjero, y culminar el programa con el módulo central y la tesis de grado. Actividades destacadas: <ul><li><i>Minor (30 ECTS)</i></li><li><i>IPE of Trade</i></li><li><i>International Law</i></li><li><i>Core Module IRIO + Bachelor Thesis (20 ECTS).</i></li></ul></div></div><div class="extra-block"><h5>Áreas clave del programa</h5><ul><li>Historia de las relaciones internacionales.</li><li>Derecho internacional y europeo.</li><li>Economía internacional y relaciones comerciales.</li><li>Organizaciones internacionales.</li><li>Lenguas modernas.</li><li>Teoría y metodología de las relaciones internacionales.</li><li>Gobernanza y política comparada.</li><li>Métodos de investigación y estadística aplicada.</li></ul></div><div class="extra-block"><h5>Salidas profesionales</h5><ul><li>Asesor/a de política internacional en ONGs o gobiernos.</li><li>Diplomático/a o funcionario en organismos internacionales.</li><li>Analista de riesgos y consultoría política.</li><li>Periodista internacional.</li><li>Investigador/a en think tanks o medios.</li><li>Coordinador/a de proyectos en cooperación al desarrollo.</li><li>Estudios de máster en relaciones internacionales, seguridad, derechos humanos.</li></ul></div>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Título de Bachiller + EVAU aprobado</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT: mínimo 90 (mínimo 21 por componente).</li><li>Cambridge: C1 Advanced (CAE) o C2 Proficiency (CPE), con mínimo 180 puntos</li><li>IELTS: mínimo 6.5 global (mínimo 6.0 por componente).</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> <span class="clr-red">15 de enero.</span></div><div class="deadline-box"><b>Resolución de admisión:</b> <span class="clr-red">15 abril</span></div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>Numerus fixus con 300 estudiantes al año. El proceso de selección es un sorteo sin ponderación: todos los candidatos se seleccionan por sorteo, y todos tienen las mismas posibilidades de obtener una plaza. La Oficina de Admisiones revisará todas las solicitudes individuales de los candidatos que hayan superado con éxito los pasos anteriores y cumplan, en principio, los requisitos de admisión a la Universidad de Groningen en función de su formación previa.<br><br>La Oficina de Admisiones clasificará a todos estos candidatos mediante el sistema de sorteo y les asignará una posición única en la clasificación. Esta clasificación se representará con un número: 001 o superior. El 15 de abril, todos los candidatos que hayan participado con éxito en el proceso de selección por sorteo recibirán su clasificación individual.</p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p><span class="clr-red">Media-alta</span> (no hay garantía de plaza y el proceso de selección se base en una lotería)</p></div></details>
+</article>
+
+<article class="uni-card" id="nl-iro-leiden">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/political-science/international-relations-and-organisations" target="_blank" rel="noopener">
+      <h3>International Relations and Organizations</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-red">Dificultad: Alta</span>
+  </div>
+  <div class="uni-line">Leiden University — La Haya</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-badges"><a href="https://www.shanghairanking.com/universities/leiden-university" target="_blank" rel="noopener" class="rank-badge">#101-150 del mundo</a><a href="https://www.shanghairanking.com/universities/leiden-university" target="_blank" rel="noopener" class="rank-badge gold">#33 en Political Sciences</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">La Haya <span style="font-weight:400;">(550.000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 €+ 100€ tasa de matricula</span></div></div>
+  <div class="desc-box">Este grado ofrece una sólida formación en Ciencia Política con un enfoque especializado en relaciones internacionales y organizaciones desde el primer día. Es un programa único y completamente en inglés, que se desarrolla en la ciudad de La Haya, centro internacional de la diplomacia, el derecho y los organismos multilaterales. La metodología combina teoría, práctica, habilidades de investigación, trabajo en grupo y desarrollo profesional desde el primer año. Se imparten asignaturas clave como Historia Global, Política Comparada, Derecho Internacional y Derechos Humanos, junto con métodos cuantitativos y cualitativos. Durante el tercer año, el/la estudiante puede elegir entre prácticas, estudios en el extranjero o cursos optativos, culminando con un seminario y un proyecto de fin de grado (tesis). Leiden University es una de las más prestigiosas de Europa, con más de 400 años de historia. Cuenta con excelentes conexiones con organizaciones internacionales para prácticas, y su enfoque académico y riguroso asegura altas tasas de empleabilidad.</div>
+  <div class="extra-block"><h5>Salidas profesionales</h5><ul><li>Funcionario/a en organizaciones internacionales (ONU, UE, ONG, ICC…).</li><li>Analista político o de relaciones internacionales.</li><li>Consultoría internacional.</li><li>Diplomacia o ministerios de asuntos exteriores.</li><li>Periodismo y comunicación internacional.</li><li>Investigador/a académico o en think tanks.</li><li>Máster en Relaciones Internacionales, Estudios Europeos, Seguridad Global.</li></ul></div>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Título de Bachiller con una calificación promedio de al menos 7.0 y aprobar los exámenes de la EVAU con una calificación de 6.0 en cada uno de los 4-5 exámenes comunes de la Fase General.</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT: mínimo 80 (20 por componente)</li><li>Cambridge: CAE/C1 o CPE/C2 con mínimo 169 por componente</li><li>IELTS: mínimo 6.0 global y por componente</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> <span class="clr-red">15 de enero.</span></div><div class="deadline-box"><b>Resolución de admisión:</b> <span class="clr-red">15 de abril</span></div></div><div class="reqs-block"><h5>Proceso de selección</h5><p><i>Numerus Fixus</i> con 400 plazas disponibles basado en los siguientes criterios de selección (no se garantiza plaza solo por cumplir requisitos):<ul><li>30%: Media de notas.</li><li>70%: Evaluación online:<ul><li>Participa en la evaluación en línea. Esta consta de preguntas de opción múltiple. Recibirás con antelación el material de estudio y las instrucciones detalladas.</li><li>Estudia las instrucciones para la evaluación en línea. Las recibirás por correo electrónico el sobre principios de febrero, alrededor de las 18:00 CET.</li><li>Familiarízate con el material de estudio proporcionado.</li><li>Realiza la evaluación en línea. Asegúrate de tener a tu disposición un ordenador en buen estado con conexión a internet.</li></ul></li></ul></p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p><span class="clr-red">Alta</span> (es un programa muy demandado)</p></div></details>
+</article>
+
+<article class="uni-card" id="nl-is-leiden">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/international-studies" target="_blank" rel="noopener">
+      <h3>International Studies</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-green">Dificultad: Media-baja</span>
+  </div>
+  <div class="uni-line">Leiden University — La Haya</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-badges"><a href="https://www.shanghairanking.com/universities/leiden-university" target="_blank" rel="noopener" class="rank-badge">#101-150 del mundo</a><a href="https://www.shanghairanking.com/universities/leiden-university" target="_blank" rel="noopener" class="rank-badge gold">#33 en Political Sciences</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">La Haya <span style="font-weight:400;">(aprox. 504.000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 € + Tasa de solicitud de 100 €</span></div></div>
+  <div class="desc-box">La globalización está transformando el mundo y sus dinámicas sociales, políticas y económicas. El grado en Estudios Internacionales de la Universidad de Leiden, ubicada en La Haya, te ofrece una formación multidisciplinar que combina economía, política, historia y cultura para comprender estos cambios desde una perspectiva global. Este programa no solo te proporciona una base teórica sólida, sino que también se enfoca en la aplicación práctica del conocimiento, gracias a su innovador enfoque de enseñanza basado en el análisis de casos reales y colaboración con instituciones internacionales. La universidad se encuentra en el centro político y diplomático de los Países Bajos, sede de numerosas organizaciones globales, lo que permite una interacción directa con profesionales del sector. Desde el primer año, te sumergirás en un entorno académico internacional, con clases en grupos reducidos que favorecen la interacción con profesores y expertos en relaciones internacionales. Además, a lo largo de la carrera, tendrás múltiples oportunidades de networking con organismos multilaterales, empresas y ONG internacionales. El tercer año incluye el programa PRINS (Practising International Studies), un curso de consultoría donde los estudiantes aplican sus conocimientos en proyectos para organizaciones como la ONU, el Ministerio de Asuntos Exteriores de los Países Bajos, Unilever y otras instituciones de prestigio. Si buscas un programa que te prepare para trabajar en un contexto globalizado y te brinde experiencia práctica en el ámbito de las relaciones internacionales, el comercio global o la diplomacia, la Universidad de Leiden es una opción ideal.</div>
+  <div class="extra-block"><h5>Áreas de especialización por región</h5><ul><li><b>África</b>: Árabe, bereber, francés, portugués, suajili.</li><li><b>Asia Oriental</b>: Japonés, coreano, chino mandarín.</li><li><b>Europa</b>: Alemán, francés, portugués, español, neerlandés.</li><li><b>América Latina</b>: Portugués, español.</li><li><b>Oriente Medio</b>: Árabe, hebreo moderno*, persa*, turco* (según disponibilidad).</li><li><b>Norteamérica</b>: Francés, español.</li><li><b>Rusia y Eurasia</b>: Ruso.</li><li><b>Asia del Sur y Sudeste Asiático</b>: Hindi, indonesio.</li></ul></div><div class="extra-block"><h5>Salidas profesionales</h5><ul><li>Diplomacia y relaciones internacionales (Ministerios de Asuntos Exteriores, embajadas, consulados).</li><li>Organismos multilaterales (ONU, UE, OCDE, UNESCO).</li><li>Empresas multinacionales y comercio exterior.</li><li>Organizaciones no gubernamentales (Amnistía Internacional, Greenpeace, Médicos Sin Fronteras).</li><li>Medios de comunicación y análisis geopolítico.</li><li>Investigación académica y consultoría internacional.</li></ul></div>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Título de Bachiller con una calificación promedio de al menos 7.0 y aprobar los exámenes de la EVAU con una calificación de 6.0 en cada uno de los 4-5 exámenes comunes de la Fase General.</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT nota mínima: 80 (con mínimo de 20 en cada sección).</li><li>Cambridge CAE (C1) / CPE (C2) (nota mínima de 169 en cada sección).</li><li>IELTS nota mínima: 6.0 (con un mínimo de 6.0 en cada componente).</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> <span class="clr-red">15 de junio.</span></div><div class="deadline-box"><b>Resolución de admisión:</b> <span class="clr-red">junio</span></div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>Evaluación de los requisitos académicos y lingüísticos por parte de la universidad.</p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p><span class="clr-red">Media-baja</span></p></div></details>
+</article>
+<div class="subsection-banner">Applied Science universities</div>
+<article class="uni-card" id="nl-ls-han">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.hanuniversity.com/en/programs/bachelor/life-sciences/fulltime/program/" target="_blank" rel="noopener">
+      <h3>Life Sciences</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-green">Dificultad: Baja</span>
+  </div>
+  <div class="uni-line">HAN University of Applied Sciences — Nijmegen</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Nijmegen <span style="font-weight:400;">(aprox. 180.000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 créditos)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 €</span></div></div>
+  <div class="desc-box">Es un programa práctico e internacional de cuatro años, centrado en biología molecular, microbiología, bioquímica y biotecnología. Ofrece una sólida base en ciencias durante los primeros años, seguida de especialización en áreas como investigación biomédica o biología vegetal. Incluye prácticas profesionales, proyectos reales en laboratorios punteros y colaboraciones con instituciones internacionales. Con enseñanza personalizada, modernas instalaciones y un enfoque orientado al empleo o a estudios de posgrado, prepara a los estudiantes para carreras científicas a nivel global.</div>
+  
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Título de bachillerato con asignaturas obligatorias de Matemáticas y Química</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT nota mínima: 80</li><li>Cambridge: FCE (B2) / CAE (C1) / CPE (C2) con calificación mínima de 169.</li><li>IELTS Academic nota mínima: 6.0 (todos los componentes con mínimo 5.0)</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> <span class="clr-red">15 de agosto.</span></div><div class="deadline-box"><b>Resolución de admisión:</b> 4 semanas aprox. después de mandar la matrícula y subir los documentos</div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>Evaluación de los requisitos académicos y lingüísticos por parte de la entidad.</p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p><span class="clr-green">Baja</span></p></div></details>
+</article>
+
+<article class="uni-card" id="nl-es-nhlstenden">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.nhlstenden.com/en/courses/european-studies" target="_blank" rel="noopener">
+      <h3>European Studies</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-green">Dificultad: Baja</span>
+  </div>
+  <div class="uni-line">NHL Stenden University of Applied Sciences — Leeuwarden</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Leeuwarden <span style="font-weight:400;">(aprox. 122.293 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 créditos ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 €</span></div></div>
+  <div class="desc-box">El grado en European Studies en NHL Stenden ofrece una formación interdisciplinaria en política, derecho, economía y comunicación dentro del contexto europeo e internacional. Su enfoque práctico permite a los estudiantes trabajar en proyectos reales con instituciones gubernamentales, ONGs y empresas del sector público y privado. El programa se basa en el método de Design-Based Education (DBE), que fomenta la resolución de problemas reales a través del trabajo en equipo y el aprendizaje aplicado. Los estudiantes desarrollan competencias clave en liderazgo, negociación y comunicación intercultural, esenciales para el mundo globalizado.<p>Uno de los aspectos diferenciadores de este programa es su amplia experiencia internacional:</p><ul><li>Movilidad académica: estancias en universidades socias en Europa y otros continentes.</li><li>Prácticas internacionales: en instituciones europeas y empresas con enfoque global.</li><li>Viajes de estudio: incluyendo visitas a Bruselas para conocer las instituciones de la UE.</li><li>Enseñanza en grupos reducidos con profesores internacionales especializados.</li><li>Los graduados de European Studies tienen una alta empleabilidad en el ámbito gubernamental, organizaciones internacionales y empresas privadas con operaciones en Europa.</li></ul></div>
+  <div class="extra-block"><h5>Salidas profesionales</h5><ul><li>Instituciones de la UE (Comisión Europea, Parlamento Europeo, etc.).</li><li>Organizaciones internacionales (ONU, OTAN, ONG, think tanks).</li><li>Ministerios y gobiernos nacionales.</li><li>Consultoría en políticas públicas y relaciones internacionales.</li><li>Lobbying y asuntos públicos.</li><li>Gestión de proyectos europeos.</li><li>Empresas multinacionales con operaciones en Europa.</li><li>Medios de comunicación y periodismo internacional.</li></ul></div>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Título de Bachiller superado</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT: mínimo 80.</li><li>Cambridge: FCE (B2) / CAE (C1) / CPE (C2) con calificación mínima de 169.</li><li>IELTS: mínimo 6.0.</li><li>TOEIC: 865 (Listening & Reading) y 335 (Speaking & Writing).</li><li>LanguageCert Academic: mínimo 65 (No se acepta la versión online).</li><li>Pearson PTE Academic: mínimo 61 (No se acepta la versión online).</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> <span class="clr-red">15 de agosto.</span></div><div class="deadline-box"><b>Resolución de admisión:</b> 4 semanas aprox. después de mandar la matrícula y subir los documentos</div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>Evaluación de los requisitos académicos y lingüísticos por parte de la entidad.</p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p><span class="clr-green">Baja</span></p></div></details>
+</article>
+
+<article class="uni-card" id="nl-es-thuas">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.thuas.com/programmes/bachelors/european-studies-4-years" target="_blank" rel="noopener">
+      <h3>European Studies</h3><span class="link-icon">🖱️</span>
+    </a>
+    <span class="diff-badge diff-green">Dificultad: Baja</span>
+  </div>
+  <div class="uni-line">The Hague University of Applied Sciences (THUAS) — La Haya</div>
+  <div class="rank-mini-title">Ranking de la universidad (Holanda):</div><div class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">La Haya <span style="font-weight:400;">(aprox. 550.000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">4 años (240 créditos) o 3 años (180 créditos, vía acelerada – fast track). Para cursar el programa de 3 años, se debe indicar explícitamente en la solicitud de admisión en el momento de la inscripción.</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.695 €</span></div></div>
+  <div class="desc-box">Descripción del Programa El grado en European Studies en The Hague University of Applied Sciences está diseñado para formar profesionales capaces de resolver desafíos internacionales dentro del contexto europeo. Con un enfoque interdisciplinario, este programa combina aspectos de política, derecho, negocios, cultura y comunicación, proporcionando una formación integral para la toma de decisiones en entornos internacionales. El aprendizaje se basa en un enfoque práctico y orientado a la empleabilidad, con metodologías de enseñanza activas como estudios de caso, proyectos en equipo y simulaciones. Además, los estudiantes tienen acceso a oportunidades de prácticas profesionales en empresas e instituciones europeas, así como la posibilidad de realizar intercambios académicos en universidades asociadas. El programa se distingue por su enfoque multilingüe: los estudiantes deben estudiar al menos un idioma adicional (francés, alemán, español o neerlandés) para ampliar sus oportunidades en el mercado laboral. Asimismo, cuenta con acreditaciones de calidad y está alineado con las necesidades del sector público y privado en Europa.</div>
+  <div class="extra-block"><h5>Áreas clave del programa</h5><ul><li>Política y gobernanza en la Unión Europea.</li><li>Negocios y economía en el contexto europeo.</li><li>Derecho internacional y regulaciones de la UE.</li><li>Comunicación y diplomacia intercultural.</li><li>Idiomas extranjeros (francés, alemán, español o neerlandés).</li><li>Prácticas y experiencias en el extranjero.</li></ul></div><div class="extra-block"><h5>Salidas profesionales</h5><ul><li>Consultor en asuntos europeos y relaciones internacionales.</li><li>Analista de políticas públicas.</li><li>Gestor de proyectos internacionales.</li><li>Especialista en sostenibilidad y responsabilidad social.</li><li>Asesor en comercio y regulación europea.</li><li>Consultor en comunicación y diplomacia.</li><li>Especialista en marketing y relaciones públicas.</li><li>Oficial en organizaciones no gubernamentales (ONGs).</li><li>Coordinador de eventos y congresos europeos.</li><li>Emprendedor en negocios internacionales.</li></ul></div>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Programa de 3 años: Título de Bachiller + EVAU superado<br>Programa de 4 años: Título de Bachiller</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT nota mínima: 80</li><li>Cambridge: FCE (B2) / CAE (C1) / CPE (C2) con calificación mínima de 169.</li><li>IELTS nota mínima: 6.</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> <span class="clr-red">1 de mayo.</span></div><div class="deadline-box"><b>Resolución de admisión:</b> 4 semanas aprox. después de mandar la matrícula y subir los documentos</div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>Evaluación de los requisitos académicos y lingüísticos por parte de la entidad.</p></div><div class="reqs-block"><h5>Dificultad de admisión</h5><p><span class="clr-green">Baja</span></p></div></details>
+</article>
+
+  
+    <div class="map-section" id="map-nl">
+      <h3>Mapa de universidades — Holanda</h3>
+      <div id="leaflet-nl" class="leaflet-map"></div>
+    </div>
+</section>
+<section id="tab-be" class="tab-panel">
+  <div class="country-head"><span class="flag flag-be flag-lg"><span class="flag-inner"><span class="stripe s1"></span><span class="stripe s2"></span><span class="stripe s3"></span></span></span><h2>Bélgica</h2></div>
+  <div class="country-meta"><div class="pill">🎓 Tasas académicas: <b>1.118 €/año</b></div></div>
+  <div class="country-intro-text"><p>Los estudiantes europeos tenemos los <u>estudios</u> parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <span class="clr-green">1.118 €/año.</span></p><p>El precio medio del <u>alojamiento</u> en Bélgica es de unos 550€.</p></div>
+  <div class="subsection-banner">Research universities</div>
+<article class="uni-card" id="be-es-kuleuven">
+  <div class="card-head">
+    <a class="card-title-link" href="https://onderwijsaanbod.kuleuven.be/opleidingen/e/SC_58415826/diploma_omschrijving" target="_blank" rel="noopener">
+      <h3>European Studies</h3><span class="link-icon">🖱️</span>
+    </a>
+    
+  </div>
+  <div class="uni-line">KU Leuven — Lovaina</div>
+  <div class="rank-mini-title">Ranking de la universidad (Bélgica):</div><div class="rank-badges"><a href="https://www.shanghairanking.com/universities/ku-leuven" target="_blank" rel="noopener" class="rank-badge gold">#76 del mundo</a><a href="https://www.shanghairanking.com/universities/ku-leuven" target="_blank" rel="noopener" class="rank-badge">101-150 en Political Sciences</a></div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Lovaina <span style="font-weight:400;">(100.000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('be','map-be')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">2.225 € + Tasa de solicitud de 90 €</span></div></div>
+  <div class="desc-box">El Bachelor of European Studies es un programa único, organizado en colaboración con nueve universidades líderes en Europa dentro de la alianza Una Europa. El programa está diseñado para proporcionar una formación interdisciplinaria sobre las sociedades, valores e instituciones europeas. A través de este enfoque, los estudiantes adquieren un conocimiento profundo de la Unión Europea y su papel en el mundo globalizado. Este programa es verdaderamente internacional: los estudiantes estudian en dos o tres destinos diferentes en Europa, sumergiéndose en diversas culturas europeas. Además, tienen la oportunidad de estudiar en varios idiomas, desarrollando habilidades transversales muy valoradas en el mercado laboral internacional.</div>
+  <div class="extra-block"><h5>Áreas clave del programa</h5><ul><li>Multidisciplinario: Después de un curso introductorio conjunto, los estudiantes eligen una especialización principal y una menor de entre diversas disciplinas relacionadas con la política, economía, derecho, historia, filosofía, y relaciones internacionales.</li><li>Multilingüe: El programa se imparte en inglés y los estudiantes deben aprender un segundo idioma europeo, lo que les otorga una ventaja significativa en el mercado laboral europeo.</li><li>Personalizado: Los estudiantes pueden adaptar su programa a sus intereses y aspiraciones, eligiendo entre diversas áreas de especialización y opciones de movilidad.</li></ul></div><div class="extra-block"><h5>Salidas profesionales</h5><ul><li>Organizaciones internacionales (ONU, UE, etc.).</li><li>Gobiernos y administraciones públicas.</li><li>Consultoría política y económica.</li><li>ONGs y grupos de defensa de los derechos humanos.</li><li>Empresas con operaciones internacionales.</li><li>Investigación académica o en think tanks.</li></ul></div>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Título de Bachiller y EVAU superado</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>TOEFL iBT: Mínimo de 90 puntos (sin subpuntajes inferiores a 20).</li><li>Cambridge English (CAE/CPE): Mínimo de 176 puntos (con ningún subpuntaje inferior a 169).</li><li>IELTS Académico: Mínimo de 6.5 (con ningún subpuntaje inferior a 5.5).</li><li>PTE Academic: Mínimo de 59 (con ningún subpuntaje inferior a 53).</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> <span class="clr-red">1 de abril.</span></div><div class="deadline-box"><b>Resolución de admisión:</b> <span class="clr-red">junio</span></div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>Además de la documentación básica que todos los candidatos deben subir:<ul><li>Un trabajo académico de lectura y redacción (500-750 palabras);</li><li>Un vídeo de presentación en el que el candidato explique brevemente su motivación para estudiar en la BAES y su trabajo escrito (máximo 120 segundos);</li><li>Una copia del formulario de inicio de estudios universitarios cumplimentado;</li><li>Una copia del formulario de movilidad cumplimentado.</li></ul></p></div></details>
+</article>
+
+  
+    <div class="map-section" id="map-be">
+      <h3>Mapa de universidades — Bélgica</h3>
+      <div id="leaflet-be" class="leaflet-map"></div>
+    </div>
+</section>
+<section id="tab-dk" class="tab-panel">
+  <div class="country-head"><span class="flag flag-dk flag-lg"><span class="flag-inner"><span class="cross-h"></span><span class="cross-v"></span></span></span><h2>Dinamarca</h2></div>
+  <div class="country-meta"><div class="pill">🎓 Tasas académicas: <b>0 €/año</b></div></div>
+  <div class="country-intro-text"><p>Los estudiantes europeos tenemos los <u>estudios</u> 100 % subvencionados en Dinamarca, siendo el coste anual que tenemos que pagar de <span class="clr-green">0 €/año</span>.</p><p>En Dinamarca el coste medio del <u>alojamiento</u> es de 600€. El resultado de las admisiones no se da a conocer hasta el día 28 de julio.</p></div>
+  <div class="subsection-banner">Research universities</div>
+<article class="uni-card" id="dk-ns-roskilde">
+  <div class="card-head">
+    <a class="card-title-link" href="https://ruc.dk/en/bachelor/international-bachelor-natural-sciences-int" target="_blank" rel="noopener">
+      <h3>Natural Sciences</h3><span class="link-icon">🖱️</span>
+    </a>
+    
+  </div>
+  <div class="uni-line">Roskilde University — Esbjerg</div>
+  <div class="rank-mini-title">Ranking de la universidad (Dinamarca):</div><div class="rank-note">A pesar de no tener una valoración concreta en el ranking de Shanghái en disciplinas de ingeniería, Roskilde University (RUC) destaca por su innovador modelo de aprendizaje basado en proyectos (PBL), su enfoque interdisciplinario en ciencias naturales y su fuerte vinculación con la industria, lo que garantiza una formación altamente práctica y alineada con las demandas del mercado laboral global.</div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Esbjerg <span style="font-weight:400;">(52.000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">0 €</span></div></div>
+  <div class="desc-box">Este grado ofrece una formación interdisciplinar en ciencias naturales, combinando asignaturas como biología, química, física, matemáticas, biotecnología e informática para abordar retos científicos reales. El programa se basa en el aprendizaje por proyectos (PBL), con un 50 % del tiempo dedicado a investigación práctica en laboratorios avanzados. A partir del segundo año, los estudiantes se especializan en dos áreas, como bioprocesos, biología molecular, química o ciencia de datos. El grado también ofrece oportunidades de intercambio internacional. Las salidas profesionales incluyen investigación, industria farmacéutica, medio ambiente, análisis de datos y estudios de posgrado.</div><div class="desc-box" style="background:#fff; border-left-color:var(--border);"><p class="subjects-title">Subjects and possible combinations</p><p class="subjects-sub">The programme begins with a one year basic section of interdisciplinary studies. The last two years you will specialise in two bachelor subjects.</p><div class="subjects-grid"><div class="subjects-col"><div class="subject-item">Bioprocess Science (int) <span>+</span></div><div class="subject-item">Chemistry (int) <span>+</span></div><div class="subject-item">Computer Science (int) <span>+</span></div><div class="subject-item">Environmental Biology (int) <span>+</span></div></div><div class="subjects-col"><div class="subject-item">Mathematics (int) <span>+</span></div><div class="subject-item">Molecular Biology (int) <span>+</span></div><div class="subject-item">Physics (int) <span>+</span></div></div></div></div>
+  
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Es necesario tener el título de Bachiller y haber cursado un mínimo de horas en determinadas asignaturas durante los tres últimos años académicos (4º de ESO, 1º y 2º de Bachillerato). Los requisitos específicos son los siguientes:<ul><li>Inglés: mínimo 210 horas (equivalente al nivel B del sistema danés).</li><li>Matemáticas: mínimo 375 horas (equivalente al nivel A danés).</li><li>Además, se debe cumplir con una de las siguientes combinaciones de asignaturas científicas:<br><b>Opción 1</b>:<ul><li>Física: mínimo 190 horas (nivel B danés)</li><li>Química: mínimo 190 horas (nivel B danés)</li></ul><b>Opción 2</b>:<ul><li>Química: mínimo 190 horas (nivel B danés)</li><li>Biología: mínimo 325 horas (nivel A danés)</li><li>Física: mínimo 75 horas (nivel C danés)</li></ul></li></ul></p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>mínimo 210 horas de inglés en los últimos 3 años de estudio (equivalente al nivel B del sistema danés) con una nota de un 6 sobre 10.</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> <span class="clr-red">15 marzo</span></div><div class="deadline-box"><b>Resolución de admisión:</b> <span class="clr-red">28 de julio</span></div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>En 2026, se ofrece admisión garantizada al Grado Internacional en Ciencias Naturales a los solicitantes que cumplan los requisitos de admisión y tengan un promedio mínimo de calificaciones de 2,0 en la escala de calificaciones danesa (aprobado en España)</p></div></details>
+</article>
+
+  
+    <div class="map-section" id="map-dk">
+      <h3>Mapa de universidades — Dinamarca</h3>
+      <div id="leaflet-dk" class="leaflet-map"></div>
+    </div>
+</section>
+<section id="tab-at" class="tab-panel">
+  <div class="country-head"><span class="flag flag-at flag-lg"><span class="flag-inner"><span class="stripe s1"></span><span class="stripe s2"></span><span class="stripe s3"></span></span></span><h2>Austria</h2></div>
+  <div class="country-meta"></div>
+  <div class="country-intro-text"><p>Austria, ubicada en el corazón de Europa, es conocida por su alta calidad de vida, su sistema educativo de prestigio y sus impresionantes paisajes alpinos. La educación superior pública suele ser gratuita, aunque los estudiantes deben abonar una cuota semestral (que varía según la institución y que en algunos casos incluye el transporte público).</p><p>El precio medio del <u>alojamiento</u> en residencias universitarias se sitúa alrededor de los 600 € mensuales.</p></div>
+  <div class="subsection-banner">Applied Science universities</div>
+<article class="uni-card" id="at-mpt-krems">
+  <div class="card-head">
+    <a class="card-title-link" href="https://www.imc.ac.at/en/study/bachelor/science-technology/medical-and-pharmaceutical-biotechnology/#c26407" target="_blank" rel="noopener">
+      <h3>Medical and Pharmaceutical Technology</h3><span class="link-icon">🖱️</span>
+    </a>
+    
+  </div>
+  <div class="uni-line">IMC Krems University Applied Sciences — Krems</div>
+  <div class="rank-mini-title">Ranking de la universidad (Austria):</div><div class="rank-note">Las universidades de <i>Applied Science</i> no entran en los rankings por su metodología de estudio.</div>
+  <div class="meta-grid"><div class="meta-cell"><span class="meta-label">Ciudad</span>
+        <span class="meta-value">Krems <span style="font-weight:400;">(24.000 habitantes)</span></span>
+        <div><button class="map-btn" onclick="scrollToMap('at','map-at')">🗺️ Ver mapa</button></div>
+        </div><div class="meta-cell"><span class="meta-label">Duración</span><span class="meta-value">3 años (180 ECTS)</span></div><div class="meta-cell"><span class="meta-label">Coste</span><span class="meta-value">363,36 € por semestre para ciudadanos de la UE</span></div></div>
+  <div class="desc-box">Es un grado que combina ciencias naturales y formación específica en biotecnología médica y farmacéutica. Incluye clases prácticas en laboratorios modernos, prácticas profesionales obligatorias en el quinto semestre (muchos lo hacen en el extranjero) y especializaciones optativas en el último semestre. El programa prepara para trabajar en la industria farmacéutica, biotecnológica o en centros de investigación, en áreas como desarrollo de procesos, control de calidad, gestión de proyectos o marketing. Además, ofrece becas, fomenta la movilidad internacional y participa en iniciativas como el proyecto CAST Mozambique (es un proyecto de IMC Krems y la Universidade Eduardo Mondlane para fomentar el turismo rural sostenible y la educación superior en Mozambique).</div>
+  
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="reqs-block"><h5>Requisitos académicos</h5><p>Título de bachillerato</p></div><div class="reqs-block"><h5>Requisitos de inglés</h5><ul><li>La universidad evaluará tu nivel de inglés durante la entrevista, así que no necesitas presentar un certificado oficial de inglés</li></ul></div><div class="reqs-block"><div class="deadline-box"><b>Fecha límite para presentar la matrícula:</b> 15 de abril</div></div><div class="reqs-block"><h5>Proceso de selección</h5><p>El proceso de admisión consiste en una solicitud online en la que deberás redactar una carta de motivación y un breve ensayo sobre un tema relacionado con el grado. Estos documentos se utilizarán como base para una entrevista personal (presencial o por videollamada), normalmente con el director del grado. Durante la entrevista se valorarán tu motivación, tu capacidad de expresión y argumentación, y la relación del tema elegido con el contenido del grado.</p></div></details>
+</article>
+
+  
+    <div class="map-section" id="map-at">
+      <h3>Mapa de universidades — Austria</h3>
+      <div id="leaflet-at" class="leaflet-map"></div>
+    </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <svg class="brand-logo" viewBox="0 0 1800 433" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="educoway">
+  <defs>
+    <linearGradient id="logoWGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2fac71"/>
+      <stop offset="35%" stop-color="#2bab8f"/>
+      <stop offset="50%" stop-color="#2baab5"/>
+      <stop offset="65%" stop-color="#2aaac1"/>
+      <stop offset="100%" stop-color="#29aadc"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(0.000000,433.000000) scale(0.100000,-0.100000)">
+    <path class="logo-letters" fill="#737373" d="M3790 3855 l0 -475 -82 83 c-94 94 -191 151 -324 189 -68 20 -101 23 -244 23 -127 0 -181 -4 -235 -18 -97 -26 -238 -96 -311 -156 -114 -93 -214 -252 -256 -409 -30 -111 -37 -358 -13 -473 68 -340 297 -572 623 -635 108 -21 289 -18 388 6 153 36 289 114 388 220 30 33 57 60 60 60 4 0 6 -63 6 -140 l0 -140 100 0 100 0 0 1170 0 1170 -100 0 -100 0 0 -475z m-429 -412 c263 -90 419 -321 419 -618 0 -193 -60 -345 -186 -471 -55 -56 -90 -81 -155 -112 -113 -54 -173 -67 -304 -67 -183 1 -327 58 -446 176 -171 169 -225 471 -134 740 30 87 55 129 120 198 125 134 285 194 495 187 84 -3 122 -9 191 -33z M9670 3679 c-282 -33 -514 -194 -640 -447 -68 -136 -84 -211 -84 -407 -1 -202 11 -260 84 -410 80 -164 180 -267 342 -351 141 -72 213 -87 413 -88 156 0 177 2 258 27 299 92 492 299 564 604 27 115 24 328 -6 448 -71 287 -278 509 -553 594 -60 18 -242 43 -287 40 -9 -1 -50 -5 -91 -10z m284 -215 c167 -43 320 -169 394 -324 97 -204 97 -440 0 -638 -42 -86 -159 -205 -245 -250 -133 -70 -345 -94 -488 -57 -370 95 -561 480 -430 866 107 317 435 489 769 403z M655 3663 c-306 -65 -549 -303 -631 -618 -23 -87 -26 -338 -5 -430 53 -241 207 -445 413 -549 120 -61 215 -85 359 -93 250 -13 476 56 655 198 66 52 128 122 122 138 -1 5 -34 34 -73 65 l-69 55 -47 -49 c-197 -205 -594 -265 -852 -128 -86 46 -194 155 -239 243 -34 65 -68 171 -68 209 0 15 66 16 726 16 l726 0 -5 173 c-4 137 -9 187 -26 247 -65 222 -218 391 -433 477 -147 60 -394 80 -553 46z m385 -199 c163 -37 297 -138 364 -275 41 -85 66 -174 66 -236 l0 -43 -625 0 -625 0 0 21 c0 41 32 145 66 217 40 84 128 183 211 238 64 42 166 81 251 94 71 11 206 4 292 -16z M14940 3670 c-365 -46 -642 -297 -721 -655 -22 -96 -16 -323 10 -420 79 -297 299 -522 586 -601 93 -26 315 -30 412 -9 149 33 301 120 401 230 l52 57 0 -141 0 -141 105 0 105 0 0 835 0 835 -105 0 -105 0 0 -139 0 -139 -80 79 c-131 129 -302 200 -510 212 -47 3 -114 2 -150 -3z m286 -220 c180 -46 315 -153 393 -311 57 -116 74 -192 74 -319 0 -194 -57 -337 -187 -465 -132 -131 -256 -179 -461 -179 -102 1 -132 5 -201 27 -163 54 -285 160 -359 311 -82 167 -96 348 -41 522 67 211 232 367 442 418 90 22 245 20 340 -4z M7552 3659 c-30 -5 -88 -21 -130 -35 -262 -87 -448 -289 -518 -562 -47 -182 -33 -415 36 -581 75 -182 206 -323 380 -411 141 -71 209 -85 410 -85 171 0 177 1 270 33 109 38 222 103 301 172 l54 49 -71 71 -71 72 -64 -52 c-129 -103 -263 -151 -424 -151 -305 0 -545 174 -621 451 -28 102 -26 303 5 400 70 226 216 363 451 421 71 18 103 21 200 16 168 -8 276 -48 402 -151 l55 -45 69 70 69 70 -40 35 c-115 101 -268 180 -407 208 -84 17 -267 20 -356 5z M4730 3125 c0 -611 2 -630 75 -780 120 -246 349 -375 668 -375 203 0 363 59 489 180 l68 65 0 -112 0 -113 105 0 105 0 0 835 0 835 -104 0 -105 0 -3 -517 -3 -518 -28 -78 c-69 -196 -208 -321 -403 -362 -88 -19 -153 -19 -250 0 -201 38 -334 158 -390 350 -15 53 -18 124 -21 593 l-5 532 -99 0 -99 0 0 -535z M16425 3599 c4 -12 151 -375 326 -807 176 -432 319 -791 319 -797 0 -6 -67 -167 -150 -358 -82 -191 -150 -352 -150 -358 0 -6 41 -9 111 -7 l110 3 480 1115 c263 613 490 1141 504 1173 l25 58 -116 -3 -116 -3 -190 -445 c-105 -245 -234 -555 -288 -688 l-97 -244 -90 224 c-50 122 -173 433 -274 690 l-184 468 -113 0 c-111 0 -113 0 -107 -21z M4124 678 c-15 -24 -31 -49 -37 -55 -7 -10 -2 -13 20 -13 24 0 36 8 59 42 48 71 48 68 15 68 -25 0 -35 -8 -57 -42z M12990 455 l0 -265 25 0 25 0 0 265 0 265 -25 0 -25 0 0 -265z M992 698 c-28 -28 -1 -75 38 -63 14 4 20 15 20 35 0 36 -33 53 -58 28z M3712 701 c-18 -11 -12 -51 10 -64 21 -14 48 7 48 38 0 30 -31 44 -58 26z M6382 701 c-18 -11 -12 -51 10 -64 21 -14 48 7 48 38 0 30 -31 44 -58 26z M8462 698 c-32 -32 8 -80 48 -58 34 18 19 70 -20 70 -9 0 -21 -5 -28 -12z M10032 698 c-28 -28 -1 -75 38 -63 14 4 20 15 20 35 0 36 -33 53 -58 28z M16322 698 c-28 -28 -1 -75 36 -63 26 8 34 41 15 60 -18 18 -35 19 -51 3z M2347 673 c-4 -3 -7 -28 -7 -55 l0 -48 -40 0 c-36 0 -40 -2 -40 -25 0 -22 4 -25 40 -25 l40 0 0 -139 c0 -158 10 -185 76 -197 41 -8 114 11 114 29 -1 28 -16 38 -44 27 -82 -31 -96 -9 -96 151 l0 129 60 0 c57 0 60 1 60 25 0 24 -3 25 -60 25 l-60 0 0 55 c0 47 -3 55 -18 55 -10 0 -22 -3 -25 -7z M8763 673 c-8 -3 -13 -24 -13 -54 l0 -49 -35 0 c-31 0 -35 -3 -35 -25 0 -22 4 -25 34 -25 l34 0 4 -135 c3 -117 6 -138 24 -162 28 -38 72 -49 129 -33 49 14 51 17 33 43 -11 15 -18 16 -45 5 -23 -9 -38 -9 -56 -1 -30 14 -37 50 -37 186 l0 97 65 0 c63 0 65 1 65 25 0 24 -2 25 -65 25 l-65 0 0 55 c0 55 -5 61 -37 48z M14533 673 c-8 -3 -13 -24 -13 -54 l0 -49 -35 0 c-31 0 -35 -3 -35 -25 0 -22 4 -25 34 -25 l34 0 4 -134 c3 -118 6 -138 24 -163 28 -38 72 -49 129 -33 49 14 51 17 33 43 -11 15 -18 16 -45 5 -23 -9 -38 -9 -56 -1 -30 14 -37 50 -37 186 l0 97 65 0 c63 0 65 1 65 25 0 24 -2 25 -65 25 l-65 0 0 55 c0 55 -5 61 -37 48z M136 546 c-58 -35 -86 -88 -86 -164 0 -122 69 -197 184 -197 40 0 74 7 99 19 101 50 131 215 55 302 -44 50 -77 64 -150 64 -48 0 -72 -6 -102 -24z m179 -45 c58 -32 83 -128 50 -191 -46 -89 -159 -104 -230 -30 -22 23 -29 42 -33 83 -11 130 100 202 213 138z M610 380 l0 -190 25 0 25 0 0 115 c0 175 30 224 129 211 41 -5 50 -4 55 11 17 43 -92 60 -152 23 -40 -25 -42 -25 -42 0 0 13 -7 20 -20 20 -19 0 -20 -7 -20 -190z M990 380 l0 -190 25 0 25 0 0 190 0 190 -25 0 -25 0 0 -190z M1330 563 c-120 -45 -154 -225 -62 -322 72 -76 198 -80 275 -11 29 26 31 30 16 45 -15 15 -19 14 -54 -9 -50 -34 -99 -42 -149 -25 -42 15 -86 66 -86 100 0 18 11 19 160 19 l160 0 0 49 c0 56 -27 103 -79 138 -27 19 -47 23 -100 22 -36 0 -73 -3 -81 -6z m136 -52 c44 -20 74 -54 74 -83 0 -16 -12 -18 -135 -18 -91 0 -135 4 -135 11 0 27 38 73 75 90 50 23 70 23 121 0z M1760 380 l0 -190 25 0 25 0 0 110 c0 123 11 164 55 198 40 32 114 30 152 -2 28 -24 28 -25 31 -165 l4 -141 24 0 24 0 0 136 c0 154 -10 190 -65 224 -44 27 -138 28 -183 0 -40 -25 -42 -25 -42 0 0 15 -7 20 -25 20 l-25 0 0 -190z M2744 551 c-18 -10 -45 -36 -60 -57 -26 -34 -29 -45 -29 -114 0 -66 4 -82 27 -117 14 -22 43 -48 65 -58 55 -27 138 -26 186 3 46 27 47 27 47 2 0 -15 7 -20 25 -20 l25 0 0 190 0 190 -25 0 c-20 0 -25 -5 -25 -25 l0 -26 -31 23 c-43 32 -160 38 -205 9z m174 -48 c44 -27 63 -72 59 -136 -3 -46 -9 -63 -32 -87 -104 -109 -269 -16 -241 135 18 93 132 140 214 88z M3295 546 c-56 -34 -87 -92 -87 -165 0 -102 49 -167 146 -193 54 -14 119 -1 168 34 l30 21 -20 20 -20 20 -27 -21 c-60 -47 -141 -37 -196 25 -29 34 -31 40 -27 101 4 59 7 67 41 98 49 45 113 50 176 13 30 -18 36 -19 49 -5 13 13 13 18 2 31 -43 51 -166 62 -235 21z M3710 380 l0 -190 25 0 25 0 0 190 0 190 -25 0 -25 0 0 -190z M4031 553 c-43 -22 -88 -83 -96 -133 -25 -150 100 -269 243 -231 152 41 192 251 67 347 -32 24 -49 29 -109 32 -52 2 -80 -2 -105 -15z m172 -51 c29 -18 67 -84 67 -120 0 -39 -32 -102 -63 -124 -43 -31 -121 -31 -164 0 -68 48 -78 153 -21 218 48 54 115 64 181 26z M4490 380 l0 -190 25 0 25 0 0 110 c0 123 11 164 55 198 20 16 42 22 77 22 41 0 54 -5 79 -29 l29 -29 0 -136 0 -136 25 0 25 0 0 143 c0 156 -7 179 -66 218 -41 26 -138 26 -182 -1 -40 -25 -42 -25 -42 0 0 15 -7 20 -25 20 l-25 0 0 -190z M5312 426 c3 -157 9 -173 71 -220 38 -28 132 -27 181 3 36 23 36 23 36 2 0 -16 6 -21 25 -21 l25 0 0 190 0 190 -24 0 c-24 0 -24 0 -28 -129 -4 -150 -15 -176 -87 -200 -36 -11 -48 -11 -79 1 -59 22 -72 59 -72 206 l0 122 -26 0 -26 0 4 -144z M5850 380 l0 -190 25 0 25 0 0 120 c0 135 10 169 60 195 34 18 89 20 123 4 44 -20 51 -46 55 -186 l4 -133 25 0 25 0 -4 143 c-3 130 -5 145 -26 175 -13 18 -36 39 -52 47 -42 22 -128 19 -173 -5 -20 -11 -39 -20 -42 -20 -3 0 -5 9 -5 20 0 13 -7 20 -20 20 -19 0 -20 -7 -20 -190z M6380 380 l0 -190 25 0 25 0 0 190 0 190 -25 0 -25 0 0 -190z M6592 561 c2 -5 37 -90 78 -190 70 -168 77 -181 101 -181 24 0 31 12 103 183 42 100 76 186 76 190 0 5 -12 7 -27 5 -24 -3 -32 -16 -87 -150 -33 -80 -63 -145 -66 -143 -3 2 -32 69 -64 149 -58 141 -61 146 -89 146 -16 0 -27 -4 -25 -9z M7153 541 c-49 -35 -71 -73 -79 -133 -25 -185 185 -298 328 -177 30 25 32 29 17 44 -15 15 -19 15 -54 -9 -50 -34 -99 -42 -149 -25 -42 15 -86 66 -86 100 0 18 11 19 161 19 l161 0 -4 55 c-5 59 -24 94 -72 129 -21 16 -46 22 -104 24 -73 4 -79 2 -119 -27z m189 -37 c26 -13 58 -60 58 -84 0 -6 -47 -10 -135 -10 -88 0 -135 4 -135 10 0 30 35 73 73 91 45 21 89 19 139 -7z M7620 380 l0 -190 25 0 25 0 0 110 c0 123 11 164 55 198 29 23 74 28 104 12 15 -7 20 -4 29 16 11 22 9 26 -14 34 -49 19 -110 12 -143 -16 l-31 -26 0 26 c0 21 -5 26 -25 26 l-25 0 0 -190z M8038 554 c-35 -19 -48 -43 -48 -92 0 -54 22 -70 136 -101 115 -31 137 -51 104 -94 -37 -47 -128 -47 -196 0 -34 23 -38 23 -53 8 -15 -15 -13 -19 18 -45 86 -73 248 -59 288 24 31 66 -2 116 -94 141 -149 40 -148 40 -151 66 -7 63 112 89 190 41 l37 -23 11 22 c13 23 11 25 -42 54 -36 20 -164 19 -200 -1z M8470 380 c0 -183 1 -190 20 -190 19 0 20 7 20 190 0 183 -1 190 -20 190 -19 0 -20 -7 -20 -190z M9155 547 c-57 -32 -85 -86 -85 -165 0 -103 46 -169 133 -193 53 -14 117 -4 161 26 l36 24 0 -24 c0 -20 5 -25 25 -25 l25 0 0 190 0 190 -25 0 c-20 0 -25 -5 -25 -24 l0 -25 -42 24 c-58 33 -146 34 -203 2z m178 -44 c18 -9 37 -32 49 -60 58 -132 -55 -252 -184 -195 -58 25 -82 72 -76 149 9 109 108 159 211 106z M9650 380 l0 -190 25 0 25 0 0 123 c0 103 3 127 20 154 27 44 54 56 110 49 40 -5 49 -3 54 11 17 43 -92 60 -152 23 -40 -25 -42 -25 -42 0 0 13 -7 20 -20 20 -19 0 -20 -7 -20 -190z M10030 380 l0 -190 25 0 25 0 0 190 0 190 -25 0 -25 0 0 -190z M10370 563 c-36 -14 -72 -48 -92 -86 -26 -51 -28 -148 -5 -194 51 -98 188 -131 281 -68 l36 24 0 -24 c0 -20 5 -25 25 -25 l25 0 0 190 0 190 -25 0 c-20 0 -25 -5 -25 -24 l0 -25 -42 24 c-33 19 -57 25 -103 24 -33 0 -67 -3 -75 -6z m153 -60 c31 -15 66 -82 67 -123 0 -44 -42 -113 -80 -133 -41 -21 -106 -17 -146 9 -65 43 -77 157 -23 219 48 55 111 64 182 28z M11195 552 c-92 -59 -120 -167 -69 -270 21 -43 34 -56 80 -78 45 -22 63 -26 104 -21 50 6 101 27 133 55 22 20 22 29 -3 42 -16 9 -24 7 -42 -10 -52 -48 -143 -50 -197 -5 -29 25 -55 78 -44 89 4 3 78 6 165 6 l158 0 0 38 c-1 52 -32 115 -71 143 -47 33 -169 39 -214 11z m177 -50 c23 -14 58 -65 58 -86 0 -3 -63 -6 -139 -6 l-140 0 10 29 c28 81 130 111 211 63z M11650 380 l0 -190 25 0 25 0 0 120 c0 135 10 169 60 195 34 17 102 20 132 4 36 -19 48 -70 48 -199 l0 -120 25 0 25 0 0 133 c0 150 -11 186 -69 224 -45 30 -130 32 -184 3 l-37 -20 0 20 c0 15 -7 20 -25 20 l-25 0 0 -190z M12533 545 c-111 -67 -112 -259 -2 -332 36 -24 53 -28 108 -28 70 1 114 17 151 57 l20 21 -20 14 c-18 13 -24 12 -50 -10 -32 -28 -94 -42 -138 -32 -36 7 -88 60 -97 98 l-7 27 167 0 168 0 -6 51 c-13 104 -78 159 -188 159 -50 0 -73 -6 -106 -25z m187 -44 c14 -9 33 -33 42 -52 l18 -34 -136 -3 c-75 -1 -139 -1 -141 2 -7 7 23 59 45 79 43 39 123 43 172 8z M13593 545 c-109 -65 -112 -259 -6 -329 75 -50 181 -43 248 16 35 30 35 31 15 45 -18 13 -23 12 -50 -10 -32 -28 -94 -42 -138 -32 -36 7 -88 60 -97 98 l-7 27 167 0 168 0 -6 51 c-13 104 -78 159 -188 159 -50 0 -73 -6 -106 -25z m187 -44 c14 -9 33 -33 42 -52 l18 -34 -136 -3 c-75 -1 -139 -1 -141 2 -7 7 23 59 45 79 43 39 123 43 172 8z M14000 565 c0 -3 29 -44 65 -92 40 -53 62 -90 57 -97 -80 -105 -102 -135 -117 -158 l-17 -28 30 0 c25 0 38 11 86 75 31 41 58 75 59 75 2 0 28 -34 58 -75 48 -67 57 -74 88 -75 25 0 31 3 24 13 -74 96 -133 177 -133 183 0 5 26 42 58 84 80 103 79 100 40 100 -29 -1 -39 -9 -84 -71 l-52 -70 -52 71 c-43 59 -57 70 -81 70 -16 0 -29 -2 -29 -5z M14870 380 l0 -190 25 0 25 0 0 115 c0 129 11 171 55 199 22 14 38 17 77 12 40 -6 49 -4 55 10 18 47 -99 61 -161 19 l-36 -24 0 24 c0 18 -5 25 -20 25 -19 0 -20 -7 -20 -190z M15305 552 c-69 -44 -95 -93 -95 -174 0 -61 30 -129 68 -157 67 -47 162 -49 227 -5 l35 23 0 -24 c0 -20 5 -25 25 -25 l25 0 0 190 0 190 -25 0 c-20 0 -25 -5 -25 -25 l0 -26 -31 23 c-43 32 -161 38 -204 10z m175 -51 c77 -54 79 -181 4 -240 -104 -82 -245 17 -220 154 18 95 136 142 216 86z M15790 380 l0 -190 25 0 25 0 0 120 c0 135 10 169 60 195 33 17 102 20 131 5 39 -21 49 -62 49 -195 l0 -125 25 0 25 0 0 133 c0 150 -11 186 -69 224 -45 30 -126 31 -181 3 l-40 -20 0 20 c0 15 -7 20 -25 20 l-25 0 0 -190z M16320 330 c0 -230 -1 -241 -21 -261 -11 -11 -27 -18 -36 -15 -46 18 -60 17 -66 -3 -7 -27 18 -41 72 -41 97 0 101 11 101 315 l0 245 -25 0 -25 0 0 -240z M16635 547 c-22 -12 -50 -40 -63 -62 -19 -34 -22 -52 -20 -116 3 -65 7 -81 31 -112 15 -20 41 -44 57 -52 73 -38 175 -27 233 25 30 27 31 30 15 46 -16 16 -19 16 -36 1 -25 -22 -86 -47 -118 -47 -60 0 -134 62 -134 113 0 15 14 17 159 17 89 0 162 4 166 9 10 17 -7 91 -29 124 -38 56 -80 77 -155 77 -50 0 -76 -6 -106 -23z m147 -29 c43 -13 88 -58 88 -89 0 -18 -8 -19 -135 -19 -91 0 -135 4 -135 11 0 26 37 71 75 89 47 23 55 24 107 8z M17090 380 l0 -190 25 0 25 0 0 103 c0 56 5 119 10 139 19 68 95 107 150 78 15 -8 21 -6 31 12 10 18 8 24 -7 35 -30 22 -106 16 -148 -12 l-36 -24 0 24 c0 20 -5 25 -25 25 l-25 0 0 -190z M17528 550 c-55 -30 -90 -95 -90 -170 0 -75 24 -125 81 -165 36 -26 52 -30 104 -30 127 0 203 82 195 209 -4 71 -34 122 -92 157 -43 26 -147 25 -198 -1z m176 -48 c36 -21 66 -76 66 -120 0 -136 -152 -199 -245 -102 -22 23 -29 42 -33 83 -10 129 101 202 212 139z"/>
+    <path class="logo-w" fill="url(#logoWGradient)" d="M11373 3629 c-142 -27 -239 -170 -212 -313 4 -24 118 -314 252 -647 134 -332 252 -625 261 -651 21 -58 106 -139 163 -156 22 -7 65 -12 95 -12 72 0 168 46 207 100 15 21 86 182 156 357 71 175 130 320 132 323 7 8 18 -17 149 -341 107 -267 135 -328 166 -360 52 -54 93 -72 174 -77 61 -4 80 -1 125 20 57 26 96 58 122 99 8 13 135 320 281 681 228 565 266 665 266 709 0 74 -18 124 -64 176 -86 98 -211 121 -327 60 -41 -21 -73 -46 -91 -72 -15 -22 -84 -179 -153 -349 -69 -170 -129 -315 -134 -323 -6 -12 -164 366 -263 630 -13 35 -78 101 -120 123 -18 9 -63 19 -99 22 -124 9 -216 -43 -268 -151 -16 -34 -80 -188 -142 -342 -61 -154 -114 -283 -118 -287 -3 -4 -46 93 -95 215 -163 404 -185 453 -224 493 -60 62 -152 90 -239 73z"/>
+  </g>
+</svg>
+  <div>Informe generado a partir del documento personalizado preparado por Educoway.</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+
+const mapData = {"nl": {"center": [52.3, 5.6], "zoom": 7, "universities": [{"id": "nl-bio-groningen", "name": "Biology", "school": "University of Groningen", "lat": 53.2194, "lng": 6.5665, "webUrl": "https://www.rug.nl/bachelors/biology/", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=53.2194,6.5665"}, {"id": "nl-bio-radboud", "name": "Biology", "school": "Radboud University", "lat": 51.8425, "lng": 5.8528, "webUrl": "https://www.ru.nl/en/education/bachelors/biology", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=51.8425,5.8528"}, {"id": "nl-mbls-utrecht", "name": "Molecular and Biophysical Life Science", "school": "Utrecht University", "lat": 52.0907, "lng": 5.1214, "webUrl": "https://www.uu.nl/en/bachelors/molecular-and-biophysical-life-sciences", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=52.0907,5.1214"}, {"id": "nl-mls-radboud", "name": "Molecular Life Science", "school": "Radboud University", "lat": 51.8425, "lng": 5.8528, "webUrl": "https://www.ru.nl/en/education/bachelors/molecular-life-sciences", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=51.8425,5.8528"}, {"id": "nl-biomed-maastricht", "name": "Biomedical Sciences", "school": "Maastricht University", "lat": 50.8514, "lng": 5.691, "webUrl": "https://www.maastrichtuniversity.nl/education/bachelor/programmes/biomedical-sciences", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=50.8514,5.691"}, {"id": "nl-msp-maastricht", "name": "Maastricht Science Programme", "school": "Maastricht University Liberal Arts & Sciences university college.", "lat": 50.8514, "lng": 5.691, "webUrl": "https://www.maastrichtuniversity.nl/education/bachelor/programmes/maastricht-science-programme/your-future", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=50.8514,5.691"}, {"id": "nl-irio-groningen", "name": "International Relations and International Organization", "school": "University of Groningen", "lat": 53.2194, "lng": 6.5665, "webUrl": "https://www.rug.nl/bachelors/international-relations-and-international-organization/?lang=en#!requirements", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=53.2194,6.5665"}, {"id": "nl-iro-leiden", "name": "International Relations and Organizations", "school": "Leiden University", "lat": 52.0705, "lng": 4.3007, "webUrl": "https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/political-science/international-relations-and-organisations", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=52.0705,4.3007"}, {"id": "nl-is-leiden", "name": "International Studies", "school": "Leiden University", "lat": 52.0705, "lng": 4.3007, "webUrl": "https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/international-studies", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=52.0705,4.3007"}, {"id": "nl-ls-han", "name": "Life Sciences", "school": "HAN University of Applied Sciences", "lat": 51.8425, "lng": 5.8528, "webUrl": "https://www.hanuniversity.com/en/programs/bachelor/life-sciences/fulltime/program/", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=51.8425,5.8528"}, {"id": "nl-es-nhlstenden", "name": "European Studies", "school": "NHL Stenden University of Applied Sciences", "lat": 53.2012, "lng": 5.7999, "webUrl": "https://www.nhlstenden.com/en/courses/european-studies", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=53.2012,5.7999"}, {"id": "nl-es-thuas", "name": "European Studies", "school": "The Hague University of Applied Sciences (THUAS)", "lat": 52.0705, "lng": 4.3007, "webUrl": "https://www.thuas.com/programmes/bachelors/european-studies-4-years", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=52.0705,4.3007"}]}, "be": {"center": [50.85, 4.35], "zoom": 8, "universities": [{"id": "be-es-kuleuven", "name": "European Studies", "school": "KU Leuven", "lat": 50.8798, "lng": 4.7005, "webUrl": "https://onderwijsaanbod.kuleuven.be/opleidingen/e/SC_58415826/diploma_omschrijving", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=50.8798,4.7005"}]}, "dk": {"center": [55.6, 8.5], "zoom": 7, "universities": [{"id": "dk-ns-roskilde", "name": "Natural Sciences", "school": "Roskilde University", "lat": 55.4765, "lng": 8.4594, "webUrl": "https://ruc.dk/en/bachelor/international-bachelor-natural-sciences-int", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=55.4765,8.4594"}]}, "at": {"center": [48.2, 14.5], "zoom": 7, "universities": [{"id": "at-mpt-krems", "name": "Medical and Pharmaceutical Technology", "school": "IMC Krems University Applied Sciences", "lat": 48.4102, "lng": 15.6136, "webUrl": "https://www.imc.ac.at/en/study/bachelor/science-technology/medical-and-pharmaceutical-biotechnology/#c26407", "mapsUrl": "https://www.google.com/maps/search/?api=1&query=48.4102,15.6136"}]}};
+const mapsInitialized = {};
+let leafletMaps = {};
+
+function showTab(id, btn){
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('tab-' + id);
+  if(panel) panel.classList.add('active');
+  if(btn) btn.classList.add('active');
+  else {
+    const target = document.querySelector('.tab-btn[data-tab="'+id+'"]');
+    if(target) target.classList.add('active');
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+  if(mapData[id] && !mapsInitialized[id]){
+    setTimeout(() => initMap(id), 150);
+  }
+}
+
+function goTo(tab, anchor){
+  const target = document.querySelector('.tab-btn[data-tab="'+tab+'"]');
+  showTab(tab, target);
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 220);
+}
+
+function scrollToCard(id){
+  const el = document.getElementById(id);
+  if(el){
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+    el.style.transition = 'box-shadow .3s';
+    el.style.boxShadow = '0 0 0 4px rgba(10,155,170,.35)';
+    setTimeout(() => { el.style.boxShadow = ''; }, 1600);
+  }
+}
+
+function scrollToMap(tab, anchorId){
+  const currentActive = document.querySelector('.tab-panel.active');
+  const isActive = currentActive && currentActive.id === 'tab-' + tab;
+  if(!isActive){
+    goTo(tab, anchorId);
+  } else {
+    const el = document.getElementById(anchorId);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    if(!mapsInitialized[tab]) initMap(tab);
+  }
+}
+
+function initMap(countryId){
+  if(mapsInitialized[countryId]) return;
+  const info = mapData[countryId];
+  if(!info) return;
+  const el = document.getElementById('leaflet-' + countryId);
+  if(!el || typeof L === 'undefined') return;
+  const map = L.map(el).setView(info.center, info.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  info.universities.forEach(u => {
+    const icon = L.divIcon({
+      className: 'grad-icon-marker',
+      html: '🎓',
+      iconSize: [30,30],
+      iconAnchor: [15,28],
+      popupAnchor: [0,-26]
+    });
+    const marker = L.marker([u.lat, u.lng], {icon}).addTo(map);
+    const popupHtml = `
+      <div class="popup-title">${u.name}</div>
+      <div class="popup-school">${u.school}</div>
+      <div class="popup-actions">
+        <a href="${u.webUrl}" target="_blank" rel="noopener">Ver grado</a>
+        <button onclick="scrollToCard('${u.id}')">Ver ficha</button>
+        <a href="${u.mapsUrl}" target="_blank" rel="noopener">Google Maps</a>
+      </div>`;
+    marker.bindPopup(popupHtml);
+  });
+  leafletMaps[countryId] = map;
+  mapsInitialized[countryId] = true;
+  setTimeout(() => map.invalidateSize(), 200);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  // pre-init nothing; maps init lazily on tab open
+});
+</script>
+</body>
+</html>
