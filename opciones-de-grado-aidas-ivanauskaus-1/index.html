@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opciones de Grado — AIDAS IVANAUSKAUS — educoWay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+<style>
+:root{
+  --teal:#0a9baa;
+  --teal-dark:#077a87;
+  --teal-light:#e0f5f7;
+  --navy:#0d2b3e;
+  --bg:#f4f8fa;
+  --border:#c8e0e5;
+  --gold:#c9a227;
+  --gold-bg:#fbf3da;
+  --red:#c0392b;
+  --orange:#d9812c;
+  --green:#2e8b57;
+  --ink:#1c2a30;
+  --muted:#6b7d84;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'DM Sans', sans-serif;
+  font-size:16px;
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.55;
+}
+h1,h2,h3,h4{font-family:'Playfair Display', serif; font-weight:700; margin:0 0 .5em 0;}
+a{color:var(--teal-dark);}
+p{margin:0 0 1em 0;}
+.ew-logo{display:block;height:100%;width:auto;}
+.ew-logo-w{}
+
+/* ---------- HEADER ---------- */
+header.site-header{
+  position:sticky; top:0; z-index:100;
+  background:linear-gradient(135deg, var(--navy) 0%, #133a52 100%);
+  color:#fff;
+  box-shadow:0 2px 12px rgba(0,0,0,.18);
+}
+.header-inner{
+  max-width:1200px; margin:0 auto; padding:18px 24px 10px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
+}
+.header-logo{height:42px;}
+.header-titles{flex:1; min-width:260px;}
+.header-titles h1{color:#fff; font-size:1.5rem; margin:0; line-height:1.2;}
+.header-sub{
+  font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:#9fd4dc; margin-top:4px; font-weight:600;
+}
+nav.tabs{
+  max-width:1200px; margin:0 auto; padding:0 24px;
+  display:flex; gap:4px; overflow-x:auto; scrollbar-width:thin;
+  border-top:1px solid rgba(255,255,255,.12);
+}
+nav.tabs::-webkit-scrollbar{height:5px;}
+nav.tabs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.25);border-radius:4px;}
+.tab-btn{
+  appearance:none; border:none; background:transparent; color:#cfe6ea;
+  padding:12px 16px; font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:600;
+  cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:8px;
+  border-bottom:3px solid transparent; transition:all .15s ease;
+}
+.tab-btn:hover{color:#fff; background:rgba(255,255,255,.06);}
+.tab-btn.active{color:#fff; border-bottom-color:var(--teal);}
+
+/* ---------- MAIN LAYOUT ---------- */
+main{max-width:1200px; margin:0 auto; padding:32px 24px 80px 24px;}
+.tab-panel{display:none; animation:fadein .25s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+.intro-block{
+  background:#fff; border:2px solid var(--border); border-radius:14px; padding:28px 32px; margin-bottom:28px;
+}
+.intro-block h2{color:var(--navy); font-size:1.5rem;}
+.intro-block p{color:#33454c;}
+
+/* ---------- INDEX (Intro tab) ---------- */
+.toc-country{margin-bottom:26px;}
+.toc-country h3{
+  color:var(--teal-dark); font-size:1.05rem; display:flex; align-items:center; gap:10px;
+  border-bottom:2px solid var(--teal-light); padding-bottom:8px; margin-bottom:12px;
+}
+.toc-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:10px;}
+.toc-link{
+  display:block; text-decoration:none; background:#fff; border:1.5px solid var(--border); border-radius:10px;
+  padding:10px 14px; transition:all .15s ease; cursor:pointer;
+}
+.toc-link:hover{border-color:var(--teal); box-shadow:0 4px 14px rgba(10,155,170,.15); transform:translateY(-1px);}
+.toc-degree{font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:400; color:var(--ink); display:block;}
+.toc-school{font-family:'Playfair Display', serif; font-style:italic; font-size:11.5px; color:#8a9aa1; display:block; margin-top:2px;}
+
+.now-block{
+  background:var(--teal-light); border:2px solid var(--teal); border-radius:14px; padding:26px 30px; margin-top:30px;
+}
+.now-block h2{color:var(--teal-dark); font-size:1.3rem;}
+.now-block p{color:#0f3b41;}
+
+/* ---------- RESEARCH VS APPLIED ---------- */
+.rva-links{background:#fff; border-left:4px solid var(--teal); padding:14px 20px; border-radius:6px; margin:16px 0;}
+.rva-links a{display:block; margin:4px 0;}
+
+/* ---------- COUNTRY INTRO ---------- */
+.country-hero{
+  display:flex; align-items:center; gap:22px; background:#fff; border:2px solid var(--border);
+  border-radius:14px; padding:26px 30px; margin-bottom:22px; flex-wrap:wrap;
+}
+.country-hero .flag{width:84px; height:60px; flex-shrink:0;}
+.country-hero h2{color:var(--navy); font-size:1.9rem; margin-bottom:4px;}
+.country-meta{display:flex; gap:10px; flex-wrap:wrap; margin:8px 0 12px 0;}
+.country-meta span{
+  background:var(--teal-light); color:var(--teal-dark); font-weight:700; font-size:.78rem;
+  padding:5px 12px; border-radius:20px; border:1px solid var(--teal);
+}
+.country-text{color:#33454c; font-size:.96rem;}
+
+.section-divider{
+  display:flex; align-items:center; gap:14px; margin:34px 0 18px 0;
+}
+.section-divider h3{
+  color:var(--navy); font-size:1.15rem; text-transform:uppercase; letter-spacing:.05em; white-space:nowrap; margin:0;
+}
+.section-divider::after{content:''; flex:1; height:2px; background:var(--border);}
+
+/* ---------- UNIVERSITY CARD ---------- */
+.uni-card{
+  background:#fff; border:2px solid var(--border); border-radius:12px; padding:24px 26px; margin-bottom:22px;
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+.uni-card:hover{border-color:var(--teal); box-shadow:0 8px 24px rgba(10,155,170,.14);}
+.uni-card-head{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; flex-wrap:wrap;}
+.uni-title-wrap{flex:1; min-width:240px;}
+.uni-title{
+  font-family:'Playfair Display', serif; font-size:1.32rem; font-weight:700; color:var(--navy);
+  text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:color .15s ease;
+}
+.uni-title:hover{color:var(--teal-dark);}
+.uni-title .cursor-ic{display:inline-block; transition:transform .15s ease; font-size:.85em;}
+.uni-title:hover .cursor-ic{transform:scale(1.3);}
+.uni-school{color:var(--teal-dark); font-weight:600; font-size:.95rem; margin-top:3px;}
+.uni-ranking-label{color:var(--muted); font-size:.74rem; margin-top:8px; margin-bottom:4px;}
+.rank-badges{display:flex; gap:8px; flex-wrap:wrap;}
+.rank-badge{
+  background:var(--teal-light); color:var(--teal-dark); font-size:.74rem; font-weight:700;
+  padding:4px 10px; border-radius:14px; border:1px solid var(--teal);
+}
+.rank-badge.gold{background:var(--gold-bg); color:#8a6d0f; border-color:var(--gold);}
+
+.difficulty-badge{
+  font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.04em;
+  padding:6px 13px; border-radius:20px; border:2px solid; white-space:nowrap;
+}
+.difficulty-badge.red{color:var(--red); border-color:var(--red); background:#fdecea;}
+.difficulty-badge.orange{color:var(--orange); border-color:var(--orange); background:#fdf1e4;}
+.difficulty-badge.green{color:var(--green); border-color:var(--green); background:#e9f6ee;}
+
+.meta-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:12px; margin:18px 0;
+}
+.meta-item{background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:10px 12px;}
+.meta-item .meta-label{font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
+.meta-item .meta-value{font-size:.9rem; color:var(--ink); font-weight:600; margin-top:2px;}
+.map-btn{
+  display:inline-flex; align-items:center; gap:4px; background:var(--teal-light); border:1px solid var(--teal);
+  color:var(--teal-dark); font-size:.68rem; font-weight:800; padding:3px 8px; border-radius:6px; margin-left:8px;
+  cursor:pointer; vertical-align:middle;
+}
+.map-btn:hover{background:var(--teal); color:#fff;}
+
+.uni-desc{
+  background:#f0f8fa; border-left:4px solid var(--teal); border-radius:0 8px 8px 0; padding:16px 20px; margin:18px 0;
+  color:#233942; font-size:.94rem;
+}
+.uni-desc strong{color:var(--navy);}
+
+details.req-details{
+  border:1.5px solid var(--border); border-radius:10px; padding:0; margin-top:14px; overflow:hidden;
+}
+details.req-details summary{
+  cursor:pointer; padding:12px 18px; font-weight:700; color:var(--teal-dark); background:var(--teal-light);
+  list-style:none; display:flex; align-items:center; gap:8px; font-size:.9rem;
+}
+details.req-details summary::-webkit-details-marker{display:none;}
+details.req-details summary::before{content:'▸'; transition:transform .15s ease; display:inline-block;}
+details.req-details[open] summary::before{transform:rotate(90deg);}
+.req-body{padding:16px 20px 20px 20px; font-size:.88rem; color:#33454c;}
+.req-body h5{margin:14px 0 6px 0; color:var(--navy); font-size:.82rem; text-transform:uppercase; letter-spacing:.04em;}
+.req-body ul{margin:4px 0 10px 0; padding-left:20px;}
+.req-body li{margin-bottom:3px;}
+.deadline-box{
+  background:#fff8dd; border:1.5px solid #e8c94a; border-radius:8px; padding:10px 14px; margin:10px 0;
+  font-weight:700; color:#7a6205;
+}
+.text-red{color:var(--red); font-weight:700;}
+.text-green{color:var(--green); font-weight:700;}
+.uni-links{margin-top:6px; font-size:.85rem;}
+
+/* ---------- FLAGS (pure CSS) ---------- */
+.flag{display:inline-block; position:relative; overflow:hidden; border:1px solid rgba(0,0,0,.18); border-radius:3px; vertical-align:middle; background:#fff;}
+.flag-sm{width:26px; height:18px;}
+.flag-lg{width:84px; height:58px;}
+.flag span{position:absolute; display:block;}
+/* Denmark */
+.flag-dk{background:#c8102e;}
+.flag-dk .h{left:0;top:41%;width:100%;height:18%;background:#fff;}
+.flag-dk .v{left:32%;top:0;width:17%;height:100%;background:#fff;}
+/* Netherlands */
+.flag-nl{background:linear-gradient(to bottom, #ae1c28 0%, #ae1c28 33.33%, #ffffff 33.33%, #ffffff 66.66%, #21468b 66.66%, #21468b 100%);}
+/* Finland */
+.flag-fi{background:#fff;}
+.flag-fi .h{left:0;top:41%;width:100%;height:18%;background:#002f6c;}
+.flag-fi .v{left:32%;top:0;width:17%;height:100%;background:#002f6c;}
+/* Sweden */
+.flag-se{background:#006aa7;}
+.flag-se .h{left:0;top:41%;width:100%;height:18%;background:#fecc02;}
+.flag-se .v{left:32%;top:0;width:17%;height:100%;background:#fecc02;}
+/* Lithuania */
+.flag-lt{background:linear-gradient(to bottom, #fdb913 0%, #fdb913 33.33%, #006a44 33.33%, #006a44 66.66%, #c1272d 66.66%, #c1272d 100%);}
+/* Germany */
+.flag-de{background:linear-gradient(to bottom, #000000 0%, #000000 33.33%, #dd0000 33.33%, #dd0000 66.66%, #ffce00 66.66%, #ffce00 100%);}
+/* Spain */
+.flag-es{background:linear-gradient(to bottom, #aa151b 0%, #aa151b 25%, #f1bf00 25%, #f1bf00 75%, #aa151b 75%, #aa151b 100%);}
+
+/* ---------- MAP ---------- */
+.map-wrap{margin-top:34px;}
+.map-wrap h3{color:var(--navy); font-size:1.1rem; margin-bottom:12px;}
+.leaflet-map{
+  height:440px; width:100%; border-radius:14px; border:2px solid var(--border); overflow:hidden;
+}
+.popup-title{font-family:'Playfair Display',serif; font-weight:700; color:var(--navy); font-size:.95rem; margin-bottom:2px;}
+.popup-school{color:var(--teal-dark); font-size:.82rem; margin-bottom:8px;}
+.popup-actions{display:flex; gap:6px; flex-wrap:wrap;}
+.popup-actions a, .popup-actions button{
+  font-size:.72rem; font-weight:700; padding:5px 9px; border-radius:6px; border:1px solid var(--teal);
+  background:var(--teal-light); color:var(--teal-dark); text-decoration:none; cursor:pointer; font-family:'DM Sans',sans-serif;
+}
+.popup-actions a:hover, .popup-actions button:hover{background:var(--teal); color:#fff;}
+
+/* ---------- FOOTER ---------- */
+footer{
+  background:var(--navy); padding:34px 24px; text-align:center; margin-top:40px;
+}
+.footer-logo{height:40px; opacity:.55; margin-bottom:10px;}
+footer p{color:#9fb6c0; font-size:.78rem; margin:0;}
+
+@media (max-width:640px){
+  .header-inner{padding:14px 16px 8px 16px;}
+  main{padding:22px 14px 60px 14px;}
+  .intro-block, .country-hero, .uni-card, .now-block{padding:18px 16px;}
+  .uni-card-head{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-logo"><svg class="ew-logo" viewBox="0 0 1800 433" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><defs><linearGradient id="ewWGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4CAB71"/><stop offset="50%" stop-color="#2CABBA"/><stop offset="100%" stop-color="#29AADC"/></linearGradient></defs><g transform="translate(0.000000,433.000000) scale(0.100000,-0.100000)"><path fill="#ffffff" d="M3780 3862 l0 -468 -77 76 c-43 42 -107 93 -143 113 -309 171 -743
+126 -995 -104 -111 -102 -196 -251 -237 -416 -31 -125 -31 -350 0 -475 62
+-249 202 -433 406 -533 137 -68 223 -87 391 -89 169 -1 235 14 383 85 86 42
+117 63 187 132 l85 82 0 -137 0 -138 110 0 110 0 0 1170 0 1170 -110 0 -110 0
+0 -468z m-465 -408 c151 -36 304 -151 377 -284 157 -285 91 -677 -145 -859
+-119 -91 -241 -131 -402 -131 -166 0 -285 37 -405 125 -94 69 -177 207 -205
+341 -20 93 -19 276 1 367 35 159 129 295 255 370 146 86 345 113 524 71z M728
+3680 c-214 -34 -356 -108 -500 -258 -89 -94 -146 -189 -189 -322 -28 -84 -32
+-112 -37 -241 -3 -112 -1 -165 12 -229 76 -372 351 -620 733 -659 308 -32 638
+91 803 299 l30 38 -74 61 c-41 34 -76 61 -78 61 -2 0 -33 -29 -69 -64 -112
+-109 -277 -173 -474 -183 -80 -4 -130 -1 -185 11 -90 19 -218 80 -282 136 -90
+78 -167 220 -193 358 l-7 32 725 0 725 0 8 66 c16 153 -20 354 -87 491 -68
+138 -202 266 -347 330 -139 62 -374 95 -514 73z m289 -215 c229 -43 391 -202
+437 -427 9 -42 16 -86 16 -98 0 -20 -2 -20 -625 -20 -344 0 -625 4 -625 8 0
+35 46 176 77 235 47 90 154 200 240 245 130 68 308 90 480 57z M9634 3679
+c-85 -14 -205 -56 -284 -100 -102 -57 -242 -197 -299 -299 -210 -380 -130
+-875 182 -1130 70 -58 212 -130 302 -154 150 -39 341 -40 489 -1 274 72 477
+264 564 535 31 97 42 172 42 291 0 438 -269 775 -680 853 -88 17 -232 19 -316
+5z m300 -214 c219 -46 400 -224 462 -455 24 -89 24 -281 1 -370 -46 -176 -156
+-314 -308 -389 -113 -56 -206 -74 -339 -68 -351 17 -581 249 -598 602 -9 215
+50 380 187 515 86 86 164 131 273 160 89 23 226 25 322 5z M7602 3669 c-292
+-38 -539 -213 -652 -462 -58 -129 -75 -215 -74 -387 1 -139 3 -164 28 -245 72
+-237 214 -409 421 -510 143 -70 233 -89 405 -89 127 1 156 4 233 28 141 42
+285 124 362 205 l29 32 -71 71 -71 71 -65 -51 c-137 -110 -289 -158 -464 -149
+-294 16 -516 193 -578 462 -21 89 -21 271 0 360 49 212 216 381 435 441 81 22
+271 25 350 5 84 -20 211 -85 268 -136 l52 -47 76 69 76 68 -57 51 c-185 166
+-449 246 -703 213z M14925 3674 c-11 -3 -50 -11 -87 -20 -316 -72 -557 -324
+-624 -653 -35 -177 -4 -422 73 -574 65 -129 182 -260 302 -336 164 -105 386
+-151 583 -120 166 26 301 93 425 212 l83 80 0 -137 0 -136 110 0 110 0 -2 833
+-3 832 -107 3 -108 3 0 -138 0 -139 -77 76 c-114 112 -233 173 -401 206 -68
+13 -229 17 -277 8z m313 -228 c201 -55 349 -196 416 -396 37 -109 46 -266 22
+-380 -25 -118 -86 -232 -170 -315 -123 -123 -260 -175 -455 -175 -192 0 -327
+54 -452 179 -127 128 -179 263 -179 466 0 132 15 199 71 314 78 159 236 279
+414 316 83 17 254 13 333 -9z M4720 3148 c0 -301 4 -540 10 -578 27 -166 85
+-284 195 -396 67 -69 95 -89 175 -127 135 -64 208 -81 365 -81 151 0 217 14
+341 73 57 27 103 59 153 106 l71 67 0 -111 0 -111 105 0 105 0 0 835 0 835
+-110 0 -110 0 0 -508 c0 -422 -3 -518 -15 -567 -50 -196 -192 -341 -382 -390
+-73 -19 -230 -19 -311 0 -193 46 -317 172 -358 363 -11 53 -14 177 -14 585 l0
+517 -110 0 -110 0 0 -512z M16413 3618 c2 -7 152 -375 331 -817 l327 -805
+-155 -360 -155 -361 111 -3 c61 -1 115 1 119 5 8 8 998 2305 1007 2336 4 16
+-4 17 -113 15 l-117 -3 -204 -480 c-112 -264 -241 -573 -287 -687 -73 -185
+-83 -205 -93 -185 -11 20 -226 559 -446 1117 l-93 235 -119 3 c-93 2 -117 0
+-113 -10z M4134 703 c-5 -10 -20 -35 -33 -55 l-23 -38 30 0 c25 0 37 9 66 49
+20 27 36 51 36 55 0 15 -66 5 -76 -11z M12992 453 l3 -268 25 0 25 0 3 268 2
+267 -30 0 -30 0 2 -267z M987 703 c-4 -3 -7 -19 -7 -34 0 -22 6 -30 25 -35 43
+-11 73 34 43 64 -13 13 -50 16 -61 5z M3700 690 c-15 -28 4 -60 35 -60 31 0
+50 32 35 60 -6 12 -21 20 -35 20 -14 0 -29 -8 -35 -20z M6370 690 c-15 -28 4
+-60 35 -60 14 0 29 8 35 20 15 28 -4 60 -35 60 -14 0 -29 -8 -35 -20z M8460
+695 c-26 -32 13 -81 48 -59 34 22 22 74 -18 74 -10 0 -23 -7 -30 -15z M10027
+703 c-4 -3 -7 -19 -7 -34 0 -22 6 -30 25 -35 43 -11 73 34 43 64 -13 13 -50
+16 -61 5z M16314 696 c-15 -40 21 -80 54 -60 37 24 21 74 -25 74 -13 0 -26 -6
+-29 -14z M2337 673 c-4 -3 -7 -28 -7 -55 l0 -48 -35 0 c-31 0 -35 -3 -35 -25
+0 -22 4 -25 35 -25 l35 0 0 -112 c0 -187 27 -234 128 -226 60 5 77 17 67 48
+-6 18 -11 20 -38 14 -87 -20 -97 -4 -97 153 l0 123 65 0 c63 0 65 1 65 25 0
+24 -2 25 -65 25 l-65 0 0 55 c0 51 -2 55 -23 55 -13 0 -27 -3 -30 -7z M8750
+625 l0 -55 -40 0 c-36 0 -40 -2 -40 -25 0 -22 4 -25 40 -25 l40 0 0 -127 c0
+-154 13 -193 71 -207 36 -9 93 -3 118 13 8 5 11 16 6 30 -6 19 -11 21 -38 15
+-45 -11 -78 -8 -88 8 -5 7 -9 70 -9 141 l0 127 60 0 c57 0 60 1 60 25 0 24 -3
+25 -60 25 l-60 0 0 55 c0 54 0 55 -30 55 -30 0 -30 -1 -30 -55z M14520 625 l0
+-55 -40 0 c-36 0 -40 -2 -40 -25 0 -22 4 -25 40 -25 l40 0 0 -127 c0 -154 13
+-193 71 -207 36 -9 93 -3 118 13 8 5 11 16 6 30 -6 19 -11 21 -38 15 -45 -11
+-78 -8 -88 8 -5 7 -9 70 -9 141 l0 127 60 0 c57 0 60 1 60 25 0 24 -3 25 -60
+25 l-60 0 0 55 c0 54 0 55 -30 55 -30 0 -30 -1 -30 -55z M172 569 c-68 -20
+-132 -113 -132 -190 0 -145 152 -241 286 -180 133 61 148 265 25 347 -44 29
+-126 40 -179 23z m134 -65 c36 -17 74 -82 74 -125 -1 -42 -36 -107 -69 -123
+-71 -37 -169 -8 -197 59 -55 131 65 249 192 189z M726 570 c-15 -5 -37 -17
+-47 -26 -18 -16 -19 -16 -19 4 0 18 -6 22 -30 22 l-30 0 2 -192 3 -193 25 0
+25 0 5 125 c5 135 15 163 65 196 24 16 54 15 96 -1 10 -4 19 3 27 19 10 22 9
+27 -6 35 -28 15 -85 21 -116 11z M1325 562 c-72 -35 -115 -103 -115 -184 1
+-78 56 -162 123 -187 68 -26 169 -6 216 43 l29 31 -24 18 c-13 10 -24 14 -24
+8 0 -5 -15 -19 -34 -30 -46 -29 -133 -29 -170 0 -23 18 -56 67 -56 84 0 3 75
+5 166 5 l167 0 -6 56 c-11 103 -75 163 -182 171 -35 3 -62 -2 -90 -15z m159
+-61 c30 -20 55 -55 56 -78 0 -10 -33 -13 -135 -13 -74 0 -135 4 -135 9 0 17
+47 76 70 88 38 19 110 16 144 -6z M1883 569 c-18 -5 -35 -14 -38 -19 -9 -15
+-25 -12 -25 5 0 10 -10 15 -30 15 l-30 0 0 -196 0 -195 28 3 27 3 5 136 c5
+145 10 158 61 185 53 27 135 9 155 -33 4 -10 10 -79 13 -153 l6 -135 25 0 25
+0 3 130 c2 118 0 134 -20 175 -37 73 -118 104 -205 79z M2779 570 c-44 -13
+-79 -41 -103 -84 -31 -54 -38 -97 -25 -154 28 -127 163 -189 282 -129 l46 24
+3 -21 c2 -15 10 -21 28 -21 l25 0 3 193 2 192 -30 0 c-26 0 -30 -4 -30 -27 0
+-24 -1 -25 -18 -10 -44 40 -122 56 -183 37z m130 -64 c85 -44 92 -189 12 -243
+-40 -27 -107 -31 -151 -8 -82 42 -86 194 -6 245 37 23 105 26 145 6z M3325
+565 c-102 -36 -154 -167 -106 -270 46 -100 164 -143 266 -96 57 26 70 44 46
+65 -18 16 -21 16 -52 -3 -41 -25 -108 -27 -150 -6 -62 33 -86 115 -55 190 30
+71 132 98 203 54 32 -20 36 -20 51 -6 15 15 14 18 -6 40 -42 44 -124 58 -197
+32z M4045 561 c-73 -34 -115 -102 -115 -186 0 -62 19 -103 68 -147 92 -83 248
+-55 301 54 23 49 28 128 10 175 -37 98 -166 149 -264 104z m156 -64 c43 -29
+59 -60 59 -120 0 -89 -49 -137 -139 -137 -44 0 -56 5 -88 33 -31 29 -37 41
+-41 89 -3 39 1 64 12 87 36 69 131 92 197 48z M4613 569 c-18 -5 -35 -14 -38
+-19 -9 -15 -25 -12 -25 5 0 10 -10 15 -30 15 l-30 0 2 -192 3 -193 25 0 25 0
+5 136 c5 145 10 158 61 185 53 27 135 9 155 -33 5 -10 11 -79 14 -153 l5 -135
+25 0 25 0 3 130 c2 118 0 134 -20 175 -37 73 -118 104 -205 79z M5948 557
+c-45 -23 -48 -23 -48 -6 0 14 -7 19 -30 19 l-30 0 2 -192 3 -193 25 0 25 0 5
+130 c3 88 10 137 19 151 38 57 129 72 178 30 28 -24 28 -26 33 -168 l5 -143
+28 -3 28 -3 -3 150 c-3 133 -5 153 -24 177 -33 45 -66 64 -119 70 -41 5 -59 1
+-97 -19z M7185 561 c-147 -66 -154 -291 -13 -360 78 -37 191 -20 242 38 18 20
+19 22 1 41 l-18 20 -20 -20 c-26 -29 -59 -40 -115 -40 -56 1 -86 16 -113 56
+-34 53 -33 53 144 56 158 3 162 4 165 25 5 35 -17 100 -45 134 -34 40 -96 69
+-148 69 -22 0 -58 -9 -80 -19z m174 -77 c16 -16 32 -39 36 -51 l6 -23 -135 0
+c-92 0 -136 4 -136 11 0 20 32 66 59 83 19 12 42 16 84 13 48 -3 63 -8 86 -33z
+M7718 557 c-45 -23 -48 -23 -48 -6 0 14 -7 19 -30 19 l-30 0 2 -192 3 -193 28
+-3 27 -3 0 108 c1 153 27 216 95 229 19 3 43 1 56 -6 19 -11 24 -10 36 6 17
+24 16 31 -5 43 -43 23 -86 22 -134 -2z M8063 567 c-45 -17 -73 -47 -79 -89 -5
+-29 -1 -40 22 -67 23 -25 46 -35 114 -52 105 -26 120 -34 120 -64 0 -58 -118
+-76 -199 -29 -40 22 -46 23 -60 10 -13 -14 -13 -18 5 -37 47 -53 165 -75 238
+-45 76 32 100 114 48 166 -21 21 -48 32 -108 45 -90 20 -124 37 -124 65 0 50
+123 69 189 29 31 -19 35 -19 50 -5 51 52 -119 108 -216 73z M9185 565 c-71
+-25 -125 -105 -125 -185 0 -75 54 -160 117 -186 65 -27 155 -14 201 28 l22 21
+0 -31 c0 -27 4 -32 25 -32 l25 0 0 195 0 195 -25 0 c-20 0 -25 -5 -25 -27 0
+-25 -1 -25 -19 -9 -25 23 -88 45 -126 45 -16 0 -48 -6 -70 -14z m139 -60 c44
+-21 66 -63 66 -125 0 -94 -45 -140 -138 -140 -58 0 -97 25 -118 76 -54 130 65
+248 190 189z M9766 570 c-15 -5 -37 -17 -47 -26 -18 -16 -19 -16 -19 4 0 18
+-6 22 -30 22 l-30 0 2 -192 3 -193 25 0 25 0 5 126 c5 134 15 162 65 195 24
+16 54 15 96 -1 10 -4 19 3 27 19 10 22 9 27 -6 35 -28 15 -85 21 -116 11z
+M10365 562 c-73 -35 -115 -103 -115 -184 1 -78 56 -162 123 -187 56 -21 149
+-8 189 26 15 13 17 12 20 -9 2 -17 10 -24 31 -26 l27 -3 0 195 0 196 -30 0
+c-23 0 -30 -4 -30 -20 0 -19 0 -19 -34 1 -51 30 -131 34 -181 11z m177 -80
+c26 -25 32 -41 36 -88 8 -99 -40 -154 -136 -154 -79 0 -132 56 -132 140 0 89
+59 144 148 137 43 -3 59 -10 84 -35z M11225 567 c-53 -21 -83 -48 -105 -91
+-37 -77 -19 -199 36 -248 75 -66 225 -61 288 11 19 20 19 22 1 41 -18 20 -19
+20 -39 1 -12 -10 -31 -24 -43 -30 -31 -16 -109 -14 -143 4 -28 14 -60 60 -60
+85 0 6 55 10 159 10 134 0 160 2 165 15 10 27 -15 114 -42 147 -50 59 -145 83
+-217 55z m145 -69 c19 -13 40 -38 47 -55 l13 -33 -135 0 c-88 0 -135 4 -135
+10 0 24 32 70 58 84 42 23 113 20 152 -6z M11747 556 c-44 -22 -47 -22 -47 -5
+0 14 -7 19 -30 19 l-30 0 2 -192 3 -193 25 0 25 0 5 130 c6 143 13 165 66 190
+48 23 98 19 131 -9 28 -24 28 -26 33 -168 l5 -143 28 -3 28 -3 -3 155 -3 155
+-35 36 c-57 58 -128 70 -203 31z M12572 569 c-52 -15 -107 -78 -122 -138 -23
+-97 17 -189 103 -232 60 -31 152 -24 209 17 45 32 53 50 28 67 -12 7 -26 2
+-54 -17 -31 -21 -51 -26 -98 -26 -55 0 -63 3 -94 34 -19 19 -34 43 -34 55 0
+20 4 21 160 21 l160 0 0 45 c0 49 -25 108 -58 138 -45 41 -130 56 -200 36z
+m138 -64 c33 -17 60 -52 60 -77 0 -16 -12 -18 -135 -18 l-135 0 13 33 c28 67
+126 99 197 62z M13625 565 c-117 -41 -161 -217 -78 -316 65 -77 191 -92 275
+-33 45 32 53 50 28 67 -12 7 -26 2 -54 -17 -55 -37 -141 -37 -184 -1 -17 14
+-35 39 -41 55 l-10 30 165 0 164 0 0 43 c0 48 -27 113 -58 140 -49 44 -136 57
+-207 32z m144 -59 c31 -16 61 -56 61 -81 0 -13 -20 -15 -135 -15 l-135 0 13
+33 c28 67 126 99 196 63z M14986 570 c-15 -5 -37 -17 -47 -26 -18 -16 -19 -16
+-19 4 0 18 -6 22 -30 22 l-30 0 2 -192 3 -193 25 0 25 0 5 125 c5 135 15 163
+65 196 24 16 54 15 96 -1 10 -4 19 3 27 19 10 22 9 27 -6 35 -28 15 -85 21
+-116 11z M15338 570 c-95 -28 -151 -133 -127 -238 28 -127 163 -189 282 -129
+l46 24 3 -21 c2 -15 10 -21 28 -21 l25 0 3 193 2 192 -30 0 c-26 0 -30 -4 -30
+-27 0 -24 -1 -25 -18 -10 -44 40 -122 56 -184 37z m133 -66 c60 -30 85 -138
+48 -206 -28 -52 -128 -75 -189 -43 -83 43 -85 205 -2 249 36 20 105 20 143 0z
+M15907 566 c-20 -7 -44 -19 -52 -26 -13 -10 -15 -9 -15 9 0 17 -6 21 -30 21
+l-30 0 2 -192 3 -193 28 -3 27 -3 0 116 c0 122 10 165 48 198 26 24 93 33 130
+18 48 -20 56 -44 60 -194 l4 -138 27 3 26 3 0 135 c-1 110 -4 142 -19 172 -34
+69 -130 103 -209 74z M16655 562 c-128 -60 -153 -236 -49 -334 36 -34 74 -48
+126 -48 59 0 112 19 149 52 l33 30 -25 18 c-20 16 -25 17 -32 4 -26 -46 -153
+-61 -201 -23 -23 18 -56 67 -56 84 0 3 75 5 166 5 l166 0 -4 54 c-8 102 -75
+165 -183 173 -34 3 -63 -2 -90 -15z m155 -57 c28 -14 60 -60 60 -85 0 -6 -47
+-10 -135 -10 -74 0 -135 4 -135 9 0 17 47 76 70 88 34 17 105 16 140 -2z
+M17210 569 c-13 -6 -33 -17 -42 -26 -17 -15 -18 -15 -18 5 0 18 -6 22 -30 22
+l-30 0 0 -196 0 -195 28 3 27 3 5 131 c6 144 15 171 70 194 23 10 40 10 65 3
+60 -19 78 28 20 53 -39 16 -60 17 -95 3z M17555 566 c-100 -37 -152 -162 -110
+-264 74 -175 326 -158 374 25 23 86 -21 193 -95 228 -52 24 -120 29 -169 11z
+m171 -89 c43 -46 52 -94 29 -153 -22 -59 -62 -84 -131 -84 -105 0 -164 100
+-120 205 22 52 69 77 135 72 47 -3 59 -9 87 -40z M990 374 l0 -195 28 3 27 3
+3 193 2 192 -30 0 -30 0 0 -196z M3702 378 l3 -193 28 -3 27 -3 0 195 0 196
+-30 0 -30 0 2 -192z M5310 434 c0 -105 4 -144 16 -170 38 -79 139 -106 227
+-61 l47 24 0 -23 c0 -19 5 -24 25 -24 l25 0 0 195 0 195 -30 0 -30 0 0 -131 0
+-131 -34 -34 c-27 -27 -42 -34 -75 -34 -52 0 -86 16 -100 47 -6 13 -11 80 -11
+153 l0 130 -30 0 -30 0 0 -136z M6380 374 l0 -195 28 3 27 3 3 193 2 192 -30
+0 -30 0 0 -196z M6590 564 c0 -21 157 -377 168 -382 8 -3 21 -1 29 4 11 7 121
+251 166 369 5 12 -1 15 -26 15 -32 0 -32 -1 -91 -145 -33 -80 -63 -142 -67
+-138 -4 5 -31 64 -59 133 -29 69 -54 131 -57 138 -5 11 -63 18 -63 6z M8462
+378 l3 -193 25 0 25 0 3 193 2 192 -30 0 -30 0 2 -192z M10030 374 l0 -195 28
+3 27 3 3 193 2 192 -30 0 -30 0 0 -196z M14055 483 c36 -47 65 -91 65 -96 0
+-6 -32 -52 -70 -104 -55 -73 -67 -95 -55 -99 32 -13 62 8 114 81 l54 74 60
+-79 c50 -68 64 -80 88 -80 16 0 29 5 29 11 0 6 -28 47 -63 92 -35 45 -67 87
+-71 94 -4 7 21 48 59 97 36 46 65 87 65 90 0 3 -15 6 -33 6 -29 0 -39 -8 -81
+-65 -26 -36 -51 -65 -54 -65 -4 0 -27 29 -52 65 -42 60 -48 65 -83 65 l-38 0
+66 -87z M16320 341 c0 -126 -4 -241 -10 -255 -8 -21 -16 -26 -44 -26 -19 0
+-38 5 -42 12 -5 7 -11 5 -21 -7 -21 -30 -15 -44 27 -56 51 -15 96 -3 124 34
+20 27 21 43 24 278 l3 249 -30 0 -31 0 0 -229z"/></g><g transform="translate(0.000000,433.000000) scale(0.100000,-0.100000)"><path class="ew-logo-w" d="M11330 3623 c-27 -10 -65 -37 -97 -68 -62 -63 -89 -136 -80 -219 4
+-34 89 -257 256 -671 138 -341 260 -638 270 -660 65 -141 227 -198 366 -131
+92 46 110 76 245 409 67 166 127 313 132 327 8 22 26 -15 137 -290 70 -173
+135 -329 144 -346 42 -82 163 -143 256 -130 65 9 145 50 183 96 25 28 101 205
+303 701 258 636 269 667 269 729 -1 150 -117 264 -269 264 -73 0 -144 -29
+-197 -81 -40 -39 -52 -64 -218 -476 -51 -125 -94 -226 -95 -225 -2 2 -62 149
+-134 328 -77 189 -143 339 -159 360 -16 19 -55 49 -87 65 -75 38 -154 40 -233
+6 -94 -42 -113 -73 -256 -427 -71 -176 -131 -322 -135 -326 -3 -4 -60 127
+-125 290 -66 163 -130 318 -142 343 -59 120 -204 177 -334 132z" fill="url(#ewWGradient)"/></g></svg></div>
+    <div class="header-titles">
+      <h1>Informe de Opciones de Grado Universitario</h1>
+      <div class="header-sub">Preparado para AIDAS IVANAUSKAUS</div>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="intro" onclick="showTab('intro', this)">Introducción</button><button class="tab-btn" data-tab="rva" onclick="showTab('rva', this)">Research vs Applied Sciences</button><button class="tab-btn" data-tab="denmark" onclick="showTab('denmark', this)"><span class="flag flag-sm flag-dk"><span class="h"></span><span class="v"></span></span>Dinamarca</button><button class="tab-btn" data-tab="netherlands" onclick="showTab('netherlands', this)"><span class="flag flag-sm flag-nl"><span class="h"></span><span class="v"></span></span>Países Bajos</button><button class="tab-btn" data-tab="finland" onclick="showTab('finland', this)"><span class="flag flag-sm flag-fi"><span class="h"></span><span class="v"></span></span>Finlandia</button><button class="tab-btn" data-tab="sweden" onclick="showTab('sweden', this)"><span class="flag flag-sm flag-se"><span class="h"></span><span class="v"></span></span>Suecia</button><button class="tab-btn" data-tab="lithuania" onclick="showTab('lithuania', this)"><span class="flag flag-sm flag-lt"><span class="h"></span><span class="v"></span></span>Lituania</button><button class="tab-btn" data-tab="germany" onclick="showTab('germany', this)"><span class="flag flag-sm flag-de"><span class="h"></span><span class="v"></span></span>Alemania</button><button class="tab-btn" data-tab="spain" onclick="showTab('spain', this)"><span class="flag flag-sm flag-es"><span class="h"></span><span class="v"></span></span>España</button>
+  </nav>
+</header>
+
+<main>
+
+<section class="tab-panel active" id="tab-intro">
+
+<div class="intro-block">
+<h2>Customized Degree Options Report</h2>
+<p style="color:var(--muted); font-weight:700; letter-spacing:.04em;">AIDAS IVANAUSKAUS</p>
+<p>Hello AIDAS</p>
+<p>I hope you're well. I've been working these past few days on finding degrees in Electronic Engineering, Mechatronics, and related fields that, based on what you told us, might interest you most. In your report, you mentioned your interest in Switzerland and Norway, but there aren't any degrees related to these fields taught in English in those countries.</p>
+<p>I've included a list of options below. If you have any questions, I'd be happy to help.</p>
+</div>
+
+<div class="intro-block">
+<h2>Índice de opciones por país</h2>
+
+<div class="toc-country">
+  <h3><span class="flag flag-sm flag-dk"><span class="h"></span><span class="v"></span></span> Dinamarca</h3>
+  <div class="toc-grid"><a class="toc-link" onclick="goTo('denmark','dk-beng-mechatronics-sdu')">
+<span class="toc-degree">BEng in Mechatronics – SDU (University of Southern Denmark)</span>
+<span class="toc-school">SDU – University of Southern Denmark</span>
+</a><a class="toc-link" onclick="goTo('denmark','dk-bsc-mechatronics-sdu')">
+<span class="toc-degree">BSc in Mechatronics Engineering – SDU (University of Southern Denmark)</span>
+<span class="toc-school">SDU – University of Southern Denmark</span>
+</a><a class="toc-link" onclick="goTo('denmark','dk-beng-electronics-sdu')">
+<span class="toc-degree">BEng in Electronics – SDU (Southern University of Denmark)</span>
+<span class="toc-school">SDU – Southern University of Denmark</span>
+</a><a class="toc-link" onclick="goTo('denmark','dk-bsc-electronics-sdu')">
+<span class="toc-degree">BSc in Electronics Engineering – SDU (Southern University of Denmark)</span>
+<span class="toc-school">SDU – Southern University of Denmark</span>
+</a><a class="toc-link" onclick="goTo('denmark','dk-beng-mechanical-sdu')">
+<span class="toc-degree">BEng in Mechanical Engineering – SDU (Southern University of Denmark)</span>
+<span class="toc-school">SDU – Southern University of Denmark</span>
+</a><a class="toc-link" onclick="goTo('denmark','dk-bsc-mechanical-sdu')">
+<span class="toc-degree">BSc in Mechanical Engineering – SDU (Southern University of Denmark)</span>
+<span class="toc-school">SDU – Southern University of Denmark</span>
+</a><a class="toc-link" onclick="goTo('denmark','dk-bsc-general-eng-dtu')">
+<span class="toc-degree">(BSc) in General Engineering – DTU (Technical University of Denmark)</span>
+<span class="toc-school">DTU – Technical University of Denmark</span>
+</a></div>
+</div>
+
+<div class="toc-country">
+  <h3><span class="flag flag-sm flag-nl"><span class="h"></span><span class="v"></span></span> Países Bajos</h3>
+  <div class="toc-grid"><a class="toc-link" onclick="goTo('netherlands','nl-ee-tue')">
+<span class="toc-degree">Electrical Engineering – TU/e Eindhoven</span>
+<span class="toc-school">TU/e – Eindhoven University of Technology</span>
+</a><a class="toc-link" onclick="goTo('netherlands','nl-advanced-tech-twente')">
+<span class="toc-degree">Advanced Technology – Twente University</span>
+<span class="toc-school">University of Twente</span>
+</a><a class="toc-link" onclick="goTo('netherlands','nl-ee-twente')">
+<span class="toc-degree">Electrical Engineering – Twente University</span>
+<span class="toc-school">University of Twente</span>
+</a><a class="toc-link" onclick="goTo('netherlands','nl-mechatronics-fontys')">
+<span class="toc-degree">Bachelor in Mechatronics – Fontys University of Applied Sciences</span>
+<span class="toc-school">Fontys University of Applied Sciences</span>
+</a><a class="toc-link" onclick="goTo('netherlands','nl-eee-fontys')">
+<span class="toc-degree">Electrical and Electronic Engineering – Fontys UAS</span>
+<span class="toc-school">Fontys University of Applied Sciences</span>
+</a><a class="toc-link" onclick="goTo('netherlands','nl-eee-mechatronics-hanze')">
+<span class="toc-degree">Electrical and Electronic Engineering - Mechatronics – Hanze University of Applied Sciences</span>
+<span class="toc-school">Hanze University of Applied Sciences</span>
+</a><a class="toc-link" onclick="goTo('netherlands','nl-eee-mechatronics-han')">
+<span class="toc-degree">Electrical and Electronic Engineering - Mechatronics – HAN University of Applied Sciences</span>
+<span class="toc-school">HAN University of Applied Sciences</span>
+</a><a class="toc-link" onclick="goTo('netherlands','nl-mechatronics-saxion')">
+<span class="toc-degree">Mechatronics – Saxion University of Applied Sciences</span>
+<span class="toc-school">Saxion University of Applied Sciences</span>
+</a></div>
+</div>
+
+<div class="toc-country">
+  <h3><span class="flag flag-sm flag-fi"><span class="h"></span><span class="v"></span></span> Finlandia</h3>
+  <div class="toc-grid"><a class="toc-link" onclick="goTo('finland','fi-aalto-bsc-msc')">
+<span class="toc-degree">Bachelor of Science (Technology) + Master of Science (Technology) – Aalto University (choose between 2 programs)</span>
+<span class="toc-school">Aalto University</span>
+</a><a class="toc-link" onclick="goTo('finland','fi-lut-tech-eng-science')">
+<span class="toc-degree">Bachelor of Science (Technology) + Master of Science (Technology) Bachelor&#x27;s Programme in Technology and Engineering Science – LUT University</span>
+<span class="toc-school">LUT University</span>
+</a><a class="toc-link" onclick="goTo('finland','fi-lut-hebut')">
+<span class="toc-degree">Bachelor of Science (Technology) + Master of Science (Technology) Electrical Engineering (HEBUT Double Degree) – LUT University</span>
+<span class="toc-school">LUT University</span>
+</a></div>
+</div>
+
+<div class="toc-country">
+  <h3><span class="flag flag-sm flag-se"><span class="h"></span><span class="v"></span></span> Suecia</h3>
+  <div class="toc-grid"><a class="toc-link" onclick="goTo('sweden','se-ict-kth')">
+<span class="toc-degree">BSc Information and Communication Technology – KTH Royal Institute of Technology</span>
+<span class="toc-school">KTH Royal Institute of Technology</span>
+</a></div>
+</div>
+
+<div class="toc-country">
+  <h3><span class="flag flag-sm flag-lt"><span class="h"></span><span class="v"></span></span> Lituania</h3>
+  <div class="toc-grid"><a class="toc-link" onclick="goTo('lithuania','lt-electronics-ktu')">
+<span class="toc-degree">Electronics Engineering – Kaunas University of Technology (KTU)</span>
+<span class="toc-school">Kaunas University of Technology (KTU)</span>
+</a><a class="toc-link" onclick="goTo('lithuania','lt-eee-ktu')">
+<span class="toc-degree">Electronics and Electrical Engineering – Kaunas University of Technology (KTU)</span>
+<span class="toc-school">Kaunas University of Technology (KTU)</span>
+</a></div>
+</div>
+
+<div class="toc-country">
+  <h3><span class="flag flag-sm flag-de"><span class="h"></span><span class="v"></span></span> Alemania</h3>
+  <div class="toc-grid"><a class="toc-link" onclick="goTo('germany','de-mechatronic-srh')">
+<span class="toc-degree">BEng Applied Mechatronic Systems – SRH University</span>
+<span class="toc-school">SRH University</span>
+</a><a class="toc-link" onclick="goTo('germany','de-eee-srh')">
+<span class="toc-degree">BEng Electrical and Electronics Engineering – SRH University</span>
+<span class="toc-school">SRH University</span>
+</a><a class="toc-link" onclick="goTo('germany','de-mechatronics-robotics-aalen')">
+<span class="toc-degree">BEng Mechatronics and Robotics Engineering – Aalen University of Applied Sciences</span>
+<span class="toc-school">Aalen University of Applied Sciences</span>
+</a><a class="toc-link" onclick="goTo('germany','de-mechatronics-automation-bielefeld')">
+<span class="toc-degree">BEng Mechatronics and Automation Engineering – Hochschule Bielefeld University of Applied Sciences</span>
+<span class="toc-school">Hochschule Bielefeld University of Applied Sciences</span>
+</a><a class="toc-link" onclick="goTo('germany','de-intelligent-mechatronic-heilbronn')">
+<span class="toc-degree">BEng Intelligent Mechatronic Systems – Heilbronn University of Applied Sciences</span>
+<span class="toc-school">Heilbronn University of Applied Sciences</span>
+</a></div>
+</div>
+
+<div class="toc-country">
+  <h3><span class="flag flag-sm flag-es"><span class="h"></span><span class="v"></span></span> España</h3>
+  <div class="toc-grid"><a class="toc-link" onclick="goTo('spain','es-electrica-uc3m')">
+<span class="toc-degree">*NEW* Degree in Electrical Engineering with Dual Mention (Bilingual, Spanish)</span>
+<span class="toc-school">Universidad Carlos III de Madrid</span>
+</a><a class="toc-link" onclick="goTo('spain','es-electronica-uc3m')">
+<span class="toc-degree">Bachelor&#x27;s Degree in Industrial Electronics and Automation Engineering (Bilingual, Spanish)</span>
+<span class="toc-school">Universidad Carlos III de Madrid</span>
+</a></div>
+</div>
+
+</div>
+
+<div class="now-block">
+<h2>What do you have to do now?</h2>
+<p>Take a look at all the options we've selected, watch the videos, read the website content (subjects, specializations, etc.), jot down any questions you have, and think about which options you like best. When you're finished, let me know and we'll find a day and time to meet, discuss the options, and answer any questions.</p>
+<p>All the best,<br>Jenni</p>
+</div>
+
+</section>
+
+
+<section class="tab-panel" id="tab-rva">
+<div class="intro-block">
+<h2>Research Universities vs Applied Science</h2>
+<p>In most European countries there are two types of universities that are important to know and differentiate: universities of <strong>Research</strong> and those of <strong>Applied Sciences</strong>. The two types of university share many commonalities, but to fully understand these two systems, it is helpful to look at their main differences:</p>
+
+<h3 style="font-size:1.05rem; color:var(--teal-dark);">● Theoretical vs. practical methodology</h3>
+<p>Applied Sciences universities are known for using a highly practical methodology called PBL (Project/Problem-Based Learning). From the first year, students simulate a real-world project-based work environment, collaborating with peers, researching to find and evaluate solutions, and reaching a consensus on a strategy that must then be implemented collectively. It's a fascinating methodology (the same one used in Denmark) that greatly facilitates learning and the acquisition of practical skills that you can apply as soon as you graduate. These universities almost always include a mandatory one-semester professional internship. Research universities don't have such a practical focus. Instead, they aim to establish a solid foundation in theory and research skills so that students can later choose a master's program in which to specialize and acquire more practical skills (more applicable to their future careers). These universities typically don't include internships as part of their undergraduate degree.</p>
+
+<h3 style="font-size:1.05rem; color:var(--teal-dark);">● Duration</h3>
+<p>The universities of Applied Sciences last one year longer (4 years, 240 ECTS) because they include internships and are designed to allow you to enter the job market directly without going through a master's degree. On the other hand, the ones of Research only last 3 years (180 ECTS) because they do not have internships and are usually complemented with a 1 or 2 year master's degree.</p>
+
+<h3 style="font-size:1.05rem; color:var(--teal-dark);">● Ranking / Prestige</h3>
+<p>The main reason why one might choose a university in Research is because of the higher ranking and prestige that these universities have.</p>
+<p>The universities of Applied Sciences (University of Applied Sciences, in Dutch) are sometimes undervalued among students because they do not appear in international rankings (they do not have research faculties that develop studies or scientific publications, which is what scores the most in the rankings).</p>
+
+<h3 style="font-size:1.05rem; color:var(--teal-dark);">● Access to Master's Degrees</h3>
+<p>Here it's important to distinguish whether your master's degree will be in a country that differentiates between the two universities, or in a country that doesn't. In Spain, for example, which doesn't differentiate between these universities, both degrees give you the same opportunities. But if it's in the Netherlands, Belgium, or Germany, for example, there are differences. With your degree from the university of Research you will be able to access master's degrees at universities in Research or Applied Sciences. But instead, with your title of Applied Sciences you will be able to access master's degrees at universities in Applied Sciences. But if you want to access universities in Research, you will be required to complete a pre-master's course (lasting either one semester or one year) to bring you up to speed with research skills that you are not expected to have developed yet.</p>
+
+<p>For more information, I'm leaving you two interesting links from two different sources (a university of Research and another one of Applied Sciences):</p>
+<div class="rva-links">
+<a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank" rel="noopener">→ Applied Science vs. Research University</a>
+<a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank" rel="noopener">→ Types of universities in the Netherlands</a>
+</div>
+<p>Now that we've covered these details, here are the most interesting study options (see the country tabs above):</p>
+
+<h3 style="font-size:1.05rem; color:var(--teal-dark);">BSc (Bachelor of Science) vs. BEng (Bachelor of Engineering) — Denmark</h3>
+<p><strong>BSc:</strong> more scientific, mathematical, and theoretical orientation. It's a good option for students who enjoy theory and analysis, want to keep open the possibility of doing a master's degree or dedicating themselves to research, and prefer to understand scientific principles in depth.</p>
+<p><strong>BEng:</strong> a more practical, technical and industry-related approach. It's a good option for students who prefer to learn in a practical way, want to work in engineering from an applied perspective, and are interested in projects, design and development of solutions.</p>
+</div>
+</section>
+
+<section class="tab-panel" id="tab-denmark">
+<div class="country-hero">
+  <span class="flag flag-lg flag-dk"><span class="h"></span><span class="v"></span></span>
+  <div>
+    <h2>Dinamarca</h2>
+    <div class="country-meta"><span>Coste matrícula UE: €0 / año</span></div>
+    <div class="country-text"><p>European students have their studies fully subsidized in Denmark, with the annual cost we have to pay being <strong>€0/year</strong>.</p>
+<p>In Denmark, admission to Bachelor's programs is done through two routes: <strong>QUOTA 1</strong>, based primarily on the final grade of the studies, and <strong>QUOTA 2</strong>. The selection committee may also consider other factors such as academic qualifications, experience, CV, and motivation. Decisions are usually made by the end of July.</p>
+<p><strong>BSc (Bachelor of Science) Vs. BEng (Bachelour of Engineering)</strong></p>
+<p><strong>BSc:</strong> more scientific, mathematical, and theoretical orientation.<br>It's a good option for students who:</p>
+<ul>
+<li>They enjoy theory and analysis.</li>
+<li>They want to keep open the possibility of doing a master's degree or dedicating themselves to research.</li>
+<li>They prefer to understand scientific principles in depth.</li>
+</ul>
+<p><strong>BEng:</strong> a more practical, technical and industry-related approach.<br>It's a good option for students who:</p>
+<ul>
+<li>They prefer to learn in a practical way.</li>
+<li>They want to work in engineering from an applied perspective.</li>
+<li>They are interested in projects, design and development of solutions.</li>
+</ul></div>
+  </div>
+</div>
+<div class="section-divider"><h3>RESEARCH UNIVERSITIES</h3></div>
+<article class="uni-card" id="dk-beng-mechatronics-sdu">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.sdu.dk/en/uddannelse/ingenioer/mekatronik" target="_blank" rel="noopener">BEng in Mechatronics – SDU (University of Southern Denmark) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">SDU – University of Southern Denmark</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge">4th-5th en Dinamarca</span><span class="rank-badge">#301-400 mundial (Shanghai)</span></div></a>
+    </div>
+    <span class="difficulty-badge green">MEDIA</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Sønderborg (27,000 inhabitants) <button class="map-btn" onclick="scrollToMap('denmark','map-wrap-denmark')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3.5 years (210 ECTS)</div></div><div class="meta-item"><div class="meta-label">Plazas disponibles</div><div class="meta-value">40 (in 2025, 47 crazy places)</div></div></div>
+  <div class="uni-desc">In this degree, you will gain a broad understanding of engineering through foundational courses in mechanics, electronics, programming, mathematics, and physics. You will also acquire knowledge in marketing, design, and manufacturing. Part of the instruction is delivered alongside other engineering programs at the Sønderborg University campus. During the program, you will be able to choose from four specialization tracks:
+<ul><li>Profile in Mechatronics Engineering.</li><li>Profile in Mechanical Engineering.</li><li>Profile in electronic engineering.</li><li>Profile in integrated systems (embedded systems).</li></ul></div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>210 hours of English (3 years)</li><li>375 hours of mathematics (3 years)</li><li>190 hours of physical education (3 years)</li></ul><h5>Nivel de inglés</h5><ul><li>210 hours of English (3 years)</li></ul><h5>Proceso de selección</h5><p>Yes, there is a selection process that consists of 2 parts: the exam <a href="https://www.sdu.dk/en/uddannelse/bachelor/mechatronics/adgangskrav/optagelsesproeve-kvote-2" target="_blank" rel="noopener">uniTest</a> (critical, quantitative, and linguistic reasoning) and a personal interview. Exam date: 2026 (March) 27 - April 25, 2026</p><h5>Dificultad de admisión</h5><p>MEDIA</p><p>Admission response date: April 15 (Installment 2: based on UniTest score); July 28 (Installment 1) GPA</p><div class="deadline-box">⏰ Deadline for submitting registration: March 15</div></div></details>
+</article>
+
+<article class="uni-card" id="dk-bsc-mechatronics-sdu">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.sdu.dk/en/bsc-mechatronics" target="_blank" rel="noopener">BSc in Mechatronics Engineering – SDU (University of Southern Denmark) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">SDU – University of Southern Denmark</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge">4th-5th en Dinamarca</span><span class="rank-badge">#301-400 mundial (Shanghai)</span></div></a>
+    </div>
+    <span class="difficulty-badge green">MEDIA</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Sønderborg (27,000 inhabitants) <button class="map-btn" onclick="scrollToMap('denmark','map-wrap-denmark')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3 years (180 ECTS)</div></div><div class="meta-item"><div class="meta-label">Plazas disponibles</div><div class="meta-value">100 (98 vacant places in 2025)</div></div></div>
+  <div class="uni-desc">It's a three-year degree program, taught entirely in English, at the Sønderborg campus. It combines mechanics, electronics, and programming to develop intelligent systems such as robots, automated machines, autonomous systems, and medical technology. The program is very hands-on, with projects every semester and collaborations with companies. It also includes subjects such as electronics, programming, power electronics, mechanics, thermodynamics, and data-driven methods.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>210 hours of English (3 years)</li><li>375 hours of mathematics (3 years)</li><li>190 physical hours (3 years)</li></ul><h5>Nivel de inglés</h5><ul><li>210 hours of English (3 years)</li></ul><h5>Proceso de selección</h5><p>Yes, there is a selection process that consists of 2 parts: the exam <a href="https://www.sdu.dk/en/uddannelse/bachelor/mechatronics/adgangskrav/optagelsesproeve-kvote-2" target="_blank" rel="noopener">uniTest</a> (critical, quantitative, and linguistic reasoning) and a personal interview. Exam date: 2026 (March 27 - April 25, 2026)</p><h5>Dificultad de admisión</h5><p>MEDIA</p><p>Admission response date: April 15 (Installment 2: based on UniTest score); July 28 (Installment 1) GPA</p><div class="deadline-box">⏰ Deadline for submitting registration: March 15</div></div></details>
+</article>
+
+<article class="uni-card" id="dk-beng-electronics-sdu">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.sdu.dk/en/uddannelse/ingenioer/electronics" target="_blank" rel="noopener">BEng in Electronics – SDU (Southern University of Denmark) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">SDU – Southern University of Denmark</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge">4th-5th en Dinamarca</span><span class="rank-badge">#301-400 mundial (Shanghai)</span></div></a>
+    </div>
+    <span class="difficulty-badge green">MEDIA</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Sønderborg (27,000 inhabitants) <button class="map-btn" onclick="scrollToMap('denmark','map-wrap-denmark')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3.5 years (210 ECTS)</div></div><div class="meta-item"><div class="meta-label">Plazas disponibles</div><div class="meta-value">40 (30 crazy places in 2025)</div></div></div>
+  <div class="uni-desc">Electronic engineers play an indispensable role in reducing CO2 emissions and the transition to sustainable energy. Do you dream of combining scientific and engineering knowledge with creativity to solve some of today's biggest challenges in electronic engineering?
+A degree in electronic engineering from SDU opens up a wide range of career opportunities both in Denmark and abroad. There is a shortage of electronic engineers, and the skills you will develop will be sought after in a broad range of industries.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Mathematics = 375 hours</li><li>English = 210 hours</li><li>Physics = 190 hours</li><li>Chemistry = 75 hours</li></ul><h5>Nivel de inglés</h5><ul><li>English = 210 hours</li></ul><h5>Proceso de selección</h5><p>Yes, there is a selection process that consists of 2 parts: the exam uniTest (critical, quantitative, and linguistic reasoning) and a personal interview. Exam date: 2026 (March 27 - April 25, 2026)</p><h5>Dificultad de admisión</h5><p>MEDIA</p><p>Admission response date: April 15 (Installment 2: based on UniTest score); July 28 (Installment 1) GPA</p><div class="deadline-box">⏰ Deadline for submitting registration: March 15</div></div></details>
+</article>
+
+<article class="uni-card" id="dk-bsc-electronics-sdu">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.sdu.dk/en/uddannelse/bachelor/electronics" target="_blank" rel="noopener">BSc in Electronics Engineering – SDU (Southern University of Denmark) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">SDU – Southern University of Denmark</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge">4th-5th en Dinamarca</span><span class="rank-badge">#301-400 mundial (Shanghai)</span></div></a>
+    </div>
+    <span class="difficulty-badge green">MEDIA</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Sønderborg (27,000 inhabitants) <button class="map-btn" onclick="scrollToMap('denmark','map-wrap-denmark')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3 years (180 ECTS)</div></div><div class="meta-item"><div class="meta-label">Plazas disponibles</div><div class="meta-value">30 (24 crazy places in 2025)</div></div></div>
+  <div class="uni-desc">With a degree in Electronic Engineering, you can have a real impact on society. Electric cars, green energy technologies like wind turbines and solar panels, smart home electronics, and energy reduction systems are just a few of the many possibilities. Are you passionate about developing innovative electronic equipment? The world depends on the ingenuity of electronic engineers, who can innovate, collaborate, and make their mark. With a degree in Electronic Engineering from SDU, you can unleash your full potential.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Mathematics = 375 hours</li><li>English = 210 hours</li><li>Physics = 190 hours</li><li>Chemistry = 75 hours</li></ul><h5>Nivel de inglés</h5><ul><li>English = 210 hours</li></ul><h5>Proceso de selección</h5><p>Yes, there is a selection process consisting of two parts: the <a href="https://www.sdu.dk/en/uddannelse/bachelor/mechatronics/adgangskrav/optagelsesproeve-kvote-2" target="_blank" rel="noopener">uniTest</a> exam (critical, quantitative, and linguistic reasoning) and a personal interview. Even so, the difficulty is medium/low, and the acceptance rate in recent years has been very high.</p><h5>Dificultad de admisión</h5><p>MEDIA</p><p>Admission response date: April 15 (Installment 2: based on UniTest score); July 28 (Installment 1) GPA</p><div class="deadline-box">⏰ Deadline for submitting registration: March 15</div></div></details>
+</article>
+
+<article class="uni-card" id="dk-beng-mechanical-sdu">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.sdu.dk/en/uddannelse/ingenioer/maskinteknik" target="_blank" rel="noopener">BEng in Mechanical Engineering – SDU (Southern University of Denmark) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">SDU – Southern University of Denmark</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge">4th-5th en Dinamarca</span><span class="rank-badge">#301-400 mundial (Shanghai)</span></div></a>
+    </div>
+    <span class="difficulty-badge green">MEDIA</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Sønderborg (27,000 inhabitants) <button class="map-btn" onclick="scrollToMap('denmark','map-wrap-denmark')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3.5 years (210 ECTS)</div></div></div>
+  <div class="uni-desc">Other degree at SDU that may interest you and has the same admission requirements as the Electronics Engineering programs listed above (academics: Mathematics 375h, English 210h, Physics 190h, Chemistry 75h; deadline March 15; response April 15 / July 28; uniTest + personal interview selection process).</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Mathematics = 375 hours</li><li>English = 210 hours</li><li>Physics = 190 hours</li><li>Chemistry = 75 hours</li></ul><h5>Nivel de inglés</h5><ul><li>English = 210 hours</li></ul><h5>Proceso de selección</h5><p>Same selection process as the SDU Electronics Engineering programs: uniTest (critical, quantitative, and linguistic reasoning) and a personal interview.</p><h5>Dificultad de admisión</h5><p>MEDIA</p><p>Admission response date: April 15 (Installment 2: based on UniTest score); July 28 (Installment 1) GPA</p><div class="deadline-box">⏰ Deadline for submitting registration: March 15</div></div></details>
+</article>
+
+<article class="uni-card" id="dk-bsc-mechanical-sdu">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.sdu.dk/en/uddannelse/bachelor/maskinteknik" target="_blank" rel="noopener">BSc in Mechanical Engineering – SDU (Southern University of Denmark) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">SDU – Southern University of Denmark</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge">4th-5th en Dinamarca</span><span class="rank-badge">#301-400 mundial (Shanghai)</span></div></a>
+    </div>
+    <span class="difficulty-badge green">MEDIA</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Sønderborg (27,000 inhabitants) <button class="map-btn" onclick="scrollToMap('denmark','map-wrap-denmark')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3 years (180 ECTS)</div></div></div>
+  <div class="uni-desc">Other degree at SDU that may interest you and has the same admission requirements as the Electronics Engineering programs listed above (academics: Mathematics 375h, English 210h, Physics 190h, Chemistry 75h; deadline March 15; response April 15 / July 28; uniTest + personal interview selection process).</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Mathematics = 375 hours</li><li>English = 210 hours</li><li>Physics = 190 hours</li><li>Chemistry = 75 hours</li></ul><h5>Nivel de inglés</h5><ul><li>English = 210 hours</li></ul><h5>Proceso de selección</h5><p>Same selection process as the SDU Electronics Engineering programs: uniTest (critical, quantitative, and linguistic reasoning) and a personal interview.</p><h5>Dificultad de admisión</h5><p>MEDIA</p><p>Admission response date: April 15 (Installment 2: based on UniTest score); July 28 (Installment 1) GPA</p><div class="deadline-box">⏰ Deadline for submitting registration: March 15</div></div></details>
+</article>
+
+<article class="uni-card" id="dk-bsc-general-eng-dtu">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.dtu.dk/english/education/undergraduate/general-engineering" target="_blank" rel="noopener">(BSc) in General Engineering – DTU (Technical University of Denmark) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">DTU – Technical University of Denmark</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/universities/technical-university-of-denmark" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge gold">3rd en Dinamarca</span><span class="rank-badge gold">#101-150 mundial (Shanghai)</span></div></a>
+    </div>
+    <span class="difficulty-badge green">MEDIA</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Lyngby (60,000 inhabitants) <button class="map-btn" onclick="scrollToMap('denmark','map-wrap-denmark')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3 years (180 ECTS)</div></div><div class="meta-item"><div class="meta-label">Plazas disponibles</div><div class="meta-value">unpublished</div></div></div>
+  <div class="uni-desc">A three-year degree, taught entirely in English, with a strong foundation in mathematics, physics, chemistry, and programming. You can specialize in Cyber Systems, which is the option most closely related to electronics, hardware, software, AI, and systems, and work on hands-on design and construction projects. <a href="https://youtu.be/IxrYmXCF6eY?si=153QXkner5uR1EG0" target="_blank" rel="noopener">WATCH VIDEO</a></div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Mathematics = 375 hours</li><li>English = 210 hours</li><li>Physics = 190 hours</li><li>Chemistry = 75 hours</li></ul><h5>Nivel de inglés</h5><ul><li>Exempt for having completed the European Baccalaureate</li></ul><h5>Proceso de selección</h5><p>Yes, there is a selection process that consists of the student's GPA, a letter of motivation, and a CV.</p><h5>Dificultad de admisión</h5><p>MEDIA</p><p>Admission response date: July 28</p><div class="deadline-box">⏰ Deadline for submitting registration: March 15</div></div></details>
+</article>
+
+<div class="map-wrap" id="map-wrap-denmark">
+  <h3>📍 Mapa de universidades — Dinamarca</h3>
+  <div class="leaflet-map" id="map-denmark"></div>
+</div>
+</section><section class="tab-panel" id="tab-netherlands">
+<div class="country-hero">
+  <span class="flag flag-lg flag-nl"><span class="h"></span><span class="v"></span></span>
+  <div>
+    <h2>Países Bajos</h2>
+    <div class="country-meta"><span>Coste matrícula UE: €2,695 / año</span></div>
+    <div class="country-text"><p>European students have their studies partially subsidized in the Netherlands, with the annual cost we have to pay being <strong>€2,695/year</strong>.</p></div>
+  </div>
+</div>
+<div class="section-divider"><h3>RESEARCH UNIVERSITIES</h3></div>
+<article class="uni-card" id="nl-ee-tue">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.tue.nl/en/education/bachelor-college/bachelor-electrical-engineering" target="_blank" rel="noopener">Electrical Engineering – TU/e Eindhoven <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">TU/e – Eindhoven University of Technology</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge gold">#151-200 Ing. Eléctrica</span><span class="rank-badge">#401-500 mundial</span></div></a>
+    </div>
+    <span class="difficulty-badge orange">Medium - High</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Eindhoven (approximately 249,000 inhabitants) <button class="map-btn" onclick="scrollToMap('netherlands','map-wrap-netherlands')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3 years (180 ECTS)</div></div><div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">Application fee 100 €</div></div></div>
+  <div class="uni-desc">A three-year degree program taught in English, focusing on electronics, electricity, digital systems, signals, control, communications, and semiconductors, with a strong foundation in mathematics and physics and practical projects. TU/e is located in Brainport Eindhoven. It is one of Europe's leading technology ecosystems, specializing in high-tech, electronics, semiconductors, robotics, and advanced systems, and is home to companies like ASML and NXP. It is particularly interesting for those who want to work in electronics, embedded systems, chips, and hardware.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate with the following subjects:</li><li>Mathematics (5 sessions per week)</li><li>Physics</li><li>English L1 or L2</li></ul><h5>Nivel de inglés</h5><ul><li>TOEFL iBT minimum score: 90 (minimum 21 in each section)</li><li>Cambridge C2 (CPE) with a minimum of 180 total points and 169 in each section, or the C1 (CAE) exam with a minimum of 176 total points and 169 in each section</li><li>IELTS minimum score: 6.5 (minimum 6.0 in each section)</li><li>EB: if fully in English EXEMPT. If not fully in English, exemption is possible with English Language 1 or 2</li></ul><h5>Proceso de selección</h5><p>There is no selection process; if you meet the requirements, admission is practically guaranteed. Admission does not depend solely on your grade point average: TU/e first checks that you meet the academic and subject requirements and, for programs with selection, there may be an additional process.</p><h5>Dificultad de admisión</h5><p>Medium - High</p><p>Admission response date: June</p><div class="deadline-box">⏰ Registration deadline: May 1st</div></div></details>
+</article>
+
+<article class="uni-card" id="nl-advanced-tech-twente">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.utwente.nl/en/education/bachelor/programmes/advanced-technology/" target="_blank" rel="noopener">Advanced Technology – Twente University <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">University of Twente</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge">#501-600 mundial</span><span class="rank-badge">#201-300 Ing. Eléctrica</span></div></a>
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Enschede (approximately 162,000 inhabitants) <button class="map-btn" onclick="scrollToMap('netherlands','map-wrap-netherlands')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3 years (180 ECTS)</div></div><div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">Application fee 100 €</div></div></div>
+  <div class="uni-desc">It combines electrical engineering, mathematics, mechanics, electronics, nanotechnology, robotics, and programming. It's a very flexible option: you can explore different areas and later specialize through electives and choose the master's program that interests you most. It's especially interesting for Electronics/Mechatronics/Robotics. The first two years combine electronics, mechanics, mathematics, materials, programming, signals and systems, and in the third year you can specialize through electives according to your interests, for example, in Systems & Control, Software Systems, Robotics or Nanotechnology. It includes many practical team projects and a final project/thesis.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate with the following subjects:</li><li>Mathematics (5 sessions per week)</li><li>Physical (4 sessions per week)</li><li>English L1 or L2</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS (Academic): Minimum overall score: 6.0 and per section: 5.5</li><li>TOEFL iBT: Minimum overall score: 80 and per section: 18</li><li>Cambridge C1 Advanced (CAE): Minimum overall score: 169 and per section: 162</li><li>Cambridge C2 Proficiency (CPE): Minimum overall score: 169 and per section: 162</li><li>If your EB is taught in English and you have an English subject* you are exempt from the test (*English L1 or L2)</li><li>Must be submitted before May 1st</li></ul><h5>Proceso de selección</h5><p>The matching process at the University of Twente is designed to confirm whether your chosen degree program aligns with your skills and interests. It is mandatory for those applying before May 1st; failure to participate could result in your being denied admission. The process, which may include questionnaires, interviews, or trial days, concludes with an indicative recommendation — which may be positive, include suggestions for improvement, or even advise reconsidering your choice — but does not directly determine your admission.</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: June</p><div class="deadline-box">⏰ Deadline for submitting registration: May 1st</div></div></details>
+</article>
+
+<article class="uni-card" id="nl-ee-twente">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.utwente.nl/en/education/bachelor/programmes/electrical-engineering/" target="_blank" rel="noopener">Electrical Engineering – Twente University <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">University of Twente</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge">#501-600 mundial</span><span class="rank-badge">#201-300 Ing. Eléctrica</span></div></a>
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Enschede (approximately 162,000 inhabitants) <button class="map-btn" onclick="scrollToMap('netherlands','map-wrap-netherlands')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3 years (180 ECTS)</div></div><div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">Application fee 100 €</div></div></div>
+  <div class="uni-desc">Focused on electronics, circuits, sensors, chips, digital systems, communications, control, and programming, the program combines a solid foundation in mathematics and physics with hands-on projects and teamwork. In the final year, you can tailor your studies through electives and a final project towards areas such as microchips, nanoelectronics, robotics, telecommunications, AI, integrated circuit design, or biomedical systems.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate with the following subjects:</li><li>Mathematics (5 sessions per week)</li><li>Physical (4 sessions per week)</li><li>English L1 or L2</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS (Academic): Minimum overall score: 6.0 and per section: 5.5</li><li>TOEFL iBT: Minimum overall score: 80 and per section: 18</li><li>Cambridge C1 Advanced (CAE): Minimum overall score: 169 and per section: 162</li><li>Cambridge C2 Proficiency (CPE): Minimum overall score: 169 and per section: 162</li><li>If your EB is taught in English and you have an English subject* you are exempt from the test (*English L1 or L2)</li><li>Must be submitted before May 1st</li></ul><h5>Proceso de selección</h5><p>The matching process at the University of Twente is designed to confirm whether your chosen degree program aligns with your skills and interests. It is mandatory for those applying before May 1st; failure to participate could result in your being denied admission. The process, which may include questionnaires, interviews, or trial days, concludes with an indicative recommendation — which may be positive, include suggestions for improvement, or even advise reconsidering your choice — but does not directly determine your admission.</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: June</p><div class="deadline-box">⏰ Deadline for submitting registration: May 1st</div></div></details>
+</article>
+<div class="section-divider"><h3>APPLIED SCIENCE UNIVERSITIES</h3></div>
+<article class="uni-card" id="nl-mechatronics-fontys">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.fontys.nl/en/Home.htm" target="_blank" rel="noopener">Bachelor in Mechatronics – Fontys University of Applied Sciences <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Fontys University of Applied Sciences</div>
+      
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Eindhoven (223,000 inhabitants) or Venlo (100,000 inhabitants) <button class="map-btn" onclick="scrollToMap('netherlands','map-wrap-netherlands')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">4 years (240 ECTS)</div></div></div>
+  <div class="uni-desc">As a mechatronics engineer, you'll be able to work in diverse teams and environments. You'll gain a solid foundation in mechanical, software, and electrical engineering. Working in international and/or multidisciplinary teams will come naturally to you. You'll be a "logical thinker," considering how to make equipment safer or easier to use and designing it accordingly — think, for example, of an automated car wash, an intelligent production robot, or an advanced self-guided vehicle. Mechatronics is essential to modern society, and therefore, there is a high demand for well-trained mechatronics engineers.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Complete the European Baccalaureate successfully</li></ul><h5>Nivel de inglés</h5><ul><li>Cambridge FCE 169 (minimum 169 in each section, maximum one with 160)</li><li>IELTS (minimum 6 in each part, maximum one section 5.5)</li><li>TOEFL (minimum total 80, Reading: 18, Listening: 17, Speaking: 20 y Writing: 17)</li><li>EB 100% English</li></ul><h5>Proceso de selección</h5><p>There is no selection process. Although the university may conduct entrance exams to assess your level of mathematics and English, you may also have to conduct an interview and submit a letter of motivation.</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: 4 weeks from enrollment</p><div class="deadline-box">⏰ Deadline for submitting registration: June 15</div></div></details>
+</article>
+
+<article class="uni-card" id="nl-eee-fontys">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.fontys.nl/en/Study-at-Fontys/Programmes/Electrical-Electronic-Engineering.htm" target="_blank" rel="noopener">Electrical and Electronic Engineering – Fontys UAS <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Fontys University of Applied Sciences</div>
+      
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Eindhoven (223,000 inhabitants) <button class="map-btn" onclick="scrollToMap('netherlands','map-wrap-netherlands')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">4 years (240 ECTS)</div></div></div>
+  <div class="uni-desc">As an electrical and electronics engineer, you'll contribute to all aspects of life, in every field, to ensure a simpler and more enjoyable existence. Electrical engineers keep the world moving. Do you play sports? Design a device to increase speed. Do you want a healthcare career? Learn to manufacture life-saving instruments. Are you concerned about the environment? Create energy-efficient devices. We offer personalized guidance and projects that can boost your future.
+Choose the path that suits you best. With expert guidance and practical experience, you'll be on the cusp of a successful career.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate Approval</li></ul><h5>Nivel de inglés</h5><ul><li>Cambridge FCE 169 (minimum 169 in each section, maximum one with 160)</li><li>IELTS (minimum 6 in each part, maximum one section 5.5)</li><li>TOEFL (minimum: total 80, Reading: 18, Listening: 17, Speaking: 20 y Writing: 17)</li><li>EB 100% English</li></ul><h5>Proceso de selección</h5><p>There is no selection process. Although the university may conduct entrance exams to assess your level of mathematics and English, you may also have to conduct an interview and submit a letter of motivation.</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: 4 weeks after enrollment</p><div class="deadline-box">⏰ Deadline for submitting registration: June 15</div></div></details>
+</article>
+
+<article class="uni-card" id="nl-eee-mechatronics-hanze">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.hanze.nl/en/programmes/full-time/bachelor/electrical-and-electronic-engineering" target="_blank" rel="noopener">Electrical and Electronic Engineering - Mechatronics – Hanze University of Applied Sciences <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Hanze University of Applied Sciences</div>
+      
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Groningen (200,336 inhabitants) <button class="map-btn" onclick="scrollToMap('netherlands','map-wrap-netherlands')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">4 years (240 ECTS)</div></div></div>
+  <div class="uni-desc">The Electrical and Electronic Engineering program offers many elective options. After the common phase of the first year, you choose the specialization that best suits your interests and career aspirations. In addition to Mechatronics, you can also specialize in Sensor Technology or Electronics. So, whether you want to explore mechanics, sensors, or the full spectrum of electronics, the Mechatronics specialization focuses on the design and control of mechanical systems. It's the ultimate combination of mechanical engineering, electrical and electronic engineering, and information technology.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Complete the European Baccalaureate successfully</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS 6.0 (maximum two sections 5.5)</li><li>TOEFL iBT 80 (with no section below 17)</li><li>Cambridge FCE B2 (minimum C - 169)</li><li>You have obtained a diploma at an English-taught institution within the European Economic Area (EEA) and you can prove that the education you have received there was full-time English-taught (statement from the school, signed and stamped, confirming that the medium of instruction and examination of your prior education was entirely in English)</li></ul><h5>Proceso de selección</h5><p>Although the university may administer entrance exams to assess your math and English skills, you might also have to complete an interview and submit a letter of motivation. You must complete the study match (online interview to ensure it's the right grade for you).</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: 4 weeks after enrollment</p><div class="deadline-box">⏰ Deadline for submitting registration: August 15th</div></div></details>
+</article>
+
+<article class="uni-card" id="nl-eee-mechatronics-han">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.hanuniversity.com/en/programs/bachelor/electrical-and-electronic-engineering/fulltime/" target="_blank" rel="noopener">Electrical and Electronic Engineering - Mechatronics – HAN University of Applied Sciences <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">HAN University of Applied Sciences</div>
+      
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Arnhem <button class="map-btn" onclick="scrollToMap('netherlands','map-wrap-netherlands')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">4 years (240 ECTS)</div></div></div>
+  <div class="uni-desc">The BSc Electrical and Electronic Engineering at HAN University of Applied Sciences is a four-year, practice-oriented programme designed to prepare students for careers as electrical engineers. The programme combines fundamental theories in electrical and electronic engineering with extensive hands-on learning through laboratories, practical assignments, and real-life projects. Students study areas such as electrical circuits, electromagnetism, electronics, microcontrollers, control systems, data communication, industrial systems, and power systems. Throughout the programme, students work in project teams and collaborate with companies and professionals, gaining practical engineering experience. The third year includes an industry internship, while the final year involves a minor and a graduation project addressing a real-world issue for a company or organisation. The programme also incorporates applied research through HAN's research centre, particularly in areas such as sustainable energy, solar power, and wind energy.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Complete the European Baccalaureate having exams in the following subjects:</li><li>English</li><li>Physics</li><li>Mathematics</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS (academic) score of 6.0 or higher with no sub-scores below 5.0, speaking 6.0</li><li>TOEFL iBT* score of 4.5 or higher (exams taken before 21 January 2026: 80)</li><li>Cambridge FCE (Grade C minimum score 169) / CAE / CPE</li><li>LanguageCert (academic) score of 65</li><li>Pearson PTE (academic) score of 61</li><li>TOEIC score of 865 for listening and reading and 335 for speaking and writing</li><li>European Baccalaureate (English Language 1 or 2)</li></ul><h5>Proceso de selección</h5><p>Meet eligibility criteria and take part in HAN's Matching process, which focuses on their motivation, expectations, and suitability for the programme. Overall, admission is mainly eligibility-based rather than competitively ranked.</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: 4 weeks after enrollment</p><div class="deadline-box">⏰ Deadline for submitting registration: August 15th</div></div></details>
+</article>
+
+<article class="uni-card" id="nl-mechatronics-saxion">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.saxion.edu/programmes/bachelor/mechatronics-english-programme" target="_blank" rel="noopener">Mechatronics – Saxion University of Applied Sciences <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Saxion University of Applied Sciences</div>
+      
+    </div>
+    
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Enschede <button class="map-btn" onclick="scrollToMap('netherlands','map-wrap-netherlands')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">4 years (240 ECTS)</div></div></div>
+  <div class="uni-desc">The BSc Mechatronics at Saxion University of Applied Sciences is a four-year, practice-oriented programme focused on the design and development of robots, smart tools, and innovative machines. Students gain an interdisciplinary foundation in mechanical engineering, electrical engineering, computer science, and control engineering, combining theoretical learning with hands-on projects. The programme includes practical projects, an industry internship, and opportunities to work with the latest developments in robotics and smart mechatronics.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Complete the European Baccalaureate having exams in the following subjects:</li><li>Physics</li><li>Mathematics</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS Academic with a minimum overall score of 6.0</li><li>TOEFL Internet-Based with a minimum score of 80 (MyBest scores of the TOEFL test are not accepted)</li><li>Cambridge English Language Assessment with a minimum score of 169 – First, Advanced, Proficiency</li><li>European Baccalaureate in English</li></ul><h5>Proceso de selección</h5><p>Meet eligibility criteria. Saxion also considers motivation, communication skills, and self-reflective abilities.</p><p>Admission response date: 4 weeks after enrollment</p><div class="deadline-box">⏰ Deadline for submitting registration: August 15th</div></div></details>
+</article>
+
+<div class="map-wrap" id="map-wrap-netherlands">
+  <h3>📍 Mapa de universidades — Países Bajos</h3>
+  <div class="leaflet-map" id="map-netherlands"></div>
+</div>
+</section><section class="tab-panel" id="tab-finland">
+<div class="country-hero">
+  <span class="flag flag-lg flag-fi"><span class="h"></span><span class="v"></span></span>
+  <div>
+    <h2>Finlandia</h2>
+    <div class="country-meta"><span>Coste matrícula UE: €0 / año</span></div>
+    <div class="country-text"><p>Education in Finland is generally free of charge for EU/EEA students, with tuition fees of <strong>€0 per year</strong>, although students may need to pay student-union or other administrative fees.</p></div>
+  </div>
+</div>
+<div class="section-divider"><h3>RESEARCH UNIVERSITIES</h3></div>
+<article class="uni-card" id="fi-aalto-bsc-msc">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.aalto.fi/en/study-options/computer-engineering-bachelor-of-science-and-master-of-science-technology" target="_blank" rel="noopener">Bachelor of Science (Technology) + Master of Science (Technology) – Aalto University (choose between 2 programs) <span class="cursor-ic">🖱️</span></a>
+      <div class="uni-links">También disponible: <a href="https://www.aalto.fi/en/study-options/digital-systems-and-design-bachelor-of-science-and-master-of-science-technology" target="_blank" rel="noopener">Digital Systems and Design 🖱️</a></div>
+      <div class="uni-school">Aalto University</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/universities/aalto-university" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge gold">3rd-4th en Finlandia</span><span class="rank-badge gold">#76-100 mundial Ing. Eléctrica</span></div></a>
+    </div>
+    <span class="difficulty-badge orange">Alto</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Espoo (330,000 inhabitants) <button class="map-btn" onclick="scrollToMap('finland','map-wrap-finland')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3+2 years, 180+120 ECTS</div></div><div class="meta-item"><div class="meta-label">Plazas Computer Engineering</div><div class="meta-value">40</div></div><div class="meta-item"><div class="meta-label">Plazas Digital Systems and Design</div><div class="meta-value">45</div></div></div>
+  <div class="uni-desc"><strong>Computer Engineering:</strong> The degree in Computer Engineering at Aalto University combines mathematics, physics, programming, and electrical engineering to train professionals capable of designing innovative, sustainable, and safe technological solutions. During the degree program, students learn about both hardware and software, including low-level programming, artificial intelligence (AI), and the Internet of Things (IoT), as well as gaining practical experience in projects, teamwork, and project management. The program also prepares students for further master's and doctoral studies. It is a collaboration between the School of Science and the School of Electrical Engineering, and its graduates can apply to fields such as smart cities, cybersecurity, healthcare, industry, and agriculture. Instruction is entirely in English, although there is the option to take a minor of 20–25 credits in Finnish if you have sufficient command of the language.
+<br><br><strong>Digital Systems and Design:</strong> The Digital Systems and Design degree at Aalto University prepares students to design and develop digital systems using current technologies. It combines electrical engineering, electronics, programming, and design, with content such as networks, electronic circuits, embedded systems, control and automation, artificial intelligence, algorithmic learning, and optical communications. During the program, students learn to program in languages such as Python, C, C++, MATLAB, and Scala, as well as work on practical, team-based projects. The program also develops skills in design, prototyping, project management, and communication of ideas. Students study complex systems such as autonomous vehicles, aircraft, ships, satellites, sensors, and mobile devices. The degree lasts three years and comprises 180 ECTS credits, is taught entirely in English, and allows students to continue their studies with a Master's degree at Aalto. It is particularly suitable for those interested in the intersection of hardware, software, electronics, and technology design.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Pass the European Baccalaureate with good results (to improve admission, you can submit SAT or ACT results before January 1st)</li></ul><h5>Nivel de inglés</h5><ul><li>There is no requirement</li></ul><h5>Proceso de selección</h5><p>Aalto converts your grades into points based on subjects and marks. Candidates are then ranked by their point totals, and places are offered starting with the highest-scoring applicants. They don't consider, for example, extracurricular activities, letters of recommendation, or a personal statement. For this selection process, admission is based on diploma grades or SAT/ACT scores.</p><h5>Dificultad de admisión</h5><p>Alto</p><p>Admission response date: May 27</p><div class="deadline-box">⏰ Deadline for submitting registration: January 22</div></div></details>
+</article>
+
+<article class="uni-card" id="fi-lut-tech-eng-science">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.lut.fi/en/studies/technology/bachelors-programmes-technology/bachelors-programme-technology-and-engineering-science" target="_blank" rel="noopener">Bachelor of Science (Technology) + Master of Science (Technology) Bachelor&#x27;s Programme in Technology and Engineering Science – LUT University <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">LUT University</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.timeshighereducation.com/world-university-rankings/lut-university" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge gold">Top 300 mundial (THE)</span></div></a>
+    </div>
+    <span class="difficulty-badge green">Medium-Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Lappeenranta <button class="map-btn" onclick="scrollToMap('finland','map-wrap-finland')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3+2 years, 180+120 ECTS</div></div><div class="meta-item"><div class="meta-label">Tipo de programa</div><div class="meta-value">Bachelor + Master, with a multidisciplinary training that integrates Electrical Engineering, Mechanical Engineering, Energy Technology and Environmental Engineering.</div></div></div>
+  <div class="uni-desc">The Bachelor's Programme in Technology and Engineering Science offers a broad and multidisciplinary education in engineering, combining Mechanical Engineering, Electrical Engineering, Energy Technology, and Environmental Engineering. During the first years, students study mathematics and physics, mechanics, thermodynamics, 3D modeling, technical documentation, electrical systems, electric drives, renewable energy, and the circular economy. In the second and third years, you can specialize in one of four areas: Electrical Engineering, Energy Technology, Environmental Technology, or Mechanical Engineering.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Complete European Baccalaureate Diploma with the following criteria:</li><li>GPA 65%</li><li>Physics passed</li><li>Mathematics 6</li><li>If you do not meet the requirements, you can submit the OMPT D/B or the SAT: <a href="https://www.omptest.org/tests/ompt-d/syllabus" target="_blank" rel="noopener">OMPT-D</a> or <a href="https://www.omptest.org/tests/ompt-b/syllabus" target="_blank" rel="noopener">OMPT-B</a> 60% / SAT 1300 (600 English/ 700 Mathematics)</li></ul><h5>Nivel de inglés</h5><ul><li>English as an L1 with an acceptable grade, or English as an L2/L3 with a minimum grade of 7</li><li>FCE – 180 minimum</li><li>IELTS ACADEMIC or ONLINE: Minimum overall score: 6.5 with a minimum score of 6.0 in writing and in speaking</li><li>TOEFL iBT or home: Minimum overall score: 90 with a minimum score of 22 in writing and in speaking</li></ul><h5>Proceso de selección</h5><p>It is done through rolling admission. The candidate submits the application online and the required documentation. If they meet all the requirements and there are still places available, they are admitted without a competitive ranking process.</p><h5>Dificultad de admisión</h5><p>Medium-Low</p><p>Admission response date: There is no single resolution date; if you meet all the requirements and there are places available, you can be admitted without competing with other candidates.</p><div class="deadline-box">⏰ Deadline for submitting registration: April 30</div></div></details>
+</article>
+
+<article class="uni-card" id="fi-lut-hebut">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.lut.fi/en/studies/technology/bachelors-programmes-technology/bachelors-programme-energy-technology-hebut-double-degree" target="_blank" rel="noopener">Bachelor of Science (Technology) + Master of Science (Technology) Electrical Engineering (HEBUT Double Degree) – LUT University <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">LUT University</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.timeshighereducation.com/world-university-rankings/lut-university" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge gold">Top 300 mundial (THE)</span></div></a>
+    </div>
+    <span class="difficulty-badge green">Medium-Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Lappeenranta <button class="map-btn" onclick="scrollToMap('finland','map-wrap-finland')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3+2 years, 180+120 ECTS</div></div><div class="meta-item"><div class="meta-label">Tipo de programa</div><div class="meta-value">Double Degree with LUT University and Hebei University of Technology (HEBUT), China. Students complete their entire degree program in Lappeenranta, Finland, but receive a degree from both universities if they meet the requirements of both. Non-Chinese students must also pass a basic Mandarin Chinese proficiency test during their studies to obtain the HEBUT degree. There is no need to travel to China to complete the program.</div></div></div>
+  <div class="uni-desc">The Bachelor's Programme in Electrical Engineering combines mathematics, physics, electrical engineering, electronics, programming, control systems, and mechatronics. The program covers areas such as power systems, electrical circuits, digital design, electric drives, mechatronics, embedded systems, and electromagnetic compatibility (EMC). It also includes technologies related to smart grids, solar and wind energy, automation, power electronics, and electric transport. The program has a practical focus, with projects, company visits, group work, and a significant amount of laboratory work.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>A completed European Baccalaureate Diploma</li><li>GPA 65%</li><li>Physics passed</li><li>Mathematics 6</li><li>If you do not meet the requirements, you can submit the OMPT D/B or the SAT: <a href="https://www.omptest.org/tests/ompt-d/syllabus" target="_blank" rel="noopener">OMPT-D</a> or <a href="https://www.omptest.org/tests/ompt-b/syllabus" target="_blank" rel="noopener">OMPT-B</a> 60% / SAT 1300 (600 English/ 700 Mathematics)</li></ul><h5>Nivel de inglés</h5><ul><li>English as an L1 with an acceptable grade, or English as an L2/L3 with a minimum grade of 7</li><li>FCE – 180 minimum</li><li>IELTS ACADEMIC or ONLINE: Minimum overall score: 6.5 with a minimum score of 6.0 in writing and in speaking</li><li>TOEFL iBT or home: Minimum overall score: 90 with a minimum score of 22 in writing and in speaking</li></ul><h5>Proceso de selección</h5><p>It is done through rolling admission. The candidate submits the application online and the required documentation. If they meet all the requirements and there are still places available, they are admitted without a competitive ranking process.</p><h5>Dificultad de admisión</h5><p>Medium-Low</p><p>Admission response date: There is no single resolution date; if you meet all the requirements and there are places available, you can be admitted without competing with other candidates.</p><div class="deadline-box">⏰ Deadline for submitting registration: April 30</div></div></details>
+</article>
+
+<div class="map-wrap" id="map-wrap-finland">
+  <h3>📍 Mapa de universidades — Finlandia</h3>
+  <div class="leaflet-map" id="map-finland"></div>
+</div>
+</section><section class="tab-panel" id="tab-sweden">
+<div class="country-hero">
+  <span class="flag flag-lg flag-se"><span class="h"></span><span class="v"></span></span>
+  <div>
+    <h2>Suecia</h2>
+    <div class="country-meta"><span>Coste matrícula UE: €0</span></div>
+    <div class="country-text"><p>Application deadlines and admission decisions in Sweden vary depending on the university and program. For Bachelor's programs beginning in the autumn semester, applications are generally submitted several months in advance, with admission decisions typically announced in July. Students should check the specific university and program deadlines, as they may differ. Education in Sweden is Free of charge for EU students 0€.</p></div>
+  </div>
+</div>
+<div class="section-divider"><h3>APPLIED SCIENCE UNIVERSITIES</h3></div>
+<article class="uni-card" id="se-ict-kth">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.kth.se/en/studies/bachelor/information-communication-technology/bsc-information-and-communication-technology-1.437049" target="_blank" rel="noopener">BSc Information and Communication Technology – KTH Royal Institute of Technology <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">KTH Royal Institute of Technology</div>
+      <div class="uni-ranking-label">Ranking de la universidad:</div><a href="https://www.shanghairanking.com/universities/kth-royal-institute-of-technology" target="_blank" rel="noopener" style="text-decoration:none;"><div class="rank-badges"><span class="rank-badge">#201-300 mundial</span><span class="rank-badge gold">#51-75 Electrónica</span></div></a>
+    </div>
+    <span class="difficulty-badge orange">Medium-High</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Stockholm (1 million inhabitants) <button class="map-btn" onclick="scrollToMap('sweden','map-wrap-sweden')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3 years, 180 ECTS</div></div></div>
+  <div class="uni-desc">The Bachelor in Information and Communication Technology (ICT) at KTH is a three-year, 180 ECTS program, taught entirely in English, that combines electronics, programming, computer science, and communication technologies. Students study areas such as artificial intelligence, machine learning, digital systems, robotics, cybersecurity, and communications, along with mathematics and digital electronics. The program has a practical focus, with labs, projects, and teamwork, and allows for specialization through elective courses. Upon completion, you can work in technology companies or continue with a master's degree in areas such as computer science, systems, communications, or AI.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>Pass the European Baccalaureate with good results</li><li>To be eligible for the KTH program, you need a background in mathematics and physics and must achieve at least a passing grade in both. The specific levels required depend on your country and education system, so KTH evaluates each application individually.</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS Academic: 6.5 overall (each section greater than 5.5)</li><li>TOEFL iBT and Home Edition: Score of 20 (scale 0-30) in written test, total score of 90</li><li>Cambridge English certificate level C1, minimum score 180</li><li>English Language 1 or 2 (L1 or L2)</li></ul><h5>Proceso de selección</h5><p>KTH's selection process is primarily based on academic record. First, you must meet the eligibility requirements, particularly in Mathematics, Physics, and English. Then, KTH evaluates and compares candidates' grades according to Swedish admissions rules and offers places to the highest-scoring applicants. There is no entrance exam or interview, and applicants completing EB are not accepted predicted grades: You must submit the documentation and final grades within the established deadline.</p><h5>Dificultad de admisión</h5><p>Medium-High</p><p>Admission response date: July 9</p><div class="deadline-box">⏰ Deadline for submitting registration: April 15th</div></div></details>
+</article>
+
+<div class="map-wrap" id="map-wrap-sweden">
+  <h3>📍 Mapa de universidades — Suecia</h3>
+  <div class="leaflet-map" id="map-sweden"></div>
+</div>
+</section><section class="tab-panel" id="tab-lithuania">
+<div class="country-hero">
+  <span class="flag flag-lg flag-lt"><span class="h"></span><span class="v"></span></span>
+  <div>
+    <h2>Lituania</h2>
+    <div class="country-meta"></div>
+    <div class="country-text"><p></p></div>
+  </div>
+</div>
+<div class="section-divider"><h3>RESEARCH UNIVERSITIES</h3></div>
+<article class="uni-card" id="lt-electronics-ktu">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://admissions.ktu.edu/programme/b-electronics-engineering/" target="_blank" rel="noopener">Electronics Engineering – Kaunas University of Technology (KTU) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Kaunas University of Technology (KTU)</div>
+      
+    </div>
+    <span class="difficulty-badge orange">Medium-High</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Kaunas, Lithuania <button class="map-btn" onclick="scrollToMap('lithuania','map-wrap-lithuania')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">4 years, 240 ECTS</div></div><div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">approximately €4,201/year</div></div><div class="meta-item"><div class="meta-label">Idioma de docencia</div><div class="meta-value">Lithuanian</div></div></div>
+  <div class="uni-desc">This is a highly practical Electronics Engineering program focused on the design and development of electronic systems. It covers circuits, analog and digital electronics, C/C++ programming, microprocessors, embedded systems, IoT, artificial intelligence applied to electronic systems, PCBs, FPGAs, and signal processing. Furthermore, it allows students to specialize in electronic equipment design, telecommunications, chip design, or medical electronics.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate approved and KTU indicates a minimum average above 60% in each access subject.</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS ≥ 5.5</li><li>TOEFL ≥ 75</li><li>CEFR ≥ B2 or equivalent — but this doesn't turn the program into English, since the university itself indicates that classes, assignments, and assessments are in Lithuanian.</li></ul><h5>Proceso de selección</h5><p>At KTU, the Bachelor's degree selection process is based on an admissions competition. First, candidates are checked to ensure they meet the academic and language requirements. Then, KTU calculates an admissions score based on the grades in the relevant subjects from the secondary school certificate; the weighting factors depend on the program. For international programs, candidates must also meet the minimum requirements for each subject and for English. Candidates are ranked according to their score, and those with the highest scores are admitted. In the case of the European Baccalaureate, the diploma is automatically recognized by KTU.</p><h5>Dificultad de admisión</h5><p>Medium-High</p><p>Admission response date: July</p><div class="deadline-box">⏰ Registration deadline: June 1st</div></div></details>
+</article>
+
+<article class="uni-card" id="lt-eee-ktu">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://admissions.ktu.edu/programme/b-electronics-and-electrical-engineering/" target="_blank" rel="noopener">Electronics and Electrical Engineering – Kaunas University of Technology (KTU) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Kaunas University of Technology (KTU)</div>
+      
+    </div>
+    <span class="difficulty-badge green">Medium</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Kaunas, Lithuania <button class="map-btn" onclick="scrollToMap('lithuania','map-wrap-lithuania')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3 years, 180 ECTS</div></div><div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">approximately €4,201/year</div></div><div class="meta-item"><div class="meta-label">Idioma de docencia</div><div class="meta-value">English</div></div></div>
+  <div class="uni-desc">The BSc Electronics and Electrical Engineering combines electronics and electrical engineering, offering a broader education than a degree focused solely on electronics. Students study mathematics, physics, programming, circuits, electronics, electrical systems, electronics manufacturing, power transmission, and smart electric power systems. They can also choose subjects such as PCB design, electric transport systems, and energy storage. The program has a strong practical focus, with access to 18 laboratories and FabLab Kaunas, and includes 15 ECTS credits of professional internships and 15 ECTS credits for a final project.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate approved. KTU requires an average score above 60% in each subject used for admission.</li><li>Admission score formula: 40% Mathematics + 40% Physics or Chemistry/Biology/Computer Science/Geography/Engineering Technologies + 20% English.</li><li>For European Baccalaureate students, KTU evaluates EB documentation and grades according to its admission criteria.</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS ≥ 5.5</li><li>TOEFL ≥ 75</li><li>CEFR ≥ B2 or equivalent</li></ul><h5>Proceso de selección</h5><p>At KTU, the Bachelor's degree selection process is based on an admissions competition. First, candidates are checked to ensure they meet the academic and language requirements. Then, KTU calculates an admissions score based on the grades in the relevant subjects from the secondary school certificate; the weighting factors depend on the program. For international programs, candidates must also meet the minimum requirements for each subject and for English. Candidates are ranked according to their score, and those with the highest scores are admitted. In the case of the European Baccalaureate, the diploma is automatically recognized by KTU.</p><h5>Dificultad de admisión</h5><p>Medium: Mathematics and Physics are important to achieve a good position.</p><p>Admission response date: July</p><div class="deadline-box">⏰ Registration deadline: June 1st</div></div></details>
+</article>
+
+<div class="map-wrap" id="map-wrap-lithuania">
+  <h3>📍 Mapa de universidades — Lituania</h3>
+  <div class="leaflet-map" id="map-lithuania"></div>
+</div>
+</section><section class="tab-panel" id="tab-germany">
+<div class="country-hero">
+  <span class="flag flag-lg flag-de"><span class="h"></span><span class="v"></span></span>
+  <div>
+    <h2>Alemania</h2>
+    <div class="country-meta"><span>Coste matrícula pública: €0 / año</span><span>Contribución semestral: ≈€363</span></div>
+    <div class="country-text"><p>For students from Germany, studying at public universities is generally tuition-free, meaning there are typically no annual tuition fees (€0/year) for most Bachelor's programs. Students are usually required to pay a semester contribution ≈€363, which covers administrative and student services.</p>
+<p>Application deadlines and admission decisions vary by university and program. For programs beginning in the winter semester, decisions are commonly made during the summer, with many universities completing the admission process by July or August.</p></div>
+  </div>
+</div>
+<div class="section-divider"><h3>APPLIED SCIENCE UNIVERSITIES</h3></div>
+<article class="uni-card" id="de-mechatronic-srh">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.srh-university.de/en/bachelor/applied-mechatronic-systems/e/" target="_blank" rel="noopener">BEng Applied Mechatronic Systems – SRH University <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">SRH University</div>
+      
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Berlin or Heidelberg <button class="map-btn" onclick="scrollToMap('germany','map-wrap-germany')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3.5 years, 7 semesters, 210 ECTS</div></div><div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">Private university — Berlin: €840/month; Heidelberg: 790 €/mes; plus a one-time registration fee of €750</div></div></div>
+  <div class="uni-desc">The B.Eng. Applied Mechatronic Systems combines mechanical engineering, electrical and electronic engineering, and computer science, with a strong practical focus. Students study mathematics, physics, programming, analog electronics, microcontrollers, sensors and actuators, embedded systems, robotics, AI, IoT, and smart manufacturing, modeling and simulation. The program includes laboratories, projects with companies, internships and research, and also offers the Siemens Mechatronic Systems Certificate Program (SMSCP), levels 1–2.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate approved</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS ≥ 6.5</li><li>TOEFL ≥ 87</li><li>Cambridge FCE A / B</li><li>Duolingo 110</li><li>*You need to ask if the English EB qualifies as a requirement</li></ul><h5>Proceso de selección</h5><p>The application is submitted online along with academic transcripts, English language certificate, CV, and identification. SRH reviews the application to ensure it meets the requirements and, if applicable, conducts an admissions interview. Following a successful interview, the acceptance letter and learning agreement are sent. This is not a competitive selection process based on grade rankings; admission is based on eligibility and available places.</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: N/A</p><div class="deadline-box">⏰ Registration deadline: Rolling admission</div></div></details>
+</article>
+
+<article class="uni-card" id="de-eee-srh">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.srh-university.de/en/bachelor/electrical-and-electronics-engineering/e/" target="_blank" rel="noopener">BEng Electrical and Electronics Engineering – SRH University <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">SRH University</div>
+      
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Heidelberg <button class="map-btn" onclick="scrollToMap('germany','map-wrap-germany')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3.5 years, 7 semesters, 210 ECTS</div></div><div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">Private university — Heidelberg: 790 €/mes; plus a one-time registration fee of €750</div></div></div>
+  <div class="uni-desc">The Bachelor in Electrical and Electronics Engineering at SRH University is a 3.5-year, 210 ECTS program taught entirely in English in Heidelberg. It combines electrical and electronic engineering with computer science and programming, covering analog electronics, sensors and actuators, microcontrollers, embedded systems, IoT, control systems, digital signal processing, and power electronics. The program has a strong practical focus, with engineering projects and 18 ECTS of professional internships, and allows students to specialize in areas such as autonomous systems and robotics or biomedical and healthcare technologies. It also addresses applications related to electromobility and energy, preparing students for careers in product development, R&D, systems design, and technology project management.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate approved</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS ≥ 6.5</li><li>TOEFL ≥ 87</li><li>Cambridge FCE A / B</li><li>Duolingo 110</li><li>*You need to ask if the English EB qualifies as a requirement</li></ul><h5>Proceso de selección</h5><p>The application is submitted online along with academic transcripts, an English language certificate, CV, and identification. SRH reviews the application to ensure it meets the requirements and, if applicable, conducts an admissions interview. Following a successful interview, the acceptance letter and learning agreement are sent. This is not a competitive selection process based on grade rankings; admission is based on eligibility and available places.</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: N/A</p><div class="deadline-box">⏰ Registration deadline: Rolling admission</div></div></details>
+</article>
+
+<article class="uni-card" id="de-mechatronics-robotics-aalen">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.hs-aalen.de/en/study-programmes/engineering-sciences-future-technologies/bachelor/mechatronics-engineering/" target="_blank" rel="noopener">BEng Mechatronics and Robotics Engineering – Aalen University of Applied Sciences <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Aalen University of Applied Sciences</div>
+      
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Aalen (70,000 inhabitants) <button class="map-btn" onclick="scrollToMap('germany','map-wrap-germany')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3.5 years, 7 semesters, 210 ECTS</div></div><div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">400€/year</div></div></div>
+  <div class="uni-desc">This is a broad engineering degree focused on the combination of electronics, robotics, programming, and mechanics, providing a well-rounded education rather than focusing solely on electronics. During the first semesters, students build a strong foundation in mathematics, physics, and engineering, before moving on to more specialized subjects such as mechatronics, control systems, automation, digital technologies, and robotics. The programme also includes a practical semester, allowing students to apply their knowledge in a professional environment. This combination prepares graduates for careers in areas such as robotics and automation, automotive electronics, electric mobility, medical technology, industrial automation, software, smart manufacturing, and artificial intelligence.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate approved</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS ≥ 6.0</li><li>TOEFL ≥ 72</li><li>Cambridge FCE B / CAE C</li></ul><h5>Proceso de selección</h5><p>VPD from uni-assist, which evaluates your European Baccalaureate and confirms your eligibility for German higher education. Submission of your diploma, transcripts/grade records, passport and other required documents through the Aalen application process.</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: N/A</p><div class="deadline-box">⏰ Registration deadline: 30 November</div></div></details>
+</article>
+
+<article class="uni-card" id="de-mechatronics-automation-bielefeld">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.hsbi.de/studiengaenge/mechatronics-and-automation" target="_blank" rel="noopener">BEng Mechatronics and Automation Engineering – Hochschule Bielefeld University of Applied Sciences <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Hochschule Bielefeld University of Applied Sciences</div>
+      
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Gütersloh (105,000 inhabitants) <button class="map-btn" onclick="scrollToMap('germany','map-wrap-germany')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3.5 years, 7 semesters, 210 ECTS</div></div><div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">700€/year</div></div></div>
+  <div class="uni-desc">Mechatronics and Automation at Hochschule Bielefeld (HSBI) is a 7-semester Bachelor of Engineering taught in English, combining mechanical engineering, electrical engineering and computer science. The programme focuses on the development, operation and optimisation of complex technical systems, with subjects such as electrical engineering, digital electronics, programming, mechanics, sensors, electrical machines and industrial automation. Students also develop project-management and teamwork skills and complete a mandatory company internship, giving the degree a strong practical and industry-oriented focus. Graduates can pursue careers in areas such as robotics, automation, mechanical and automotive engineering, aerospace, medical technology, electronics and industrial production.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate approved</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS ≥ 5.5</li><li>TOEFL ≥ 72</li><li>Cambridge FCE B / CAE C</li></ul><h5>Proceso de selección</h5><p>VPD from uni-assist, which evaluates your European Baccalaureate and confirms your eligibility for German higher education. Submission of your diploma, transcripts/grade records, passport, and other required documents through the application process.</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: N/A</p><div class="deadline-box">⏰ Registration deadline: 15 July</div></div></details>
+</article>
+
+<article class="uni-card" id="de-intelligent-mechatronic-heilbronn">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.hs-heilbronn.de/en/intelligent-mechatronic-systems" target="_blank" rel="noopener">BEng Intelligent Mechatronic Systems – Heilbronn University of Applied Sciences <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Heilbronn University of Applied Sciences</div>
+      
+    </div>
+    <span class="difficulty-badge green">Low</span>
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Heilbronn (130,000 inhabitants) <button class="map-btn" onclick="scrollToMap('germany','map-wrap-germany')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Duración</div><div class="meta-value">3.5 years, 7 semesters, 210 ECTS</div></div><div class="meta-item"><div class="meta-label">Coste</div><div class="meta-value">400€/year</div></div></div>
+  <div class="uni-desc">Intelligent Mechatronic Systems at Heilbronn University is a 7-semester Bachelor of Engineering taught in English, combining mechanical engineering, electronics, electrical engineering, computer science, automation and robotics. The programme focuses on designing and developing intelligent and automated technical systems, with practical applications in areas such as robotics, automotive technology, smart manufacturing, automation and Industry 4.0. It is a good option for students interested in the intersection of electronics, programming and mechanical engineering, with a strong practical and industry-oriented approach.</div>
+  <details class="req-details"><summary>Ver requisitos de admisión y fechas</summary><div class="req-body"><h5>Requisitos académicos</h5><ul><li>European Baccalaureate approved</li></ul><h5>Nivel de inglés</h5><ul><li>IELTS ≥ 6.0</li><li>TOEFL ≥ 79</li><li>Cambridge FCE C</li><li>Oxford Test of English min. 120 points and B2 in all modules</li></ul><h5>Proceso de selección</h5><p>VPD from uni-assist, which evaluates your European Baccalaureate and confirms your eligibility for German higher education. Submission of your diploma, transcripts/grade records, passport, and other required documents through the application process.</p><h5>Dificultad de admisión</h5><p>Low</p><p>Admission response date: end of August</p><div class="deadline-box">⏰ Registration deadline: 28 September</div></div></details>
+</article>
+
+<div class="map-wrap" id="map-wrap-germany">
+  <h3>📍 Mapa de universidades — Alemania</h3>
+  <div class="leaflet-map" id="map-germany"></div>
+</div>
+</section><section class="tab-panel" id="tab-spain">
+<div class="country-hero">
+  <span class="flag flag-lg flag-es"><span class="h"></span><span class="v"></span></span>
+  <div>
+    <h2>España</h2>
+    <div class="country-meta"></div>
+    <div class="country-text"><p><strong>Charles III of Madrid:</strong></p></div>
+  </div>
+</div>
+<div class="section-divider"><h3>UNIVERSIDAD CARLOS III DE MADRID</h3></div>
+<article class="uni-card" id="es-electrica-uc3m">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.uc3m.es/grado/electrica" target="_blank" rel="noopener">*NEW* Degree in Electrical Engineering with Dual Mention (Bilingual, Spanish) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Universidad Carlos III de Madrid</div>
+      
+    </div>
+    
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Madrid <button class="map-btn" onclick="scrollToMap('spain','map-wrap-spain')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Modalidad</div><div class="meta-value">Bilingual, Spanish</div></div></div>
+  <div class="uni-desc">Listed in the report as a Spanish option to consider alongside the international programs above: a new Degree in Electrical Engineering with Dual Mention, bilingual, taught in Spanish, at Universidad Carlos III de Madrid.</div>
+  
+</article>
+
+<article class="uni-card" id="es-electronica-uc3m">
+  <div class="uni-card-head">
+    <div class="uni-title-wrap">
+      <a class="uni-title" href="https://www.uc3m.es/grado/electronica" target="_blank" rel="noopener">Bachelor&#x27;s Degree in Industrial Electronics and Automation Engineering (Bilingual, Spanish) <span class="cursor-ic">🖱️</span></a>
+      
+      <div class="uni-school">Universidad Carlos III de Madrid</div>
+      
+    </div>
+    
+  </div>
+  <div class="meta-grid"><div class="meta-item"><div class="meta-label">Ciudad</div><div class="meta-value">Madrid <button class="map-btn" onclick="scrollToMap('spain','map-wrap-spain')">🗺️ Ver mapa</button></div></div><div class="meta-item"><div class="meta-label">Modalidad</div><div class="meta-value">Bilingual, Spanish</div></div></div>
+  <div class="uni-desc">Listed in the report as a Spanish option to consider alongside the international programs above: the Bachelor's Degree in Industrial Electronics and Automation Engineering, bilingual, taught in Spanish, at Universidad Carlos III de Madrid.</div>
+  
+</article>
+
+<div class="map-wrap" id="map-wrap-spain">
+  <h3>📍 Mapa de universidades — España</h3>
+  <div class="leaflet-map" id="map-spain"></div>
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="footer-logo"><svg class="ew-logo" viewBox="0 0 1800 433" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"><defs><linearGradient id="ewWGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#4CAB71"/><stop offset="50%" stop-color="#2CABBA"/><stop offset="100%" stop-color="#29AADC"/></linearGradient></defs><g transform="translate(0.000000,433.000000) scale(0.100000,-0.100000)"><path fill="#737373" d="M3780 3862 l0 -468 -77 76 c-43 42 -107 93 -143 113 -309 171 -743
+126 -995 -104 -111 -102 -196 -251 -237 -416 -31 -125 -31 -350 0 -475 62
+-249 202 -433 406 -533 137 -68 223 -87 391 -89 169 -1 235 14 383 85 86 42
+117 63 187 132 l85 82 0 -137 0 -138 110 0 110 0 0 1170 0 1170 -110 0 -110 0
+0 -468z m-465 -408 c151 -36 304 -151 377 -284 157 -285 91 -677 -145 -859
+-119 -91 -241 -131 -402 -131 -166 0 -285 37 -405 125 -94 69 -177 207 -205
+341 -20 93 -19 276 1 367 35 159 129 295 255 370 146 86 345 113 524 71z M728
+3680 c-214 -34 -356 -108 -500 -258 -89 -94 -146 -189 -189 -322 -28 -84 -32
+-112 -37 -241 -3 -112 -1 -165 12 -229 76 -372 351 -620 733 -659 308 -32 638
+91 803 299 l30 38 -74 61 c-41 34 -76 61 -78 61 -2 0 -33 -29 -69 -64 -112
+-109 -277 -173 -474 -183 -80 -4 -130 -1 -185 11 -90 19 -218 80 -282 136 -90
+78 -167 220 -193 358 l-7 32 725 0 725 0 8 66 c16 153 -20 354 -87 491 -68
+138 -202 266 -347 330 -139 62 -374 95 -514 73z m289 -215 c229 -43 391 -202
+437 -427 9 -42 16 -86 16 -98 0 -20 -2 -20 -625 -20 -344 0 -625 4 -625 8 0
+35 46 176 77 235 47 90 154 200 240 245 130 68 308 90 480 57z M9634 3679
+c-85 -14 -205 -56 -284 -100 -102 -57 -242 -197 -299 -299 -210 -380 -130
+-875 182 -1130 70 -58 212 -130 302 -154 150 -39 341 -40 489 -1 274 72 477
+264 564 535 31 97 42 172 42 291 0 438 -269 775 -680 853 -88 17 -232 19 -316
+5z m300 -214 c219 -46 400 -224 462 -455 24 -89 24 -281 1 -370 -46 -176 -156
+-314 -308 -389 -113 -56 -206 -74 -339 -68 -351 17 -581 249 -598 602 -9 215
+50 380 187 515 86 86 164 131 273 160 89 23 226 25 322 5z M7602 3669 c-292
+-38 -539 -213 -652 -462 -58 -129 -75 -215 -74 -387 1 -139 3 -164 28 -245 72
+-237 214 -409 421 -510 143 -70 233 -89 405 -89 127 1 156 4 233 28 141 42
+285 124 362 205 l29 32 -71 71 -71 71 -65 -51 c-137 -110 -289 -158 -464 -149
+-294 16 -516 193 -578 462 -21 89 -21 271 0 360 49 212 216 381 435 441 81 22
+271 25 350 5 84 -20 211 -85 268 -136 l52 -47 76 69 76 68 -57 51 c-185 166
+-449 246 -703 213z M14925 3674 c-11 -3 -50 -11 -87 -20 -316 -72 -557 -324
+-624 -653 -35 -177 -4 -422 73 -574 65 -129 182 -260 302 -336 164 -105 386
+-151 583 -120 166 26 301 93 425 212 l83 80 0 -137 0 -136 110 0 110 0 -2 833
+-3 832 -107 3 -108 3 0 -138 0 -139 -77 76 c-114 112 -233 173 -401 206 -68
+13 -229 17 -277 8z m313 -228 c201 -55 349 -196 416 -396 37 -109 46 -266 22
+-380 -25 -118 -86 -232 -170 -315 -123 -123 -260 -175 -455 -175 -192 0 -327
+54 -452 179 -127 128 -179 263 -179 466 0 132 15 199 71 314 78 159 236 279
+414 316 83 17 254 13 333 -9z M4720 3148 c0 -301 4 -540 10 -578 27 -166 85
+-284 195 -396 67 -69 95 -89 175 -127 135 -64 208 -81 365 -81 151 0 217 14
+341 73 57 27 103 59 153 106 l71 67 0 -111 0 -111 105 0 105 0 0 835 0 835
+-110 0 -110 0 0 -508 c0 -422 -3 -518 -15 -567 -50 -196 -192 -341 -382 -390
+-73 -19 -230 -19 -311 0 -193 46 -317 172 -358 363 -11 53 -14 177 -14 585 l0
+517 -110 0 -110 0 0 -512z M16413 3618 c2 -7 152 -375 331 -817 l327 -805
+-155 -360 -155 -361 111 -3 c61 -1 115 1 119 5 8 8 998 2305 1007 2336 4 16
+-4 17 -113 15 l-117 -3 -204 -480 c-112 -264 -241 -573 -287 -687 -73 -185
+-83 -205 -93 -185 -11 20 -226 559 -446 1117 l-93 235 -119 3 c-93 2 -117 0
+-113 -10z M4134 703 c-5 -10 -20 -35 -33 -55 l-23 -38 30 0 c25 0 37 9 66 49
+20 27 36 51 36 55 0 15 -66 5 -76 -11z M12992 453 l3 -268 25 0 25 0 3 268 2
+267 -30 0 -30 0 2 -267z M987 703 c-4 -3 -7 -19 -7 -34 0 -22 6 -30 25 -35 43
+-11 73 34 43 64 -13 13 -50 16 -61 5z M3700 690 c-15 -28 4 -60 35 -60 31 0
+50 32 35 60 -6 12 -21 20 -35 20 -14 0 -29 -8 -35 -20z M6370 690 c-15 -28 4
+-60 35 -60 14 0 29 8 35 20 15 28 -4 60 -35 60 -14 0 -29 -8 -35 -20z M8460
+695 c-26 -32 13 -81 48 -59 34 22 22 74 -18 74 -10 0 -23 -7 -30 -15z M10027
+703 c-4 -3 -7 -19 -7 -34 0 -22 6 -30 25 -35 43 -11 73 34 43 64 -13 13 -50
+16 -61 5z M16314 696 c-15 -40 21 -80 54 -60 37 24 21 74 -25 74 -13 0 -26 -6
+-29 -14z M2337 673 c-4 -3 -7 -28 -7 -55 l0 -48 -35 0 c-31 0 -35 -3 -35 -25
+0 -22 4 -25 35 -25 l35 0 0 -112 c0 -187 27 -234 128 -226 60 5 77 17 67 48
+-6 18 -11 20 -38 14 -87 -20 -97 -4 -97 153 l0 123 65 0 c63 0 65 1 65 25 0
+24 -2 25 -65 25 l-65 0 0 55 c0 51 -2 55 -23 55 -13 0 -27 -3 -30 -7z M8750
+625 l0 -55 -40 0 c-36 0 -40 -2 -40 -25 0 -22 4 -25 40 -25 l40 0 0 -127 c0
+-154 13 -193 71 -207 36 -9 93 -3 118 13 8 5 11 16 6 30 -6 19 -11 21 -38 15
+-45 -11 -78 -8 -88 8 -5 7 -9 70 -9 141 l0 127 60 0 c57 0 60 1 60 25 0 24 -3
+25 -60 25 l-60 0 0 55 c0 54 0 55 -30 55 -30 0 -30 -1 -30 -55z M14520 625 l0
+-55 -40 0 c-36 0 -40 -2 -40 -25 0 -22 4 -25 40 -25 l40 0 0 -127 c0 -154 13
+-193 71 -207 36 -9 93 -3 118 13 8 5 11 16 6 30 -6 19 -11 21 -38 15 -45 -11
+-78 -8 -88 8 -5 7 -9 70 -9 141 l0 127 60 0 c57 0 60 1 60 25 0 24 -3 25 -60
+25 l-60 0 0 55 c0 54 0 55 -30 55 -30 0 -30 -1 -30 -55z M172 569 c-68 -20
+-132 -113 -132 -190 0 -145 152 -241 286 -180 133 61 148 265 25 347 -44 29
+-126 40 -179 23z m134 -65 c36 -17 74 -82 74 -125 -1 -42 -36 -107 -69 -123
+-71 -37 -169 -8 -197 59 -55 131 65 249 192 189z M726 570 c-15 -5 -37 -17
+-47 -26 -18 -16 -19 -16 -19 4 0 18 -6 22 -30 22 l-30 0 2 -192 3 -193 25 0
+25 0 5 125 c5 135 15 163 65 196 24 16 54 15 96 -1 10 -4 19 3 27 19 10 22 9
+27 -6 35 -28 15 -85 21 -116 11z M1325 562 c-72 -35 -115 -103 -115 -184 1
+-78 56 -162 123 -187 68 -26 169 -6 216 43 l29 31 -24 18 c-13 10 -24 14 -24
+8 0 -5 -15 -19 -34 -30 -46 -29 -133 -29 -170 0 -23 18 -56 67 -56 84 0 3 75
+5 166 5 l167 0 -6 56 c-11 103 -75 163 -182 171 -35 3 -62 -2 -90 -15z m159
+-61 c30 -20 55 -55 56 -78 0 -10 -33 -13 -135 -13 -74 0 -135 4 -135 9 0 17
+47 76 70 88 38 19 110 16 144 -6z M1883 569 c-18 -5 -35 -14 -38 -19 -9 -15
+-25 -12 -25 5 0 10 -10 15 -30 15 l-30 0 0 -196 0 -195 28 3 27 3 5 136 c5
+145 10 158 61 185 53 27 135 9 155 -33 4 -10 10 -79 13 -153 l6 -135 25 0 25
+0 3 130 c2 118 0 134 -20 175 -37 73 -118 104 -205 79z M2779 570 c-44 -13
+-79 -41 -103 -84 -31 -54 -38 -97 -25 -154 28 -127 163 -189 282 -129 l46 24
+3 -21 c2 -15 10 -21 28 -21 l25 0 3 193 2 192 -30 0 c-26 0 -30 -4 -30 -27 0
+-24 -1 -25 -18 -10 -44 40 -122 56 -183 37z m130 -64 c85 -44 92 -189 12 -243
+-40 -27 -107 -31 -151 -8 -82 42 -86 194 -6 245 37 23 105 26 145 6z M3325
+565 c-102 -36 -154 -167 -106 -270 46 -100 164 -143 266 -96 57 26 70 44 46
+65 -18 16 -21 16 -52 -3 -41 -25 -108 -27 -150 -6 -62 33 -86 115 -55 190 30
+71 132 98 203 54 32 -20 36 -20 51 -6 15 15 14 18 -6 40 -42 44 -124 58 -197
+32z M4045 561 c-73 -34 -115 -102 -115 -186 0 -62 19 -103 68 -147 92 -83 248
+-55 301 54 23 49 28 128 10 175 -37 98 -166 149 -264 104z m156 -64 c43 -29
+59 -60 59 -120 0 -89 -49 -137 -139 -137 -44 0 -56 5 -88 33 -31 29 -37 41
+-41 89 -3 39 1 64 12 87 36 69 131 92 197 48z M4613 569 c-18 -5 -35 -14 -38
+-19 -9 -15 -25 -12 -25 5 0 10 -10 15 -30 15 l-30 0 2 -192 3 -193 25 0 25 0
+5 136 c5 145 10 158 61 185 53 27 135 9 155 -33 5 -10 11 -79 14 -153 l5 -135
+25 0 25 0 3 130 c2 118 0 134 -20 175 -37 73 -118 104 -205 79z M5948 557
+c-45 -23 -48 -23 -48 -6 0 14 -7 19 -30 19 l-30 0 2 -192 3 -193 25 0 25 0 5
+130 c3 88 10 137 19 151 38 57 129 72 178 30 28 -24 28 -26 33 -168 l5 -143
+28 -3 28 -3 -3 150 c-3 133 -5 153 -24 177 -33 45 -66 64 -119 70 -41 5 -59 1
+-97 -19z M7185 561 c-147 -66 -154 -291 -13 -360 78 -37 191 -20 242 38 18 20
+19 22 1 41 l-18 20 -20 -20 c-26 -29 -59 -40 -115 -40 -56 1 -86 16 -113 56
+-34 53 -33 53 144 56 158 3 162 4 165 25 5 35 -17 100 -45 134 -34 40 -96 69
+-148 69 -22 0 -58 -9 -80 -19z m174 -77 c16 -16 32 -39 36 -51 l6 -23 -135 0
+c-92 0 -136 4 -136 11 0 20 32 66 59 83 19 12 42 16 84 13 48 -3 63 -8 86 -33z
+M7718 557 c-45 -23 -48 -23 -48 -6 0 14 -7 19 -30 19 l-30 0 2 -192 3 -193 28
+-3 27 -3 0 108 c1 153 27 216 95 229 19 3 43 1 56 -6 19 -11 24 -10 36 6 17
+24 16 31 -5 43 -43 23 -86 22 -134 -2z M8063 567 c-45 -17 -73 -47 -79 -89 -5
+-29 -1 -40 22 -67 23 -25 46 -35 114 -52 105 -26 120 -34 120 -64 0 -58 -118
+-76 -199 -29 -40 22 -46 23 -60 10 -13 -14 -13 -18 5 -37 47 -53 165 -75 238
+-45 76 32 100 114 48 166 -21 21 -48 32 -108 45 -90 20 -124 37 -124 65 0 50
+123 69 189 29 31 -19 35 -19 50 -5 51 52 -119 108 -216 73z M9185 565 c-71
+-25 -125 -105 -125 -185 0 -75 54 -160 117 -186 65 -27 155 -14 201 28 l22 21
+0 -31 c0 -27 4 -32 25 -32 l25 0 0 195 0 195 -25 0 c-20 0 -25 -5 -25 -27 0
+-25 -1 -25 -19 -9 -25 23 -88 45 -126 45 -16 0 -48 -6 -70 -14z m139 -60 c44
+-21 66 -63 66 -125 0 -94 -45 -140 -138 -140 -58 0 -97 25 -118 76 -54 130 65
+248 190 189z M9766 570 c-15 -5 -37 -17 -47 -26 -18 -16 -19 -16 -19 4 0 18
+-6 22 -30 22 l-30 0 2 -192 3 -193 25 0 25 0 5 126 c5 134 15 162 65 195 24
+16 54 15 96 -1 10 -4 19 3 27 19 10 22 9 27 -6 35 -28 15 -85 21 -116 11z
+M10365 562 c-73 -35 -115 -103 -115 -184 1 -78 56 -162 123 -187 56 -21 149
+-8 189 26 15 13 17 12 20 -9 2 -17 10 -24 31 -26 l27 -3 0 195 0 196 -30 0
+c-23 0 -30 -4 -30 -20 0 -19 0 -19 -34 1 -51 30 -131 34 -181 11z m177 -80
+c26 -25 32 -41 36 -88 8 -99 -40 -154 -136 -154 -79 0 -132 56 -132 140 0 89
+59 144 148 137 43 -3 59 -10 84 -35z M11225 567 c-53 -21 -83 -48 -105 -91
+-37 -77 -19 -199 36 -248 75 -66 225 -61 288 11 19 20 19 22 1 41 -18 20 -19
+20 -39 1 -12 -10 -31 -24 -43 -30 -31 -16 -109 -14 -143 4 -28 14 -60 60 -60
+85 0 6 55 10 159 10 134 0 160 2 165 15 10 27 -15 114 -42 147 -50 59 -145 83
+-217 55z m145 -69 c19 -13 40 -38 47 -55 l13 -33 -135 0 c-88 0 -135 4 -135
+10 0 24 32 70 58 84 42 23 113 20 152 -6z M11747 556 c-44 -22 -47 -22 -47 -5
+0 14 -7 19 -30 19 l-30 0 2 -192 3 -193 25 0 25 0 5 130 c6 143 13 165 66 190
+48 23 98 19 131 -9 28 -24 28 -26 33 -168 l5 -143 28 -3 28 -3 -3 155 -3 155
+-35 36 c-57 58 -128 70 -203 31z M12572 569 c-52 -15 -107 -78 -122 -138 -23
+-97 17 -189 103 -232 60 -31 152 -24 209 17 45 32 53 50 28 67 -12 7 -26 2
+-54 -17 -31 -21 -51 -26 -98 -26 -55 0 -63 3 -94 34 -19 19 -34 43 -34 55 0
+20 4 21 160 21 l160 0 0 45 c0 49 -25 108 -58 138 -45 41 -130 56 -200 36z
+m138 -64 c33 -17 60 -52 60 -77 0 -16 -12 -18 -135 -18 l-135 0 13 33 c28 67
+126 99 197 62z M13625 565 c-117 -41 -161 -217 -78 -316 65 -77 191 -92 275
+-33 45 32 53 50 28 67 -12 7 -26 2 -54 -17 -55 -37 -141 -37 -184 -1 -17 14
+-35 39 -41 55 l-10 30 165 0 164 0 0 43 c0 48 -27 113 -58 140 -49 44 -136 57
+-207 32z m144 -59 c31 -16 61 -56 61 -81 0 -13 -20 -15 -135 -15 l-135 0 13
+33 c28 67 126 99 196 63z M14986 570 c-15 -5 -37 -17 -47 -26 -18 -16 -19 -16
+-19 4 0 18 -6 22 -30 22 l-30 0 2 -192 3 -193 25 0 25 0 5 125 c5 135 15 163
+65 196 24 16 54 15 96 -1 10 -4 19 3 27 19 10 22 9 27 -6 35 -28 15 -85 21
+-116 11z M15338 570 c-95 -28 -151 -133 -127 -238 28 -127 163 -189 282 -129
+l46 24 3 -21 c2 -15 10 -21 28 -21 l25 0 3 193 2 192 -30 0 c-26 0 -30 -4 -30
+-27 0 -24 -1 -25 -18 -10 -44 40 -122 56 -184 37z m133 -66 c60 -30 85 -138
+48 -206 -28 -52 -128 -75 -189 -43 -83 43 -85 205 -2 249 36 20 105 20 143 0z
+M15907 566 c-20 -7 -44 -19 -52 -26 -13 -10 -15 -9 -15 9 0 17 -6 21 -30 21
+l-30 0 2 -192 3 -193 28 -3 27 -3 0 116 c0 122 10 165 48 198 26 24 93 33 130
+18 48 -20 56 -44 60 -194 l4 -138 27 3 26 3 0 135 c-1 110 -4 142 -19 172 -34
+69 -130 103 -209 74z M16655 562 c-128 -60 -153 -236 -49 -334 36 -34 74 -48
+126 -48 59 0 112 19 149 52 l33 30 -25 18 c-20 16 -25 17 -32 4 -26 -46 -153
+-61 -201 -23 -23 18 -56 67 -56 84 0 3 75 5 166 5 l166 0 -4 54 c-8 102 -75
+165 -183 173 -34 3 -63 -2 -90 -15z m155 -57 c28 -14 60 -60 60 -85 0 -6 -47
+-10 -135 -10 -74 0 -135 4 -135 9 0 17 47 76 70 88 34 17 105 16 140 -2z
+M17210 569 c-13 -6 -33 -17 -42 -26 -17 -15 -18 -15 -18 5 0 18 -6 22 -30 22
+l-30 0 0 -196 0 -195 28 3 27 3 5 131 c6 144 15 171 70 194 23 10 40 10 65 3
+60 -19 78 28 20 53 -39 16 -60 17 -95 3z M17555 566 c-100 -37 -152 -162 -110
+-264 74 -175 326 -158 374 25 23 86 -21 193 -95 228 -52 24 -120 29 -169 11z
+m171 -89 c43 -46 52 -94 29 -153 -22 -59 -62 -84 -131 -84 -105 0 -164 100
+-120 205 22 52 69 77 135 72 47 -3 59 -9 87 -40z M990 374 l0 -195 28 3 27 3
+3 193 2 192 -30 0 -30 0 0 -196z M3702 378 l3 -193 28 -3 27 -3 0 195 0 196
+-30 0 -30 0 2 -192z M5310 434 c0 -105 4 -144 16 -170 38 -79 139 -106 227
+-61 l47 24 0 -23 c0 -19 5 -24 25 -24 l25 0 0 195 0 195 -30 0 -30 0 0 -131 0
+-131 -34 -34 c-27 -27 -42 -34 -75 -34 -52 0 -86 16 -100 47 -6 13 -11 80 -11
+153 l0 130 -30 0 -30 0 0 -136z M6380 374 l0 -195 28 3 27 3 3 193 2 192 -30
+0 -30 0 0 -196z M6590 564 c0 -21 157 -377 168 -382 8 -3 21 -1 29 4 11 7 121
+251 166 369 5 12 -1 15 -26 15 -32 0 -32 -1 -91 -145 -33 -80 -63 -142 -67
+-138 -4 5 -31 64 -59 133 -29 69 -54 131 -57 138 -5 11 -63 18 -63 6z M8462
+378 l3 -193 25 0 25 0 3 193 2 192 -30 0 -30 0 2 -192z M10030 374 l0 -195 28
+3 27 3 3 193 2 192 -30 0 -30 0 0 -196z M14055 483 c36 -47 65 -91 65 -96 0
+-6 -32 -52 -70 -104 -55 -73 -67 -95 -55 -99 32 -13 62 8 114 81 l54 74 60
+-79 c50 -68 64 -80 88 -80 16 0 29 5 29 11 0 6 -28 47 -63 92 -35 45 -67 87
+-71 94 -4 7 21 48 59 97 36 46 65 87 65 90 0 3 -15 6 -33 6 -29 0 -39 -8 -81
+-65 -26 -36 -51 -65 -54 -65 -4 0 -27 29 -52 65 -42 60 -48 65 -83 65 l-38 0
+66 -87z M16320 341 c0 -126 -4 -241 -10 -255 -8 -21 -16 -26 -44 -26 -19 0
+-38 5 -42 12 -5 7 -11 5 -21 -7 -21 -30 -15 -44 27 -56 51 -15 96 -3 124 34
+20 27 21 43 24 278 l3 249 -30 0 -31 0 0 -229z"/></g><g transform="translate(0.000000,433.000000) scale(0.100000,-0.100000)"><path class="ew-logo-w" d="M11330 3623 c-27 -10 -65 -37 -97 -68 -62 -63 -89 -136 -80 -219 4
+-34 89 -257 256 -671 138 -341 260 -638 270 -660 65 -141 227 -198 366 -131
+92 46 110 76 245 409 67 166 127 313 132 327 8 22 26 -15 137 -290 70 -173
+135 -329 144 -346 42 -82 163 -143 256 -130 65 9 145 50 183 96 25 28 101 205
+303 701 258 636 269 667 269 729 -1 150 -117 264 -269 264 -73 0 -144 -29
+-197 -81 -40 -39 -52 -64 -218 -476 -51 -125 -94 -226 -95 -225 -2 2 -62 149
+-134 328 -77 189 -143 339 -159 360 -16 19 -55 49 -87 65 -75 38 -154 40 -233
+6 -94 -42 -113 -73 -256 -427 -71 -176 -131 -322 -135 -326 -3 -4 -60 127
+-125 290 -66 163 -130 318 -142 343 -59 120 -204 177 -334 132z" fill="url(#ewWGradient)"/></g></svg></div>
+  <p>educoWay — orientación universitaria en el extranjero</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const mapData = {
+"denmark": {"center": [55.4, 10.8], "zoom": 6, "universities": [{"id": "dk-beng-mechatronics-sdu", "name": "BEng in Mechatronics", "school": "SDU – Sønderborg", "lat": 54.9092, "lng": 9.7847, "webUrl": "https://www.sdu.dk/en/uddannelse/ingenioer/mekatronik", "mapsUrl": "https://maps.google.com/?q=SDU+Sønderborg"}, {"id": "dk-bsc-mechatronics-sdu", "name": "BSc in Mechatronics Engineering", "school": "SDU – Sønderborg", "lat": 54.9092, "lng": 9.7847, "webUrl": "https://www.sdu.dk/en/bsc-mechatronics", "mapsUrl": "https://maps.google.com/?q=SDU+Sønderborg"}, {"id": "dk-beng-electronics-sdu", "name": "BEng in Electronics", "school": "SDU – Sønderborg", "lat": 54.9092, "lng": 9.7847, "webUrl": "https://www.sdu.dk/en/uddannelse/ingenioer/electronics", "mapsUrl": "https://maps.google.com/?q=SDU+Sønderborg"}, {"id": "dk-bsc-electronics-sdu", "name": "BSc in Electronics Engineering", "school": "SDU – Sønderborg", "lat": 54.9092, "lng": 9.7847, "webUrl": "https://www.sdu.dk/en/uddannelse/bachelor/electronics", "mapsUrl": "https://maps.google.com/?q=SDU+Sønderborg"}, {"id": "dk-beng-mechanical-sdu", "name": "BEng in Mechanical Engineering", "school": "SDU – Sønderborg", "lat": 54.9092, "lng": 9.7847, "webUrl": "https://www.sdu.dk/en/uddannelse/ingenioer/maskinteknik", "mapsUrl": "https://maps.google.com/?q=SDU+Sønderborg"}, {"id": "dk-bsc-mechanical-sdu", "name": "BSc in Mechanical Engineering", "school": "SDU – Sønderborg", "lat": 54.9092, "lng": 9.7847, "webUrl": "https://www.sdu.dk/en/uddannelse/bachelor/maskinteknik", "mapsUrl": "https://maps.google.com/?q=SDU+Sønderborg"}, {"id": "dk-bsc-general-eng-dtu", "name": "General Engineering", "school": "DTU – Lyngby", "lat": 55.7861, "lng": 12.5231, "webUrl": "https://www.dtu.dk/english/education/undergraduate/general-engineering", "mapsUrl": "https://maps.google.com/?q=DTU+Lyngby"}]},
+"netherlands": {"center": [52.2, 5.8], "zoom": 7, "universities": [{"id": "nl-ee-tue", "name": "Electrical Engineering", "school": "TU/e – Eindhoven", "lat": 51.4416, "lng": 5.4697, "webUrl": "https://www.tue.nl/en/education/bachelor-college/bachelor-electrical-engineering", "mapsUrl": "https://maps.google.com/?q=TU+Eindhoven"}, {"id": "nl-advanced-tech-twente", "name": "Advanced Technology", "school": "University of Twente – Enschede", "lat": 52.2394, "lng": 6.8558, "webUrl": "https://www.utwente.nl/en/education/bachelor/programmes/advanced-technology/", "mapsUrl": "https://maps.google.com/?q=University+of+Twente"}, {"id": "nl-ee-twente", "name": "Electrical Engineering", "school": "University of Twente – Enschede", "lat": 52.2394, "lng": 6.8558, "webUrl": "https://www.utwente.nl/en/education/bachelor/programmes/electrical-engineering/", "mapsUrl": "https://maps.google.com/?q=University+of+Twente"}, {"id": "nl-mechatronics-fontys", "name": "Bachelor in Mechatronics", "school": "Fontys UAS – Eindhoven", "lat": 51.4416, "lng": 5.4697, "webUrl": "https://www.fontys.nl/en/Home.htm", "mapsUrl": "https://maps.google.com/?q=Fontys+Eindhoven"}, {"id": "nl-eee-fontys", "name": "Electrical and Electronic Engineering", "school": "Fontys UAS – Eindhoven", "lat": 51.4416, "lng": 5.4697, "webUrl": "https://www.fontys.nl/en/Study-at-Fontys/Programmes/Electrical-Electronic-Engineering.htm", "mapsUrl": "https://maps.google.com/?q=Fontys+Eindhoven"}, {"id": "nl-eee-mechatronics-hanze", "name": "EEE - Mechatronics", "school": "Hanze UAS – Groningen", "lat": 53.2194, "lng": 6.5665, "webUrl": "https://www.hanze.nl/en/programmes/full-time/bachelor/electrical-and-electronic-engineering", "mapsUrl": "https://maps.google.com/?q=Hanze+University+Groningen"}, {"id": "nl-eee-mechatronics-han", "name": "EEE - Mechatronics", "school": "HAN UAS – Arnhem", "lat": 51.9851, "lng": 5.8987, "webUrl": "https://www.hanuniversity.com/en/programs/bachelor/electrical-and-electronic-engineering/fulltime/", "mapsUrl": "https://maps.google.com/?q=HAN+University+Arnhem"}, {"id": "nl-mechatronics-saxion", "name": "Mechatronics", "school": "Saxion UAS – Enschede", "lat": 52.2277, "lng": 6.8937, "webUrl": "https://www.saxion.edu/programmes/bachelor/mechatronics-english-programme", "mapsUrl": "https://maps.google.com/?q=Saxion+University+Enschede"}]},
+"finland": {"center": [62.5, 26.5], "zoom": 6, "universities": [{"id": "fi-aalto-bsc-msc", "name": "Computer Eng. / Digital Systems and Design", "school": "Aalto University – Espoo", "lat": 60.1841, "lng": 24.8281, "webUrl": "https://www.aalto.fi/en/study-options/computer-engineering-bachelor-of-science-and-master-of-science-technology", "mapsUrl": "https://maps.google.com/?q=Aalto+University+Espoo"}, {"id": "fi-lut-tech-eng-science", "name": "Technology and Engineering Science", "school": "LUT University – Lappeenranta", "lat": 61.0587, "lng": 28.1887, "webUrl": "https://www.lut.fi/en/studies/technology/bachelors-programmes-technology/bachelors-programme-technology-and-engineering-science", "mapsUrl": "https://maps.google.com/?q=LUT+University+Lappeenranta"}, {"id": "fi-lut-hebut", "name": "Electrical Engineering (HEBUT)", "school": "LUT University – Lappeenranta", "lat": 61.0587, "lng": 28.1887, "webUrl": "https://www.lut.fi/en/studies/technology/bachelors-programmes-technology/bachelors-programme-energy-technology-hebut-double-degree", "mapsUrl": "https://maps.google.com/?q=LUT+University+Lappeenranta"}]},
+"sweden": {"center": [59.33, 18.07], "zoom": 10, "universities": [{"id": "se-ict-kth", "name": "BSc Information and Communication Technology", "school": "KTH – Stockholm", "lat": 59.3499, "lng": 18.0709, "webUrl": "https://www.kth.se/en/studies/bachelor/information-communication-technology/bsc-information-and-communication-technology-1.437049", "mapsUrl": "https://maps.google.com/?q=KTH+Royal+Institute+of+Technology"}]},
+"lithuania": {"center": [54.9, 23.9], "zoom": 11, "universities": [{"id": "lt-electronics-ktu", "name": "Electronics Engineering", "school": "KTU – Kaunas", "lat": 54.8985, "lng": 23.9036, "webUrl": "https://admissions.ktu.edu/programme/b-electronics-engineering/", "mapsUrl": "https://maps.google.com/?q=Kaunas+University+of+Technology"}, {"id": "lt-eee-ktu", "name": "Electronics and Electrical Engineering", "school": "KTU – Kaunas", "lat": 54.8985, "lng": 23.9036, "webUrl": "https://admissions.ktu.edu/programme/b-electronics-and-electrical-engineering/", "mapsUrl": "https://maps.google.com/?q=Kaunas+University+of+Technology"}]},
+"germany": {"center": [50.5, 9.5], "zoom": 6, "universities": [{"id": "de-mechatronic-srh", "name": "Applied Mechatronic Systems", "school": "SRH University – Heidelberg", "lat": 49.3988, "lng": 8.6724, "webUrl": "https://www.srh-university.de/en/bachelor/applied-mechatronic-systems/e/", "mapsUrl": "https://maps.google.com/?q=SRH+University+Heidelberg"}, {"id": "de-eee-srh", "name": "Electrical and Electronics Engineering", "school": "SRH University – Heidelberg", "lat": 49.3988, "lng": 8.6724, "webUrl": "https://www.srh-university.de/en/bachelor/electrical-and-electronics-engineering/e/", "mapsUrl": "https://maps.google.com/?q=SRH+University+Heidelberg"}, {"id": "de-mechatronics-robotics-aalen", "name": "Mechatronics and Robotics Engineering", "school": "Aalen UAS", "lat": 48.8365, "lng": 10.093, "webUrl": "https://www.hs-aalen.de/en/study-programmes/engineering-sciences-future-technologies/bachelor/mechatronics-engineering/", "mapsUrl": "https://maps.google.com/?q=Aalen+University+of+Applied+Sciences"}, {"id": "de-mechatronics-automation-bielefeld", "name": "Mechatronics and Automation Engineering", "school": "Hochschule Bielefeld – Gütersloh", "lat": 51.9068, "lng": 8.3799, "webUrl": "https://www.hsbi.de/studiengaenge/mechatronics-and-automation", "mapsUrl": "https://maps.google.com/?q=Hochschule+Bielefeld+Gütersloh"}, {"id": "de-intelligent-mechatronic-heilbronn", "name": "Intelligent Mechatronic Systems", "school": "Heilbronn UAS", "lat": 49.1427, "lng": 9.2109, "webUrl": "https://www.hs-heilbronn.de/en/intelligent-mechatronic-systems", "mapsUrl": "https://maps.google.com/?q=Heilbronn+University+of+Applied+Sciences"}]},
+"spain": {"center": [40.3329, -3.7674], "zoom": 11, "universities": [{"id": "es-electrica-uc3m", "name": "Electrical Engineering with Dual Mention", "school": "UC3M – Madrid", "lat": 40.3329, "lng": -3.7674, "webUrl": "https://www.uc3m.es/grado/electrica", "mapsUrl": "https://maps.google.com/?q=Universidad+Carlos+III+de+Madrid"}, {"id": "es-electronica-uc3m", "name": "Industrial Electronics and Automation Engineering", "school": "UC3M – Madrid", "lat": 40.3329, "lng": -3.7674, "webUrl": "https://www.uc3m.es/grado/electronica", "mapsUrl": "https://maps.google.com/?q=Universidad+Carlos+III+de+Madrid"}]}
+};
+
+
+let mapsInitialized = {};
+let leafletMaps = {};
+
+function showTab(id, btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const panel = document.getElementById('tab-'+id);
+  if(panel) panel.classList.add('active');
+  if(btn) btn.classList.add('active');
+  else {
+    const b = document.querySelector('.tab-btn[data-tab="'+id+'"]');
+    if(b) b.classList.add('active');
+  }
+  window.scrollTo({top:0, behavior:'instant'});
+  // lazy init map if this tab has one
+  setTimeout(()=>{ if(mapData[id]) initMap(id); }, 60);
+}
+
+function goTo(tab, anchor){
+  const btn = document.querySelector('.tab-btn[data-tab="'+tab+'"]');
+  showTab(tab, btn);
+  setTimeout(()=>{
+    const el = document.getElementById(anchor);
+    if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
+  }, 120);
+}
+
+function scrollToCard(id){
+  const el = document.getElementById(id);
+  if(el){
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.style.transition='box-shadow .3s ease';
+    el.style.boxShadow='0 0 0 4px var(--teal)';
+    setTimeout(()=>{ el.style.boxShadow=''; }, 1500);
+  }
+}
+
+function scrollToMap(tab, anchor){
+  const currentActive = document.querySelector('.tab-panel.active');
+  const isActive = currentActive && currentActive.id === 'tab-'+tab;
+  if(!isActive){
+    const btn = document.querySelector('.tab-btn[data-tab="'+tab+'"]');
+    showTab(tab, btn);
+  }
+  setTimeout(()=>{
+    const el = document.getElementById(anchor);
+    if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); }
+  }, isActive ? 0 : 180);
+}
+
+function initMap(countryId){
+  if(mapsInitialized[countryId]) return;
+  const data = mapData[countryId];
+  if(!data) return;
+  const mapEl = document.getElementById('map-'+countryId);
+  if(!mapEl) return;
+  mapsInitialized[countryId] = true;
+  const map = L.map(mapEl).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
+    maxZoom: 19
+  }).addTo(map);
+
+  const gradIcon = L.divIcon({
+    className: 'grad-marker',
+    html: '<div style="font-size:26px; line-height:1; filter:drop-shadow(0 2px 3px rgba(0,0,0,.4));">🎓</div>',
+    iconSize: [30,30],
+    iconAnchor: [15,26],
+    popupAnchor: [0,-24]
+  });
+
+  data.universities.forEach(u=>{
+    const marker = L.marker([u.lat, u.lng], {icon: gradIcon}).addTo(map);
+    const popupHtml = `
+      <div class="popup-title">${u.name}</div>
+      <div class="popup-school">${u.school}</div>
+      <div class="popup-actions">
+        <a href="${u.webUrl}" target="_blank" rel="noopener">Ver grado</a>
+        <button onclick="scrollToCard('${u.id}')">Ver ficha</button>
+        <a href="${u.mapsUrl}" target="_blank" rel="noopener">Google Maps</a>
+      </div>`;
+    marker.bindPopup(popupHtml);
+  });
+
+  setTimeout(()=>{ map.invalidateSize(); }, 200);
+  leafletMaps[countryId] = map;
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  // init map for whichever tab is active by default (none until user navigates to a country tab)
+});
+
+</script>
+</body>
+</html>
