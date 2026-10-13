@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Opciones de Grado · Yune Wagenhoefer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+:root{
+  --teal:#0a9baa; --teal-dark:#077a87; --teal-light:#e0f5f7; --navy:#0d2b3e;
+  --bg:#f4f8fa; --border:#c8e0e5; --text:#22313a; --muted:#6b7c86;
+  --red:#d62828; --orange:#e07a10; --green:#2e9e5b; --gold:#b8860b; --gold-bg:#fbf1d3;
+  --hdr:150px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;color:var(--text);background:var(--bg)}
+a{color:var(--teal-dark)}
+h1,h2,h3{font-family:'Playfair Display',serif;color:var(--navy)}
+.red{color:#e00000}
+.green{color:var(--green)}
+.teal-txt{color:#057f7f}
+
+/* ---------- Logo ---------- */
+.logo svg{display:block;height:auto}
+.logo .lg-stroke{fill:none;stroke:#737373;stroke-width:22}
+.logo .lg-text{fill:#737373}
+header .logo .lg-stroke{stroke:#ffffff}
+header .logo .lg-text{fill:#ffffff}
+header .logo svg{width:170px}
+footer .logo{opacity:.55}
+footer .logo svg{width:200px;margin:0 auto}
+
+/* ---------- Header ---------- */
+header{position:sticky;top:0;z-index:5000;background:linear-gradient(135deg,var(--navy) 0%,#123f57 60%,var(--teal-dark) 100%);color:#fff;box-shadow:0 4px 18px rgba(13,43,62,.25)}
+.hdr-top{max-width:1100px;margin:0 auto;padding:14px 16px 10px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.hdr-titles h1{color:#fff;margin:0;font-size:1.55rem;line-height:1.2}
+.hdr-titles .sub{font-variant:small-caps;text-transform:lowercase;letter-spacing:.12em;font-size:.95rem;opacity:.85}
+nav.tabs{max-width:1100px;margin:0 auto;padding:0 16px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin}
+.tab-btn{flex:0 0 auto;display:flex;align-items:center;gap:8px;background:transparent;border:none;color:rgba(255,255,255,.78);font:500 .95rem 'DM Sans',sans-serif;padding:10px 14px 11px;cursor:pointer;border-bottom:3px solid transparent;border-radius:8px 8px 0 0;transition:.2s}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tab-btn.active{color:#fff;border-bottom-color:#5fd3df;background:rgba(255,255,255,.12)}
+
+/* ---------- Flags (CSS) ---------- */
+.flag{display:inline-flex;flex-direction:column;width:24px;height:16px;border-radius:2px;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.15);flex-shrink:0}
+.flag span{flex:1;display:block}
+.flag.big{width:72px;height:48px;border-radius:5px}
+.flag-nl .s1{background:#ae1c28}.flag-nl .s2{background:#fff}.flag-nl .s3{background:#21468b}
+
+/* ---------- Layout ---------- */
+main{max-width:1100px;margin:0 auto;padding:28px 16px 40px}
+.panel{display:none}
+.panel.active{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.box{background:#fff;border:2px solid var(--border);border-radius:12px;padding:24px 26px;margin-bottom:22px}
+.box h2{margin-top:0}
+.lead p{margin:0 0 14px}
+[id]{scroll-margin-top:calc(var(--hdr) + 14px)}
+
+/* ---------- Index ---------- */
+.idx-country{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--navy);margin:6px 0 10px}
+.idx-group{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-dark);font-weight:700;margin:16px 0 8px}
+.idx-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.idx-item{display:block;text-decoration:none;border:2px solid var(--border);border-radius:10px;padding:10px 14px;background:#fbfdfe;transition:.2s}
+.idx-item:hover{border-color:var(--teal);box-shadow:0 6px 16px rgba(10,155,170,.15)}
+.idx-item .g{display:block;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:400;color:var(--navy);line-height:1.35}
+.idx-item .u{display:block;font-family:'Playfair Display',serif;font-size:11.5px;font-style:italic;color:var(--muted);margin-top:2px}
+
+/* ---------- RvA ---------- */
+.rva-sec{border-left:4px solid var(--teal);padding:2px 0 2px 18px;margin:22px 0}
+.rva-sec h3{margin:0 0 8px;font-size:1.15rem}
+.rva-sec p{margin:0 0 10px}
+.links-list a{display:inline-flex;align-items:center;gap:6px;margin:4px 0;font-weight:500}
+
+/* ---------- Country intro ---------- */
+.country-hero{display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap}
+.country-hero h2{margin:0 0 8px;font-size:2rem}
+.country-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.chip{background:var(--teal-light);border:1px solid var(--border);border-radius:999px;padding:5px 12px;font-size:.88rem}
+.chip b{color:var(--teal-dark)}
+.alert{background:#fff7e6;border:2px solid #f0b54a;border-radius:12px;padding:18px 22px;margin-bottom:22px}
+.alert h3{margin:0 0 8px;font-size:1.1rem;color:#8a5300;font-family:'DM Sans',sans-serif}
+.alert ul{margin:0;padding-left:20px}
+.alert li{margin:4px 0}
+.sec-sep{display:flex;align-items:center;gap:14px;margin:34px 0 18px;color:var(--teal-dark);font-weight:700;letter-spacing:.16em;font-size:.9rem}
+.sec-sep::before,.sec-sep::after{content:"";flex:1;height:2px;background:var(--border)}
+
+/* ---------- Cards ---------- */
+.card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:22px;transition:border-color .2s,box-shadow .2s}
+.card:hover{border-color:var(--teal);box-shadow:0 10px 28px rgba(13,43,62,.12)}
+.card-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.card-title{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;margin:0;line-height:1.25}
+.card-title a{color:var(--navy);text-decoration:none;transition:color .2s}
+.card-title a:hover{color:var(--teal)}
+.card-title .click{display:inline-block;font-size:1rem;margin-left:6px;transition:transform .2s}
+.card-title a:hover .click{transform:scale(1.35)}
+.card-title .pending-link{font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:500;color:#8a5300;background:#fff7e6;border:1px solid #f0b54a;border-radius:6px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+.card-uni{color:var(--teal);font-weight:500;margin-top:3px}
+.diff{flex-shrink:0;font-size:.82rem;font-weight:700;padding:6px 12px;border-radius:999px;border:2px solid;white-space:nowrap}
+.diff.alta{color:var(--orange);border-color:var(--orange);background:#fff3e6}
+.diff.muyalta{color:var(--red);border-color:var(--red);background:#fdecec}
+.diff.media{color:var(--green);border-color:var(--green);background:#e9f7ef}
+.diff.neutral{color:#5f6b72;border-color:#9aa7ae;background:#f2f4f5}
+.rank-wrap{margin:14px 0 4px}
+.rank-label{font-size:.78rem;color:var(--muted);margin-bottom:5px}
+.rank-badges{display:flex;flex-wrap:wrap;gap:7px}
+.rbadge{font-size:.82rem;padding:4px 10px;border-radius:7px;background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--border);text-decoration:none;font-weight:500}
+.rbadge.gold{background:var(--gold-bg);color:var(--gold);border-color:#e8cf86;font-weight:700}
+.rbadge.none{background:#f2f4f5;color:#5f6b72;border-color:#d5dde1}
+a.rbadge:hover{filter:brightness(.96)}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:16px 0}
+.meta{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 12px}
+.meta .k{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.meta .v{font-size:.95rem;color:var(--navy)}
+.pend{color:#8a5300;font-style:italic;font-size:.88rem}
+.map-btn{display:inline-block;margin-top:6px;background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark);font:700 .74rem 'DM Sans',sans-serif;padding:3px 9px;border-radius:6px;cursor:pointer}
+.map-btn:hover{background:var(--teal);color:#fff}
+.desc{background:#f1f8fb;border-left:4px solid var(--teal);border-radius:0 9px 9px 0;padding:14px 18px;margin:6px 0 14px}
+.desc p{margin:0 0 10px}.desc p:last-child{margin-bottom:0}
+.desc .lbl{font-weight:700;color:var(--navy)}
+details{border:1px solid var(--border);border-radius:9px;background:#fbfdfe}
+summary{cursor:pointer;padding:11px 16px;font-weight:700;color:var(--teal-dark);list-style:none;display:flex;align-items:center;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸";transition:transform .2s}
+details[open] summary::before{transform:rotate(90deg)}
+.det{padding:4px 20px 16px}
+.det h4{margin:14px 0 6px;font-size:.95rem;color:var(--navy)}
+.det ul{margin:0;padding-left:22px}
+.det li{margin:3px 0}
+.deadline{background:#fff8c5;border:2px solid #e8d24a;border-radius:9px;padding:9px 14px;margin:12px 0;font-weight:500}
+.special-link{display:inline-block;margin-top:10px;font-weight:700}
+
+/* ---------- Map ---------- */
+.map-box h2{margin:0 0 12px}
+.map{height:480px;border-radius:10px;border:2px solid var(--border)}
+.edu-pin{font-size:26px;line-height:1;text-align:center;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.pop-g{font-family:'DM Sans',sans-serif;font-weight:700;color:var(--navy);font-size:14px}
+.pop-u{font-family:'Playfair Display',serif;font-style:italic;color:var(--muted);font-size:12.5px;margin-bottom:8px}
+.pop-btns{display:flex;gap:6px;flex-wrap:wrap}
+.pop-btns a,.pop-btns button,.pop-btns span{font:700 11.5px 'DM Sans',sans-serif;padding:5px 9px;border-radius:6px;border:1px solid var(--teal);background:var(--teal-light);color:var(--teal-dark);text-decoration:none;cursor:pointer}
+.pop-btns a:hover,.pop-btns button:hover{background:var(--teal);color:#fff}
+.pop-btns span{opacity:.55;cursor:default;border-style:dashed}
+
+footer{text-align:center;padding:30px 16px 40px;color:var(--muted);font-size:.85rem}
+
+@media (max-width:640px){
+  .hdr-top{gap:10px}
+  header .logo svg{width:120px}
+  .hdr-titles h1{font-size:1.15rem}
+  .box,.card{padding:18px 16px}
+  .card-title{font-size:1.2rem}
+  .map{height:360px}
+}
+</style>
+</head>
+<body>
+
+<header id="top-header">
+  <div class="hdr-top">
+    <div class="logo" aria-label="educoWay">
+      <svg viewBox="0 0 1800 434" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="educoway - orientación universitaria en el extranjero">
+        <path class="lg-stroke" d="M12 150 H155 A72 72 0 1 0 140 195"/>
+        <circle class="lg-stroke" cx="309" cy="150" r="72"/>
+        <path class="lg-stroke" d="M389 0 V234"/>
+        <path class="lg-stroke" d="M484 66 V150 A65 65 0 0 0 614 150 M614 66 V234"/>
+        <path class="lg-stroke" d="M815 104 A72 72 0 1 0 815 196"/>
+        <circle class="lg-stroke" cx="978" cy="150" r="72"/>
+        <g fill="none" stroke-width="52" stroke-linecap="round">
+          <path d="M1141 92 L1192 220" stroke="#5bbd8c" opacity=".92"/>
+          <path d="M1192 220 L1243 92" stroke="#56bdb0" opacity=".88"/>
+          <path d="M1243 92 L1294 220" stroke="#3db2c1" opacity=".88"/>
+          <path d="M1294 220 L1345 92" stroke="#56b9e3" opacity=".92"/>
+        </g>
+        <circle class="lg-stroke" cx="1497" cy="150" r="72"/>
+        <path class="lg-stroke" d="M1580 66 V234"/>
+        <path class="lg-stroke" d="M1653 70 L1720 214 M1786 70 L1688 305"/>
+        <text class="lg-text" x="0" y="414" font-family="DM Sans, sans-serif" font-size="74" textLength="1785" lengthAdjust="spacing">orientación universitaria en el extranjero</text>
+      </svg>
+    </div>
+    <div class="hdr-titles">
+      <h1>Informe de Opciones de Grado</h1>
+      <div class="sub">Preparado para Yune Wagenhoefer</div>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="intro" onclick="showTab('intro', this)">Introducción</button>
+    <button class="tab-btn" data-tab="rva" onclick="showTab('rva', this)">Research vs Applied Sciences</button>
+    <button class="tab-btn" data-tab="holanda" onclick="showTab('holanda', this)"><span class="flag flag-nl"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>Holanda</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ================= INTRODUCCIÓN ================= -->
+<section class="panel active" id="panel-intro">
+  <div class="box lead">
+    <p>Hola Yune,</p>
+    <p>He estado trabajando en tu búsqueda de grados de Psicología en Holanda, tal y como lo hemos acordado en la reunión que tuvimos.</p>
+    <p>Como verás a continuación, la mayoría de las opciones son de <b>Numerus Fixus: tienen proceso de selección y la fecha límite de inscripción es el 15 de enero.</b></p>
+    <p>Además, a modo de recordatorio para que tu elección sea la adecuada, ten en cuenta que puedes aplicar a un total de cuatro grados en Holanda, pero solamente dos si estas opciones son Numerus Fixus.</p>
+  </div>
+
+  <div class="box">
+    <h2>Índice de opciones</h2>
+    <div class="idx-country"><span class="flag flag-nl"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>Opciones en Holanda:</div>
+
+    <div class="idx-group">Research Universities</div>
+    <div class="idx-list">
+      <a class="idx-item" href="#c-rug-psy" onclick="goTo('holanda','c-rug-psy');return false;"><span class="g">Psychology</span><span class="u">University of Groningen</span></a>
+      <a class="idx-item" href="#c-ucg-las" onclick="goTo('holanda','c-ucg-las');return false;"><span class="g">Liberal Arts and Sciences (major Psychology)</span><span class="u">University College Groningen</span></a>
+      <a class="idx-item" href="#c-leiden" onclick="goTo('holanda','c-leiden');return false;"><span class="g">Psychology</span><span class="u">Universiteit Leiden</span></a>
+      <a class="idx-item" href="#c-vu" onclick="goTo('holanda','c-vu');return false;"><span class="g">Psychology</span><span class="u">Vrije Universiteit Amsterdam</span></a>
+      <a class="idx-item" href="#c-maastricht" onclick="goTo('holanda','c-maastricht');return false;"><span class="g">Psychology</span><span class="u">Maastricht University</span></a>
+      <a class="idx-item" href="#c-twente" onclick="goTo('holanda','c-twente');return false;"><span class="g">Psychology</span><span class="u">University of Twente</span></a>
+      <a class="idx-item" href="#c-tilburg" onclick="goTo('holanda','c-tilburg');return false;"><span class="g">BSc Psychology</span><span class="u">Tilburg University</span></a>
+      <a class="idx-item" href="#c-tue" onclick="goTo('holanda','c-tue');return false;"><span class="g">Psychology and Technology</span><span class="u">TU/e (Eindhoven University of Technology)</span></a>
+    </div>
+
+    <div class="idx-group">Applied Sciences</div>
+    <div class="idx-list">
+      <a class="idx-item" href="#c-ucr" onclick="goTo('holanda','c-ucr');return false;"><span class="g">Health, Cognition &amp; Behavior</span><span class="u">University College Roosevelt</span></a>
+    </div>
+
+    <p style="margin:22px 0 0">Ahora te recomiendo que leas bien el programa de estudios, las salidas profesionales y eches un vistazo a los vídeos que te he incluido.</p>
+  </div>
+
+  <div class="box" style="border-color:var(--teal);background:linear-gradient(180deg,#fff, var(--teal-light))">
+    <h2>¿Qué hay que hacer ahora?</h2>
+    <p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc) y ves apuntando cualquier duda que te surja y pensando en que opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+    <p style="margin-bottom:0">¡Un saludo!</p>
+  </div>
+</section>
+
+<!-- ================= RESEARCH VS APPLIED ================= -->
+<section class="panel" id="panel-rva">
+  <div class="box">
+    <h2>Research vs Applied Sciences</h2>
+    <p>Dentro de Holanda tenemos que diferenciar entre 2 tipos de universidades: "Research" y "Applied Sciences." La mayoría de los grados de Psicología se encuentran en las <span class="teal-txt">"Research Universities</span>", duran 3 años y no tienen prácticas en empresa. Su acceso es más complicado y la metodología es más enfocada a la teoría (pensados para acceder a un máster una vez completados). Los dos tipos de universidades comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+
+    <div class="rva-sec">
+      <h3>Metodología teórica y práctica</h3>
+      <p>Las universidades de Applied Sciences destacan por usar una metodología muy práctica llamada PBL (Project/Problem Based Learning). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de Research no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p>
+    </div>
+
+    <div class="rva-sec">
+      <h3>Duración</h3>
+      <p>Las universidades de Applied Sciences duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+      <p>Las de Research duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p>
+    </div>
+
+    <div class="rva-sec">
+      <h3>Ranking / Prestigio</h3>
+      <p>El principal motivo por el cual se podría escoger una universidad de Research es por el mayor ranking y prestigio que estas universidades tienen.</p>
+      <p>Las universidades de Applied Sciences (Hogeschools en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p>
+    </div>
+
+    <div class="rva-sec">
+      <h3>Acceso a Másteres</h3>
+      <p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de Research podrás acceder a másteres tanto en universidades de Research como Applied Sciences. En cambio, con tu título de Applied Sciences podrás acceder a másteres en universidades de Applied Sciences, pero si quieres acceder a universidades de Research, te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p>
+    </div>
+
+    <p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de Research y otra de Applied Sciences):</p>
+    <div class="links-list">
+      <div>🔗 <a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank" rel="noopener">Applied Science vs. Research University</a></div>
+      <div>🔗 <a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank" rel="noopener">Types of universities in the Netherlands</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOLANDA ================= -->
+<section class="panel" id="panel-holanda">
+  <div class="box">
+    <div class="country-hero">
+      <span class="flag flag-nl big"><span class="s1"></span><span class="s2"></span><span class="s3"></span></span>
+      <div style="flex:1;min-width:240px">
+        <h2>Holanda</h2>
+        <div class="country-meta">
+          <span class="chip"><b>Matrícula:</b> 2.771 €/año (2027-2028)</span>
+          <span class="chip"><b>Alojamiento:</b> media de 850 €/mes (más de 1.000 € en Ámsterdam, Rotterdam, La Haya o Eindhoven)</span>
+        </div>
+      </div>
+    </div>
+    <p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de 2.771 €/año (2027-2028).</p>
+    <p>Cabe destacar que el alojamiento en Holanda tiene un precio elevado, siendo la media de 850€, aunque llegando en ciudades grandes como Ámsterdam, Rotterdam, La Haya o Eindhoven a marcar una media superior a los 1000€ al mes.</p>
+    <p style="margin-bottom:0">Dentro de Holanda tenemos que diferenciar entre 2 tipos de universidades: "Research" y "Applied Sciences." La mayoría de los grados de Psicología se encuentran en las <span class="teal-txt">"Research Universities</span>", duran 3 años y no tienen prácticas en empresa. Su acceso es más complicado y la metodología es más enfocada a la teoría (pensados para acceder a un máster una vez completados). <a href="#" onclick="showTab('rva', document.querySelector('[data-tab=rva]'));return false;">Ver diferencias Research vs Applied Sciences →</a></p>
+  </div>
+
+  <div class="alert">
+    <h3>⚠️ A tener en cuenta en Holanda</h3>
+    <ul>
+      <li>La mayoría de las opciones son de <b>Numerus Fixus: tienen proceso de selección y la fecha límite de inscripción es el 15 de enero.</b></li>
+      <li>Puedes aplicar a un total de cuatro grados en Holanda, pero solamente dos si estas opciones son Numerus Fixus.</li>
+    </ul>
+  </div>
+
+  <div class="sec-sep">RESEARCH UNIVERSITIES</div>
+
+  <!-- ---------- University of Groningen · Psychology ---------- -->
+  <article class="card" id="c-rug-psy">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://www.rug.nl/bachelors/psychology-en/" target="_blank" rel="noopener">Psychology<span class="click">🖱️</span></a></h3>
+        <div class="card-uni">University of Groningen · Groningen</div>
+      </div>
+      <span class="diff alta">Dificultad de admisión: ALTA</span>
+    </div>
+    <div class="rank-wrap">
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="rank-badges">
+        <a class="rbadge gold" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">84.º del mundo · Shanghái</a>
+        <a class="rbadge" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">51-75 del mundo en Psicología · Shanghái</a>
+        <a class="rbadge" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">2.º de Holanda · Shanghái</a>
+      </div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><div class="k">Ciudad</div><div class="v">Groningen (200.000 habitantes)</div><button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button></div>
+      <div class="meta"><div class="k">Duración</div><div class="v">3 años / 180 ECTS</div></div>
+      <div class="meta"><div class="k">Coste</div><div class="v">2771 Euros</div></div>
+      <div class="meta"><div class="k">Idioma de impartición</div><div class="v pend">Pendiente (no indicado en el informe)</div></div>
+      <div class="meta"><div class="k">Fecha límite</div><div class="v"><b class="red">15 de enero</b></div></div>
+    </div>
+    <div class="desc"><p><span class="lbl">Sobre el programa:</span> Aprenderás sobre las teorías de los factores biológicos, cognitivos, sociales y ambientales que influyen en el comportamiento; obtendrás las habilidades básicas de comunicación y diagnóstico necesarias para el trabajo en la práctica; estarás capacitado para enfocarte en profundidad en los conocimientos y habilidades metodológicos y estadísticos esenciales para la investigación científica y aprenderás a reflexionar sobre tu propio desarrollo como psicólogo.</p></div>
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="det">
+        <h4>Académicos</h4>
+        <ul><li>3 A Levels (nota A* - C) + 3 IGCSE (nota A*- C), en total 6 asignaturas diferentes</li></ul>
+        <h4>De nivel de inglés</h4>
+        <ul>
+          <li><b class="red">Posible exención basado en minimum 3 with grades A* to C</b></li>
+          <li><b class="red">Lo confirmaremos en su debido momento.</b></li>
+        </ul>
+        <div class="deadline">📅 <b>Plazo límite de inscripción:</b> <b class="red">15 de enero</b></div>
+        <h4>Proceso de selección</h4>
+        <ul>
+          <li>Es un grado <b>Numerus Fixus</b>, por lo que sí existe un proceso de selección.</li>
+          <li><b class="red">Máximo de 225 estudiantes admitidos por curso académico.</b></li>
+        </ul>
+        <a class="special-link" href="https://www.rug.nl/gmw/bachelors/psychology/selectieprocedure-bachelor-psychology-en" target="_blank" rel="noopener">Ver Proceso de Admisión →</a>
+      </div>
+    </details>
+  </article>
+
+  <!-- ---------- University College Groningen · LAS ---------- -->
+  <article class="card" id="c-ucg-las">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://www.rug.nl/ucg/education/majors/social-sciences-major/#psychology" target="_blank" rel="noopener">Liberal Arts and Sciences (Major in Psychology)<span class="click">🖱️</span></a></h3>
+        <div class="card-uni">University College Groningen (University of Groningen) · Groningen</div>
+      </div>
+      <span class="diff media">Dificultad de admisión: BAJA</span>
+    </div>
+    <div class="rank-wrap">
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="rank-badges">
+        <a class="rbadge gold" href="https://www.shanghairanking.com/institution/university-of-groningen" target="_blank" rel="noopener">84.º del mundo · Shanghái</a>
+        <a class="rbadge" href="https://www.shanghairanking.com/institution/university-of-groningen" target="_blank" rel="noopener">51-75 del mundo en Psicología · Shanghái</a>
+        <a class="rbadge" href="https://www.shanghairanking.com/institution/university-of-groningen" target="_blank" rel="noopener">2.º de Holanda · Shanghái</a>
+      </div>
+      <div style="font-size:.85rem;color:var(--muted);margin-top:5px">Enlace del informe original: <a href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" rel="noopener">Ranking de Shanghái (ARWU 2025)</a></div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><div class="k">Ciudad</div><div class="v">Groningen (200.000 habitantes)</div><button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button></div>
+      <div class="meta"><div class="k">Duración</div><div class="v">3 años (180 ECTS)</div></div>
+      <div class="meta"><div class="k">Coste</div><div class="v">5.494 euros</div></div>
+      <div class="meta"><div class="k">Idioma de impartición</div><div class="v pend">Pendiente (no indicado en el informe)</div></div>
+      <div class="meta"><div class="k">Fecha límite</div><div class="v">15 de enero <b>(early bird) o 1 mayo</b></div></div>
+    </div>
+    <div class="desc"><p><span class="lbl">Sobre el programa:</span> Este programa de Ciencias y Artes Liberales combina diferentes disciplinas científicas: derecho, economía, filosofía, sociología, psicología y neurociencia cognitiva. El programa intensivo te permite convertirte en un pensador crítico, un ciudadano comprometido y un profesional con formación académica. Adquirirás conocimientos profundos sobre problemas globales complejos y aprenderás a desarrollar soluciones creativas basadas en una perspectiva interdisciplinaria.</p></div>
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="det">
+        <h4>Académicos</h4>
+        <ul><li>Three A-Levels (min. grade C)</li></ul>
+        <h4>De nivel de inglés</h4>
+        <ul>
+          <li>Have obtained at least 3 GCE(A) level certificates from one of the recognized British examination boards.</li>
+          <li>IELTS 6.5 overall (y 6.5 en Speaking y Writing, además ninguna sección por debajo del 6.0)</li>
+          <li>TOEFL 90 overall (mínimo 21 en writing y 19 es speaking)</li>
+          <li>Cambridge CAE (C1)</li>
+        </ul>
+        <div class="deadline">📅 <b>Plazo límite de inscripción:</b> 15 de enero <b>(early bird) o 1 mayo</b></div>
+        <h4>Proceso de selección</h4>
+        <p style="margin:0">Aunque no es un programa numerus fixus, es un programa selectivo. La aplicación procede en dos pasos: En el primer paso se determina tu elegibilidad. Si se considera que reúnes los requisitos para la admisión, en un segundo paso se usa tu video de motivación para determinar si finalmente serás admitido en el programa.</p>
+      </div>
+    </details>
+  </article>
+
+  <!-- ---------- Universiteit Leiden ---------- -->
+  <article class="card" id="c-leiden">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/psychology" target="_blank" rel="noopener">Psychology<span class="click">🖱️</span></a></h3>
+        <div class="card-uni">Universiteit Leiden · Leiden</div>
+      </div>
+      <span class="diff alta">Dificultad de admisión: ALTA</span>
+    </div>
+    <div class="rank-wrap">
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="rank-badges">
+        <a class="rbadge gold" href="https://www.shanghairanking.com/universities/leiden-university" target="_blank" rel="noopener">101-150 del mundo · Shanghái</a>
+        <a class="rbadge" href="https://www.shanghairanking.com/universities/leiden-university" target="_blank" rel="noopener">3.º de Holanda · Shanghái</a>
+      </div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><div class="k">Ciudad</div><div class="v">Leiden (121.000 habitantes)</div><button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button></div>
+      <div class="meta"><div class="k">Duración</div><div class="v">3 años / 180 ECTS</div></div>
+      <div class="meta"><div class="k">Coste</div><div class="v">2771 Euros</div></div>
+      <div class="meta"><div class="k">Idioma de impartición</div><div class="v pend">Pendiente (no indicado en el informe)</div></div>
+      <div class="meta"><div class="k">Fecha límite</div><div class="v"><b class="red">15 de enero</b></div></div>
+    </div>
+    <div class="desc"><p><span class="lbl">Sobre el programa:</span> El grado ofrece un amplio desarrollo académico, con conocimiento de varias disciplinas, tales como neuropsicología clínica, psicología del desarrollo, psicología social y organizacional, psicología económica y del consumidor, psicología cognitiva y psicología de la salud. Puedes elegir diferentes cursos de especialización a partir de tu segundo año. Además, las optativas las puedes estudiar en el extranjero.</p></div>
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="det">
+        <h4>Académicos</h4>
+        <ul>
+          <li>3 A Levels (nota A* - C) + 3 IGCSE (nota A*- C), en total 6 asignaturas diferentes (incluyendo Matemáticas)</li>
+          <li class="red">Languages other than English that are your native language are not preferred and will be considered on a case-by-case basis. May be considered in combination with two other ‘Accepted’ subjects.</li>
+        </ul>
+        <h4>De nivel de inglés</h4>
+        <ul>
+          <li>Exento si:
+            <ul>
+              <li>(I)GCSE + A-levels*</li>
+              <li>* Excepto si: if your A-levels are all in science subjects or were obtained after only 1 year of study (fast track course) and you do not have GCSE English as a first language, exemption will only be considered on a case-by-case basis</li>
+              <li>IGCSE with English as First Language</li>
+            </ul>
+          </li>
+          <li>De lo contrario:
+            <ul>
+              <li>IELTS 6.0 overall (ninguna sección por debajo del 6.0)</li>
+              <li>TOEFL 80 overall</li>
+              <li>TOEFL despues de Enero 2026 4.5 Overall (ninguna sección por debajo del 4.5)</li>
+              <li>Cambridge C2, or C1 Advanced, (ninguna sección por debajo del 169)</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="deadline">📅 <b>Plazo límite de inscripción:</b> <b class="red">15 de enero</b></div>
+        <h4>Proceso de selección</h4>
+        <ul><li>Es un grado <b>Numerus Fixus</b>, por lo que sí existe un proceso de selección.</li></ul>
+        <a class="special-link" href="https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/psychology/admission-and-application/selection-and-placement" target="_blank" rel="noopener">Ver Proceso de Selección →</a>
+      </div>
+    </details>
+  </article>
+
+  <!-- ---------- Vrije Universiteit Amsterdam ---------- -->
+  <article class="card" id="c-vu">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://vuweb.vu.nl/en/education/bachelor/psychology" target="_blank" rel="noopener">Psychology<span class="click">🖱️</span></a></h3>
+        <div class="card-uni">Vrije Universiteit Amsterdam · Amsterdam</div>
+      </div>
+      <span class="diff alta">Dificultad de admisión: ALTA</span>
+    </div>
+    <div class="rank-wrap">
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="rank-badges">
+        <a class="rbadge gold" href="https://www.shanghairanking.com/universities/vrije-universiteit-amsterdam" target="_blank" rel="noopener">151-200 del mundo · Shanghái</a>
+        <a class="rbadge" href="https://www.shanghairanking.com/universities/vrije-universiteit-amsterdam" target="_blank" rel="noopener">4-8 de Holanda · Shanghái</a>
+      </div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><div class="k">Ciudad</div><div class="v">Amsterdam (821.000 habitantes)</div><button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button></div>
+      <div class="meta"><div class="k">Duración</div><div class="v">3 años / 180 ECTS</div></div>
+      <div class="meta"><div class="k">Coste</div><div class="v">2771 Euros</div></div>
+      <div class="meta"><div class="k">Idioma de impartición</div><div class="v pend">Pendiente (no indicado en el informe)</div></div>
+      <div class="meta"><div class="k">Fecha límite</div><div class="v"><b class="red">15 de enero</b></div></div>
+    </div>
+    <div class="desc"><p><span class="lbl">Sobre el programa:</span> El grado se centra en la intersección entre la salud, los patrones de comportamiento y las formas de pensar. ¿En qué se diferencian estos de una persona a otra y cómo podemos influir en ellos? Este grado es para tí si eres curioso y de mente abierta, quieres saber cómo funcionan las cosas. Se adopta un enfoque científico para desentrañar los desafíos que enfrentamos como personas. En los dos primeros años adquieres una base sólida de conocimientos y posteriormente eliges la especialización que más te conviene: Psicología Clínica; Psicología social y organizacional; Psicología biológica y cognitiva; o Psicopatología, Prevención y Salud.</p></div>
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="det">
+        <h4>Académicos</h4>
+        <ul><li>3 A Levels (nota A* - C) + 3 IGCSE (nota A*- C), en total 6 asignaturas diferentes (se requiere un AL o AS Level en Matemáticas, con un grado A, B o C. También se acepta el AL en Psicología.</li></ul>
+        <h4>De nivel de inglés</h4>
+        <ul>
+          <li>Exento si:
+            <ul><li>3 academic GCE A-levels completed with minimum grade C (meeting the general diploma requirement) and language of instruction English, in combination with GCSE English Language grade C/4* or above,or iGCSE English as a First Language minimum grade C/4*. *B Law in Society and B Philosophy, Politics and Economics (PPE): in combination with GCSE English Language grade B/6 or above iGCSE English as a First Language minimum grade B/6.</li></ul>
+          </li>
+          <li>De lo contrario:
+            <ul>
+              <li>IELTS 6.5 overall</li>
+              <li>TOEFL 92 overall</li>
+              <li>Cambridge CAE (C1)</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="deadline">📅 <b>Plazo límite de inscripción:</b> <b class="red">15 de enero</b></div>
+        <h4>Proceso de selección</h4>
+        <ul><li>Es un grado <b>Numerus Fixus</b>, por lo que sí existe un proceso de selección, que consta de un <b>test de selección online, que se realizará aproximadamente el 17 o 18 de marzo</b></li></ul>
+        <a class="special-link" href="https://vu.nl/en/education/more-about/selection-procedure-numerus-fixus" target="_blank" rel="noopener">Ver Proceso de Selección →</a>
+      </div>
+    </details>
+  </article>
+
+  <!-- ---------- Maastricht University ---------- -->
+  <article class="card" id="c-maastricht">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://www.maastrichtuniversity.nl/education/bachelor/programmes/psychology" target="_blank" rel="noopener">Psychology<span class="click">🖱️</span></a></h3>
+        <div class="card-uni">Maastricht University · Maastricht</div>
+      </div>
+      <span class="diff alta">Dificultad de admisión: ALTA</span>
+    </div>
+    <div class="rank-wrap">
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="rank-badges">
+        <a class="rbadge gold" href="https://www.shanghairanking.com/universities/maastricht-university" target="_blank" rel="noopener">301-400 del mundo · Shanghái</a>
+        <a class="rbadge" href="https://www.shanghairanking.com/universities/maastricht-university" target="_blank" rel="noopener">10.º de Holanda · Shanghái</a>
+      </div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><div class="k">Ciudad</div><div class="v">Maastricht (122.000 habitantes)</div><button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button></div>
+      <div class="meta"><div class="k">Duración</div><div class="v">3 años / 180 ECTS</div></div>
+      <div class="meta"><div class="k">Coste</div><div class="v">2771 Euros</div></div>
+      <div class="meta"><div class="k">Idioma de impartición</div><div class="v pend">Pendiente (no indicado en el informe)</div></div>
+      <div class="meta"><div class="k">Fecha límite</div><div class="v"><b class="red">15 de enero</b></div></div>
+    </div>
+    <div class="desc">
+      <p><span class="lbl">Sobre el grado:</span> El grado en Psicología abarca un campo de estudio muy amplio. Los psicólogos quieren comprender, explicar y predecir cómo piensan las personas y por qué hacen lo que hacen. Y no solo quieren comprender el comportamiento, también quieren saber cómo modificarlo si es necesario. Los psicólogos estudian cómo los niños aprenden un idioma a través del juego. Pero también están interesados en los vínculos entre la actividad de los neurotransmisores y la depresión.</p>
+      <p>Este programa de licenciatura le presenta todas las teorías y temas principales dentro de la psicología. Pero el programa de Psicología de la Universidad de Maastricht es muy especial. En la Universidad de Maastricht, podrás estudiar psicología cognitiva y biológica.</p>
+    </div>
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="det">
+        <h4>Académicos</h4>
+        <ul><li>3 A Levels (nota A* - C) + 3 IGCSE (nota A*- C), en total 6 asignaturas diferentes.</li></ul>
+        <h4>De nivel de inglés</h4>
+        <p style="margin:0 0 6px">Se cumple el requisito si has cursado inglés en tu último año de estudios y lo has aprobado. Si no es el caso, se pide alguno de estos certificados:</p>
+        <ul>
+          <li>Posible exención basado en A-levels
+            <ul><li>Sera evaluado por la universidad directamente durante el proceso de aplicación</li></ul>
+          </li>
+          <li>De lo contrario:
+            <ul>
+              <li>IELTS 6.0</li>
+              <li>TOEFL 80</li>
+              <li>TOEFL despues de Enero 2026: 4.5</li>
+              <li>Cambridge FCE (B2) con resultado mínimo 169</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="deadline">📅 <b>Plazo límite de inscripción:</b> <b class="red">15 de enero</b></div>
+        <h4>Proceso de selección</h4>
+        <p style="margin:0">Es un grado <b>Numerus Fixus</b>, por lo que sí existe un proceso de selección. <a href="https://www.maastrichtuniversity.nl/study/admission-enrolment/applying-maastricht-university/free-selective-and-fixus-bachelors" target="_blank" rel="noopener"><b>Enlace de Interés</b></a>. El proceso de selección debe ser completado antes del 24 de febrero (17:00 pm) completar los requisitos lleva de 4 a 6 horas. El 15 de abril 2022 se publicarán los resultados.</p>
+      </div>
+    </details>
+  </article>
+
+  <!-- ---------- TU/e ---------- -->
+  <article class="card" id="c-tue">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://www.tue.nl/en/education/bachelor-college/bachelor-psychology-technology/" target="_blank" rel="noopener">Psychology and Technology<span class="click">🖱️</span></a></h3>
+        <div class="card-uni">TU/e (Eindhoven University of Technology) · Eindhoven</div>
+      </div>
+      <span class="diff media">Dificultad de admisión: MEDIA/BAJA</span>
+    </div>
+    <div class="rank-wrap">
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="rank-badges">
+        <a class="rbadge gold" href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener">301-400 del mundo · Shanghái</a>
+        <a class="rbadge" href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener">11.º de Holanda · Shanghái</a>
+      </div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><div class="k">Ciudad</div><div class="v">Eindhoven (223.000)</div><button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button></div>
+      <div class="meta"><div class="k">Duración</div><div class="v">3 años / 180 ECTS</div></div>
+      <div class="meta"><div class="k">Coste</div><div class="v">2771 Euros<br><b class="red" style="font-size:.85rem">La universidad pide una “application fee” (Tasa de matriculación) de 100€</b></div></div>
+      <div class="meta"><div class="k">Idioma de impartición</div><div class="v pend">Pendiente (no indicado en el informe)</div></div>
+      <div class="meta"><div class="k">Fecha límite</div><div class="v">1 de mayo</div></div>
+    </div>
+    <div class="desc"><p><span class="lbl">Sobre el programa:</span> En este grado aprenderás cómo la tecnología influye en las personas y cómo puedes usar el conocimiento de la psicología para ayudar a las personas a usar la tecnología de la manera más eficaz posible. Además, también aprenderás a utilizar la psicología para diseñar aplicaciones completamente nuevas, como robots sociables, interfaces cerebro-computadora o tecnología de rehabilitación motivacional para el cuidado de la salud. Las materias se centran en la relación entre las personas y la tecnología.</p></div>
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="det">
+        <h4>Académicos</h4>
+        <ul><li>3 A Levels (nota A* - C) + 3 IGCSE (nota A*- C), en total 6 asignaturas diferentes (incluyendo Matemáticas como AL)</li></ul>
+        <h4>De nivel de inglés</h4>
+        <ul>
+          <li>Exento si:
+            <ul><li>Completed the full British curriculum (GCSE and A-levels) at an international/British school outside the United Kingdom</li></ul>
+          </li>
+          <li>De lo contrario:
+            <ul>
+              <li>IELTS 6.5 overall (ninguna sección por debajo del 6.0)</li>
+              <li>TOEFL 90 overall (ninguna sección por debajo de 21)</li>
+              <li>TOEFL después de Enero 2026: 4.5 (ninguna sección por debajo de 4.5)</li>
+              <li>Cambridge CAE (C1)</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="deadline">📅 <b>Plazo límite de inscripción:</b> 1 de mayo</div>
+        <h4>Proceso de selección</h4>
+        <p style="margin:0">No es un grado <b>Numerus Fixus</b>, por lo que no hay proceso de selección. Sí cumplimos los requisitos y completamos el proceso correctamente, la admisión está casi asegurada.</p>
+        <h4>Otros</h4>
+        <ul><li class="red"><b>La universidad pide una “application fee” (Tasa de matriculación) de 100€</b></li></ul>
+      </div>
+    </details>
+  </article>
+
+  <!-- ---------- University of Twente ---------- -->
+  <article class="card" id="c-twente">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://www.utwente.nl/en/education/bachelor/programmes/psychology/" target="_blank" rel="noopener">Psychology<span class="click">🖱️</span></a></h3>
+        <div class="card-uni">University of Twente · Enschede</div>
+      </div>
+      <span class="diff alta">Dificultad de admisión: ALTA</span>
+    </div>
+    <div class="rank-wrap">
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="rank-badges">
+        <a class="rbadge gold" href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener">501-600 del mundo · Shanghái</a>
+        <a class="rbadge" href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener">12.º de Holanda · Shanghái</a>
+      </div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><div class="k">Ciudad</div><div class="v">Enschede (158.000 habitantes)</div><button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button></div>
+      <div class="meta"><div class="k">Duración</div><div class="v">3 años / 180 ECTS</div></div>
+      <div class="meta"><div class="k">Coste</div><div class="v">2771 Euros</div></div>
+      <div class="meta"><div class="k">Idioma de impartición</div><div class="v pend">Pendiente (no indicado en el informe)</div></div>
+      <div class="meta"><div class="k">Fecha límite</div><div class="v"><b class="red">15 de enero (250 PLAZAS)</b></div></div>
+    </div>
+    <div class="desc"><p><span class="lbl">Sobre el programa:</span> En este grado descubrirás que la psicología es mucho más que psicología clínica, y también ofrece perspectivas profesionales mucho más amplias. Por supuesto, construirás una base sólida en psicología clínica, psicología de la personalidad, neuropsicología cognitiva, psicología social y psicología del desarrollo. Además de eso, te daremos las herramientas que necesitas para diseñar intervenciones efectivas para los nuevos desafíos en nuestro mundo que cambia rápidamente, utilizando robots amigables para los humanos o creando soluciones inteligentes para abordar las adicciones a los juegos o los riesgos de tráfico resultantes del uso de teléfonos móviles. En la UT, aprenderás a analizar problemas personales o sociales de manera académica y a encontrar sistemáticamente una solución realista en la que se incruste tu conocimiento psicológico.</p></div>
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="det">
+        <h4>Académicos</h4>
+        <ul><li>3 A Levels (nota A* - C) + 3 IGCSE (nota A*- C), en total 6 asignaturas diferentes (incluyendo Matemáticas como AL)</li></ul>
+        <h4>De nivel de inglés <span class="red" style="font-weight:400">(obligatorio presentar el certificado antes del fin de matrículas):</span></h4>
+        <ul>
+          <li>Exento si:
+            <ul><li>If you have English as a subject obtained at (I)GCSE or GCE (O-, AS-, A2-Level) with an A, B or C score you are exempted from the English language test. Please be aware that this only applies if you have the GCE A2-level certificates in combination with the GCSE certificates. If this does not apply to you, it will be reviewed on a case-by-case basis</li></ul>
+          </li>
+          <li>De lo contrario:
+            <ul>
+              <li>IELTS 6.0 overall (ninguna sección por debajo del 5.5)</li>
+              <li>TOEFL 90 overall</li>
+              <li>TOEFL después de Enero 2026: 4.5 (mínimo 4.5 en Reading, listening, and writing. 4 en speaking)</li>
+              <li>Cambridge CAE (C1)</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="deadline">📅 <b>Plazo límite de inscripción:</b> <b class="red">15 de enero (250 PLAZAS)</b></div>
+        <h4>Proceso de selección</h4>
+        <p style="margin:0 0 6px">Es un grado <b>Numerus Fixus</b>, por lo que sí existe un proceso de selección, que consiste en:</p>
+        <ul>
+          <li>Test de compatibilidad online que cuenta un (20%) de la nota total</li>
+          <li>Un test escrito de psicología (40%)</li>
+          <li>Methods &amp; Statistics online written test (40%)</li>
+        </ul>
+        <a class="special-link" href="https://www.utwente.nl/en/education/bachelor/programmes/psychology/enrolment/#apply-for-the-english-track" target="_blank" rel="noopener">Ver Proceso de Selección →</a>
+      </div>
+    </details>
+  </article>
+
+  <!-- ---------- Tilburg University ---------- -->
+  <article class="card" id="c-tilburg">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://www.tilburguniversity.edu/education/bachelors-programs/psychology" target="_blank" rel="noopener">Psychology<span class="click">🖱️</span></a></h3>
+        <div class="card-uni">Tilburg University · Tilburg</div>
+      </div>
+      <span class="diff neutral" title="El informe indica «Probabilidad de Admisión: ALTA»; dificultad pendiente de confirmar">Probabilidad de admisión: ALTA · dificultad pendiente</span>
+    </div>
+    <div class="rank-wrap">
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="rank-badges">
+        <a class="rbadge gold" href="https://www.shanghairanking.com/universities/tilburg-university" target="_blank" rel="noopener">801-900 del mundo · Shanghái</a>
+        <a class="rbadge" href="https://www.shanghairanking.com/universities/tilburg-university" target="_blank" rel="noopener">13.º de Holanda · Shanghái</a>
+      </div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><div class="k">Ciudad</div><div class="v">Tilburg (206.000 habitantes)</div><button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button></div>
+      <div class="meta"><div class="k">Duración</div><div class="v">3 años / 180 ECTS</div></div>
+      <div class="meta"><div class="k">Coste</div><div class="v">2771 Euros</div></div>
+      <div class="meta"><div class="k">Idioma de impartición</div><div class="v pend">Pendiente (no indicado en el informe)</div></div>
+      <div class="meta"><div class="k">Fecha límite</div><div class="v"><b class="red">15 de enero</b></div></div>
+    </div>
+    <div class="desc"><p><span class="lbl">Sobre el grado:</span> Obtendrás una base sólida en varios campos de la psicología, lo que te preparará para una amplia gama de campos profesionales, que incluyen servicios sociales y de salud, salud mental, liderazgo y gestión organizacional, relaciones comunitarias y públicas, educación, desarrollo y facilitación de programas y servicios sociales. investigación científica. Podrás diseñar tu propio programa de estudios eligiendo una especialización en el segundo año, seguida de una especialización posterior en tu tercer año.</p></div>
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="det">
+        <h4>Académicos</h4>
+        <ul><li>3 A Levels (nota A* - C) + 3 IGCSE (nota A*- C), en total 6 asignaturas diferentes (incluyendo Matemáticas, aunque si no las tienes puedes inscribirte en un curso suplementario de Matemáticas en el 1er semestre)</li></ul>
+        <h4>De nivel de inglés <span class="red" style="font-weight:400">(obligatorio presentar el certificado antes del fin de matrículas, 1 de mayo):</span></h4>
+        <ul>
+          <li>Exento si:
+            <ul><li>Cambridge International GCSE’s in combination with A Levels.</li></ul>
+          </li>
+          <li>De lo contrario:
+            <ul>
+              <li>IELTS 6.0 overall (ninguna sección por debajo del 5.5)</li>
+              <li>TOEFL 80 overall</li>
+              <li>TOEFL después de Enero 2026: 4.5 ( mínimo de 4 en Writing y Speaking)</li>
+              <li>Cambridge CAE (C1)</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="deadline">📅 <b>Plazo límite de inscripción:</b> <b class="red">15 de enero</b></div>
+        <h4>Proceso de selección</h4>
+        <p style="margin:0">Es un grado <b>Numerus Fixus</b>, por lo que sí existe un proceso de selección.</p>
+        <h4>Probabilidad de Admisión</h4>
+        <p style="margin:0">ALTA <span class="pend">(así figura en el informe; pendiente de confirmar si se refiere a la dificultad)</span></p>
+      </div>
+    </details>
+  </article>
+
+  <div class="sec-sep">UNIVERSITIES OF APPLIED SCIENCES</div>
+
+  <!-- ---------- University College Roosevelt ---------- -->
+  <article class="card" id="c-ucr">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://ucr.nl/education/courses/health-cognition-behavior/" target="_blank" rel="noopener">Health, Cognition and Behaviour<span class="click">🖱️</span></a></h3>
+        <div class="card-uni">University College Roosevelt · Middelburg</div>
+      </div>
+      <span class="diff media">Dificultad de admisión: BAJA</span>
+    </div>
+    <div class="rank-wrap">
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="rank-badges">
+        <span class="rbadge none">No aparece en el ranking de Shanghái</span>
+      </div>
+      <div style="font-size:.85rem;color:var(--muted);margin-top:5px">No aparece en el ranking Shanghái debido a su metodología de enseñanza.</div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><div class="k">Ciudad</div><div class="v">Middelburg (48,964 population)</div><button class="map-btn" onclick="scrollToMap('holanda','map-holanda')">🗺️ Ver mapa</button></div>
+      <div class="meta"><div class="k">Duración</div><div class="v">3 años (180 ECT)</div></div>
+      <div class="meta"><div class="k">Coste</div><div class="v"><span class="red">€5,361 / €5,629 año (universidad privada)</span></div></div>
+      <div class="meta"><div class="k">Idioma de impartición</div><div class="v pend">Pendiente (no indicado en el informe)</div></div>
+      <div class="meta"><div class="k">Fecha límite</div><div class="v"><b class="red">1 marzo</b></div></div>
+    </div>
+    <div class="desc">
+      <p><span class="lbl">Descripción:</span> ¿Qué significa realmente estar sano, no solo físicamente, sino también mental y socialmente? En el área de Salud, Cognición y Comportamiento, explorarás la ciencia que sustenta el bienestar humano. Desde cómo el cerebro procesa las emociones y las decisiones, hasta cómo el cuerpo responde a la enfermedad o al estrés, en esta área profundizarás en lo que ayuda a las personas a prosperar y qué sucede cuando las cosas se complican.  Estudiarás temas como la salud mental, la biología del cuerpo humano, los procesos cognitivos y el comportamiento, a la vez que aprendes cómo influyen el estilo de vida, el entorno y la sociedad. Pero esto no es todo. En nuestra universidad de Artes y Ciencias, puedes conectar Salud, Cognición y Comportamiento con otras áreas como Gobierno y Sociedad para analizar los sistemas de salud y las políticas de salud pública, o Ciencia de Datos y Sistemas Inteligentes para analizar las tendencias de salud y modelar la propagación de enfermedades.</p>
+      <p>Ya sea que te interese la psicología, la medicina, la salud global o simplemente la psicología humana, esta área te ofrece una base sólida y amplia para comprender el bienestar humano.</p>
+      <p><span class="lbl">Diseña tu programa: Portales en salud, cognición y comportamiento:</span></p>
+      <ul style="margin:0;padding-left:22px">
+        <li><b>Fundamentos de Ciencias de la Vida, la Salud y la Biomedicina</b>:  Este curso da acceso a cursos de nivel 200 y 300 en Ciencias Biomédicas y Ciencias de la Vida.
+          <ul><li>Ciencias Biomédicas</li><li>Ciencias de la Vida</li></ul>
+        </li>
+        <li><b>Introducción al Cerebro y la Conducta</b>: Este curso da acceso a cursos de nivel 200 y 300 de Psicología Clínica y Ciencias Cognitivas, que normalmente están bloqueados.
+          <ul><li>Psicología Clínica</li><li>Ciencias Cognitivas</li></ul>
+        </li>
+      </ul>
+    </div>
+    <details>
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="det">
+        <h4>Académicos</h4>
+        <ul>
+          <li>A-Levels in three general, academic subjects* with a minimum score of BBB.</li>
+          <li>*Preferred subjects are: Biology, Chemistry, Classical Studies / Classical Civilisation, Economics, English Literature / English Language and Literature, Environmental Science / Technology, Geography, Geology, History / Ancient History, Languages, Law, Mathematics, Marine Science, Philosophy, Physics, Politics / Government and Politics, Psychology, Religious Studies, Sociology, Statistics. Other subjects may be considered on a case-by-case basis</li>
+        </ul>
+        <h4>Requisitos de Inglés</h4>
+        <ul>
+          <li>Exento si:
+            <ul><li>Completed (international) A-levels</li></ul>
+          </li>
+          <li>De lo Contrario:
+            <ul>
+              <li>C1 Advanced Exam (CAE) o C2 Proficiency Exam (CPE)</li>
+              <li>IELTS 7.0 overall (ninguna sección por debajo del 6.5)</li>
+              <li>TOEFL 95 overall</li>
+              <li>TOEFL después de Enero 2026: 5 Overall</li>
+            </ul>
+          </li>
+        </ul>
+        <div class="deadline">📅 <b>Plazo límite para enviar matrícula:</b> <b class="red">1 marzo</b></div>
+        <h4>Proceso de selección</h4>
+        <p style="margin:0 0 8px">Después de la matrícula hay un proceso, recibirá una invitación para completar la evaluación de selección en línea de UCR en la plataforma Kira. Cree un perfil en Kira con el número de estudiante que se le asignó al iniciar su solicitud. Tendrá dos semanas para completar la evaluación, pero puede hacerlo cuando le resulte conveniente.</p>
+        <p style="margin:0 0 8px">Durante la evaluación, responderá un total de seis preguntas sobre usted y sus experiencias. Cinco de estas preguntas se grabarán en video, mientras que una consistirá en una pregunta escrita. Las preguntas en video se presentarán con un breve video, mientras que la pregunta escrita será simplemente un texto. Tendrá 60 segundos para pensar y reflexionar; después, tendrá 90 segundos para grabar su respuesta en video o 5 minutos para proporcionar su respuesta escrita. Podrá responder cada pregunta solo una vez, pero no es necesario completar toda la evaluación de una sola vez.</p>
+        <p style="margin:0">Tenga en cuenta que no puede completar la evaluación en su teléfono. Necesitará una computadora portátil o de escritorio con micrófono y cámara.</p>
+      </div>
+    </details>
+  </article>
+
+  <div class="box map-box" id="map-holanda">
+    <h2>Mapa de universidades en Holanda</h2>
+    <div class="map" id="leaflet-holanda"></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="logo">
+    <svg viewBox="0 0 1800 434" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="educoway - orientación universitaria en el extranjero">
+      <path class="lg-stroke" d="M12 150 H155 A72 72 0 1 0 140 195"/>
+      <circle class="lg-stroke" cx="309" cy="150" r="72"/>
+      <path class="lg-stroke" d="M389 0 V234"/>
+      <path class="lg-stroke" d="M484 66 V150 A65 65 0 0 0 614 150 M614 66 V234"/>
+      <path class="lg-stroke" d="M815 104 A72 72 0 1 0 815 196"/>
+      <circle class="lg-stroke" cx="978" cy="150" r="72"/>
+      <g fill="none" stroke-width="52" stroke-linecap="round">
+        <path d="M1141 92 L1192 220" stroke="#5bbd8c" opacity=".92"/>
+        <path d="M1192 220 L1243 92" stroke="#56bdb0" opacity=".88"/>
+        <path d="M1243 92 L1294 220" stroke="#3db2c1" opacity=".88"/>
+        <path d="M1294 220 L1345 92" stroke="#56b9e3" opacity=".92"/>
+      </g>
+      <circle class="lg-stroke" cx="1497" cy="150" r="72"/>
+      <path class="lg-stroke" d="M1580 66 V234"/>
+      <path class="lg-stroke" d="M1653 70 L1720 214 M1786 70 L1688 305"/>
+      <text class="lg-text" x="0" y="414" font-family="DM Sans, sans-serif" font-size="74" textLength="1785" lengthAdjust="spacing">orientación universitaria en el extranjero</text>
+    </svg>
+  </div>
+  <p>Informe de Opciones de Grado · Preparado por educoWay para Yune Wagenhoefer</p>
+</footer>
+
+<script>
+const mapData = {
+  holanda: {
+    center: [52.15, 5.35],
+    zoom: 7,
+    universities: [
+      { id: 'c-rug-psy',   name: 'Psychology', school: 'University of Groningen', lat: 53.2193, lng: 6.5627, webUrl: 'https://www.rug.nl/bachelors/psychology-en/', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=University+of+Groningen+Groningen' },
+      { id: 'c-ucg-las',   name: 'Liberal Arts and Sciences (Major in Psychology)', school: 'University College Groningen', lat: 53.2155, lng: 6.5520, webUrl: 'https://www.rug.nl/ucg/education/majors/social-sciences-major/#psychology', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=University+College+Groningen' },
+      { id: 'c-leiden',    name: 'Psychology', school: 'Universiteit Leiden', lat: 52.1570, lng: 4.4850, webUrl: 'https://www.universiteitleiden.nl/en/education/study-programmes/bachelor/psychology', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Universiteit+Leiden+Leiden' },
+      { id: 'c-vu',        name: 'Psychology', school: 'Vrije Universiteit Amsterdam', lat: 52.3340, lng: 4.8660, webUrl: 'https://vuweb.vu.nl/en/education/bachelor/psychology', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Vrije+Universiteit+Amsterdam' },
+      { id: 'c-maastricht',name: 'Psychology', school: 'Maastricht University', lat: 50.8400, lng: 5.7120, webUrl: 'https://www.maastrichtuniversity.nl/education/bachelor/programmes/psychology', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Maastricht+University+Maastricht' },
+      { id: 'c-tue',       name: 'Psychology and Technology', school: 'TU/e (Eindhoven University of Technology)', lat: 51.4480, lng: 5.4900, webUrl: 'https://www.tue.nl/en/education/bachelor-college/bachelor-psychology-technology/', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Eindhoven+University+of+Technology' },
+      { id: 'c-twente',    name: 'Psychology', school: 'University of Twente', lat: 52.2389, lng: 6.8568, webUrl: 'https://www.utwente.nl/en/education/bachelor/programmes/psychology/', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=University+of+Twente+Enschede' },
+      { id: 'c-tilburg',   name: 'Psychology', school: 'Tilburg University', lat: 51.5630, lng: 5.0420, webUrl: 'https://www.tilburguniversity.edu/education/bachelors-programs/psychology', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Tilburg+University+Tilburg' },
+      { id: 'c-ucr',       name: 'Health, Cognition and Behaviour', school: 'University College Roosevelt', lat: 51.4988, lng: 3.6136, webUrl: 'https://ucr.nl/education/courses/health-cognition-behavior/', mapsUrl: 'https://www.google.com/maps/search/?api=1&query=University+College+Roosevelt+Middelburg' }
+    ]
+  }
+};
+
+const mapsInitialized = {};
+const mapInstances = {};
+
+function updateHeaderOffset() {
+  const h = document.getElementById('top-header').offsetHeight;
+  document.documentElement.style.setProperty('--hdr', h + 'px');
+}
+
+function scrollToEl(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - document.getElementById('top-header').offsetHeight - 14;
+  window.scrollTo({ top: top, behavior: 'smooth' });
+}
+
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('panel-' + id);
+  if (panel) panel.classList.add('active');
+  const button = btn || document.querySelector('.tab-btn[data-tab="' + id + '"]');
+  if (button) {
+    button.classList.add('active');
+    button.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+  }
+  window.scrollTo({ top: 0, behavior: 'auto' });
+  if (mapData[id]) initMap(id);
+}
+
+function isActiveTab(tab) {
+  const p = document.getElementById('panel-' + tab);
+  return p && p.classList.contains('active');
+}
+
+function goTo(tab, anchor) {
+  if (!isActiveTab(tab)) showTab(tab);
+  setTimeout(() => scrollToEl(anchor), 80);
+}
+
+function scrollToCard(id) {
+  scrollToEl(id);
+  const card = document.getElementById(id);
+  if (card) {
+    card.style.borderColor = 'var(--teal)';
+    card.style.boxShadow = '0 0 0 4px rgba(10,155,170,.25)';
+    setTimeout(() => { card.style.borderColor = ''; card.style.boxShadow = ''; }, 1600);
+  }
+}
+
+function scrollToMap(tab, anchor) {
+  if (isActiveTab(tab)) {
+    scrollToEl(anchor);
+  } else {
+    showTab(tab);
+    setTimeout(() => scrollToEl(anchor), 120);
+  }
+}
+
+function initMap(countryId) {
+  if (mapsInitialized[countryId] || typeof L === 'undefined') return;
+  const data = mapData[countryId];
+  if (!data) return;
+  mapsInitialized[countryId] = true;
+  const map = L.map('leaflet-' + countryId, { scrollWheelZoom: false }).setView(data.center, data.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+  }).addTo(map);
+  const icon = L.divIcon({ className: 'edu-pin', html: '🎓', iconSize: [30, 30], iconAnchor: [15, 15], popupAnchor: [0, -14] });
+  const bounds = [];
+  data.universities.forEach(u => {
+    const web = u.webUrl
+      ? '<a href="' + u.webUrl + '" target="_blank" rel="noopener">Ver grado</a>'
+      : '<span title="Enlace pendiente">Ver grado (pendiente)</span>';
+    const html =
+      '<div class="pop-g">' + u.name + '</div>' +
+      '<div class="pop-u">' + u.school + '</div>' +
+      '<div class="pop-btns">' + web +
+      '<button onclick="scrollToCard(\'' + u.id + '\')">Ver ficha</button>' +
+      '<a href="' + u.mapsUrl + '" target="_blank" rel="noopener">Google Maps</a></div>';
+    L.marker([u.lat, u.lng], { icon: icon, title: u.school }).addTo(map).bindPopup(html);
+    bounds.push([u.lat, u.lng]);
+  });
+  map.fitBounds(bounds, { padding: [30, 30] });
+  mapInstances[countryId] = map;
+  setTimeout(() => map.invalidateSize(), 150);
+}
+
+window.addEventListener('load', updateHeaderOffset);
+window.addEventListener('resize', updateHeaderOffset);
+updateHeaderOffset();
+</script>
+</body>
+</html>
