@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Opciones de grado · Julia Jimena Urbina San Martin · educoWay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>:root{--teal:#0a9baa;--teal-dark:#077a87;--teal-light:#e0f5f7;--navy:#0d2b3e;--bg:#f4f8fa;--border:#c8e0e5;--muted:#6b7f8a;--text:#1d3340;--gold:#c9a227;--gold-light:#fbf3dc}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;color:var(--text);background:var(--bg)}
+a{color:var(--teal-dark)}
+h1,h2,h3{font-family:'Playfair Display',Georgia,'Times New Roman',serif;color:var(--navy);line-height:1.25}
+.txt-red{color:#d0021b}
+.txt-green{color:#1e8e3e}
+.txt-teal{color:#25afb4}
+
+/* header */
+.top{position:sticky;top:0;z-index:1000;background:var(--navy);color:#fff;box-shadow:0 4px 18px rgba(13,43,62,.25);padding-top:env(safe-area-inset-top,0px)}
+.top-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:22px;padding:14px 20px 10px}
+.brand .logo-svg{height:40px;width:auto;display:block}
+.titles h1{color:#fff;font-size:1.35rem;margin:0}
+.titles .sub{font-variant:small-caps;letter-spacing:.08em;text-transform:lowercase;color:#9fd8de;font-size:.95rem}
+.tabs{max-width:1100px;margin:0 auto;display:flex;gap:6px;padding:0 20px 10px;overflow-x:auto;scrollbar-width:thin}
+.tab{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;font:500 .9rem 'DM Sans',sans-serif;color:#cfe7eb;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:7px 15px;cursor:pointer;transition:.2s}
+.tab:hover{background:rgba(255,255,255,.15);color:#fff}
+.tab.active{background:var(--teal);border-color:var(--teal);color:#fff}
+
+/* flags */
+.flag{position:relative;display:inline-block;width:24px;height:16px;overflow:hidden;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.15);flex:0 0 auto;vertical-align:middle}
+.flag span{position:absolute;display:block}
+.flag-lg{width:84px;height:56px;border-radius:5px}
+.flag-nl .st{left:0;right:0;height:33.34%}
+.flag-nl .st-r{top:0;background:#ae1c28}.flag-nl .st-w{top:33.33%;background:#fff}.flag-nl .st-b{top:66.66%;background:#21468b}
+.flag-dk{background:#c8102e}.flag-dk .nc-h{left:0;right:0;top:42.85%;height:14.3%;background:#fff}.flag-dk .nc-v{top:0;bottom:0;left:32.4%;width:10.8%;background:#fff}
+.flag-se{background:#006aa7}.flag-se .nc-h{left:0;right:0;top:40%;height:20%;background:#fecc00}.flag-se .nc-v{top:0;bottom:0;left:31.25%;width:12.5%;background:#fecc00}
+.flag-uk{background:#012169}
+.flag-uk .uk-d1,.flag-uk .uk-d2{left:-20%;width:140%;top:50%;height:20%;margin-top:-10%;background:#fff}
+.flag-uk .uk-r1,.flag-uk .uk-r2{left:-20%;width:140%;top:50%;height:6.6%;margin-top:-3.3%;background:#c8102e}
+.flag-uk .uk-d1,.flag-uk .uk-r1{transform:rotate(33.7deg)}
+.flag-uk .uk-d2,.flag-uk .uk-r2{transform:rotate(-33.7deg)}
+.flag-uk .uk-h{left:0;right:0;top:33.3%;height:33.4%;background:#fff}
+.flag-uk .uk-v{top:0;bottom:0;left:41.6%;width:16.8%;background:#fff}
+.flag-uk .uk-hr{left:0;right:0;top:40%;height:20%;background:#c8102e}
+.flag-uk .uk-vr{top:0;bottom:0;left:45%;width:10%;background:#c8102e}
+
+/* layout */
+main{max-width:1100px;margin:0 auto;padding:28px 20px 40px}
+.panel{display:none}.panel.active{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sec-title{font-size:1.6rem;margin:34px 0 16px}
+.intro-box,.rvsa,.country-text{background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px 28px}
+.intro-box p:first-child{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--navy)}
+.next-box{margin-top:34px;background:var(--navy);color:#e6f3f5;border-radius:12px;padding:22px 28px}
+.next-box h2{color:#fff;margin-top:0}
+
+/* index */
+.index{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.ix-group{background:#fff;border:2px solid var(--border);border-radius:12px;padding:16px 18px}
+.ix-group h3{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:1.1rem}
+.ix-group ul{list-style:none;margin:0;padding:0}
+.ix-group li a{display:block;text-decoration:none;padding:7px 8px;border-radius:8px;border-left:3px solid transparent;transition:.15s}
+.ix-group li a:hover{background:var(--teal-light);border-left-color:var(--teal)}
+.ix-deg{display:block;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:400;color:var(--navy)}
+.ix-uni{display:block;font-family:'Playfair Display',serif;font-size:11.5px;font-style:italic;color:var(--muted)}
+
+/* rvsa */
+.rv-block{border-left:3px solid var(--teal);padding:2px 0 2px 18px;margin:18px 0}
+.rv-block h3{margin:0 0 6px;font-size:1.15rem}
+.rv-links li{margin:4px 0}
+
+/* country */
+.country-hero{display:flex;align-items:center;gap:22px;background:linear-gradient(120deg,var(--navy),#14445f);color:#fff;border-radius:12px;padding:22px 26px;margin-bottom:16px}
+.country-hero h2{color:#fff;margin:0 0 8px;font-size:2rem}
+.ch-meta{display:flex;flex-wrap:wrap;gap:10px 28px}
+.ch-meta .mk{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#9fd8de}
+.ch-meta .mv{font-weight:500;color:#fff}
+.ch-meta .pending{background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.4)}
+.see-also{font-size:.92rem;color:var(--muted)}
+.notice{margin:16px 0;background:#fff5e6;border:2px solid #f0a33a;border-radius:12px;padding:16px 20px}
+.notice-k{font-weight:700;color:#b35c00;margin-bottom:4px}
+.sep{display:flex;align-items:center;gap:14px;margin:34px 0 14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-dark);font-size:.85rem}
+.sep::before,.sep::after{content:"";flex:1;height:2px;background:var(--border)}
+
+/* cards */
+.card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px 24px;margin:18px 0;transition:border-color .2s,box-shadow .2s;scroll-margin-top:150px}
+.card:hover{border-color:var(--teal);box-shadow:0 10px 28px rgba(10,155,170,.15)}
+.card.flash{animation:flash 1.6s ease}
+@keyframes flash{0%,60%{box-shadow:0 0 0 4px rgba(10,155,170,.45)}100%{box-shadow:none}}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px}
+.card-title{margin:0;font-size:1.4rem}
+.card-title-link{color:var(--navy);text-decoration:none;transition:color .2s}
+.card-title-link:hover{color:var(--teal)}
+.click-ico{display:inline-block;font-size:.95rem;transition:transform .2s}
+.card-title-link:hover .click-ico{transform:scale(1.35)}
+.card-uni{color:var(--teal);font-weight:500;margin-top:2px}
+.rank-label{font-size:.75rem;color:var(--muted);margin-top:10px}
+.ranks{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.rk{display:inline-block;font-size:.78rem;font-weight:500;background:var(--teal-light);color:var(--teal-dark);border:1px solid #b6e2e7;border-radius:999px;padding:2px 10px;text-decoration:none}
+a.rk:hover{background:#cdeef2}
+.rk-gold{background:var(--gold-light);color:#8a6a07;border-color:#e6cf86}
+.rk-none{background:#f1f3f4;color:var(--muted);border-color:#dde2e5}
+.rk-note{font-size:.8rem;color:var(--muted);margin-top:6px;width:100%}
+.diff{flex:0 0 auto;max-width:240px;text-align:center;font-weight:700;font-size:.85rem;border:2px solid;border-radius:10px;padding:6px 12px}
+.diff-k{display:block;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;opacity:.85}
+.diff-red{color:#c0392b;border-color:#c0392b;background:#fdecea}
+.diff-orange{color:#c46200;border-color:#e67e22;background:#fef3e6}
+.diff-green{color:#1e8449;border-color:#27ae60;background:#e9f7ef}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:18px 0}
+.m{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 12px}
+.mk{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.mv{font-weight:500;color:var(--navy)}
+.mv small{font-weight:400;color:var(--muted)}
+.map-btn{display:block;width:fit-content;margin-top:6px;font:700 .72rem 'DM Sans',sans-serif;background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--teal);border-radius:6px;padding:3px 8px;cursor:pointer}
+.map-btn:hover{background:var(--teal);color:#fff}
+.pending{display:inline-block;font:500 .72rem 'DM Sans',sans-serif;color:#8a6d00;background:#fff8d6;border:1px dashed #d9b400;border-radius:6px;padding:1px 7px;vertical-align:middle}
+.card-title-nolink{color:var(--navy)}
+.desc{background:#f3f9fb;border-left:4px solid var(--teal);border-radius:0 10px 10px 0;padding:14px 18px}
+.desc-k{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-dark);font-weight:700}
+.desc p{margin:.5em 0}
+details{margin-top:12px;border:1px solid var(--border);border-radius:10px;background:#fff}
+summary{cursor:pointer;padding:10px 16px;font-weight:700;color:var(--teal-dark);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸";display:inline-block;margin-right:8px;transition:transform .2s}
+details[open] summary::before{transform:rotate(90deg)}
+details[open] summary{border-bottom:1px solid var(--border)}
+.dc{padding:4px 18px 14px}
+.dc h4{margin:14px 0 4px;color:var(--navy);font-size:.95rem}
+.dc ul{margin:4px 0;padding-left:22px}
+.deadline{margin:14px 0 8px;background:#fff8c5;border:1px solid #f0d64a;border-radius:8px;padding:10px 14px}
+.sel{margin-top:8px}
+
+/* map */
+.map-wrap{margin-top:36px;scroll-margin-top:150px}
+.map{height:440px;border-radius:12px;border:2px solid var(--border);overflow:hidden}
+.uni-marker{font-size:24px;line-height:1;text-align:center;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.pop-deg{font-family:'DM Sans',sans-serif;font-weight:700;color:var(--navy);font-size:.95rem}
+.pop-uni{font-family:'Playfair Display',serif;font-style:italic;color:var(--muted);margin-bottom:8px}
+.pop-btns{display:flex;flex-wrap:wrap;gap:5px}
+.pop-btns a,.pop-btns button,.pop-btns span{font:700 .72rem 'DM Sans',sans-serif;border-radius:6px;padding:4px 8px;border:1px solid var(--teal);background:var(--teal-light);color:var(--teal-dark)!important;text-decoration:none;cursor:pointer}
+.pop-btns span{border-style:dashed;cursor:default;opacity:.7}
+
+/* footer */
+.foot{text-align:center;padding:30px 20px calc(30px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--border);color:var(--muted);font-size:.85rem}
+.foot-logo{opacity:.6}.foot-logo .logo-svg{height:34px;width:auto}
+
+@media (max-width:700px){
+  .top-in{gap:12px;padding:10px 14px 8px}.brand .logo-svg{height:28px}.titles h1{font-size:1rem}
+  .card-head{flex-direction:column}.diff{max-width:none}
+  .country-hero{flex-direction:column;align-items:flex-start}
+  .intro-box,.rvsa,.country-text,.card{padding:16px}
+  .card,.map-wrap{scroll-margin-top:130px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><svg class="logo-svg lh" role="img" aria-label="educoWay" id="lh-svg" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .lh-1 {
+        fill: #36aadc;
+      }
+
+      .lh-1, .lh-2, .lh-3, .lh-4 {
+        opacity: .8;
+      }
+
+      .lh-2 {
+        fill: #30ac71;
+      }
+
+      .lh-5 {
+        fill: #ffffff;
+      }
+
+      .lh-3 {
+        fill: #32abbb;
+      }
+
+      .lh-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="lh-g" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="lh-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="lh-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lh-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="lh-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="lh-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lh-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lh-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lh-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lh-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="lh-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="lh-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lh-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="lh-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="lh-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lh-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="lh-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="lh-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="lh-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="lh-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="lh-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lh-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lh-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="lh-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="lh-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="lh-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lh-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lh-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="lh-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="lh-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lh-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lh-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lh-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lh-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="lh-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="lh-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="lh-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="lh-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lh-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lh-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lh-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lh-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="lh-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lh-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lh-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lh-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="lh-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="lh-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="lh-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="lh-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="lh-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="lh-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="lh-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="lh-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="lh-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="lh-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="lh-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+    <div class="titles">
+      <h1>Informe de opciones de grado · Física y Matemáticas</h1>
+      <div class="sub">Preparado para Julia Jimena Urbina San Martin</div>
+    </div>
+  </div>
+  <nav class="tabs"><button class="tab active" data-tab="intro" onclick="showTab('intro',this)">Introducción</button><button class="tab" data-tab="rvsa" onclick="showTab('rvsa',this)">Research vs Applied Sciences</button><button class="tab" data-tab="uk" onclick="showTab('uk',this)"><span class="flag flag-uk" aria-hidden="true"><span class="uk-d1"></span><span class="uk-d2"></span><span class="uk-r1"></span><span class="uk-r2"></span><span class="uk-h"></span><span class="uk-v"></span><span class="uk-hr"></span><span class="uk-vr"></span></span><span>Reino Unido</span></button><button class="tab" data-tab="nl" onclick="showTab('nl',this)"><span class="flag flag-nl" aria-hidden="true"><span class="st st-r"></span><span class="st st-w"></span><span class="st st-b"></span></span><span>Países Bajos</span></button><button class="tab" data-tab="dk" onclick="showTab('dk',this)"><span class="flag flag-dk" aria-hidden="true"><span class="nc-h"></span><span class="nc-v"></span></span><span>Dinamarca</span></button><button class="tab" data-tab="se" onclick="showTab('se',this)"><span class="flag flag-se" aria-hidden="true"><span class="nc-h"></span><span class="nc-v"></span></span><span>Suecia</span></button></nav>
+</header>
+<main>
+<section class="panel active" id="panel-intro">
+  <div class="intro-box"><p>Hola Julia,</p><p>En primer lugar, quería decirte ¡ENHORABUENA! Esta va a ser una experiencia muy enriquecedora donde vas a aprender muchísimo, vas a conocer muchas culturas y vivirás un sinfín de experiencias inolvidables. A continuación, te comparto el resultado de nuestra búsqueda de las principales opciones académicas que creo que van a encajar mejor con tus intereses.</p></div>
+  <h2 class="sec-title">Índice de opciones</h2>
+  <div class="index"><div class="ix-group"><h3><span class="flag flag-uk" aria-hidden="true"><span class="uk-d1"></span><span class="uk-d2"></span><span class="uk-r1"></span><span class="uk-r2"></span><span class="uk-h"></span><span class="uk-v"></span><span class="uk-hr"></span><span class="uk-vr"></span></span> Reino Unido</h3><ul><li><a href="#" onclick="goTo('uk','uk-imperial');return false;"><span class="ix-deg">Mathematics with Applied Mathematics / Mathematical Physics</span><span class="ix-uni">Imperial College London</span></a></li><li><a href="#" onclick="goTo('uk','uk-man-phys');return false;"><span class="ix-deg">Bachelor in Physics</span><span class="ix-uni">The University of Manchester</span></a></li><li><a href="#" onclick="goTo('uk','uk-man-mp');return false;"><span class="ix-deg">Bachelor in Mathematics & Physics</span><span class="ix-uni">The University of Manchester</span></a></li><li><a href="#" onclick="goTo('uk','uk-edin');return false;"><span class="ix-deg">Bachelor in Mathematics & Physics</span><span class="ix-uni">The University of Edinburgh</span></a></li><li><a href="#" onclick="goTo('uk','uk-durham');return false;"><span class="ix-deg">Bachelor in Physics</span><span class="ix-uni">Durham University</span></a></li><li><a href="#" onclick="goTo('uk','uk-lancaster');return false;"><span class="ix-deg">Bachelor in Physics</span><span class="ix-uni">Lancaster University</span></a></li><li><a href="#" onclick="goTo('uk','uk-lough');return false;"><span class="ix-deg">Engineering Physics</span><span class="ix-uni">Loughborough University</span></a></li><li><a href="#" onclick="goTo('uk','uk-hull');return false;"><span class="ix-deg">Physics</span><span class="ix-uni">University of Hull</span></a></li></ul></div><div class="ix-group"><h3><span class="flag flag-nl" aria-hidden="true"><span class="st st-r"></span><span class="st st-w"></span><span class="st st-b"></span></span> Países Bajos</h3><ul><li><a href="#" onclick="goTo('nl','nl-delft');return false;"><span class="ix-deg">Aerospace Engineering</span><span class="ix-uni">TU Delft</span></a></li><li><a href="#" onclick="goTo('nl','nl-rug-phys');return false;"><span class="ix-deg">Bachelor in Physics</span><span class="ix-uni">Groningen University (RUG)</span></a></li><li><a href="#" onclick="goTo('nl','nl-rug-ap');return false;"><span class="ix-deg">Bachelor in Applied Physics</span><span class="ix-uni">Groningen University (RUG)</span></a></li><li><a href="#" onclick="goTo('nl','nl-rug-am');return false;"><span class="ix-deg">Bachelor in Applied Mathematics</span><span class="ix-uni">Groningen University (RUG)</span></a></li><li><a href="#" onclick="goTo('nl','nl-tue-ap');return false;"><span class="ix-deg">Applied Physics</span><span class="ix-uni">Technical University of Eindhoven (TU/e)</span></a></li><li><a href="#" onclick="goTo('nl','nl-tue-am');return false;"><span class="ix-deg">Applied Mathematics</span><span class="ix-uni">Technical University of Eindhoven (TU/e)</span></a></li><li><a href="#" onclick="goTo('nl','nl-ut-ap');return false;"><span class="ix-deg">Bachelor in Applied Physics</span><span class="ix-uni">University of Twente</span></a></li><li><a href="#" onclick="goTo('nl','nl-ut-am');return false;"><span class="ix-deg">Bachelor in Applied Mathematics</span><span class="ix-uni">University of Twente</span></a></li><li><a href="#" onclick="goTo('nl','nl-inholland');return false;"><span class="ix-deg">Aeronautical Engineering</span><span class="ix-uni">Inholland University of Applied Sciences</span></a></li></ul></div><div class="ix-group"><h3><span class="flag flag-dk" aria-hidden="true"><span class="nc-h"></span><span class="nc-v"></span></span> Dinamarca</h3><ul><li><a href="#" onclick="goTo('dk','dk-dtu');return false;"><span class="ix-deg">General Engineering (BSc)</span><span class="ix-uni">DTU (Technical University of Denmark)</span></a></li><li><a href="#" onclick="goTo('dk','dk-sdu');return false;"><span class="ix-deg">BEng in Mechanical Engineering</span><span class="ix-uni">University of Southern Denmark (SDU)</span></a></li></ul></div><div class="ix-group"><h3><span class="flag flag-se" aria-hidden="true"><span class="nc-h"></span><span class="nc-v"></span></span> Suecia</h3><ul><li><a href="#" onclick="goTo('se','se-lund-phys');return false;"><span class="ix-deg">Bachelor in Physics</span><span class="ix-uni">Lund University</span></a></li><li><a href="#" onclick="goTo('se','se-lund-math');return false;"><span class="ix-deg">Bachelor in Mathematics</span><span class="ix-uni">Lund University</span></a></li></ul></div></div>
+  <div class="next-box"><h2>¿Qué tienes que hacer ahora?</h2><p>Echa un vistazo a todas las opciones, mira los vídeos, lee el contenido de las webs (asignaturas, especializaciones, etc.), ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p></div>
+</section><section class="panel" id="panel-rvsa"><h2 class="sec-title">Research vs Applied Science Universities</h2><div class="rvsa"><p>Como creo que ya te hemos explicado, en la mayoría de países europeos tenemos que diferenciar entre 2 tipos de universidades: "<em>Research</em>" y "<em>Applied Sciences</em>". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p><div class="rv-block"><h3>Metodología teórica vs práctica</h3><p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project</em>/<em>Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p></div><div class="rv-block"><h3>Duración</h3><p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p><p>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p></div><div class="rv-block"><h3>Ranking / Prestigio</h3><p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.</p><p>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p></div><div class="rv-block"><h3>Acceso a Másteres</h3><p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. En cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research</em>, te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p></div><p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de <em>Research</em> y otra de <em>Applied Sciences</em>):</p><ul class="rv-links"><li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank" rel="noopener">Applied Science vs. Research University</a></li><li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank" rel="noopener">Types of universities in the Netherlands</a></li></ul></div></section><section class="panel" id="panel-uk">
+  <div class="country-hero">
+    <span class="flag flag-uk flag-lg" aria-hidden="true"><span class="uk-d1"></span><span class="uk-d2"></span><span class="uk-r1"></span><span class="uk-r2"></span><span class="uk-h"></span><span class="uk-v"></span><span class="uk-hr"></span><span class="uk-vr"></span></span>
+    <div class="ch-body">
+      <h2>Reino Unido</h2>
+      <div class="ch-meta">
+        <div><span class="mk">Coste de matrícula</span><span class="mv">Entre 26.000 € y 54.000 € / año aprox. (según universidad, ver cada ficha)</span></div>
+        <div><span class="mk">Alojamiento</span><span class="mv">Varía en función de la ciudad y universidad.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="country-text"><p>En Reino Unido tenemos cientos de opciones, por ello me gustaría hablar primero contigo y que me indiques cuáles son tus preferencias y qué te gustaría encontrar en cuanto a los programas de estudio, las ciudades, etc., de este modo podemos acotar las opciones y centrarnos solamente en aquellas que son de tu interés. En este informe he incluido las opciones mas interesantes en base a tus intereses aademicos /Fisica y Matematicas) y en el ranking mundial y local de las universidades en estas disciplinas específicas.</p><p>Además, me gustaría recordarte que el Reino Unido es considerado un país extracomunitario. Esto quiere decir que a partir del curso académico 2020-2021 los estudiantes no contarán con el préstamo universitario (<em>loan</em>) que facilitaba la financiación de estudios. Por ende, resulta de particular importancia considerar la relación coste-calidad tanto de las universidades en cuestión.</p></div>
+  
+  
+<article class="card" id="uk-imperial">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-applied-physics/" target="_blank" rel="noopener">Mathematics with Applied Mathematics / Mathematical Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Imperial College London · London</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/imperial-college-london" target="_blank" rel="noopener">#29 del mundo</a><a class="rk" href="https://www.shanghairanking.com/universities/imperial-college-london" target="_blank" rel="noopener">#5 de Reino Unido</a><span class="rk rk-gold">#17 del mundo en Mathematics</span><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/imperial-college-london" target="_blank" rel="noopener">#47 del mundo en Physics</a></div>
+    </div>
+    <div class="diff diff-red"><span class="diff-k">Dificultad</span>Muy Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">London <small>(9 millones de habitantes)</small></span><button class="map-btn" onclick="scrollToMap('uk','map-uk')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años</span></div><div class="m"><span class="mk">Coste</span><span class="mv">54.000 euros / año (aproximadamente)</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">13 de Enero</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Este grado tiene como objetivo presentarte una amplia variedad de ideas matemáticas de una forma que potencie tus capacidades críticas e intelectuales.</p><p>Desarrollarás una comprensión amplia de la teoría y la aplicación de las matemáticas, y tendrás oportunidades de profundizar en las áreas que más te interesen.</p><p>Trabajarás con conceptos que suponen una continuación directa de los estudiados en el A-level (equivalente al Bachillerato), así como con otros que te introducirán en nuevas formas de pensar.</p><p>Tus estudios abarcarán las áreas clave de las matemáticas, como el álgebra, el análisis, la probabilidad y la estadística. También explorarás temas como la estructura lógica de los argumentos, la definición rigurosa de los objetos matemáticos, el diseño de modelos matemáticos sofisticados y la validez de los cálculos.</p><p>Dentro de la especialización en Matemáticas Aplicadas/Física Matemática, estudiarás diversos conceptos relevantes, como la dinámica de juegos, la biología matemática y la computación científica.</p><p>A través de estos módulos especializados, te centrarás en cómo pueden utilizarse los métodos matemáticos para resolver problemas de la física y de otras ciencias.</p><p>Además, podrás elegir entre una amplia selección de módulos optativos, muchos de ellos vinculados a nuestra investigación de vanguardia e impartidos por destacados expertos en sus respectivos campos.</p><p>Como graduado en Matemáticas, contarás con un conjunto de competencias lógicas y analíticas muy valoradas por las empresas, lo que te permitirá optar a oportunidades en los sectores empresarial, público y educativo.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Londres es una de las ciudades universitarias más importantes del mundo, con universidades de prestigio y un ambiente académico internacional. Cuenta con unos 9 millones de habitantes y una gran diversidad cultural, lo que permite conocer personas de distintas nacionalidades y culturas. La vida universitaria es muy activa, con clubes, deportes y actividades sociales. Además, ofrece una amplia oferta cultural, con museos, teatros, musicales, conciertos y numerosos parques, muchos con opciones gratuitas o descuentos para estudiantes. El transporte público facilita moverse por la ciudad, aunque conviene elegir el alojamiento cerca del campus o de una buena conexión de transporte. Es importante tener en cuenta que el coste de vida, especialmente el alojamiento, es elevado, por lo que se recomienda planificar el presupuesto y explorar becas y residencias universitarias. En conjunto, Londres ofrece una excelente oportunidad para crecer académica y personalmente en un entorno diverso, estimulante e internacional.</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller</li><li>Nota media de 9. Incluyendo 9 en matematicas, 9 en una asignatura de ciencias y 8.5 en otra</li><li><span class="txt-red"><em>Admissions Test – </em></span><a href="https://www.imperial.ac.uk/study/apply/undergraduate/process/admissions-tests/tmua/" target="_blank" rel="noopener"><span class="txt-red"><em>TMUA (Test of Mathematics for University Admissions)</em></span></a></li><li><span class="txt-red"><em>Booking / Testing Window: 26 de Octubre – 21 de Diciembre</em></span></li></ul><h4>De nivel de inglés</h4><ul><li>C1 Advanced: Overall score 185 ovrall, incluyendo 176 en cada componente</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 13 de Enero</div>
+      <div class="sel"><strong>Si hay proceso de selección:</strong> Consiste en un proceso de selección interno una vez que se hayan cumplido todos los requisitos mínimos de admisión. Ver más información <a href="https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-applied-physics/" target="_blank" rel="noopener">aquí.</a></div>
+    </div>
+  </details>
+</article>
+<article class="card" id="uk-man-phys">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.manchester.ac.uk/study/undergraduate/courses/2027/00638/bsc-physics/" target="_blank" rel="noopener">Bachelor in Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">The University of Manchester · Manchester</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/the-university-of-manchester" target="_blank" rel="noopener">#51 del mundo</a><a class="rk" href="https://www.shanghairanking.com/rankings/arwu/2026" target="_blank" rel="noopener">#6 de Reino Unido</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/the-university-of-manchester" target="_blank" rel="noopener">#17 del mundo en Physics</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/the-university-of-manchester" target="_blank" rel="noopener">#51-75 del mundo en Mathematics</a></div>
+    </div>
+    <div class="diff diff-red"><span class="diff-k">Dificultad</span>Muy alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Manchester <small>(600.000 de habitantes)</small></span><button class="map-btn" onclick="scrollToMap('uk','map-uk')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años</span></div><div class="m"><span class="mk">Coste</span><span class="mv">48.000 euros / año (aproximadamente)</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">13 de Enero</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Durante el primer y segundo año, el grado proporciona una base en física clásica, que incluye dinámica, ondas, electromagnetismo y termodinámica. Al mismo tiempo, se introducen conceptos más recientes, como la unificación del espacio y el tiempo, el significado de la dualidad onda-partícula y la relación entre entropía y desorden. Esta introducción se impartirá a través de asignaturas de relatividad especial, mecánica cuántica y mecánica estadística. Estos conceptos modernos y las técnicas de la física clásica sientan las bases para el tercer año, en el que podrás elegir entre una amplia variedad de optativas para especializarte en diversos temas, entre ellos: estructura atómica y molecular, dispositivos electrónicos de estado sólido, radiación electromagnética, láseres, estrellas y cosmología, física de partículas y nuclear, y los aspectos más avanzados de la física teórica. Trabajando junto a académicos de referencia y con acceso a nuestras extraordinarias instalaciones, estarás en una posición inmejorable para avanzar en tu trayectoria en física.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Manchester, en el noroeste de Inglaterra, es una ciudad dinámica y moderna, con aproximadamente 600.000 habitantes y una importante comunidad estudiantil. Su ambiente universitario es muy activo y juvenil, con numerosas asociaciones, actividades deportivas y oportunidades para hacer amistades. En el área metropolitana estudian más de 100.000 universitarios. La ciudad es multicultural e internacional: conviven personas de numerosos orígenes y se hablan cerca de 200 idiomas. El transporte público, especialmente autobuses y tranvías (<em>Metrolink</em>), permite desplazarse sin coche; también es habitual caminar o utilizar la bicicleta.</p><p>Su oferta cultural incluye museos gratuitos, conciertos, teatros, galerías, festivales y una reconocida tradición futbolística y musical. Como dato práctico, existen descuentos para estudiantes en el transporte, y muchos museos son gratuitos.</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller</li><li>Nota media de 8 – 9.5. Incluyendo 9-9.5 en asignaturas requeridas.</li></ul><h4>De nivel de inglés</h4><ul><li>IELTS Academic or IELTS UKVI 6.0 overall with no sub-skill below 5.5, or Equivalent</li><li><strong><em>C1 Advanced es equivalente</em></strong></li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 13 de Enero</div>
+      <div class="sel"><strong>Si hay proceso de selección:</strong> Consiste en un proceso de selección interno una vez que se hayan cumplido todos los requisitos mínimos de admisión. Ver más información <a href="https://www.manchester.ac.uk/study/undergraduate/courses/2027/00638/bsc-physics/" target="_blank" rel="noopener">aquí.</a></div>
+    </div>
+  </details>
+</article>
+<article class="card" id="uk-man-mp">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.manchester.ac.uk/study/undergraduate/courses/2027/00592/bsc-mathematics-and-physics/" target="_blank" rel="noopener">Bachelor in Mathematics & Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">The University of Manchester · Manchester</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/the-university-of-manchester" target="_blank" rel="noopener">#51 del mundo</a><a class="rk" href="https://www.shanghairanking.com/rankings/arwu/2026" target="_blank" rel="noopener">#6 de Reino Unido</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/the-university-of-manchester" target="_blank" rel="noopener">#17 del mundo en Physics</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/the-university-of-manchester" target="_blank" rel="noopener">#51-75 del mundo en Mathematics</a></div>
+    </div>
+    <div class="diff diff-red"><span class="diff-k">Dificultad</span>Muy alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Manchester <small>(600.000 de habitantes)</small></span><button class="map-btn" onclick="scrollToMap('uk','map-uk')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años</span></div><div class="m"><span class="mk">Coste</span><span class="mv">48.000 euros / año (aproximadamente)</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">13 de Enero</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>La titulación de Grado en Matemáticas y Física (BSc Mathematics and Physics) ofrece la oportunidad de estudiar en profundidad dos disciplinas fundamentales en una universidad con una excelente reputación en ambas áreas. Estudiarás una amplia variedad de temas relacionados con ambas disciplinas. En el ámbito de las matemáticas aplicadas, por ejemplo, podrás abordar la hidrodinámica, las ondas, la elasticidad y la modelización de procesos industriales. En cuanto a la física teórica, podrás estudiar, entre otras materias, la física de partículas de altas energías, la física nuclear y la materia de quarks, así como la teoría de campos en el espacio-tiempo curvo. El departamento de Física está reconocido como uno de los mejores del Reino Unido y contamos con uno de los departamentos de Matemáticas más grandes del país, lo que te permitirá explorar una enorme variedad de áreas de conocimiento. Tendrás acceso a una extraordinaria variedad de instalaciones, entre las que destaca el edificio Alan Turing, construido específicamente para este fin con una inversión de 43 millones de libras esterlinas. Su diseño contó con las aportaciones tanto del personal docente como del alumnado del departamento de Matemáticas. Además, recibirás clases de profesores con intereses de investigación muy diversos. La universidad goza de estrechos vínculos con el sector empresarial e incluyen una feria anual de empleo especializada en matemáticas y un programa de entrevistas con empleadores.</p></div>
+  
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller</li><li>Nota media de 9, Incluyendo 10, 10 y 9 en por lo menos 3 asignaturas requeridas (Matematicas, Fisica, y otra asignatura de ciencias relevante).</li></ul><h4>De nivel de inglés</h4><ul><li>IELTS Academic or IELTS UKVI 6.0 overall with no sub-skill below 5.5, or Equivalent</li><li><strong><em>C1 Advanced es equivalente</em></strong></li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 13 de Enero</div>
+      <div class="sel"><strong>Proceso de selección:</strong> Consiste en un proceso de selección interno una vez que se hayan cumplido todos los requisitos mínimos de admisión. Ver más información <a href="https://www.manchester.ac.uk/study/undergraduate/courses/2027/00592/bsc-mathematics-and-physics/" target="_blank" rel="noopener">aquí.</a></div>
+    </div>
+  </details>
+</article>
+<article class="card" id="uk-edin">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://study.ed.ac.uk/programmes/undergraduate/61-mathematics-and-physics" target="_blank" rel="noopener">Bachelor in Mathematics & Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">The University of Edinburgh · Edinburgh</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/the-university-of-edinburgh" target="_blank" rel="noopener">#38 del mundo</a><a class="rk" href="https://www.shanghairanking.com/universities/the-university-of-edinburgh" target="_blank" rel="noopener">#5 de Reino Unido</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/the-university-of-edinburgh" target="_blank" rel="noopener">#21 del mundo en Physics</a></div>
+    </div>
+    <div class="diff diff-red"><span class="diff-k">Dificultad</span>Muy Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Edinburgh <small>(530.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('uk','map-uk')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">4 años</span></div><div class="m"><span class="mk">Coste</span><span class="mv">48.900 euros / año</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">13 de Enero</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Estudiar matemáticas en la universidad te anima a pensar de una forma completamente distinta. A través de nuevos conceptos matemáticos que no se abordan en el colegio, desarrollarás una mentalidad rigurosa y adquirirás valiosas capacidades analíticas y de resolución de problemas.</p><p>La física estudia los procesos fundamentales de nuestro universo, y sus leyes son la base de las demás ciencias naturales.</p><p>Este programa te permite estudiar estas dos materias, estrechamente relacionadas, con la misma profundidad. Dividirás tu tiempo a partes iguales entre las matemáticas y la física, y podrás:</p><ul><li>especializarte en aspectos concretos de las matemáticas o de la física</li><li>analizar los vínculos entre ambas disciplinas</li><li>estudiar una amplia variedad de temas</li></ul></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Edimburgo, capital de Escocia, tiene unos 530.000 habitantes y combina historia, naturaleza y vida urbana. Su ambiente universitario es muy animado, con miles de estudiantes internacionales y oportunidades para participar en clubes, deportes y actividades sociales. Es una ciudad multicultural y acogedora, aunque el clima suele ser fresco y lluvioso. El transporte se basa principalmente en autobuses, tranvías, bicicleta y desplazamientos a pie; generalmente no hace falta coche. Su oferta cultural incluye museos, teatros, conciertos y festivales internacionales, especialmente el famoso Fringe de agosto. <strong>Dato útil:</strong> los menores de 22 años que cumplen los requisitos pueden viajar gratis en autobuses de Escocia con la tarjeta Young Scot NEC. Para las familias, conviene planificar con antelación el alojamiento y el presupuesto, ya que la vivienda puede representar una parte importante de los gastos</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller</li><li>Nota media de 9.5, incluyendo tres asignaturas en 10</li></ul><h4>De nivel de inglés</h4><ul><li>C1 Advanced: Overall score 176 incluyendo 162 en cada componente</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 13 de Enero</div>
+      <div class="sel"><strong>Si hay proceso de selección:</strong> Consiste en un proceso de selección interno una vez que se hayan cumplido todos los requisitos mínimos de admisión. Ver más información <a href="https://study.ed.ac.uk/undergraduate/applying/selection/how-select" target="_blank" rel="noopener">aquí.</a></div>
+    </div>
+  </details>
+</article>
+<article class="card" id="uk-durham">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.durham.ac.uk/study/courses/physics-f300/#overview" target="_blank" rel="noopener">Bachelor in Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Durham University · Durham</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/durham-university" target="_blank" rel="noopener">#201-300 del mundo</a><a class="rk" href="https://www.shanghairanking.com/rankings/arwu/2026" target="_blank" rel="noopener">#18-25 de Reino Unido</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/durham-university" target="_blank" rel="noopener">#51-75 del mundo en Physics</a></div>
+    </div>
+    <div class="diff diff-orange"><span class="diff-k">Dificultad</span>Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Durham <small>(24.500 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('uk','map-uk')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años</span></div><div class="m"><span class="mk">Coste</span><span class="mv">43.000 euros / año</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">13 de Enero</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>El primer año sienta las bases en teoría física, matemáticas y competencias de laboratorio necesarias para abordar contenidos más complejos más adelante en la carrera. A partir del segundo año, tendrás la oportunidad de explorar con más detalle áreas como la astrofísica, la teoría cuántica y la relación entre la física y la sociedad. En el tercer año podrás aplicar lo aprendido a diversos problemas del mundo real mediante trabajos por proyectos, prácticas de laboratorio dirigidas por los propios estudiantes y módulos optativos adaptados a tus intereses y aspiraciones. Ver más información del plan de estudios <a href="https://www.durham.ac.uk/study/courses/physics-f300/#what-you'll-study" target="_blank" rel="noopener">aquí.</a></p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Durham es una ciudad histórica del noreste de Inglaterra, pequeña, tranquila y con un ambiente universitario muy marcado. Su universidad, reconocida internacionalmente, cuenta con estudiantes de más de 130 países y un sistema de 17 colegios universitarios que facilita crear amistades y participar en actividades sociales. La ciudad se recorre principalmente a pie, aunque dispone de autobuses y estación de tren para viajar a otras ciudades. Su oferta cultural incluye museos, teatro, música, deportes y paseos junto al río Wear. <strong>Dato curioso:</strong> su catedral y su castillo forman parte de un sitio declarado Patrimonio Mundial por la UNESCO. Para las familias, Durham suele tener un coste de vida inferior al de grandes ciudades como Londres, pero es importante planificar el alojamiento y el presupuesto con antelación. Es una buena opción para quienes buscan una comunidad estudiantil cercana y un entorno histórico donde concentrarse en sus estudios.</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachillerato</li><li>Nota media de 9.1, incluyendo 9.0 en las asignaturas requeridas.</li></ul><h4>De nivel de inglés</h4><ul><li>Cambridge C2 Proficiency or C1 Advanced</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 13 de Enero</div>
+      <div class="sel"><strong>Si hay proceso de selección:</strong> Consiste en un análisis interno y riguroso. La universidad no garantiza plazas por cumplir los requisitos mínimos de admisión. Ver más información <a href="https://www.durham.ac.uk/study/undergraduate/how-to-apply/what-happens-to-your-application/selection-process/" target="_blank" rel="noopener">aquí.</a></div>
+    </div>
+  </details>
+</article>
+<article class="card" id="uk-lancaster">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.lancaster.ac.uk/study/undergraduate/courses/physics-bsc-hons-f300/2027/#overview" target="_blank" rel="noopener">Bachelor in Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Lancaster University · Bailrigg</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/lancaster-university" target="_blank" rel="noopener">#301-400 del mundo</a><a class="rk" href="https://www.shanghairanking.com/rankings/arwu/2026" target="_blank" rel="noopener">#26-31 en Reino Unido</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/lancaster-university" target="_blank" rel="noopener">#151-200 del mundo en Physics</a></div>
+    </div>
+    <div class="diff diff-orange"><span class="diff-k">Dificultad</span>Media-Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Bailrigg <small>(4.300 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('uk','map-uk')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años</span></div><div class="m"><span class="mk">Coste</span><span class="mv">38,000 euros / año (Aproximadamente)</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">13 de Enero</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Nuestro BSc (Hons) en Física, de tres años de duración, comienza con un primer curso común a todos nuestros grados de física de especialidad única, en el que enseñamos los fundamentos para proporcionarte una base sólida de cara al segundo y tercer año. Es posible que tus intereses cambien a lo largo del curso, y tendrás la flexibilidad de cambiarte a cualquiera de nuestros otros grados hasta el final del primer año. Las materias troncales incluyen mecánica, física cuántica, termodinámica, y electricidad y campos magnéticos. Pero es mucho más que clases y talleres: también adquirirás experiencia práctica en física experimental en nuestros laboratorios de última generación.</p><p>A medida que avances hacia el segundo y tercer curso, profundizarás en conceptos clave de la física, como la relatividad, la física de partículas, las ondas, la óptica y las propiedades de la materia. Podrás elegir módulos adaptados a tus intereses, lo que te permitirá explorar las fronteras de la investigación en física de la mano de nuestro profesorado experto.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Bailrigg es una pequeña localidad situada junto a Lancaster, en el noroeste de Inglaterra, conocida principalmente por albergar el campus de <strong>Lancaster University</strong>. El ambiente es tranquilo, verde y muy universitario, ideal para concentrarse en los estudios y participar en actividades deportivas, sociales y culturales. La comunidad estudiantil es internacional, con jóvenes de numerosos países. Dentro del campus, muchos desplazamientos se realizan a pie o en bicicleta; para llegar al centro de Lancaster se utilizan principalmente autobuses. La oferta cultural incluye teatro universitario, música, eventos estudiantiles y actividades al aire libre. <strong>Dato curioso:</strong> el campus se construyó sobre antiguos terrenos agrícolas y cuenta con amplias zonas verdes. Para las familias, conviene comprobar las opciones de residencia universitaria y el transporte al centro de Lancaster, especialmente si el estudiante desea disfrutar de más actividades fuera del campus.</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Título de Bachiller</li><li>Rango de Nota media de 7.5 – 9.3 (Sin incluir PAU)</li></ul><h4>De nivel de inglés</h4><ul><li>C1 Advanced: Score of 176, incluyendo 162 en todos los componentes</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 13 de Enero</div>
+      
+    </div>
+  </details>
+</article>
+<article class="card" id="uk-lough">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.lboro.ac.uk/study/undergraduate/courses/engineering-physics-bsc/" target="_blank" rel="noopener">Engineering Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Loughborough University · Loughborough</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/loughborough-university" target="_blank" rel="noopener">#601-700 del mundo</a><a class="rk" href="https://www.shanghairanking.com/rankings/arwu/2026" target="_blank" rel="noopener">#26-31 en Reino Unido</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/loughborough-university" target="_blank" rel="noopener">#401-500 del mundo en Mathematics</a></div>
+    </div>
+    <div class="diff diff-orange"><span class="diff-k">Dificultad</span>Media-Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Loughborough <small>(66.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('uk','map-uk')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años</span></div><div class="m"><span class="mk">Coste</span><span class="mv">38,000 euros / año (Aproximadamente)</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">13 de Enero</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>La física sustenta las leyes fundamentales que lo rigen todo, desde las partículas más pequeñas hasta el inmenso universo que nos rodea, y constituye la caja de herramientas de la ingeniería moderna y las ciencias físicas. En Loughborough estudiarás los principios fundamentales de la física mientras desarrollas competencias de resolución de problemas, experimentales, matemáticas y computacionales, muy valoradas en una amplia variedad de entornos laborales y profesiones.</p><p>Este grado combina el programa troncal de física con contenidos de ingeniería organizados por itinerarios (que se eligen al final del primer año) para garantizar una sólida formación en la especialidad de ingeniería que escojas. Ofrecemos itinerarios en ingeniería de materiales, ingeniería eléctrica, e ingeniería mecánica y de fabricación.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Loughborough es una localidad de tamaño medio situada en el centro de Inglaterra, conocida por su prestigiosa universidad y su ambiente juvenil y deportivo. La vida estudiantil es muy activa, con numerosos clubes, asociaciones y actividades sociales. Su comunidad universitaria es internacional, con más de 3.500 estudiantes procedentes de otros países. La ciudad se recorre fácilmente a pie o en bicicleta, y cuenta con autobuses que conectan el campus con el centro y la estación de tren. Su oferta cultural incluye teatro, música, cine, mercados y actividades organizadas por la universidad. <strong>Dato curioso:</strong> el campus tiene más de 200 hectáreas de espacios verdes y excelentes instalaciones deportivas. Para las familias, es útil saber que existen trenes que permiten viajar a ciudades como Leicester, Nottingham y Londres.</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Título de Bachiller</li><li>Nota media de 7.50 – 9.50</li><li>Asignaturas especificas normalmente requieren una nota de 8.0 o 9.0</li></ul><h4>De nivel de inglés</h4><ul><li>C1 Advanced: Score of 180</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 13 de Enero</div>
+      
+    </div>
+  </details>
+</article>
+<article class="card" id="uk-hull">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.hull.ac.uk/study/undergraduate/physics-bsc-mphys" target="_blank" rel="noopener">Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">University of Hull · Kingston upon Hull</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/university-of-hull" target="_blank" rel="noopener">#801-900 del mundo</a><a class="rk" href="https://www.shanghairanking.com/rankings/arwu/2026" target="_blank" rel="noopener">#48-55 en Reino Unido</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/university-of-hull" target="_blank" rel="noopener">#401-500 del mundo en Physics</a></div>
+    </div>
+    <div class="diff diff-green"><span class="diff-k">Dificultad</span>Media</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Kingston upon Hull <small>(273,000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('uk','map-uk')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años</span></div><div class="m"><span class="mk">Coste</span><span class="mv">26,000 euros / año (Aproximadamente)</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">13 de Enero</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Descubre los conceptos y las herramientas para comprender en profundidad la física moderna con este grado acreditado.</p><p>Los avances en nuevas fuentes de energía, técnicas médicas modernas, comunicaciones y ordenadores... todos ellos se deben a físicos con el conocimiento para innovar y la capacidad para llevarlo a la práctica.</p><p>Te ayudaremos a desarrollar competencias transferibles en ciencia de datos muy valoradas por las empresas, incluido Python, uno de los lenguajes de programación con mayor crecimiento. Adquirirás habilidades muy demandadas, desde la comunicación y el trabajo en equipo hasta la resolución de problemas, además de experiencia en programación, matemáticas e investigación.</p><p>Con el acompañamiento de académicos de referencia mundial, tendrás tutorías semanales durante los dos primeros años, así como sesiones individuales de <em>feedback</em> con tu tutor a lo largo de toda la carrera.</p><p>Organizamos un completo calendario con más de 100 eventos al año, que incluyen actividades de acceso a la universidad, diversidad y enriquecimiento del plan de estudios. Formamos parte de una red de empleabilidad única, la White Rose Industrial Physics Alliance, que organiza eventos de orientación profesional con posibles futuros empleadores. Y gracias a nuestra galardonada campaña Changing Face of Physics, el departamento de Física de Hull cuenta con una de las poblaciones estudiantiles más diversas del país.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Kingston upon Hull, conocida como Hull, es una ciudad portuaria del noreste de Inglaterra con un ambiente juvenil, cercano y una vida universitaria activa gracias a la University of Hull. Su comunidad estudiantil es internacional, con estudiantes de más de 100 países. La ciudad es relativamente compacta y permite desplazarse a pie, en bicicleta o en autobús, sin necesidad habitual de tener coche. Su oferta cultural incluye museos gratuitos, galerías, teatros, música en directo y festivales como el Freedom Festival.</p><p><strong>Dato curioso:</strong> Hull alberga The Deep, un acuario muy conocido, y fue Capital de la Cultura del Reino Unido en 2017. Para las familias, uno de sus atractivos es el coste de vida relativamente bajo frente a otras ciudades universitarias británicas; conviene comparer conexiones de transporte antes de elegir alojamiento.</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller (incluyendo Matemáticas, Química y Física) + EVAU</li><li>Nota media de 9.0</li><li>Incluyendo 9 en todas las asignaturas requeridas</li></ul><h4>De nivel de inglés</h4><ul><li>IELTS (Academic) 6.0 overall</li><li>Minimo 5.5 en Reading, Writing, Speaking, Listening)</li><li>C1 advanced</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 13 de Enero</div>
+      
+    </div>
+  </details>
+</article>
+  <div class="map-wrap" id="map-uk"><h3>🗺️ Mapa de universidades · Reino Unido</h3><div class="map" id="leaflet-uk"></div></div>
+</section><section class="panel" id="panel-nl">
+  <div class="country-hero">
+    <span class="flag flag-nl flag-lg" aria-hidden="true"><span class="st st-r"></span><span class="st st-w"></span><span class="st st-b"></span></span>
+    <div class="ch-body">
+      <h2>Países Bajos</h2>
+      <div class="ch-meta">
+        <div><span class="mk">Coste de matrícula</span><span class="mv">2.771 € / año</span></div>
+        <div><span class="mk">Alojamiento</span><span class="mv">Media de 850 € / mes; más de 1.000 € / mes en Ámsterdam, Rotterdam, La Haya o Eindhoven</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="country-text"><p>Los estudiantes europeos tenemos los estudios parcialmente subvencionados en Holanda, siendo el coste anual que tenemos que pagar de <strong class="txt-teal">2.771€/año</strong> . Cabe destacar que el alojamiento en Holanda tiene un precio elevado, siendo la media de 850€, aunque llegando en ciudades grandes como Ámsterdam, Rotterdam, La Haya o Eindhoven a marcar una media superior a los 1000€ al mes. Las universidades es países bajos se diferencias en Research Universities and Applied Sciences Universities. Si bien la mayoría de las opciones que te presento pertenecen a la metodología de Research, vale la pena elaborar en dicha diferencia.</p><p class="see-also">Consulta la explicación completa en la pestaña <a href="#" onclick="showTab('rvsa');return false;">Research vs Applied Sciences</a>.</p></div>
+  
+  <div class="sep"><span>Research Universities</span></div>
+<article class="card" id="nl-delft">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/ae/bsc-aerospace-engineering" target="_blank" rel="noopener">Aerospace Engineering <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">TU Delft · Delft</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/delft-university-of-technology" target="_blank" rel="noopener">#151-200 del mundo</a><a class="rk" href="https://www.shanghairanking.com/rankings/arwu/2026" target="_blank" rel="noopener">#7-9 en Países Bajos</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/delft-university-of-technology" target="_blank" rel="noopener">#10 en Ingeniería Aeroespacial</a></div>
+    </div>
+    <div class="diff diff-red"><span class="diff-k">Dificultad</span>Muy Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Delft <small>(aproximadamente 110.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años / 180 ECTS</span></div><div class="m"><span class="mk">Coste</span><span class="mv">2,771 Euros</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">15 de enero</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>El grado en Ingeniería Aeroespacial (BSc Aerospace Engineering) te proporciona los conocimientos, las habilidades y la mentalidad necesarios para afrontar estos retos. El programa goza de una excelente reputación internacional y la facultad dispone de instalaciones de alta tecnología. Contamos con un simulador de vuelo avanzado, una aeronave propia que se utiliza como aula volante, una sala blanca para el desarrollo de nuestros propios satélites y túneles de viento subsónicos, supersónicos e hipersónicos. Además, tenemos acceso a un amplio laboratorio dedicado al desarrollo, la fabricación y el ensayo de materiales y estructuras.</p><p>Como ingeniero aeroespacial, podrás abordar problemas complejos y desafiantes en distintos ámbitos. Encontrarás soluciones a problemas sociales que sean rentables, ligeras y seguras. Para ello, deberás trabajar eficazmente en equipos multidisciplinares y ser capaz de integrar conocimientos procedentes de diversas disciplinas relacionadas.</p><p>Esto requiere una formación amplia y sólida que abarque todas las áreas de la ingeniería aeroespacial. Durante el grado, te introducirás en diferentes campos de la ingeniería: Aerodynamics &amp; Wind energy, Control &amp; Operations, Propulsion Systems, Structure % Materials y Space.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Delft es una ciudad histórica de unos 110.000 habitantes, conocida por su prestigiosa Universidad Tecnológica (TU Delft) y su ambiente juvenil e internacional. Cerca del 20 % de su población son estudiantes, lo que favorece una vida universitaria activa, con asociaciones, deportes y actividades sociales. La bicicleta es el medio de transporte más habitual para desplazarse por la ciudad, aunque también cuenta con tranvías, autobuses y trenes que conectan con La Haya, Róterdam y Ámsterdam. Su oferta cultural incluye museos, cafés, mercados, canales históricos y la famosa cerámica azul de Delft. <strong>Dato curioso:</strong> el pintor Johannes Vermeer nació y vivió en esta ciudad. Para las familias, es importante buscar alojamiento con antelación, ya que existe escasez de habitaciones para estudiantes.</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><p>Título de Bachiller científico/tecnológico aprobado + EVAU/PAU aprobado con una media mínima de 7. Obligatorio haber cursado: Matemáticas y física. Puntaje mínimo de 6.0 en cada una de las asignaturas requeridas de la Selectividad/PAU/EBAU/EvAU.</p><h4>Inglés</h4><p>Cambridge CAE (C1) (no se requiere nota mínima)</p>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 15 de enero</div>
+      <div class="sel"><strong>Sí hay proceso de selección:</strong> El Grado en Ingeniería Aeroespacial tiene un límite de plazas (numerus clausus) para el número de estudiantes nuevos que pueden ser admitidos cada año. Para el curso académico 2026-2027, el cupo está fijado en 440 plazas. <a href="https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/ae/bsc-aerospace-engineering/from-application-to-enrolment/selection-procedure" target="_blank" rel="noopener"><strong>Mas información.</strong></a></div>
+    </div>
+  </details>
+</article>
+<article class="card" id="nl-rug-phys">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.rug.nl/bachelors/physics/?lang=en" target="_blank" rel="noopener">Bachelor in Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Groningen University (RUG) · Groningen</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#84 del mundo</a><a class="rk" href="https://www.shanghairanking.com/universities?name=&amp;r=Netherlands" target="_blank" rel="noopener">#2 de Países Bajos</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#51-75 del mundo en Physics</a></div>
+    </div>
+    <div class="diff diff-orange"><span class="diff-k">Dificultad</span>Media-Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Groningen <small>(240.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años (180 ECTS)</span></div><div class="m"><span class="mk">Coste</span><span class="mv">2,771 Euros</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">1 de mayo</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Durante tu primer año, estudiarás materias básicas como mecánica, relatividad especial y electricidad y magnetismo. Durante este año, puedes elegir entre cuatro especialidades:</p><ul><li>Biofísica y Física Médica</li><li>Energía y física ambiental</li><li>Nanofísica</li><li>Partículas físicas</li></ul><p>Los graduados en física tienen excelentes oportunidades en el mercado laboral. Puedes trabajar como investigador en una empresa o en un instituto, o por ejemplo como consultor, porque tendrás las habilidades analíticas que se necesitan y se desean para resolver cuestiones complicadas en estos entornos.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Groningen es una ciudad universitaria del norte de los Países Bajos, con unos 240.000 habitantes y una población estudiantil muy numerosa, que le aporta un ambiente joven, activo e internacional. La Universidad de Groningen y la Hanze University of Applied Sciences atraen a estudiantes de numerosos países y ofrecen una amplia variedad de actividades académicas y sociales. La bicicleta es el medio de transporte más habitual, gracias a sus excelentes carriles bici y a que la ciudad es compacta; también dispone de autobuses y trenes. Su oferta cultural incluye museos, conciertos, festivales, cafeterías y una animada vida nocturna. <strong>Dato curioso:</strong> Groningen es conocida como una de las ciudades más ciclistas de Europa, por lo que es posible desplazarse a diario sin necesidad de coche. Para las familias, es importante buscar alojamiento con antelación, ya que existe una elevada demanda de habitaciones para estudiantes.</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller (incluyendo Matemáticas y Física en el último año) + EVAU</li></ul><h4>De nivel de inglés</h4><ul><li>IELTS 6.5 (ninguna parte por debajo del 6.5)</li><li>TOEFL iBT 90 (en Writing resultado mínimo de 24, en las otras 3 partes, resultado mínimo de 21)</li><li>Cambridge CAE resultado mínimo de 180</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 1 de mayo</div>
+      <div class="sel"><strong>No hay proceso de selección:</strong> si se cumplen los requisitos, tu admisión está prácticamente garantizada.</div>
+    </div>
+  </details>
+</article>
+<article class="card" id="nl-rug-ap">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.rug.nl/bachelors/applied-physics/?lang=en" target="_blank" rel="noopener">Bachelor in Applied Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Groningen University (RUG) · Groningen</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#84 del mundo</a><a class="rk" href="https://www.shanghairanking.com/universities?name=&amp;r=Netherlands" target="_blank" rel="noopener">#2 de Países Bajos</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#51-75 del mundo en Physics</a></div>
+    </div>
+    <div class="diff diff-orange"><span class="diff-k">Dificultad</span>Media - Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Groningen <small>(240.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años (180 ECTS)</span></div><div class="m"><span class="mk">Coste</span><span class="mv">2,771 Euros</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">1 de mayo</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>La física aplicada se ocupa de aplicar la física en soluciones técnicas. El diseño y la construcción son aspectos importantes de esto. El programa tiene una fuerte orientación interdisciplinaria, con énfasis en combinaciones de materias: física con estudios de diseño, nanotecnología, nuevos materiales y sistemas e ingeniería de control. La física aplicada implica estudiar no solo cómo se producen los fenómenos, sino también cómo utilizarlos para soluciones técnicas.</p></div>
+  
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller (incluyendo Matemáticas y Física en el último año) + EVAU</li></ul><h4>De nivel de inglés</h4><ul><li>IELTS 6.5 (ninguna parte por debajo del 6.5)</li><li>TOEFL iBT 90 (en Writing resultado mínimo de 24, en las otras 3 partes, resultado mínimo de 21)</li><li>Cambridge CAE resultado mínimo de 180</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 1 de mayo</div>
+      <div class="sel"><strong>No hay proceso de selección:</strong> si se cumplen los requisitos, tu admisión está prácticamente garantizada.</div>
+    </div>
+  </details>
+</article>
+<article class="card" id="nl-rug-am">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.rug.nl/bachelors/applied-mathematics/" target="_blank" rel="noopener">Bachelor in Applied Mathematics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Groningen University (RUG) · Groningen</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#84 del mundo</a><a class="rk" href="https://www.shanghairanking.com/universities?name=&amp;r=Netherlands" target="_blank" rel="noopener">#2 de Países Bajos</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#301-400 del mundo en matemáticas</a></div>
+    </div>
+    <div class="diff diff-green"><span class="diff-k">Dificultad</span>Media</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Groningen <small>(240.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años (180 ECTS)</span></div><div class="m"><span class="mk">Coste</span><span class="mv">2,771 Euros</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">1 de mayo</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Este grado internacional de tres años en Matemáticas Aplicadas se centra en el uso de las matemáticas para comprender y simular el comportamiento de los sistemas, ya trabajes en dinámica de vehículos, redes energéticas o procesos biológicos. Aprenderás a traducir retos del mundo real en modelos matemáticos abstractos, a formular teoremas y demostraciones sobre las propiedades de esos modelos y a extraer conclusiones útiles. Durante el primer año cursarás las mismas asignaturas que los estudiantes del grado en Matemáticas, lo que te proporcionará una base sólida y la flexibilidad de decidir qué rumbo tomar sin retrasar tus estudios.</p><p>Tanto si te apasiona la relevancia social de las matemáticas aplicadas como si te atrae el desafío en sí mismo, este programa te da la libertad de explorar tus intereses y desarrollar las competencias necesarias para continuar tus estudios o construir una carrera profesional en investigación, tecnología, educación y otros ámbitos.</p></div>
+  
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller (incluyendo Matemáticas y Física en el último año) + EVAU</li></ul><h4>De nivel de inglés</h4><ul><li>IELTS 6.5 (ninguna parte por debajo del 6.5)</li><li>TOEFL iBT 90 (en Writing resultado mínimo de 24, en las otras 3 partes, resultado mínimo de 21)</li><li>Cambridge CAE resultado mínimo de 180</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 1 de mayo</div>
+      <div class="sel"><strong>No hay proceso de selección:</strong> si se cumplen los requisitos, tu admisión está prácticamente garantizada.</div>
+    </div>
+  </details>
+</article>
+<article class="card" id="nl-tue-ap">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.tue.nl/en/education/bachelor-college/bachelor-applied-physics" target="_blank" rel="noopener">Applied Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Technical University of Eindhoven (TU/e) · Eindhoven</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener">#301-400 del mundo</a><a class="rk" href="https://www.shanghairanking.com/universities?name=&amp;r=Netherlands" target="_blank" rel="noopener">#10 de Países Bajos</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener">#301-400 del mundo en Physics</a></div>
+    </div>
+    <div class="diff diff-orange"><span class="diff-k">Dificultad</span>Media - Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Eindhoven <small>(250.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años / 180 ECTS</span></div><div class="m"><span class="mk">Coste</span><span class="mv">2,771 Euros</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">1 de mayo</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Este grado se distingue por ofrecer una excelente orientación académica y un plan de estudios equilibrado, que incluye prácticas de investigación durante el tercer año. El profesorado cuenta con una sólida formación y experiencia en su campo. Algunos docentes también trabajan en empresas, mientras que otros se dedican a la investigación científica. Como estudiante, te beneficiarás del contacto con el mundo empresarial y los departamentos de investigación, tanto durante tus estudios como después de graduarte. El ambiente cercano e informal y la facilidad para acceder al profesorado hacen que te sientas como en casa en nuestro departamento. Puedes combinar tu grado de Applied Physics con Applied Mathematics o con Chemistry and Chemical Engineering</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Eindhoven es una ciudad de unos 250.000 habitantes, conocida por su innovación tecnológica y su ambiente internacional. La Eindhoven University of Technology (TU/e), Fontys University of Applied Sciences y Design Academy Eindhoven atraen a estudiantes de numerosos países y ofrecen asociaciones, deportes y proyectos prácticos. La bicicleta es uno de los medios de transporte más utilizados, aunque también hay autobuses y trenes; generalmente no es necesario tener coche. This is Eindhoven. La oferta cultural incluye museos, conciertos, espacios creativos y la <strong>Dutch Design Week</strong>, un festival internacional de diseño que se celebra cada año en octubre. <strong>Dato curioso:</strong> Eindhoven fue el lugar de origen de Philips y hoy forma parte de una importante región tecnológica que ofrece oportunidades de prácticas y contacto con empresas. Para las familias, es fundamental buscar alojamiento con antelación, ya que la demanda de habitaciones para estudiantes es elevada</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller (incluyendo Matemáticas y Física) con nota media de al menos 7.0 + EVAU.</li></ul><h4>De nivel de inglés <span class="txt-red">(necesario aportarlo en la fecha de fin de matrículas):</span></h4><ul><li>IELTS 6.5 (ninguna sección por debajo de 6.0)</li><li>TOEFL iBT 90 (ninguna parte por debajo de 21)</li><li>Cambridge CAE con resultado mínimo de 176</li></ul><p>Esta universidad tiene una tasa de matriculación de 100€ (no reembolsable)</p>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 1 de mayo</div>
+      <div class="sel"><strong>Sí hay proceso de selección</strong> (la admisión no está garantizada tan sólo con cumplir los requisitos). Sin embargo, el proceso puede ser únicamente interno, y que no se requiera ninguna entrevista, examen o similar. Se valorarán las asignaturas cursadas y notas obtenidas.</div>
+    </div>
+  </details>
+</article>
+<article class="card" id="nl-tue-am">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.tue.nl/en/education/bachelor-college/bachelor-applied-mathematics" target="_blank" rel="noopener">Applied Mathematics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Technical University of Eindhoven (TU/e) · Eindhoven</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener">#301-400 del mundo</a><a class="rk" href="https://www.shanghairanking.com/universities?name=&amp;r=Netherlands" target="_blank" rel="noopener">#10 de Países Bajos</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/eindhoven-university-of-technology" target="_blank" rel="noopener">#401-500 del mundo en Mathematics</a></div>
+    </div>
+    <div class="diff diff-orange"><span class="diff-k">Dificultad</span>Media - Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Eindhoven <small>(250.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años / 180 ECTS</span></div><div class="m"><span class="mk">Coste</span><span class="mv">2,771 Euros</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">1 de mayo</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Las matemáticas aplicadas son una rama específica de las matemáticas. Consisten en aplicar modelos matemáticos para identificar y representar la esencia matemática de un problema práctico. Gracias a las matemáticas aplicadas, es posible resolver problemas que, a primera vista, ni siquiera parecen tener una naturaleza matemática. Por ejemplo, puede tratarse de un problema práctico que se presenta en la industria o en instituciones gubernamentales. Dado que, en ocasiones, un problema matemático requiere investigar y estudiar las matemáticas desde un nivel más fundamental, es posible que, como matemático aplicado, tengas que realizar estudios en profundidad. Además, como a menudo colaborarás con especialistas de otros campos, también necesitarás tener la capacidad de ir más allá de tu propia especialización. Eso es precisamente lo que hace que las matemáticas aplicadas sean tan fascinantes. Puedes combinar tu grado de Applied Physics con Applied Mathematics o con Chemistry and Chemical Engineering</p></div>
+  
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller (incluyendo Matemáticas y Física) con nota media de al menos 7.0 + EVAU.</li></ul><h4>De nivel de inglés <span class="txt-red">(necesario aportarlo en la fecha de fin de matrículas):</span></h4><ul><li>IELTS 6.5 (ninguna sección por debajo de 6.0)</li><li>TOEFL iBT 90 (ninguna parte por debajo de 21)</li><li>Cambridge CAE con resultado mínimo de 176</li></ul><p>Esta universidad tiene una tasa de matriculación de 100€ (no reembolsable)</p>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 1 de mayo</div>
+      <div class="sel"><strong>Sí hay proceso de selección</strong> (la admisión no está garantizada tan sólo con cumplir los requisitos). Sin embargo, el proceso puede ser únicamente interno, y que no se requiera ninguna entrevista, examen o similar. Se valorarán las asignaturas cursadas y notas obtenidas.</div>
+    </div>
+  </details>
+</article>
+<article class="card" id="nl-ut-ap">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.utwente.nl/en/education/bachelor/programmes/applied-physics/" target="_blank" rel="noopener">Bachelor in Applied Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">University of Twente · Enschede</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener">#501-600 del mundo</a><a class="rk" href="https://www.shanghairanking.com/universities?name=&amp;r=Netherlands" target="_blank" rel="noopener">#12 de Países Bajos</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener">#401-500 en Physics</a></div>
+    </div>
+    <div class="diff diff-green"><span class="diff-k">Dificultad</span>Media</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Enschede <small>(162.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años / 180 ECTS</span></div><div class="m"><span class="mk">Coste</span><span class="mv">2,771 Euros</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">1 de Julio</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Obtendrás todos los conocimientos científicos y las habilidades que esperarías de un grado en Física, mientras aprendes a pensar como un ingeniero capaz de convertir el conocimiento en soluciones innovadoras que funcionan. Buscarás conocimientos y posibilidades de aplicación que aún no existen, como el desarrollo de ordenadores cuánticos o una nueva generación de baterías. ¡Pero también está aumentando la demanda de físicos técnicos en el sector bancario, por ejemplo! Gracias a tu gran capacidad analítica, sabrás reducir problemas complejos a su esencia física y encontrar una solución.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad/región</summary><div class="dc"><p>Twente es una región del este de los Países Bajos, cerca de la frontera alemana, cuya principal ciudad universitaria es <strong>Enschede</strong>. La University of Twente destaca por su enfoque tecnológico, científico e innovador, y reúne a estudiantes de alrededor de 100 nacionalidades. El ambiente universitario es activo y cercano, con asociaciones, deportes y actividades sociales. La bicicleta es el medio de transporte más habitual, aunque también hay autobuses y trenes; no suele ser necesario disponer de coche. La oferta cultural incluye museos, teatros, conciertos, festivales y mercados, además de espacios naturales para practicar deporte y disfrutar al aire libre. <strong>Dato curioso:</strong> la universidad cuenta con un campus de 146 hectáreas que funciona como una pequeña ciudad. Para las familias, es fundamental organizar el alojamiento con antelación.</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller + EVAU</li><li><em>Por lo menos 4 asignaturas en Fase General con un resultado de Apto</em></li><li><em>Incluyendo <strong>Matematicas</strong></em></li></ul><h4>De nivel de inglés</h4><ul><li>IELTS 6.5 (ninguna parte por debajo del 6.5)</li><li>TOEFL iBT 90 (en Writing resultado mínimo de 24, en las otras 3 partes, resultado mínimo de 21)</li><li>Cambridge CAE resultado mínimo de 180</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 1 de Julio</div>
+      <div class="sel"><strong>No hay proceso de selección:</strong> si se cumplen los requisitos, tu admisión está prácticamente garantizada.</div>
+    </div>
+  </details>
+</article>
+<article class="card" id="nl-ut-am">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.utwente.nl/en/education/bachelor/programmes/applied-mathematics/" target="_blank" rel="noopener">Bachelor in Applied Mathematics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">University of Twente · Enschede</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener">#501-600 del mundo</a><a class="rk" href="https://www.shanghairanking.com/universities?name=&amp;r=Netherlands" target="_blank" rel="noopener">#12 de Países Bajos</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener">#401-500 del mundo en Physics</a></div>
+    </div>
+    <div class="diff diff-green"><span class="diff-k">Dificultad</span>Media</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Enschede <small>(162.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años (180 ECTS)</span></div><div class="m"><span class="mk">Coste</span><span class="mv">2,771 Euros</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">1 de Julio</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Durante este programa de estudios, por supuesto, verás toda la teoría y las habilidades matemáticas que esperarías de un grado en Matemáticas. ¡Pero no se queda ahí! Este grado tiene un fuerte enfoque en la aplicación práctica. Aprenderás a usar tus conocimientos y habilidades matemáticas para reducir problemas complejos de la vida real a su esencia matemática, analizarlos y encontrar la mejor solución posible. Descubrirás que las matemáticas, como el oxígeno, están en todas partes, y que tú, como matemático, puedes ofrecer soluciones en muchos ámbitos de la sociedad: el clima, la movilidad, la tecnología, los seguros o la sanidad.</p></div>
+  
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><ul><li>Bachiller + EVAU</li><li><em>Por lo menos 4 asignaturas en Fase General con un resultado de Apto</em></li><li><em>Incluyendo <strong>Matematicas</strong></em></li></ul><h4>De nivel de inglés</h4><ul><li>IELTS 6.5 (ninguna parte por debajo del 6.5)</li><li>TOEFL iBT 90 (en Writing resultado mínimo de 24, en las otras 3 partes, resultado mínimo de 21)</li><li>Cambridge CAE resultado mínimo de 180</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 1 de Julio</div>
+      <div class="sel"><strong>No hay proceso de selección:</strong> si se cumplen los requisitos, tu admisión está prácticamente garantizada.</div>
+    </div>
+  </details>
+</article><div class="sep"><span>Universities of Applied Sciences</span></div>
+<article class="card" id="nl-inholland">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.inholland.nl/inhollandcom/degree-programmes/aeronautical-engineering-eng-full-time/" target="_blank" rel="noopener">Aeronautical Engineering <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Inholland University of Applied Sciences · Delft</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><span class="rk rk-none">No aparece en el ranking de Shanghái</span><div class="rk-note">Las universidades de <em>Applied Science</em> no entran en el ranking de Shanghái por su metodología de estudio.</div></div>
+    </div>
+    <div class="diff diff-green"><span class="diff-k">Dificultad</span>Baja</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Delft <small>(aprox. 105.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">4 años (240 créditos)</span></div><div class="m"><span class="mk">Coste</span><span class="mv">2.771 €</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">1 de agosto</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Este grado combina asignaturas técnicas fundamentales con proyectos prácticos que te permiten aplicar lo aprendido. Podrás elegir entre dos especializaciones: <em>Diseño y Desarrollo</em> o <em>Estructuras Ligeras</em>, adaptadas a tus intereses y objetivos profesionales. Además, realizarás prácticas profesionales y de especialización, con la opción de hacerlas en el extranjero gracias a las colaboraciones de la universidad con empresas internacionales como Airbus y Boeing.</p><p>El programa también enfatiza el desarrollo de habilidades investigadoras y el uso de software avanzado de diseño y pruebas, preparándote para una carrera en la industria aeronáutica o para continuar con estudios de máster.</p></div>
+  
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><p>Titulo de bachiller incluyendo Matemáticas y Física</p><h4>Requisitos de inglés</h4><ul><li>IELTS: average score of 6</li><li>TOEFL internet-based: overall score of 80</li><li>Cambridge certificate: CAE, CPE or FCE overall score C (169-172)</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 1 de agosto</div>
+      <div class="sel"><strong>Proceso de selección:</strong> si cumples con los requisitos la admisión está prácticamente garantizada.</div>
+    </div>
+  </details>
+</article>
+  <div class="map-wrap" id="map-nl"><h3>🗺️ Mapa de universidades · Países Bajos</h3><div class="map" id="leaflet-nl"></div></div>
+</section><section class="panel" id="panel-dk">
+  <div class="country-hero">
+    <span class="flag flag-dk flag-lg" aria-hidden="true"><span class="nc-h"></span><span class="nc-v"></span></span>
+    <div class="ch-body">
+      <h2>Dinamarca</h2>
+      <div class="ch-meta">
+        <div><span class="mk">Coste de matrícula</span><span class="mv">0 € (100% subvencionada para ciudadanos de la UE)</span></div>
+        <div><span class="mk">Alojamiento</span><span class="mv">En Dinamarca el coste medio del alojamiento es de 600 €.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="country-text"><p>En Dinamarca la educación es <strong>100% subvencionada</strong> para los ciudadanos de la Unión Europea, esto quiere decir que el coste de la universidad es de 0€.</p><p>Estas dos opciones no son exactamente matemáticas y física, pero ofrecen una experiencia multidisciplinar que te podría resultar muy interesante debido a dos razones: 1) tu interés en Física y Matemáticas aplicadas y 2) La opción de estudiar la rama de la ingeniería de manera integral con la opción de especializarte en una rama especifica posteriormente basado en tus intereses específicos.</p></div>
+  
+  
+<article class="card" id="dk-dtu">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.dtu.dk/english/education/undergraduate/general-engineering" target="_blank" rel="noopener">General Engineering (BSc) <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">DTU (Technical University of Denmark) · Lyngby</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/technical-university-of-denmark" target="_blank" rel="noopener">#101-150 en el mundo</a><a class="rk" href="https://www.shanghairanking.com/universities/technical-university-of-denmark" target="_blank" rel="noopener">#3 en Dinamarca</a></div>
+    </div>
+    <div class="diff diff-red"><span class="diff-k">Dificultad</span>Muy alta · Nota de corte: 9,55 sobre 10 (2026)</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Lyngby <small>(60,000 inhabitants)</small></span><button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 years (180 ECTS)</span></div><div class="m"><span class="mk">Coste</span><span class="mv">100% subvencionada</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">15 de marzo</span></div><div class="m"><span class="mk">Nota de corte</span><span class="mv">9,55 sobre 10 (2026)</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Un grado de ingeniería generalista con un planteamiento poco habitual: en lugar de elegir una especialidad desde el primer día, construyes una base amplia y después te orientas hacia una de las cuatro líneas de especialización del programa: <strong>Living Systems</strong>, <strong>Advanced Materials</strong>, <strong>Cyber Systems</strong> y <strong>Future Energy</strong>.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Lyngby es una localidad de unos 59.000 habitantes situada a 15 km al norte de Copenhague, conocida por albergar el campus principal de la Universidad Técnica de Dinamarca (DTU). El ambiente universitario es dinámico e internacional, con estudiantes de más de 100 nacionalidades y numerosas asociaciones, actividades deportivas y eventos sociales. La bicicleta es una opción habitual para desplazarse, aunque también hay autobuses y trenes que conectan con Copenhague; no suele ser necesario tener coche. La oferta cultural incluye museos, tiendas, cafeterías, cines y espacios naturales con bosques y lagos cercanos. <strong>Dato curioso:</strong> el campus de DTU ocupa aproximadamente 106 hectáreas y está organizado en cuatro cuadrantes, inspirados en un sistema de coordenadas. Para las familias, es importante buscar alojamiento con antelación y calcular el presupuesto, ya que Dinamarca tiene un coste de vida elevado</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><p>Título de Bachiller, habiendo cursado:</p><ul><li><strong>English: 210 horas y un 6 de media</strong></li><li><strong>Mathematics: 375 horas</strong></li><li><strong>Physics; 200 horas</strong></li><li><strong>Chemistry: 200 horas</strong></li></ul><h4>Inglés</h4><ul><li>Cambridge CAE (mínimo 180)</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 15 de marzo</div>
+      <div class="sel"><strong>Sí hay proceso de selección:</strong> Se entra por nota. En 2026 la nota de corte se quedó en 9,55 sobre 10</div>
+    </div>
+  </details>
+</article>
+<article class="card" id="dk-sdu">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.sdu.dk/en/uddannelse/ingenioer/mechanical-engineering" target="_blank" rel="noopener">BEng in Mechanical Engineering <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">University of Southern Denmark (SDU) · Sonderborg</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#301-400 en el mundo</a><a class="rk" href="https://www.shanghairanking.com/rankings/arwu/2026" target="_blank" rel="noopener">#4-5 en Dinamarca</a></div>
+    </div>
+    <div class="diff diff-orange"><span class="diff-k">Dificultad</span>Media-Alta</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Sonderborg <small>(aprox. 28,333 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3,5 años</span></div><div class="m"><span class="mk">Coste</span><span class="mv">100% Subvencionada</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">15 de marzo</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>En el programa de Ingeniería Mecánica de Sønderborg trabajarás de forma práctica con la mecánica, la energía y el diseño. Aprenderás a analizar y calcular cómo se mueven los sistemas, cómo soportan esfuerzos y cómo funcionan en la vida real, por ejemplo, motores, brazos robóticos o sistemas de calefacción y refrigeración. Construirás una base técnica sólida y te familiarizarás tanto con las disciplinas clásicas de la ingeniería como con herramientas modernas como el modelado 3D y la simulación.</p><p>A lo largo de tus estudios trabajarás en proyectos reales. Por ejemplo, podrías ayudar a desarrollar una solución energética, diseñar un robot u optimizar una línea de producción. Cada semestre incluye un proyecto en grupo en el que aplicarás tus conocimientos para resolver retos concretos, a menudo inspirados en empresas de la zona.</p><p>El programa te ofrece un perfil técnico amplio, con sólidas capacidades analíticas y una buena comprensión tanto de la teoría como de la práctica. Aprenderás a colaborar y comunicarte con profesionales de otras disciplinas, y estarás bien preparado para desarrollar las soluciones técnicas del futuro en un mundo que necesita innovación sostenible.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Sønderborg es una ciudad costera del sur de Dinamarca, cerca de la frontera alemana, que ofrece un ambiente tranquilo, seguro y muy vinculado a la vida universitaria. La University of Southern Denmark (SDU) cuenta con más de 1.000 estudiantes internacionales y ofrece programas impartidos en inglés, especialmente en ingeniería, tecnología y negocios. La bicicleta y los desplazamientos a pie son habituales, y existen autobuses para conectar diferentes zonas de la ciudad. Su oferta cultural incluye conciertos, cafeterías, festivales y actividades creativas en el centro juvenil Mejeriet. <strong>Dato curioso:</strong> el campus universitario se encuentra en Alsion, un edificio junto al puerto que combina universidad, investigación y una sala de conciertos. Para las familias, Sønderborg dispone de residencias y alojamientos para estudiantes, pero es recomendable solicitarlos pronto, ya que las plazas no están garantizadas para todos</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><p>Título de Bachiller, habiendo cursado:</p><ul><li><strong>Matemáticas nivel A</strong> — haberla estudiado en los tres últimos cursos y terminado con Matemáticas II, sumando 375 horas en total entre todos.</li><li><strong>Física nivel B</strong> — haberla tenido en al menos 2 de los 3 últimos cursos, sumando 210 horas en total.</li><li><strong>Química nivel B</strong> — haberla tenido en al menos 2 de los 3 últimos cursos, sumando 210 horas en total.</li><li><strong>Inglés nivel B</strong> — haberlo tenido en al menos 2 de los 3 últimos cursos, sumando 210 horas en total.</li></ul><h4>Inglés</h4><p>210 horas de inglés con una nota de 6/10 o más</p>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 15 de marzo</div>
+      <div class="sel"><strong>Sí hay proceso de selección:</strong> <a href="https://www.sdu.dk/en/uddannelse/bachelor/bachelor-admission/admission-requirements/admission-test" target="_blank" rel="noopener"><strong>uniTest</strong></a> (razonamiento crítico, cuantitativo y lingüístico) que se suele hacer en los meses de marzo o abril y una entrevista personal. Si tienes buen resultado en el unitest la universidad te garantiza plaza (15 de abril). Si apruebas el examen, la resolución de admisión es el 28 de julio.</div>
+    </div>
+  </details>
+</article>
+  <div class="map-wrap" id="map-dk"><h3>🗺️ Mapa de universidades · Dinamarca</h3><div class="map" id="leaflet-dk"></div></div>
+</section><section class="panel" id="panel-se">
+  <div class="country-hero">
+    <span class="flag flag-se flag-lg" aria-hidden="true"><span class="nc-h"></span><span class="nc-v"></span></span>
+    <div class="ch-body">
+      <h2>Suecia</h2>
+      <div class="ch-meta">
+        <div><span class="mk">Coste de matrícula</span><span class="mv">0 € (100% subvencionada para ciudadanos de la UE)</span></div>
+        <div><span class="mk">Alojamiento</span><span class="mv">A excepción de la capital, Estocolmo, el coste de alojamiento podría estar entre los 500 y 750 € al mes.</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="country-text"><p>En Suecia la educación es <strong>100% subvencionada</strong> para los ciudadanos de la Unión Europea, esto quiere decir que el coste de la universidad es de 0€. En este caso te presento un grado en física y otro en matemáticas dentro de la misma universidad. Es una universidad de alto prestigio a nivel europeo y es bastante competitiva a nivel mundial, específicamente en física.</p></div>
+  <div class="notice"><div class="notice-k">⚠️ Aviso importante para Suecia</div><strong>Plazo límite</strong> para enviar matrícula en Suecia si no has terminado aún tus estudios de secundaria, tienes que esperar a la 2ª ronda de admisiones <strong>15 de abril</strong>.<br><strong>Nivel de inglés:</strong> el certificado debe presentarse <strong>antes del 21 junio</strong>.</div>
+  
+<article class="card" id="se-lund-phys">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.lunduniversity.lu.se/study/sciences-physics-NGNAT-ENFY" target="_blank" rel="noopener">Bachelor in Physics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Lund University · Lund</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/lund-university" target="_blank" rel="noopener">#101-150 del mundo</a><a class="rk" href="https://www.shanghairanking.com/rankings/arwu/2025" target="_blank" rel="noopener">#3-4 de Suecia</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/lund-university" target="_blank" rel="noopener">#42 del mundo en Physics</a></div>
+    </div>
+    <div class="diff diff-orange"><span class="diff-k">Dificultad</span>Alta · Programa muy competitivo</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Lund <small>(130.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años / 180 ECTS</span></div><div class="m"><span class="mk">Coste</span><span class="mv">0€</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">15 de abril (2ª ronda de admisiones · ver aviso al inicio de la pestaña)</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>La física estudia los componentes fundamentales de nuestro mundo, así como las fuerzas y leyes que los rigen. En este grado tendrás acceso al amplio conjunto de conocimientos de la física. Aprenderás a explorar las propiedades de la materia mediante experimentos avanzados y a desarrollar modelos para describir la realidad, a menudo con simulaciones por ordenador detalladas. Según la especialización que elijas, podrás profundizar en ámbitos que van desde la investigación de partículas elementales hasta el desarrollo de nuevos componentes para tecnologías energéticamente eficientes y células solares de alto rendimiento.</p><p>Como estudiante, formarás parte de un entorno universitario dinámico y con orientación internacional, en el que todos tus profesores son también investigadores. Hay muchos proyectos de investigación en curso muy interesantes, tanto teóricos como experimentales.</p><p>Por ejemplo, la Universidad de Lund cuenta con un área de especialización en Luz y Materiales, en la que participa la Premio Nobel Anne L’Huillier. También se realiza una amplia investigación en física de partículas en colaboración con el CERN, además de proyectos en física nuclear, mecánica cuántica e investigación industrial. Algunos proyectos se llevan a cabo en las instalaciones de investigación de Lund, referentes a nivel mundial: el laboratorio MAX IV y la futura fuente de neutrones ESS, con aplicaciones en ciencias naturales, ingeniería y medicina.</p></div>
+  <details class="city-prof"><summary>Perfil de la ciudad</summary><div class="dc"><p>Lund es una ciudad universitaria del sur de Suecia, con unos 130.000 habitantes y una comunidad estudiantil muy activa. La Universidad de Lund atrae a estudiantes de más de 130 nacionalidades, creando un ambiente internacional, dinámico y acogedor. La bicicleta y los desplazamientos a pie son habituales, aunque también hay autobuses, tranvía y trenes; no suele ser necesario disponer de coche. Su oferta cultural incluye museos, conciertos, teatros, festivales y asociaciones estudiantiles que organizan numerosas actividades sociales. Dato curioso: casi un tercio de la población está formado por estudiantes, y las tradicionales <em>nations</em> son asociaciones universitarias que organizan fiestas, deportes y eventos culturales. Para las familias, es importante buscar alojamiento con antelación, ya que encontrar habitación puede ser complicado al inicio del curso. Además, Copenhague está a menos de una hora en tren, lo que facilita los viajes internacionales.</p></div></details>
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><p><strong>Título de Bachillerato y haber cursado:</strong></p><ul><li>Chemistry --&gt; Física y Química (de 1º de Bachiller)</li><li>Mathematics --&gt; Matemáticas II (sólo de la rama de ciencias)</li><li>Physics --&gt; Física (de 2º de Bachiller)</li></ul><h4>De nivel de inglés: (antes del 21 junio)</h4><ul><li>C1 Advanced (CAE), minimum score 180 (points awarded since 2015), or Cambridge English: Advanced</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 15 de abril (2ª ronda de admisiones · ver aviso al inicio de la pestaña)</div>
+      <div class="sel"><strong>Sí hay proceso de selección:</strong> entre todos los solicitantes internacionales que apliquen a la 2ª ronda y cumplan los requisitos, la universidad escogerá a los mejores, basándose principalmente en las notas finales.</div>
+    </div>
+  </details>
+</article>
+<article class="card" id="se-lund-math">
+  <header class="card-head">
+    <div class="card-hl">
+      <h3 class="card-title"><a class="card-title-link" href="https://www.lunduniversity.lu.se/study/sciences-mathematics-NGNAT-ENMA" target="_blank" rel="noopener">Bachelor in Mathematics <span class="click-ico">🖱️</span></a></h3>
+      <div class="card-uni">Lund University · Lund</div>
+      <div class="rank-label">Ranking de la universidad:</div>
+      <div class="ranks"><a class="rk" href="https://www.shanghairanking.com/universities/lund-university" target="_blank" rel="noopener">#101-150 del mundo</a><a class="rk" href="https://www.shanghairanking.com/rankings/arwu/2026" target="_blank" rel="noopener">#3-4 de Suecia</a><a class="rk rk-gold" href="https://www.shanghairanking.com/universities/lund-university" target="_blank" rel="noopener">#201-300 del mundo en Mathematics</a></div>
+    </div>
+    <div class="diff diff-orange"><span class="diff-k">Dificultad</span>Alta · Programa muy competitivo</div>
+  </header>
+  <div class="meta-grid"><div class="m m-city"><span class="mk">Ciudad</span><span class="mv">Lund <small>(130.000 habitantes)</small></span><button class="map-btn" onclick="scrollToMap('se','map-se')">🗺️ Ver mapa</button></div><div class="m"><span class="mk">Duración</span><span class="mv">3 años / 180 ECTS</span></div><div class="m"><span class="mk">Coste</span><span class="mv">0€</span></div><div class="m"><span class="mk">Idioma de impartición</span><span class="mv">Inglés</span></div><div class="m"><span class="mk">Fecha límite</span><span class="mv">15 de abril (2ª ronda de admisiones · ver aviso al inicio de la pestaña)</span></div></div>
+  <div class="desc"><div class="desc-k">Breve descripción</div><p>Aprenderás a utilizar herramientas de pensamiento matemático, algoritmos y métodos para resolver problemas complejos. Desarrollarás tu capacidad de abstracción, tu pensamiento analítico y tu razonamiento lógico. Obtendrás mucho más que habilidades de cálculo: aprenderás a usar la teoría matemática para calcular de forma más eficiente y, en ocasiones, para evitar los cálculos por completo. Cuando es necesario, la capacidad de razonamiento se complementa con cálculos numéricos y simulaciones. El programa ofrece una amplia variedad de asignaturas de matemáticas, estadística matemática, análisis numérico y ciencia computacional. Estas pueden combinarse con asignaturas de ciencias naturales, ingeniería, economía, finanzas, ciencias sociales o humanidades. La docencia se imparte en inglés. La mitad de las plazas están reservadas para la admisión internacional. Es posible cursar parte del programa en el extranjero, ya que la Universidad de Lund tiene acuerdos de intercambio con universidades de todo el mundo.</p></div>
+  
+  <details class="adm"><summary>Ver requisitos de admisión y fechas</summary>
+    <div class="dc"><h4>Académicos</h4><p><strong>Título de Bachillerato y haber cursado:</strong></p><ul><li>Chemistry --&gt; Física y Química (de 1º de Bachiller)</li><li>Mathematics --&gt; Matemáticas II (sólo de la rama de ciencias)</li><li>Physics --&gt; Física (de 2º de Bachiller)</li></ul><h4>De nivel de inglés: (antes del 21 junio)</h4><ul><li>C1 Advanced (CAE), minimum score 180 (points awarded since 2015), or</li></ul>
+      <div class="deadline">📅 <strong>Plazo límite para enviar matrícula:</strong> 15 de abril (2ª ronda de admisiones · ver aviso al inicio de la pestaña)</div>
+      <div class="sel"><strong>Sí hay proceso de selección:</strong> entre todos los solicitantes internacionales que apliquen a la 2ª ronda y cumplan los requisitos, la universidad escogerá a los mejores, basándose principalmente en las notas finales.</div>
+    </div>
+  </details>
+</article>
+  <div class="map-wrap" id="map-se"><h3>🗺️ Mapa de universidades · Suecia</h3><div class="map" id="leaflet-se"></div></div>
+</section>
+</main>
+<footer class="foot">
+  <div class="foot-logo"><svg class="logo-svg lf" role="img" aria-label="educoWay" id="lf-svg" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .lf-1 {
+        fill: #36aadc;
+      }
+
+      .lf-1, .lf-2, .lf-3, .lf-4 {
+        opacity: .8;
+      }
+
+      .lf-2 {
+        fill: #30ac71;
+      }
+
+      .lf-5 {
+        fill: #737373;
+      }
+
+      .lf-3 {
+        fill: #32abbb;
+      }
+
+      .lf-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="lf-g" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="lf-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="lf-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lf-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="lf-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="lf-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lf-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lf-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lf-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lf-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="lf-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="lf-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lf-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="lf-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="lf-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lf-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="lf-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="lf-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="lf-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="lf-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="lf-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lf-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lf-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="lf-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="lf-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="lf-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lf-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lf-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="lf-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="lf-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lf-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lf-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lf-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lf-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="lf-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="lf-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="lf-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="lf-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lf-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lf-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lf-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lf-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="lf-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lf-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lf-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lf-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="lf-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="lf-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="lf-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="lf-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="lf-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="lf-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="lf-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="lf-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="lf-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="lf-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="lf-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+  <p>Informe preparado por educoWay para Julia Jimena Urbina San Martin.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>const mapData = {
+ "uk": {
+  "center": [
+   53.6,
+   -2.2
+  ],
+  "zoom": 6,
+  "universities": [
+   {
+    "id": "uk-imperial",
+    "name": "Mathematics with Applied Mathematics / Mathematical Physics",
+    "school": "Imperial College London",
+    "lat": 51.4988,
+    "lng": -0.1749,
+    "webUrl": "https://www.imperial.ac.uk/study/courses/undergraduate/mathematics-applied-physics/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Imperial+College+London+London"
+   },
+   {
+    "id": "uk-man-phys",
+    "name": "Bachelor in Physics",
+    "school": "The University of Manchester",
+    "lat": 53.4668,
+    "lng": -2.2339,
+    "webUrl": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/00638/bsc-physics/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=The+University+of+Manchester+Manchester"
+   },
+   {
+    "id": "uk-man-mp",
+    "name": "Bachelor in Mathematics & Physics",
+    "school": "The University of Manchester",
+    "lat": 53.4676,
+    "lng": -2.2318,
+    "webUrl": "https://www.manchester.ac.uk/study/undergraduate/courses/2027/00592/bsc-mathematics-and-physics/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=The+University+of+Manchester+Manchester"
+   },
+   {
+    "id": "uk-edin",
+    "name": "Bachelor in Mathematics & Physics",
+    "school": "The University of Edinburgh",
+    "lat": 55.9445,
+    "lng": -3.1892,
+    "webUrl": "https://study.ed.ac.uk/programmes/undergraduate/61-mathematics-and-physics",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=The+University+of+Edinburgh+Edinburgh"
+   },
+   {
+    "id": "uk-durham",
+    "name": "Bachelor in Physics",
+    "school": "Durham University",
+    "lat": 54.7663,
+    "lng": -1.5729,
+    "webUrl": "https://www.durham.ac.uk/study/courses/physics-f300/#overview",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Durham+University+Durham"
+   },
+   {
+    "id": "uk-lancaster",
+    "name": "Bachelor in Physics",
+    "school": "Lancaster University",
+    "lat": 54.0104,
+    "lng": -2.7877,
+    "webUrl": "https://www.lancaster.ac.uk/study/undergraduate/courses/physics-bsc-hons-f300/2027/#overview",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Lancaster+University+Bailrigg"
+   },
+   {
+    "id": "uk-lough",
+    "name": "Engineering Physics",
+    "school": "Loughborough University",
+    "lat": 52.7647,
+    "lng": -1.229,
+    "webUrl": "https://www.lboro.ac.uk/study/undergraduate/courses/engineering-physics-bsc/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Loughborough+University+Loughborough"
+   },
+   {
+    "id": "uk-hull",
+    "name": "Physics",
+    "school": "University of Hull",
+    "lat": 53.7708,
+    "lng": -0.3685,
+    "webUrl": "https://www.hull.ac.uk/study/undergraduate/physics-bsc-mphys",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=University+of+Hull+Kingston+upon+Hull"
+   }
+  ]
+ },
+ "nl": {
+  "center": [
+   52.3,
+   5.6
+  ],
+  "zoom": 7,
+  "universities": [
+   {
+    "id": "nl-delft",
+    "name": "Aerospace Engineering",
+    "school": "TU Delft",
+    "lat": 51.999,
+    "lng": 4.3737,
+    "webUrl": "https://www.tudelft.nl/en/onderwijs/opleidingen/bachelors/ae/bsc-aerospace-engineering",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=TU+Delft+Delft"
+   },
+   {
+    "id": "nl-rug-phys",
+    "name": "Bachelor in Physics",
+    "school": "Groningen University (RUG)",
+    "lat": 53.2405,
+    "lng": 6.5365,
+    "webUrl": "https://www.rug.nl/bachelors/physics/?lang=en",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Groningen+University+%28RUG%29+Groningen"
+   },
+   {
+    "id": "nl-rug-ap",
+    "name": "Bachelor in Applied Physics",
+    "school": "Groningen University (RUG)",
+    "lat": 53.2412,
+    "lng": 6.5385,
+    "webUrl": "https://www.rug.nl/bachelors/applied-physics/?lang=en",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Groningen+University+%28RUG%29+Groningen"
+   },
+   {
+    "id": "nl-rug-am",
+    "name": "Bachelor in Applied Mathematics",
+    "school": "Groningen University (RUG)",
+    "lat": 53.2398,
+    "lng": 6.5345,
+    "webUrl": "https://www.rug.nl/bachelors/applied-mathematics/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Groningen+University+%28RUG%29+Groningen"
+   },
+   {
+    "id": "nl-tue-ap",
+    "name": "Applied Physics",
+    "school": "Technical University of Eindhoven (TU/e)",
+    "lat": 51.4485,
+    "lng": 5.4907,
+    "webUrl": "https://www.tue.nl/en/education/bachelor-college/bachelor-applied-physics",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Technical+University+of+Eindhoven+%28TU%2Fe%29+Eindhoven"
+   },
+   {
+    "id": "nl-tue-am",
+    "name": "Applied Mathematics",
+    "school": "Technical University of Eindhoven (TU/e)",
+    "lat": 51.4472,
+    "lng": 5.4925,
+    "webUrl": "https://www.tue.nl/en/education/bachelor-college/bachelor-applied-mathematics",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Technical+University+of+Eindhoven+%28TU%2Fe%29+Eindhoven"
+   },
+   {
+    "id": "nl-ut-ap",
+    "name": "Bachelor in Applied Physics",
+    "school": "University of Twente",
+    "lat": 52.2389,
+    "lng": 6.856,
+    "webUrl": "https://www.utwente.nl/en/education/bachelor/programmes/applied-physics/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=University+of+Twente+Enschede"
+   },
+   {
+    "id": "nl-ut-am",
+    "name": "Bachelor in Applied Mathematics",
+    "school": "University of Twente",
+    "lat": 52.2402,
+    "lng": 6.854,
+    "webUrl": "https://www.utwente.nl/en/education/bachelor/programmes/applied-mathematics/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=University+of+Twente+Enschede"
+   },
+   {
+    "id": "nl-inholland",
+    "name": "Aeronautical Engineering",
+    "school": "Inholland University of Applied Sciences",
+    "lat": 51.9878,
+    "lng": 4.3786,
+    "webUrl": "https://www.inholland.nl/inhollandcom/degree-programmes/aeronautical-engineering-eng-full-time/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Inholland+University+of+Applied+Sciences+Delft"
+   }
+  ]
+ },
+ "dk": {
+  "center": [
+   55.4,
+   11.2
+  ],
+  "zoom": 7,
+  "universities": [
+   {
+    "id": "dk-dtu",
+    "name": "General Engineering (BSc)",
+    "school": "DTU (Technical University of Denmark)",
+    "lat": 55.7858,
+    "lng": 12.5222,
+    "webUrl": "https://www.dtu.dk/english/education/undergraduate/general-engineering",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=DTU+%28Technical+University+of+Denmark%29+Lyngby"
+   },
+   {
+    "id": "dk-sdu",
+    "name": "BEng in Mechanical Engineering",
+    "school": "University of Southern Denmark (SDU)",
+    "lat": 54.9119,
+    "lng": 9.7807,
+    "webUrl": "https://www.sdu.dk/en/uddannelse/ingenioer/mechanical-engineering",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=University+of+Southern+Denmark+%28SDU%29+Sonderborg"
+   }
+  ]
+ },
+ "se": {
+  "center": [
+   55.712,
+   13.204
+  ],
+  "zoom": 13,
+  "universities": [
+   {
+    "id": "se-lund-phys",
+    "name": "Bachelor in Physics",
+    "school": "Lund University",
+    "lat": 55.7115,
+    "lng": 13.2032,
+    "webUrl": "https://www.lunduniversity.lu.se/study/sciences-physics-NGNAT-ENFY",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Lund+University+Lund"
+   },
+   {
+    "id": "se-lund-math",
+    "name": "Bachelor in Mathematics",
+    "school": "Lund University",
+    "lat": 55.7128,
+    "lng": 13.2058,
+    "webUrl": "https://www.lunduniversity.lu.se/study/sciences-mathematics-NGNAT-ENMA",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Lund+University+Lund"
+   }
+  ]
+ }
+};
+const mapsInitialized = {};
+let currentTab = 'intro';
+
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + id));
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  const active = btn || document.querySelector('.tab[data-tab="' + id + '"]');
+  if (active) active.scrollIntoView({block: 'nearest', inline: 'center', behavior: 'smooth'});
+  currentTab = id;
+  window.scrollTo({top: 0, behavior: 'auto'});
+  if (mapData[id]) initMap(id);
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({behavior: 'smooth', block: 'start'});
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+}
+
+function goTo(tab, anchor) {
+  showTab(tab);
+  setTimeout(() => scrollToCard(anchor), 80);
+}
+
+function scrollToMap(tab, anchor) {
+  const go = () => { const el = document.getElementById(anchor); if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'}); };
+  if (currentTab === tab) { go(); } else { showTab(tab); setTimeout(go, 120); }
+}
+
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function initMap(countryId) {
+  const d = mapData[countryId];
+  if (!d || typeof L === 'undefined') return;
+  if (mapsInitialized[countryId]) { mapsInitialized[countryId].invalidateSize(); return; }
+  const map = L.map('leaflet-' + countryId, {scrollWheelZoom: false}).setView(d.center, d.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18, attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+  const icon = L.divIcon({className: 'uni-marker', html: '🎓', iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -12]});
+  const bounds = [];
+  d.universities.forEach(u => {
+    const web = u.webUrl
+      ? '<a href="' + esc(u.webUrl) + '" target="_blank" rel="noopener">Ver grado</a>'
+      : '<span title="Enlace pendiente en el informe">Ver grado (pendiente)</span>';
+    const html = '<div class="pop-deg">' + esc(u.name) + '</div><div class="pop-uni">' + esc(u.school) + '</div>' +
+      '<div class="pop-btns">' + web +
+      '<button onclick="scrollToCard(\'' + u.id + '\')">Ver ficha</button>' +
+      '<a href="' + esc(u.mapsUrl) + '" target="_blank" rel="noopener">Google Maps</a></div>';
+    L.marker([u.lat, u.lng], {icon}).addTo(map).bindPopup(html);
+    bounds.push([u.lat, u.lng]);
+  });
+  if (bounds.length > 1) map.fitBounds(bounds, {padding: [40, 40], maxZoom: 14});
+  mapsInitialized[countryId] = map;
+  setTimeout(() => map.invalidateSize(), 200);
+}
+</script>
+</body>
+</html>
