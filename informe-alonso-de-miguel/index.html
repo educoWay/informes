@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informe personalizado de opciones de grado · Alonso de Miguel · educoWay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+:root{
+  --teal:#0a9baa; --teal-dark:#077a87; --teal-light:#e0f5f7; --navy:#0d2b3e;
+  --bg:#f4f8fa; --border:#c8e0e5; --text:#1f2d36; --muted:#6b7c86;
+  --red:#d62828; --orange:#e07a10; --green:#2a9d55; --gold:#b8860b; --gold-bg:#fbf1d6;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;color:var(--text);background:var(--bg)}
+a{color:var(--teal-dark)}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;color:var(--navy);line-height:1.25}
+.txt-red{color:#e00000 !important}
+.txt-green{color:#1e9e48 !important}
+.txt-teal{color:var(--teal)}
+.pending{display:inline-block;font-size:.82em;font-style:italic;color:#8a6d00;background:#fff6d6;border:1px dashed #d8b74a;border-radius:6px;padding:0 6px}
+
+/* ---------- header ---------- */
+.site-head{position:sticky;top:0;z-index:1000;background:var(--navy);color:#fff;box-shadow:0 2px 14px rgba(0,0,0,.18)}
+.head-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:22px;padding:12px 20px 8px}
+.brand .logo-svg{height:42px;width:auto;display:block}
+.head-titles h1{color:#fff;font-size:1.35rem;margin:0}
+.prepared{margin:2px 0 0;font-variant:small-caps;text-transform:uppercase;letter-spacing:.08em;font-size:.72rem;color:#9fdbe2}
+.tabs{max-width:1180px;margin:0 auto;display:flex;gap:4px;padding:0 14px;overflow-x:auto;scrollbar-width:thin}
+.tab{flex:0 0 auto;display:flex;align-items:center;gap:8px;background:transparent;border:0;border-bottom:3px solid transparent;color:#c9dde3;font:500 .9rem 'DM Sans',sans-serif;padding:10px 12px;cursor:pointer;white-space:nowrap}
+.tab:hover{color:#fff}
+.tab.active{color:#fff;border-bottom-color:var(--teal)}
+
+/* ---------- flags (CSS only) ---------- */
+.flag{position:relative;display:inline-block;width:24px;height:16px;border-radius:2px;overflow:hidden;flex:0 0 auto;box-shadow:0 0 0 1px rgba(0,0,0,.15);vertical-align:middle}
+.flag-lg{width:84px;height:56px;border-radius:6px}
+.flag .fx-v,.flag .fx-h{position:absolute;display:block}
+.flag .fx-v{top:0;bottom:0;left:30%;width:12.5%}
+.flag .fx-h{left:0;right:0;top:42%;height:16%}
+.flag-dk{background:#c8102e}.flag-dk .fx-v,.flag-dk .fx-h{background:#fff}
+.flag-se{background:#006aa7}.flag-se .fx-v,.flag-se .fx-h{background:#fecc00}
+.flag-se .fx-v{left:31.25%;width:12.5%}.flag-se .fx-h{top:40%;height:20%}
+.flag .fs{position:absolute;display:block}
+.flag-de .fs,.flag-nl .fs{left:0;right:0;height:33.34%}
+.flag-de .fs1,.flag-nl .fs1{top:0}.flag-de .fs2,.flag-nl .fs2{top:33.33%}.flag-de .fs3,.flag-nl .fs3{top:66.66%}
+.flag-de .fs1{background:#000}.flag-de .fs2{background:#dd0000}.flag-de .fs3{background:#ffce00}
+.flag-nl .fs1{background:#ae1c28}.flag-nl .fs2{background:#fff}.flag-nl .fs3{background:#21468b}
+.flag-be .fs{top:0;bottom:0;width:33.34%}
+.flag-be .fs1{left:0;background:#000}.flag-be .fs2{left:33.33%;background:#fdda24}.flag-be .fs3{left:66.66%;background:#ef3340}
+
+/* ---------- layout ---------- */
+main{max-width:1180px;margin:0 auto;padding:28px 20px 40px}
+.panel[hidden]{display:none}
+.prose{max-width:860px}
+.welcome p{font-size:1.02rem}
+
+/* index */
+.toc{background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px 24px;margin:26px 0}
+.toc h2{margin:0 0 14px;font-size:1.5rem}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px 28px}
+.toc-country h3{display:flex;align-items:center;gap:10px;font-size:1.15rem;margin:0 0 6px}
+.toc-sec{margin:8px 0 4px;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-dark);font-weight:700}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc li a{display:block;padding:7px 10px;border-left:3px solid var(--border);margin-bottom:4px;text-decoration:none;border-radius:0 6px 6px 0;transition:background .15s,border-color .15s}
+.toc li a:hover{background:var(--teal-light);border-left-color:var(--teal)}
+.toc-deg{display:block;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:400;color:var(--navy);line-height:1.35}
+.toc-uni{display:block;font-family:'Playfair Display',serif;font-size:11.5px;font-style:italic;color:var(--muted);margin-top:1px}
+
+.next-box{background:var(--navy);color:#e8f4f6;border-radius:12px;padding:24px 28px}
+.next-box h2{color:#fff;margin-top:0}
+
+/* research vs applied */
+.rva-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin:18px 0}
+.rva-item{background:#fff;border:2px solid var(--border);border-radius:12px;padding:16px 20px;transition:border-color .2s,box-shadow .2s}
+.rva-item:hover{border-color:var(--teal);box-shadow:0 8px 24px rgba(10,155,170,.14)}
+.rva-item h3{margin:0 0 6px;font-size:1.12rem;color:var(--teal-dark)}
+.rva-links a{font-weight:700}
+
+/* country */
+.country-hero{display:flex;gap:22px;align-items:flex-start;background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px 24px}
+.country-hero h2{margin:0 0 8px;font-size:2rem}
+.cmeta-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:6px}
+.cmeta{background:var(--teal-light);border:1px solid var(--border);border-radius:8px;padding:6px 12px}
+.notice{margin:18px 0 0;background:#fff8e1;border:2px solid #f2c94c;border-left:6px solid #e0a800;border-radius:12px;padding:14px 18px}
+.notice p{margin:6px 0 0}
+.sec-sep{display:flex;align-items:center;gap:14px;margin:34px 0 16px;color:var(--teal-dark);font-weight:700;font-size:.8rem;letter-spacing:.16em}
+.sec-sep::before,.sec-sep::after{content:"";flex:1;height:2px;background:var(--border)}
+
+/* ---------- cards ---------- */
+.card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:20px;box-shadow:0 2px 8px rgba(13,43,62,.05);transition:border-color .2s,box-shadow .2s;scroll-margin-top:150px}
+.card:hover{border-color:var(--teal);box-shadow:0 10px 30px rgba(10,155,170,.16)}
+.card.flash{animation:flash 1.6s ease}
+@keyframes flash{0%,40%{box-shadow:0 0 0 5px rgba(10,155,170,.35)}100%{box-shadow:0 2px 8px rgba(13,43,62,.05)}}
+.card-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
+.card-title{margin:0;font-size:1.45rem}
+.card-title a{color:var(--navy);text-decoration:none;transition:color .15s}
+.card-title a:hover{color:var(--teal)}
+.clickicon{display:inline-block;margin-left:8px;font-size:.85em;transition:transform .2s}
+.card-title a:hover .clickicon{transform:scale(1.35)}
+.card-uni{margin:4px 0 8px;color:var(--teal);font-weight:700}
+.ranks{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.rank-label{font-size:.75rem;color:var(--muted);margin-right:2px}
+.rbadge{display:inline-block;font-size:.78rem;font-weight:600;background:var(--teal-light);color:var(--teal-dark);border:1px solid var(--border);border-radius:999px;padding:2px 10px;text-decoration:none}
+a.rbadge:hover{border-color:var(--teal)}
+.rbadge-gold{background:var(--gold-bg);color:var(--gold);border-color:#e6c76b}
+.rbadge-none{background:#f1f3f4;color:#5f6b72;border-color:#d7dde0;font-weight:500}
+.rank-extra{font-size:.75rem}
+.rank-note{margin:6px 0 0;font-size:.82rem;color:var(--muted)}
+.card-diff{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:0 0 auto}
+.dbadge{font-size:.8rem;font-weight:700;border:2px solid;border-radius:8px;padding:3px 10px;white-space:nowrap}
+.d-red{color:var(--red);border-color:var(--red);background:#fdecec}
+.d-orange{color:var(--orange);border-color:var(--orange);background:#fff3e4}
+.d-green{color:var(--green);border-color:var(--green);background:#e9f7ef}
+
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:18px 0}
+.mcell{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:9px 12px}
+.mcell-city{grid-column:span 2}
+.mlabel{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.mval{display:block;font-size:.93rem}
+.mapbtn{margin-top:6px;background:var(--teal-light);border:1px solid var(--teal);color:var(--teal-dark);font:700 .74rem 'DM Sans',sans-serif;border-radius:6px;padding:3px 9px;cursor:pointer}
+.mapbtn:hover{background:var(--teal);color:#fff}
+
+.desc{background:#f2f8fb;border-left:4px solid var(--teal);border-radius:0 10px 10px 0;padding:12px 18px;margin-bottom:12px}
+.desc h4{margin:0 0 4px;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-dark)}
+.desc p{margin:.4em 0}
+details{border:1px solid var(--border);border-radius:10px;margin:10px 0;background:#fff}
+summary{cursor:pointer;padding:10px 14px;font-weight:700;color:var(--teal-dark);list-style-position:inside}
+summary:hover{background:var(--teal-light);border-radius:10px}
+.det-body{padding:4px 18px 14px}
+.det-body h5{margin:14px 0 4px;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--navy)}
+.det-body ul{margin:4px 0;padding-left:20px}
+.det-body blockquote{margin:8px 0;padding:6px 12px;border-left:3px solid var(--border);color:#45545d}
+.deadline{margin:12px 0;background:#fff7cc;border:2px solid #f0d34a;border-radius:10px;padding:10px 14px}
+.card-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.linkbtn{font-size:.85rem;font-weight:700;text-decoration:none;border:1px solid var(--teal);border-radius:8px;padding:5px 12px;color:var(--teal-dark)}
+.linkbtn:hover{background:var(--teal);color:#fff}
+
+/* map */
+.map-wrap{margin-top:30px;scroll-margin-top:150px}
+.map{height:460px;border:2px solid var(--border);border-radius:12px;overflow:hidden;scroll-margin-top:150px}
+.uni-marker{font-size:26px;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.pop h4{margin:0 0 2px;font:700 14px 'DM Sans',sans-serif;color:var(--navy)}
+.pop p{margin:0 0 8px;font:italic 12px 'Playfair Display',serif;color:var(--muted)}
+.pop .pbtns{display:flex;gap:5px;flex-wrap:wrap}
+.pop a,.pop button{font:700 11px 'DM Sans',sans-serif;border:1px solid var(--teal);background:var(--teal-light);color:var(--teal-dark);border-radius:6px;padding:3px 7px;cursor:pointer;text-decoration:none}
+
+/* footer */
+.site-foot{text-align:center;padding:30px 20px 40px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--border)}
+.foot-logo .logo-svg{height:46px;width:auto;opacity:.55}
+
+@media (max-width:720px){
+  .head-inner{gap:12px;padding:10px 14px 6px}
+  .brand .logo-svg{height:30px}
+  .head-titles h1{font-size:1rem}
+  .card{padding:16px}
+  .card-head{flex-direction:column}
+  .card-diff{align-items:flex-start;flex-direction:row;flex-wrap:wrap}
+  .mcell-city{grid-column:auto}
+  .country-hero{flex-direction:column}
+  .card,.map-wrap,.map{scroll-margin-top:130px}
+}
+
+</style>
+</head>
+<body>
+<header class="site-head">
+  <div class="head-inner">
+    <div class="brand"><svg class="logo-svg" role="img" aria-label="educoWay" id="lh-logo" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .lh-cls-1 {
+        fill: #36aadc;
+      }
+
+      .lh-cls-1, .lh-cls-2, .lh-cls-3, .lh-cls-4 {
+        opacity: .8;
+      }
+
+      .lh-cls-2 {
+        fill: #30ac71;
+      }
+
+      .lh-cls-5 {
+        fill: #ffffff;
+      }
+
+      .lh-cls-3 {
+        fill: #32abbb;
+      }
+
+      .lh-cls-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="lh-capa3" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="lh-cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="lh-cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lh-cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="lh-cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="lh-cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lh-cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lh-cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lh-cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lh-cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="lh-cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="lh-cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lh-cls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="lh-cls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="lh-cls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lh-cls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="lh-cls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="lh-cls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="lh-cls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="lh-cls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="lh-cls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lh-cls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lh-cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="lh-cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="lh-cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="lh-cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lh-cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lh-cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="lh-cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="lh-cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lh-cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lh-cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lh-cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lh-cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="lh-cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="lh-cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="lh-cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="lh-cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lh-cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lh-cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lh-cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lh-cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="lh-cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lh-cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lh-cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lh-cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="lh-cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="lh-cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="lh-cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="lh-cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="lh-cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="lh-cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="lh-cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="lh-cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="lh-cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="lh-cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="lh-cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+    <div class="head-titles">
+      <h1>Informe personalizado de opciones de grado</h1>
+      <p class="prepared">Preparado para Alonso de Miguel</p>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist"><button class="tab active" data-tab="intro" onclick="showTab('intro',this)">Introducción</button><button class="tab" data-tab="rva" onclick="showTab('rva',this)">Research vs Applied Sciences</button><button class="tab" data-tab="dinamarca" onclick="showTab('dinamarca',this)"><span class="flag flag-dk" aria-hidden="true"><span class="fx-v"></span><span class="fx-h"></span></span> Dinamarca</button><button class="tab" data-tab="suecia" onclick="showTab('suecia',this)"><span class="flag flag-se" aria-hidden="true"><span class="fx-v"></span><span class="fx-h"></span></span> Suecia</button><button class="tab" data-tab="alemania" onclick="showTab('alemania',this)"><span class="flag flag-de" aria-hidden="true"><span class="fs fs1"></span><span class="fs fs2"></span><span class="fs fs3"></span></span> Alemania</button><button class="tab" data-tab="belgica" onclick="showTab('belgica',this)"><span class="flag flag-be" aria-hidden="true"><span class="fs fs1"></span><span class="fs fs2"></span><span class="fs fs3"></span></span> Bélgica</button><button class="tab" data-tab="paises-bajos" onclick="showTab('paises-bajos',this)"><span class="flag flag-nl" aria-hidden="true"><span class="fs fs1"></span><span class="fs fs2"></span><span class="fs fs3"></span></span> Países Bajos</button></nav>
+</header>
+
+<main>
+<section class="panel" id="tab-intro" role="tabpanel">
+  <div class="prose welcome">
+<p>Hola Alonso,</p>
+<p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencido de que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+<p>Estos días he estado trabajando en la búsqueda de grados en International Business, Business Administration, Economics, y programas afines que, según lo que hemos hablado, podrían interesarte.</p>
+<p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes, junto con unas indicaciones finales:</p></div>
+  <div class="toc"><h2>Índice de opciones</h2><div class="toc-grid"><div class="toc-country"><h3><span class="flag flag-dk" aria-hidden="true"><span class="fx-v"></span><span class="fx-h"></span></span> Dinamarca</h3><p class="toc-sec">Research Universities</p><ul><li><a href="#aarhus-eba" onclick="goTo('dinamarca','aarhus-eba');return false;"><span class="toc-deg">Economics and Business Administration</span><span class="toc-uni">Aarhus University</span></a></li><li><a href="#aalborg-eba" onclick="goTo('dinamarca','aalborg-eba');return false;"><span class="toc-deg">Economics and Business Administration</span><span class="toc-uni">Aalborg University</span></a></li><li><a href="#sdu-eba" onclick="goTo('dinamarca','sdu-eba');return false;"><span class="toc-deg">BA in Economics and Business Administration</span><span class="toc-uni">University of Southern Denmark (SDU)</span></a></li></ul></div><div class="toc-country"><h3><span class="flag flag-se" aria-hidden="true"><span class="fx-v"></span><span class="fx-h"></span></span> Suecia</h3><p class="toc-sec">Research Universities</p><ul><li><a href="#umea-ibe" onclick="goTo('suecia','umea-ibe');return false;"><span class="toc-deg">International Business and Economics</span><span class="toc-uni">Umeå University</span></a></li><li><a href="#jonkoping-im" onclick="goTo('suecia','jonkoping-im');return false;"><span class="toc-deg">International Management</span><span class="toc-uni">Jönköping University</span></a></li></ul></div><div class="toc-country"><h3><span class="flag flag-de" aria-hidden="true"><span class="fs fs1"></span><span class="fs fs2"></span><span class="fs fs3"></span></span> Alemania</h3><p class="toc-sec">Universities of Applied Sciences</p><ul><li><a href="#rhine-waal-ibm" onclick="goTo('alemania','rhine-waal-ibm');return false;"><span class="toc-deg">BA International Business and Management</span><span class="toc-uni">Rhine-Waal University of Applied Sciences</span></a></li></ul></div><div class="toc-country"><h3><span class="flag flag-be" aria-hidden="true"><span class="fs fs1"></span><span class="fs fs2"></span><span class="fs fs3"></span></span> Bélgica</h3><p class="toc-sec">Research Universities</p><ul><li><a href="#kuleuven-ba" onclick="goTo('belgica','kuleuven-ba');return false;"><span class="toc-deg">Business Administration</span><span class="toc-uni">KU Leuven</span></a></li></ul><p class="toc-sec">Universities of Applied Sciences</p><ul><li><a href="#vives-bm" onclick="goTo('belgica','vives-bm');return false;"><span class="toc-deg">Bachelor of Business Management</span><span class="toc-uni">VIVES University of Applied Sciences</span></a></li><li><a href="#artevelde-ib" onclick="goTo('belgica','artevelde-ib');return false;"><span class="toc-deg">International Business</span><span class="toc-uni">Artevelde University of Applied Sciences</span></a></li><li><a href="#thomasmore-ibm" onclick="goTo('belgica','thomasmore-ibm');return false;"><span class="toc-deg">International Business Management (especialización en International Business and Trade)</span><span class="toc-uni">Thomas More University of Applied Sciences</span></a></li></ul></div><div class="toc-country"><h3><span class="flag flag-nl" aria-hidden="true"><span class="fs fs1"></span><span class="fs fs2"></span><span class="fs fs3"></span></span> Países Bajos</h3><p class="toc-sec">Research Universities</p><ul><li><a href="#twente-iba" onclick="goTo('paises-bajos','twente-iba');return false;"><span class="toc-deg">International Business Administration</span><span class="toc-uni">University of Twente</span></a></li><li><a href="#groningen-ib" onclick="goTo('paises-bajos','groningen-ib');return false;"><span class="toc-deg">BSc International Business</span><span class="toc-uni">University of Groningen</span></a></li><li><a href="#tilburg-iba" onclick="goTo('paises-bajos','tilburg-iba');return false;"><span class="toc-deg">BSc International Business Administration</span><span class="toc-uni">Tilburg University</span></a></li><li><a href="#maastricht-ib" onclick="goTo('paises-bajos','maastricht-ib');return false;"><span class="toc-deg">International Business</span><span class="toc-uni">Maastricht University</span></a></li></ul><p class="toc-sec">Universities of Applied Sciences</p><ul><li><a href="#hanze-ib" onclick="goTo('paises-bajos','hanze-ib');return false;"><span class="toc-deg">International Business</span><span class="toc-uni">Hanze University of Applied Sciences</span></a></li><li><a href="#nhlstenden-ib" onclick="goTo('paises-bajos','nhlstenden-ib');return false;"><span class="toc-deg">International Business</span><span class="toc-uni">NHL Stenden University of Applied Sciences</span></a></li><li><a href="#rotterdam-ib" onclick="goTo('paises-bajos','rotterdam-ib');return false;"><span class="toc-deg">International Business</span><span class="toc-uni">Rotterdam University of Applied Sciences</span></a></li><li><a href="#thuas-ib" onclick="goTo('paises-bajos','thuas-ib');return false;"><span class="toc-deg">International Business</span><span class="toc-uni">The Hague University of Applied Sciences</span></a></li><li><a href="#inholland-bi" onclick="goTo('paises-bajos','inholland-bi');return false;"><span class="toc-deg">Business Innovation</span><span class="toc-uni">Inholland University of Applied Sciences</span></a></li></ul></div></div></div>
+  
+<div class="next-box">
+  <h2>¿Qué tienes que hacer ahora?</h2>
+  <p>Echa un vistazo a todas las opciones, explora el perfil de las ciudades, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+  <p>¡Un saludo!</p>
+</div>
+</section>
+<section class="panel" id="tab-rva" role="tabpanel" hidden>
+<section class="prose">
+<h2>Research vs Applied Sciences Universities</h2>
+<p>Como creo que ya te hemos explicado, en la mayoría de países europeos tenemos que diferenciar entre <u>2 tipos de universidades</u>: "<i>Research</i>" y "<i>Applied Sciences</i>". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+<div class="rva-grid">
+<div class="rva-item"><h3>Metodología teórica vs práctica</h3>
+<p>Las universidades de <i>Applied Sciences</i> destacan por usar una metodología muy práctica llamada PBL (<i>Project</i>/<i>Problem Based Learning</i>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <i>Research</i> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p></div>
+<div class="rva-item"><h3>Duración</h3>
+<p>Las universidades de <i>Applied Sciences</i> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+<p>Las de <i>Research</i> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p></div>
+<div class="rva-item"><h3>Ranking / Prestigio</h3>
+<p>El principal motivo por el cual se podría escoger una universidad de <i>Research</i> es por el mayor ranking y prestigio que estas universidades tienen.</p>
+<p>Las universidades de <i>Applied Sciences</i> (<i>Hogeschools</i> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p></div>
+<div class="rva-item"><h3>Acceso a Másteres</h3>
+<p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <i>Research</i> podrás acceder a másteres tanto en universidades de <i>Research</i> como <i>Applied Sciences</i>. En cambio, con tu título de <i>Applied Sciences</i> podrás acceder a másteres en universidades de <i>Applied Sciences</i>, pero si quieres acceder a universidades de <i>Research,</i> te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p></div>
+</div>
+<p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de <i>Research</i> y otra de <i>Applied Sciences</i>):</p>
+<ul class="rva-links">
+<li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank" rel="noopener">Applied Science vs. Research University ↗</a></li>
+<li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank" rel="noopener">Types of universities in the Netherlands ↗</a></li>
+</ul>
+<p>Ahora sí, habiendo comentado estos detalles, te paso las opciones de estudio más interesantes para tu caso particular:</p>
+</section></section>
+
+<section class="panel" id="tab-dinamarca" role="tabpanel" hidden>
+  <div class="country-hero">
+    <span class="flag flag-dk flag-lg" aria-hidden="true"><span class="fx-v"></span><span class="fx-h"></span></span>
+    <div class="ch-text"><h2>Dinamarca</h2><div class="cmeta-row"><div class="cmeta"><span class="mlabel">Matrícula</span><span class="mval">0 € / año</span></div><div class="cmeta"><span class="mlabel">Alojamiento</span><span class="mval">aprox. 600 € / mes</span></div></div><p>Los estudiantes europeos tenemos los <u>estudios</u> subvencionados en Dinamarca, siendo el coste anual que tenemos que pagar de <b class="txt-teal">0€ / año</b>. Adicionalmente, el coste medio del <u>alojamiento</u> en Dinamarca es de aproximadamente 600 € / mes.</p></div>
+  </div>
+  <div class="notice"><strong>⚠️ Calendario de admisión común en las tres universidades danesas</strong><p>Aarhus, Aalborg y SDU comparten el mismo calendario: <b>apertura del proceso de aplicación el 1 de febrero</b>, <b>fecha límite para presentar la matrícula el 15 de marzo</b> y <b>fecha de resolución el 28 de julio</b>. En Aarhus y Aalborg, el certificado de inglés <span class="txt-green">se puede entregar hasta el 5 de julio</span>.</p></div>
+  <div class="sec-sep"><span>RESEARCH UNIVERSITIES</span></div>
+<article class="card" id="aarhus-eba">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://bachelor.au.dk/en/economics-and-business-administration/" target="_blank" rel="noopener">Economics and Business Administration<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Aarhus University · Aarhus · Herning</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><a class="rbadge" href="https://www.shanghairanking.com/universities/aarhus-university" target="_blank" rel="noopener">#81 universidad del mundo</a><span class="rbadge rbadge-gold">#51-75 universidad del mundo en Economics</span><span class="rank-extra"><a href="https://www.shanghairanking.com/rankings/arwu/2026" target="_blank" rel="noopener">Ranking de Shanghái 2026 (posición en Dinamarca)</a></span></div>
+    </div>
+    <div class="card-diff"><span class="dbadge d-red">Muy alta · corte 9.00 (Aarhus)</span><span class="dbadge d-green">Media · corte 7.3 (Herning)</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Se puede estudiar en dos campus distintos: Aarhus (aproximadamente 300.000 habitantes) y Herning (aproximadamente 47.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('dinamarca','map-dinamarca')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">0 €/año (100 % subvencionado)</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">15 de marzo</span></div><div class="mcell"><span class="mlabel">Nota de corte 2026</span><span class="mval">9.00 (campus Aarhus) · 7.3 (campus Herning) de media en Bachiller</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado forma a los estudiantes para afrontar desafíos empresariales, especialmente en el sector privado, y desarrollar estrategias de negocio orientadas al crecimiento. A lo largo del programa se estudian áreas como comportamiento organizacional, estrategia, contabilidad, logística, marketing, finanzas, derecho empresarial, micro y macroeconomía, así como metodologías propias de la administración y economía. El alumno puede personalizar su itinerario eligiendo asignaturas optativas o cursando un semestre en el extranjero, y finalizará con un proyecto de grado. Las clases se imparten principalmente en el campus de Aarhus BSS mediante clases magistrales, sesiones prácticas y trabajo en grupo. Este grado ofrece una amplia preparación para carreras en gestión, marketing, finanzas o desarrollo organizacional, además de acceso a programas de máster especializados en áreas empresariales.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p><b>Aarhus:</b> Aarhus, Dinamarca, es la segunda ciudad más grande del país y destaca por su ambiente joven y universitario: reúne alrededor de 50.000 estudiantes de distintas instituciones, con una vida social activa y un entorno académico internacional. La bicicleta es uno de los medios de transporte más habituales, complementada por autobuses y tranvía ligero; no suele ser necesario tener coche para la vida cotidiana. La internacionalidad es notable, especialmente en la universidad, donde estudian jóvenes de más de 120 nacionalidades; además, el inglés está muy extendido. La oferta cultural incluye el museo de arte ARoS, el museo histórico Den Gamle By, conciertos, festivales, cafeterías y espacios naturales junto al mar. Como dato útil para las familias, encontrar alojamiento estudiantil puede ser difícil cerca del inicio del curso, por lo que <b>conviene buscarlo con antelación</b></p><p><b>Herning:</b> <b>Herning, Dinamarca</b>, es una ciudad de tamaño medio, con unos 51.000 habitantes y un ambiente tranquilo, cercano y orientado a los estudiantes. Cuenta con aproximadamente 6.000 estudiantes y campus de Aarhus University y VIA University College, con programas internacionales en negocios, ingeniería y diseño. La bicicleta y los desplazamientos a pie son habituales; los autobuses cubren trayectos más largos y la estación central conecta con otras ciudades danesas. Su internacionalidad es notable en los campus: alrededor del 35 % del alumnado a tiempo completo de BTECH, la sede local de Aarhus University, es internacional. La oferta cultural incluye el museo de arte contemporáneo HEART, conciertos, teatro, eventos deportivos y grandes ferias. Como dato práctico para las familias, <b>el alojamiento estudiantil suele ser más asequible que en ciudades universitarias danesas mayores</b>, y existen opciones cerca del campus; aun así, conviene reservar con antelación.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos</b>: Bachillerato español, incluyendo las siguientes horas cursadas durante los 3 últimos cursos (4º ESO, 1º y 2º de bachillerato) en las siguientes asignaturas:<ul><li>Matemáticas (250 horas)</li><li>Inglés (210 horas)</li><li>Historia (150 horas) o Economía (210 horas)</li></ul></li><li><b>Requisitos de inglés:<span class="txt-green"> se puede entregar hasta el 5 de julio</span></b><ul><li><b><i>TOEFL:</i></b><ul><li><b><i><u>Antes de 21 de enero, 2026:</u></i></b> Nota mínima: 83, mínimo 20 en cada sección</li><li><b><i><u>Después de 21 de enero, 2026:</u></i></b> Nota mínima: 4.5, mínimo 4.5 en cada sección</li></ul></li><li><b><i>Cambridge</i></b>:<ul><li>CAE (C1) / CPE (C2) nota mínima: 180</li></ul></li><li><b><i>IELTS Academic:</i></b><ul><li>Nota mínima: 6.5, mínimo 6 en cada sección</li></ul></li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura de Proceso de Aplicación:</b> 1 de febrero</li><li><b>Fecha de resolución:</b> 28 de Julio</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 15 de marzo</div>
+    <h5>Proceso de selección</h5><div>Sí, la universidad usa como principal criterio de admisión la nota media de los candidatos. Detalles adicionales del proceso una vez se haya enviado la aplicación disponible en este enlace: <a href="https://bachelor.au.dk/en/afterapplying" target="_blank" rel="noopener">¿Que pasa después de aplicar?</a></div>
+    <h5>Dificultad de acceso</h5><div><ul><li><b>Campus Aarhus: <span class="txt-red">Muy alta</span></b>. En 2026 la nota de corte de la Quota 1, por donde tú entrarías compitiendo también con tu nota media, fue de un 9,5 en la escala danesa, que equivale a un 9.00 de media en Bachiller (nota media de los 2 años sin contar religión)</li><li><b>Campus Herning: Media</b>. En 2026 la nota de corte de la Quota 1, por donde tú entrarías compitiendo también con tu nota media, fue de un 6.9 en la escala danesa, que equivale a un 7.3 de media en Bachiller (nota media de los 2 años sin contar religión)</li></ul></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://bachelor.au.dk/en/economics-and-business-administration/" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article>
+<article class="card" id="aalborg-eba">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.en.aau.dk/education/bachelor/economics-and-business-administration" target="_blank" rel="noopener">Economics and Business Administration<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Aalborg University · Aalborg</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><a class="rbadge" href="https://www.shanghairanking.com/universities/aalborg-university" target="_blank" rel="noopener">#301-400 universidad del mundo</a><a class="rbadge rbadge-gold" href="https://www.shanghairanking.com/universities/aalborg-university" target="_blank" rel="noopener">#301-400 universidad del mundo en Business Administration</a></div>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Media · corte 7.7</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Aalborg (alrededor de 125.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('dinamarca','map-dinamarca')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">100 % subvencionado</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">15 de marzo</span></div><div class="mcell"><span class="mlabel">Nota de corte 2026</span><span class="mval">7.7 de media en Bachiller (Quota 1)</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado combina economía y gestión empresarial con una metodología práctica basada en proyectos (<i>Problem-Based Learning</i>). Desde el inicio, los estudiantes trabajan con casos reales y empresas, integrando teoría y práctica. A lo largo de tres años, se profundiza en áreas como contabilidad, marketing, finanzas, estrategia y derecho mercantil, culminando con un proyecto final vinculado al mundo empresarial o investigativo. El programa ofrece intercambios internacionales, prácticas y alta empleabilidad en sectores como consultoría, finanzas o gestión.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Aalborg es una ciudad universitaria danesa que combina un ambiente juvenil, seguro y moderno con un tamaño manejable para quienes comienzan su vida independiente. Para un estudiante universitarios, ofrece un entorno internacional, oportunidades para conocer gente de distintos países y una vida estudiantil activa. La bicicleta es uno de los medios de transporte habituales, junto con los autobuses; muchas zonas universitarias y residenciales están bien conectadas, por lo que no suele ser imprescindible tener coche. La ciudad cuenta con museos, conciertos, festivales, espacios culturales y zonas de ocio junto al fiordo de Limfjord. El inglés está bastante extendido, especialmente en el entorno universitario, aunque aprender danés facilita la integración a largo plazo. <b>Dato curioso:</b> Aalborg cuenta con más de 20.000 estudiantes y alrededor de 125.000 habitantes, por lo que la comunidad universitaria tiene un peso importante en la vida local. Además, el aeropuerto está a unos 15 minutos del centro, algo práctico para las visitas familiares.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos</b>: Bachillerato español, incluyendo las siguientes horas cursadas durante los 3 últimos cursos (4º ESO, 1º y 2º de bachillerato) en las siguientes asignaturas:<ul><li>Matemáticas (250 horas)</li><li>Inglés (210 horas)</li><li>Historia (150 horas) o Economía (210 horas)</li></ul></li><li><b>Requisitos de inglés:<span class="txt-green"> se puede entregar hasta el 5 de julio</span></b><ul><li>TOEFL (basado en internet): 85 puntos, con un mínimo de 20 en cada sección. Al registrarse hay que introducir el código la universidad 8892.</li><li>Cambridge CAE (C1) / CPE (C2) nota mínima: 180</li><li>IELTS Academic puntuación global mínima de 6.5, con al menos 6.0 en cada sección.</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de febrero</li><li><b>Fecha de resolución:</b> 28 de Julio</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 15 de marzo.</div>
+    <h5>Proceso de selección</h5><div>Sí, la universidad usa como principal criterio de admisión la nota media de los candidatos.</div>
+    <h5>Dificultad de acceso</h5><div><p><b>Media</b>. En 2026 la nota de corte de la Quota 1 (Basado únicamente en notamedia) fue de un 7.5 en la escala danesa, que equivale a un 7.7 de media en Bachiller (nota media de los 2 años sin contar religión). Quota 2 tiene en consideración detalles adicionales del perfil académico / personal.</p></div>
+  </div></details>
+  <p><b>Career Services (Orientacion Laboral):</b> <a href="https://www.students.aau.dk/guidance/career-guidance" target="_blank" rel="noopener">Disponible para todos los estudiantes</a></p>
+  <div class="card-links"><a class="linkbtn" href="https://www.en.aau.dk/education/bachelor/economics-and-business-administration" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article>
+<article class="card" id="sdu-eba">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.sdu.dk/en/uddannelse/bachelor/ha#/uddannelsen" target="_blank" rel="noopener">BA in Economics and Business Administration<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">University of Southern Denmark (SDU) · Sønderborg</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><a class="rbadge" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#301-400 universidad del mundo</a><a class="rbadge rbadge-gold" href="https://www.shanghairanking.com/universities/university-of-southern-denmark" target="_blank" rel="noopener">#101-150 del mundo en Business Administration</a></div>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Media · corte 8.25 (Quota 1)</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Sønderborg (aprox. 28 333 habitantes)</span><button class="mapbtn" onclick="scrollToMap('dinamarca','map-dinamarca')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración y créditos</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">100 % subvencionado</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">15 de marzo</span></div><div class="mcell"><span class="mlabel">Nota de corte 2026</span><span class="mval">8.25 de media en Bachiller (Quota 1)</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este programa se centra en negocios desde una perspectiva global, relaciones colaborativas internacionales y cuestiones culturales en el ámbito empresarial, preparándote para roles en compañías privadas y públicas con enfoque internacional. El programa dura 6 semestres (180 ECTS), combina asignaturas básicas de economía, contabilidad, finanzas, derecho y gestión con cursos específicos sobre marketing global y comunicación intercultural, e incluye la posibilidad de realizar prácticas o estudiar en el extranjero en el quinto semestre, para acabar con un trabajo de fin de grado en el sexto. El entorno es vibrante e internacional, con un alumnado diverso, y ofrece amplias oportunidades profesionales o académicas tras la graduación.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Sønderborg es una ciudad costera del sur de Dinamarca, de tamaño mediano-pequeño y ambiente tranquilo, seguro y familiar. Su universidad (University of Southern Denmark, SDU) reúne aproximadamente 1.300 estudiantes en un entorno académico cercano, innovador e internacional. Destaca la diversidad: hay estudiantes de más de 50 países y numerosos programas impartidos en inglés. La bicicleta es uno de los medios de transporte más habituales: la ciudad es compacta y permite desplazarse fácilmente entre universidad, alojamiento y zonas de ocio. También dispone de autobuses; el automóvil resulta más útil para explorar los alrededores. Su oferta cultural incluye conciertos, cine, festivales, cafés, actividades deportivas y espacios juveniles. <b>Dato curioso:</b> el campus universitario está en Alsion, un edificio que combina universidad, investigación, empresas y sala de conciertos. Además, su proximidad a Alemania permite viajar fácilmente a ciudades como Flensburg o Hamburgo.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b> Título de bachillerato español. Además, es necesario demostrar que has cursado, durante los últimos 3 cursos, las siguientes horas en las siguientes asignaturas:<ul><li>Matemáticas – 250 horas.</li><li>Historia o Economía – 150 horas.</li><li>Inglés – 210 horas.</li></ul></li><li><b>Requisitos de inglés:</b> Aceptan inglés de bachillerato: 210 horas y 6 de nota media en inglés.</li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de febrero</li><li><b>Fecha de resolución:</b> 28 de Julio</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 15 de marzo.</div>
+    <h5>Proceso de selección</h5><div>Sí hay, es obligatorio realizar el examen uniTEST entre el 28 de marzo y el 26 de abril. uniTEST evalúa tu capacidad para pensar y resolver problemas de maneras importantes para completar tu educación universitaria.<blockquote>Por lo tanto, no te evaluamos sobre un plan de estudios específico ni esperamos que lo sepas todo antes de empezar. De hecho, nos interesa principalmente conocer los requisitos fundamentales para tener éxito en la universidad. <a href="https://www.sdu.dk/en/uddannelse/bachelor/bachelor-admission/admission-requirements/admission-test" target="_blank" rel="noopener">Más información</a></blockquote></div>
+    <h5>Dificultad de acceso</h5><div><p><span class="txt-red">Media</span>. Tenemos dos vías de acceso:</p><ul><li><b>Quota 2:</b> el primer cupo en el que nos van a considerar, si tu examen uniTest es muy bueno, puedes conseguir admisión directa. Si es un resultado normal, dependerá del resto de candidatos. Y si es malo, puedes quedar descartado de este cupo y optar solo a la Quota 1 (que mide la nota media final).</li><li><b>Quota 1:</b> en 2026 la nota de corte de la Quota 1, que mide solo la nota media final de bachiller, fue de un 8.3 en la escala danesa, que equivale a un 8.25 de media en Bachiller (nota media de los 2 años sin contar religión).</li></ul></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.sdu.dk/en/uddannelse/bachelor/ha_global_business_relationships" target="_blank" rel="noopener">Enlace a la web de la Universidad ↗</a></div>
+</article>
+  <div class="map-wrap"><h3>Mapa de universidades · Dinamarca</h3><div class="map" id="map-dinamarca"></div></div>
+</section>
+<section class="panel" id="tab-suecia" role="tabpanel" hidden>
+  <div class="country-hero">
+    <span class="flag flag-se flag-lg" aria-hidden="true"><span class="fx-v"></span><span class="fx-h"></span></span>
+    <div class="ch-text"><h2>Suecia</h2><div class="cmeta-row"><div class="cmeta"><span class="mlabel">Matrícula</span><span class="mval">0 € / año</span></div><div class="cmeta"><span class="mlabel">Alojamiento</span><span class="mval">aprox. 700 € / mes</span></div></div><p>Los estudiantes europeos se benefician de una subvención parcial en Suecia, Ubicando así el coste anual en <b class="txt-teal">0 €/año</b>. Adicionalmente, el coste del <u>alojamiento</u> en Suecia ronda los 700€ mensuales.</p></div>
+  </div>
+  
+  <div class="sec-sep"><span>RESEARCH UNIVERSITIES</span></div>
+<article class="card" id="umea-ibe">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.umu.se/en/education/programmes/international-business-and-economics-programme/" target="_blank" rel="noopener">International Business and Economics<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Umeå University · Umeå</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><a class="rbadge" href="https://www.shanghairanking.com/universities/umea-university" target="_blank" rel="noopener">#601-700 universidad del mundo</a><a class="rbadge rbadge-none" href="https://www.shanghairanking.com/universities/umea-university" target="_blank" rel="noopener">No aparece destacada en el ranking específico de Business Administration</a></div>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Media · estimación &gt; 7</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Umeå (aprox. 130.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('suecia','map-suecia')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">0 € (100 % subvencionado)</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">15 de enero (1ª ronda) · 15 de abril (2ª ronda, ciudadanos EU)</span></div><div class="mcell"><span class="mlabel">Nota de corte</span><span class="mval">Sin datos oficiales (estimación: nota final superior al 7)</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado prepara para carreras internacionales en empresas y organizaciones con actividad transnacional. Ofrece una sólida formación en administración de empresas, economía, estadística, análisis de datos y derecho internacional, permitiendo especializarse en business administration o economics. Los estudiantes adquieren habilidades para afrontar retos globales, liderar en entornos multiculturales y adaptarse a la innovación tecnológica. Incluye asignaturas de gestión de proyectos, emprendimiento, contabilidad, economía financiera y modelos económicos, además de la posibilidad de cursar asignaturas optativas, estudiar un semestre en el extranjero o realizar prácticas en Suecia o internacionalmente. El programa culmina con un trabajo de fin de grado y da acceso a másteres en Suecia o en el extranjero.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Umeå es una ciudad universitaria del norte de Suecia, con unos 130.000 habitantes y una población joven e internacional. Cuenta con dos universidades y una comunidad de aproximadamente 29.000-38.000 estudiantes, lo que genera un ambiente académico dinámico, multicultural y con numerosas asociaciones y actividades estudiantiles. La bicicleta es el medio de transporte preferido por muchos estudiantes, gracias a su extensa red de carriles bici; también dispone de autobuses frecuentes y eficientes. Su oferta cultural incluye museos, conciertos, festivales, teatro y exposiciones de arte contemporáneo. <b>Dato curioso:</b> es conocida como la «Ciudad de los Abedules» y cuenta con más de 400 km de pistas de esquí de fondo en invierno. El aeropuerto está a unos 10 minutos del centro y las universidades recomienda buscar alojamiento con antelación, debido a la demanda estudiantil.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos</b>: Título de bachillerato español + Certificado de Calificaciones de 1º y 2º de Bachillerato.</li><li><b>Requisitos de inglés:</b> C1.<ul><li>TOEFL iBT nota mínima: 90 (con al menos 20 en writing).</li><li>Cambridge: se aceptan certificados CAE (C1) mínimo 180 puntos o CPE (C2).</li><li>IELTS Academic nota mínima: 6.5 (ninguna sección por debajo de 5.5)</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 31 de agosto</li></ul><h5>Proceso de aplicación</h5><ul><li><b>Primera ronda (sugerida):</b><ul><li><b>Apertura:</b> (sugerido): 16 de octubre</li><li><b>Fecha limite de aplicación:</b> 15 de enero</li><li><b>Fecha límite de documentos:</b> 1 de Febrero</li><li><b>Fecha de resolución:</b> 8 de Abril</li></ul></li><li><b>Segunda ronda (Para ciudadanos EU):</b><ul><li><b>Apertura</b>: 15 de Marzo</li><li><b>Fecha limite de aplicación:</b> 15 de Abril</li><li><b>Fecha límite para presentar la matrícula:</b> 15 de abril</li><li><b>Fecha de resolución:</b> Julio (7 semanas antes del inicio del curso)</li></ul></li></ul>
+    <div class="deadline">⏰ <b>Primera ronda (sugerida):</b> fecha límite de aplicación 15 de enero · fecha límite de documentos 1 de Febrero<br><b>Segunda ronda (ciudadanos EU):</b> fecha límite de aplicación y de matrícula 15 de abril</div>
+    <h5>Proceso de selección</h5><div>Sí, la universidad usa como principal criterio de admisión la nota media de los candidatos.</div>
+    <h5>Dificultad de acceso</h5><div><p>Media. No contamos con datos oficiales, pero estimamos que haría falta una nota final superior al 7 para tener opciones reales</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.umu.se/en/education/programmes/international-business-and-economics-programme/" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article>
+<article class="card" id="jonkoping-im">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://ju.se/en/study-at-ju/our-programmes/bachelor-programmes/international-management-autumn-2027-ku101.html" target="_blank" rel="noopener">International Management<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Jönköping University · Jönköping</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><span class="rbadge rbadge-none">No aparece en el ranking de Shanghái</span></div>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Media · estimación &gt; 7</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Jönköping (aprox. 146.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('suecia','map-suecia')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">0 € (100 % subvencionado)</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">2 de mayo</span></div><div class="mcell"><span class="mlabel">Nota de corte</span><span class="mval">Sin datos oficiales (estimación: notas superiores al 7, aplicando pronto)</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado prepara a futuros líderes capaces de impulsar el crecimiento empresarial y aprovechar oportunidades en un contexto global. Ofrece una sólida base en economía y estudios empresariales con énfasis en trabajo en equipo directivo y renovación estratégica internacional. Incluye asignaturas como emprendimiento, micro y macroeconomía, gestión organizacional, estrategia y marketing internacional. En el quinto semestre, los estudiantes pueden especializarse mediante intercambios o asignaturas optativas, realizar prácticas en el extranjero o incluso obtener una doble titulación con Kedge Business School en Francia. El programa mantiene estrechos vínculos con empresas colaboradoras, permitiendo trabajar en desafíos reales y adquirir experiencia práctica. Al graduarse, los estudiantes estarán preparados para emprender o trabajar en roles como desarrollador de negocios, gestor de marca, coordinador de marketing o gerente de exportación, tanto en Suecia como internacionalmente, y podrán acceder a programas de máster en JIBS u otras universidades del mundo.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Jönköping es una ciudad de aproximadamente 146.000 habitantes, situada junto al lago Vättern. Tiene un ambiente juvenil, seguro y dinámico, marcado por Jönköping University, que reúne unos 16.000 estudiantes. Su comunidad universitaria es muy internacional, con alrededor de 2.400 estudiantes extranjeros de más de 100 nacionalidades, y una activa vida social con asociaciones, eventos y actividades deportivas. El transporte combina autobuses urbanos, bicicleta y tren; el coche no es imprescindible para la vida cotidiana. La oferta cultural incluye teatros, conciertos, museos, restaurantes y actividades junto al lago. <b>Dato curioso y práctico:</b> Jönköping fue elegida Ciudad Universitaria del Año 2026 en Suecia.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos</b>:<ul><li>Título de bachillerato español + Certificado de Calificaciones de 1º y 2º de Bachillerato.<ul><li>Matemáticas Ciencias Sociales II</li></ul></li></ul></li><li><b>Requisitos de inglés:</b> C1.<ul><li>TOEFL iBT nota mínima: 90 (con al menos 20 en writing).</li><li>Cambridge: se aceptan certificados CAE (C1) mínimo 180 puntos o CPE (C2).</li><li>IELTS Academic nota mínima: 6.5 (ninguna sección por debajo de 5.5)</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 31 de agosto</li></ul><h5>Proceso de aplicación</h5><ul><li>Aplicación directa (sugerida):<ul><li><b>Apertura proceso de aplicación:</b> 16 de octubre</li><li><b>Fecha límite para presentar la matrícula:</b> 2 de mayo</li><li><b>Fecha de resolución:</b> <i>Rolling Admission: El comité de admisiones evalua tu aplicación tan pronto hayan recibido todos los documentos necesarios. La fecha de resolución varia dependiendo de la fecha en la que se completa la aplicación.</i></li></ul></li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 2 de mayo</div>
+    <h5>Proceso de selección</h5><div>Sí hay, en este caso Jonkoping usa un sistema de calificación más abierto, contempla notas y expediente general (Cv, etc). Además, permite hacer matrículas antes que el resto de universidades y va asignando plazas según evalúa a los candidatos (aplicar pronto facilita la admisión).</div>
+    <h5>Dificultad de acceso</h5><div><p>Media. No contamos con datos oficiales, pero estimamos que con notas superiores al 7 y aplicando en las primeras semanas del periodo de matrículas, podríamos tener posibilidades.</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://ju.se/en/study-at-ju/our-programmes/bachelor-programmes/international-management-autumn-2027-ku101.html" target="_blank" rel="noopener">Enlace a la web de la universidad (International Management) ↗</a></div>
+</article>
+  <div class="map-wrap"><h3>Mapa de universidades · Suecia</h3><div class="map" id="map-suecia"></div></div>
+</section>
+<section class="panel" id="tab-alemania" role="tabpanel" hidden>
+  <div class="country-hero">
+    <span class="flag flag-de flag-lg" aria-hidden="true"><span class="fs fs1"></span><span class="fs fs2"></span><span class="fs fs3"></span></span>
+    <div class="ch-text"><h2>Alemania</h2><div class="cmeta-row"><div class="cmeta"><span class="mlabel">Matrícula</span><span class="mval">Sin matrícula · cuota semestral de 363.00 €</span></div><div class="cmeta"><span class="mlabel">Alojamiento</span><span class="mval">aprox. 500 € / mes (Kleve)</span></div></div><p>Aunque no hay coste de <u>matrícula en las universidades públicas</u>, sí que se debe abonar una cuota semestral de <b class="txt-teal"><u>363.00€,</u></b> que incluye el coste del transporte público de la región.</p><p>El precio medio del <u>alojamiento</u> en una ciudad como Kleve es de unos 500€ mensuales.</p></div>
+  </div>
+  
+  <div class="sec-sep"><span>UNIVERSITIES OF APPLIED SCIENCES</span></div>
+<article class="card" id="rhine-waal-ibm">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.hochschule-rhein-waal.de/en/faculties/society-and-economics/degree-programmes/international-business-and-management-ba" target="_blank" rel="noopener">BA International Business and Management<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Rhine-Waal University of Applied Sciences · Kleve</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><span class="rbadge rbadge-none">No aparece en el ranking de Shanghái</span></div><p class="rank-note">Al tratarse de una universidad de Applied Science no figura en el ranking de Shanghai, pues este ranking solo valora las metodologías teóricas e investigativas.</p>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Kleve (53,000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('alemania','map-alemania')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3.5 años (incluyendo un semestre de prácticas), 240 ECTS, applied science</span></div><div class="mcell"><span class="mlabel">Coste de la matrícula</span><span class="mval">365.10€/semestre para estudiantes europeos</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval"><span class="txt-red">15 julio</span></span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>El programa <b>International Business and Management (B.A.)</b> de la Universidad de Ciencias Aplicadas del Rhine-Waal se imparte completamente en inglés en el campus de Kleve y tiene una duración de siete semestres. Formas profesionales con una visión global en administración, economía, marketing, finanzas, sostenibilidad y transformación digital, combinando teoría con experiencia práctica. Incluye un semestre obligatorio en el extranjero y prácticas profesionales, ofreciendo además la posibilidad de obtener un doble título con la Universidad Católica de Valencia. Es un programa con admisión restringida (N.C.) y requiere una práctica inicial de al menos ocho semanas antes de finalizar el cuarto semestre.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Kleve es una pequeña ciudad de aproximadamente 53.000 habitantes, situada en el estado de Renania del Norte-Westfalia, muy cerca de la frontera con Países Bajos. Su ambiente es tranquilo, seguro y familiar, con una vida universitaria joven y multicultural gracias a la <i>Rhine-Waal University of Applied Sciences</i>, que cuenta con unos 3.700 estudiantes en su campus de Kleve. La universidad destaca por su internacionalidad: reúne estudiantes de más de 120 nacionalidades y alrededor del 75 % de sus programas se imparten en inglés. La bicicleta es uno de los medios de transporte más habituales, complementada por autobuses y conexiones ferroviarias regionales. Su oferta cultural incluye museos, cafeterías, actividades deportivas, jardines barrocos y el histórico Castillo de Schwanenburg. <b>Dato curioso y práctico:</b> Nijmegen (Países Bajos) está a poca distancia, lo que permite disfrutar de otra cultura y ampliar las opciones de ocio y excursiones.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b><ul><li>Título de Bachillerato</li></ul></li><li><b>Inglés</b>:<ul><li>IELTS Academic (minimum score: 5.5)</li><li>TOEFL iBT (minimum score: 72 or 4 as of 21.01.2026)</li><li>Cambridge First Certificate in English +Grade A (FCE)</li><li>Cambridge of Advanced English + Grade B or C (CAE)</li><li>Pearson PTE Academic PTE Academic (score 59 ‐ 75)</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> Primera semana de abril</li><li><b>Fecha de resolución:</b> <span class="txt-red"><b>Agosto</b></span></li></ul>
+    <div class="deadline">⏰ <span class="txt-red"><b>Fecha límite: 15 julio</b></span></div>
+    <h5>Proceso de selección</h5><div>Los solicitantes deben aplicar <b>a través de la plataforma uni-assist</b>. Las solicitudes enviadas por otros medios no serán aceptadas.<ul><li>Para los programas con admisión restringida (N.C.) como International Business, se puede aplicar hasta el 15 de julio a un máximo de tres programas. Si hay más solicitantes que plazas, se realiza un proceso de selección legalmente regulado. Este programa se gestiona mediante el procedimiento DoSV en hochschulstart.de, donde el solicitante debe registrarse y obtener los códigos BID y BAN para completar la solicitud en uni-assist. Los ciudadanos de la UE son tratados igual que los alemanes. Un 7% de las plazas se reserva para otros solicitantes internacionales, seleccionados según su promedio académico (GPA).</li></ul></div>
+    <h5>Dificultad de acceso</h5><div><p><span class="txt-green"><b>BAJA</b></span></p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.hochschule-rhein-waal.de/en/international-business-and-management-ba" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article>
+  <div class="map-wrap"><h3>Mapa de universidades · Alemania</h3><div class="map" id="map-alemania"></div></div>
+</section>
+<section class="panel" id="tab-belgica" role="tabpanel" hidden>
+  <div class="country-hero">
+    <span class="flag flag-be flag-lg" aria-hidden="true"><span class="fs fs1"></span><span class="fs fs2"></span><span class="fs fs3"></span></span>
+    <div class="ch-text"><h2>Bélgica</h2><div class="cmeta-row"><div class="cmeta"><span class="mlabel">Matrícula</span><span class="mval">1.181 € / año</span></div><div class="cmeta"><span class="mlabel">Alojamiento</span><span class="mval">aprox. 600 € / mes</span></div></div><p>Los estudiantes europeos tenemos los <u>estudios</u> parcialmente subvencionados en Bélgica, siendo el coste anual que tenemos que pagar de <b class="txt-teal"><u>1.181€/año.</u></b> El precio medio del <u>alojamiento</u> en Bélgica es de aproximadamente unos 600€ / mes.</p></div>
+  </div>
+  
+  <div class="sec-sep"><span>RESEARCH UNIVERSITIES</span></div>
+<article class="card" id="kuleuven-ba">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://onderwijsaanbod.kuleuven.be/opleidingen/e/SC_53266472/diploma_omschrijving" target="_blank" rel="noopener">Business Administration<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">KU Leuven · Bruselas</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><a class="rbadge" href="https://www.shanghairanking.com/universities/ku-leuven" target="_blank" rel="noopener">#87 universidad del mundo</a><a class="rbadge rbadge-gold" href="https://www.shanghairanking.com/universities/ku-leuven" target="_blank" rel="noopener">#101-150 universidad del mundo en Business Administration</a></div>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Media</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Brussels (aproximadamente 1.25 millones de habitantes)</span><button class="mapbtn" onclick="scrollToMap('belgica','map-belgica')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">1.181 €/año (2026-2027)</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">1 de Julio</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado prepara a los estudiantes para desenvolverse en un entorno empresarial cada vez más complejo y globalizado, donde los mercados trascienden fronteras y la tecnología mantiene el comercio activo las 24 horas. Durante tres años, combina un enfoque práctico con una sólida base académica para formar gestores capaces de tomar decisiones estratégicas informadas frente a retos económicos. Impartido en inglés y con marcado enfoque internacional, el programa ofrece intercambios con numerosas universidades y la posibilidad de obtener doble titulación con Kedge Business School (Marsella) o la University of Galway (Irlanda). Está dirigido a quienes se sienten atraídos por el mundo de los negocios, valoran el trabajo en equipos multiculturales, desean estudiar en Bruselas y aspiran a una carrera internacional con experiencia práctica y un grado académico.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Bruselas es una capital cosmopolita de aproximadamente 1,25 millones de habitantes, con un ambiente universitario dinámico y multicultural. Cuenta con más de 140.000 estudiantes y universidades reconocidas como la Université libre de Bruxelles (ULB) y la Vrije Universiteit Brussel (VUB).</p><p>Su población reúne más de 180 nacionalidades, con el francés y el neerlandés como idiomas principales y una importante presencia del inglés.</p><p>El transporte público (metro, tranvía y autobús) es muy utilizado; también se camina y se utiliza cada vez más la bicicleta, por lo que no es indispensable tener automóvil. La oferta cultural es excepcional: museos, conciertos, festivales, teatros y patrimonio arquitectónico. <b>Dato curioso:</b> Bruselas alberga las principales instituciones de la Unión Europea y permite viajar fácilmente en tren a París, Ámsterdam o Londres, una ventaja para estudiantes y familias que quieran explorar Europa</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos</b>:<ul><li>Título de Bachiller y EVAU</li><li>Superar prueba online de matemáticas <b><i><u>(Gratuita)</u></i></b><ul><li><a href="https://www.kuleuven.be/programmes/bachelor-business-administration/bba-prerequisites.pdf?_gl=1*16tf1w4*_gcl_aw*R0NMLjE3OTIxNTE5NzEuQ2owS0NRandsc2ZXQmhENEFSSXNBQ0w3cDFHQlAxemtUTDlUdjljcGZnVEU3M0RKUUN4TUFaNk1Na1lpVU8zLW1sOE9HcDg3d2k4UXFsWWFBcHBmRUFMd193Y0I.*_gcl_au*NzM3MjI0NTMyLjE3OTA2ODYwNjM." target="_blank" rel="noopener">Conceptos de prueba de matemáticas</a></li></ul></li></ul></li><li><b>Requisitos de inglés:</b><ul><li><b>TOEFL:</b> 90 (Nota mínima de 20 en los subcomponentes)</li><li><b>IELTS:</b> 6.5</li><li><b>CPE:</b> No especifica nota mínima</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 21 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 8 de octubre</li><li><b>Fecha de resolución:</b> 6 a 8 semanas después de la aplicación (Rolling Admissions)</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 1 de Julio</div>
+    <h5>Proceso de selección</h5><div>No hay proceso de selección, aunque la universidad dice que se reservan la posibilidad de no dar admisiones a perfiles que crean que no tengan un buen encaje con su programa tras ver su expediente completo.</div>
+    <h5>Dificultad de acceso</h5><div><p>Media.</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.kuleuven.be/programmes/bachelor-business-administration" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article><div class="sec-sep"><span>UNIVERSITIES OF APPLIED SCIENCES</span></div>
+<article class="card" id="vives-bm">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.vives.be/en/commercial-sciences-business-management/bachelor-business-management-english-programme" target="_blank" rel="noopener">Bachelor of Business Management<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">VIVES University of Applied Sciences · Kortrijk</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><span class="rbadge rbadge-none">No aparece en el ranking de Shanghái</span></div><p class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Kortrijk (aprox. 81.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('belgica','map-belgica')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">1.181 € / año (2026-2027)</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">1 de Julio</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Si te apasiona el negocio internacional o sueñas con emprender, este programa te ofrece muchas posibilidades: desde marketing y emprendimiento hasta idiomas, desarrollarás habilidades clave como comunicación multilingüe, trabajo en equipo y capacidad para convencer con tus ideas, siempre con enfoque internacional. Estudiarás en grupos reducidos con atención personalizada, explorando el uso de IA y tecnologías emergentes gracias a The Flax, la Casa de la IA de VIVES. Podrás obtener certificaciones de Google en el curso de Digital Marketing Academy, aprender de compañeros de todo el mundo y enfocarte en un negocio sostenible con impacto positivo. Además, el programa incluye viajes de estudio a países como Francia, España, Alemania, China, Chile o Indonesia.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Kortrijk (Courtrai) es una ciudad de aproximadamente 81.000 habitantes, situada en Flandes Occidental, con un ambiente juvenil y universitario en crecimiento. Cuenta con cuatro instituciones de educación superior: Howest, VIVES, KU Leuven-Kulak y UGent, que reúnen alrededor de 18.600 estudiantes.</p><p>Tiene una comunidad internacional creciente, aunque conserva un carácter local y flamenco, por lo que el neerlandés es el idioma predominante. La bicicleta y los desplazamientos a pie son habituales; también dispone de autobuses y buenas conexiones ferroviarias con otras ciudades belgas. Su oferta cultural incluye museos, cine independiente, galerías, festivales y una animada vida estudiantil. <b>Dato de interés:</b> Lille (Francia) está a unos 25 km, lo que permite explorar otro país fácilmente. Además, existen opciones de alojamiento estudiantil y ventajas de transporte para estudiantes.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b> Bachillerato español</li><li><b>Requisitos de inglés:</b><ul><li>TOEFL iBT nota mínima: 79</li><li>Cambridge: puntuación mínima global de 169 en los componentes de Reading, Use of English, Writing, Listening y Speaking (calificación A, B o C).</li><li>IELTS Academic nota mínima: 6.0</li><li>Duolingo English Test min. 105</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 22 de Septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de Enero</li><li><b>Fecha de resolución:</b> 6 a 8 semanas después de la aplicación (Rolling Admissions)</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 1 de Julio</div>
+    <h5>Proceso de selección</h5><div>No hay proceso de selección. Todos los candidatos que cumplan los requisitos de admisión deberían recibir su oferta condicional tras presentar la matrícula, que será oficial al presentar las notas finales.</div>
+    <h5>Dificultad de acceso</h5><div><p>Baja</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.vives.be/en/commercial-sciences-business-management/bachelor-business-management-english-programme" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article>
+<article class="card" id="artevelde-ib">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.arteveldehogeschool.be/en/programmes/bachelor/international-business-management" target="_blank" rel="noopener">International Business<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Artevelde University of Applied Sciences · Gante (Gent)</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><span class="rbadge rbadge-none">No aparece en el ranking de Shanghái</span></div><p class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Gent (aprox. 270.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('belgica','map-belgica')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">1.181€</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">31 de agosto</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado ofrece una formación con profunda inmersión intercultural y cooperación transnacional, con estudiantes de más de 60 nacionalidades. Está pensado para personas con mentalidad abierta, actitud independiente y ganas de aprender sobre contabilidad, derecho, finanzas, marketing, comercio e informática, además de dominar un idioma extranjero como chino, alemán o español. Incluye un enfoque práctico con clases en grupos reducidos, visitas a empresas, conferencias de expertos y estudios de casos internacionales. Los estudiantes pueden realizar intercambios en más de 100 universidades asociadas en todo el mundo, con oportunidades de estudio en Taiwán o Brasil y prácticas en países como Perú, China o Nueva Zelanda. Además, ofrece opciones de doble titulación en Austria y Canadá, preparando a sus graduados para trabajar o emprender en sectores como banca, comercio, ONG o tecnologías de la información en cualquier parte del mundo.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Gent es una ciudad flamenca de aproximadamente 270.000 habitantes y uno de los principales centros universitarios de Bélgica, con más de 70.000 estudiantes. Alberga varias instituciones de educación superior, creando un ambiente joven, dinámico e internacional. Conviven más de 160 nacionalidades y, aunque el neerlandés es el idioma oficial, el inglés está bastante extendido en el entorno universitario. La bicicleta y los desplazamientos a pie son los medios más habituales entre estudiantes; también dispone de una buena red de tranvías y autobuses. El automóvil no es necesario para la vida cotidiana. Su oferta cultural incluye museos, castillos medievales, conciertos, festivales, teatros y una animada vida nocturna. <b>Dato de interés:</b> Bruselas está a unos 30 minutos en tren, lo que facilita conexiones internacionales y visitas familiares.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b> Bachillerato español</li><li><b>Requisitos de inglés:</b><ul><li>TOEFL iBT nota mínima: 79</li><li>Cambridge: puntuación mínima global de 168 en los componentes de Reading, Use of English, Writing, Listening y Speaking (calificación A, B o C).</li><li>IELTS Academic nota mínima: 6.5</li><li>Duolingo English Test min. 115</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> Segunda semana de Septiembre</li><li><b>Apertura proceso de aplicación:</b> 2da semana de Noviembre (Aproximadamente)</li><li><b>Fecha de resolución:</b> 6- 8 semanas (aproximadamente). Rolling admissions</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 31 de agosto</div>
+    <h5>Proceso de selección</h5><div>No hay proceso de selección. Todos los candidatos que cumplan los requisitos de admisión deberían recibir su oferta condicional tras presentar la matrícula, que será oficial al presentar las notas finales.</div>
+    <h5>Dificultad de acceso</h5><div><p>Baja</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.arteveldehogeschool.be/en/programmes/bachelor/international-business-management" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article>
+<article class="card" id="thomasmore-ibm">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://thomasmore.be/en/educations/degree-students/business-management" target="_blank" rel="noopener">International Business Management (especialización en International Business and Trade)<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Thomas More University of Applied Sciences · Malinas (Mechelen)</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><span class="rbadge rbadge-none">No aparece en el ranking de Shanghái</span></div><p class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Mechelen (aprox. 90.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('belgica','map-belgica')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">1.181 €</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">31 de Mayo</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado está diseñado para formar profesionales con visión global y habilidades prácticas en comercio internacional, logística, marketing y ventas. A través de clases interactivas, proyectos reales y simulaciones, los estudiantes desarrollan competencias en negociación internacional, finanzas, derecho comercial y gestión intercultural. Incluye aprendizaje de un segundo idioma (francés, alemán o español) y fuertes vínculos con el mundo empresarial, con prácticas obligatorias en el último semestre que pueden realizarse en Bélgica o en el extranjero. El enfoque práctico se refuerza con un proyecto de consultoría internacional y oportunidades de intercambio en universidades asociadas, preparando a los graduados para carreras en comercio global, logística, marketing y gestión empresarial internacional.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Mechelen es una ciudad flamenca de aproximadamente 90.000 habitantes, situada estratégicamente entre Bruselas y Amberes. Ofrece un ambiente juvenil, acogedor y multicultural, con una importante comunidad estudiantil, especialmente vinculada a Thomas More University of Applied Sciences, que cuenta con unos 8.000 estudiantes en sus campus locales. También destaca por su creciente internacionalización, con estudiantes de numerosas nacionalidades. La bicicleta y los desplazamientos a pie son habituales; dispone además de autobuses urbanos y excelentes conexiones ferroviarias. No es necesario tener automóvil. Su oferta cultural incluye museos, teatros, festivales, arquitectura medieval y actividades musicales. <b>Dato de interés:</b> Bruselas y Amberes están a solo 20 minutos en tren, facilitando excursiones, conexiones internacionales y visitas familiares.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b> Bachillerato español</li><li><b>Requisitos de inglés:</b><ul><li>TOEFL iBT nota mínima: 79</li><li>Cambridge: puntuación mínima global de 169 en los componentes de Reading, Use of English, Writing, Listening y Speaking (calificación A, B o C).</li><li>IELTS Academic nota mínima: 6.0</li><li>Duolingo English Test min. 110</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> Primera semana de septiembre</li><li><b>Apertura proceso de aplicación:</b> 25 de enero</li><li><b>Fecha de resolución:</b> 6- 8 semanas (aproximadamente). Rolling admissions</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 31 de Mayo</div>
+    <h5>Proceso de selección</h5><div>No hay proceso de selección. Todos los candidatos que cumplan los requisitos de admisión deberían recibir su oferta condicional tras presentar la matrícula, que será oficial al presentar las notas finales.</div>
+    <h5>Dificultad de acceso</h5><div><p>Baja</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://thomasmore.be/en/educations/degree-students/business-management" target="_blank" rel="noopener">Web de la universidad ↗</a></div>
+</article>
+  <div class="map-wrap"><h3>Mapa de universidades · Bélgica</h3><div class="map" id="map-belgica"></div></div>
+</section>
+<section class="panel" id="tab-paises-bajos" role="tabpanel" hidden>
+  <div class="country-hero">
+    <span class="flag flag-nl flag-lg" aria-hidden="true"><span class="fs fs1"></span><span class="fs fs2"></span><span class="fs fs3"></span></span>
+    <div class="ch-text"><h2>Países Bajos</h2><div class="cmeta-row"><div class="cmeta"><span class="mlabel">Matrícula</span><span class="mval">2.771 € / año</span></div><div class="cmeta"><span class="mlabel">Alojamiento</span><span class="mval">media 850 € / mes (más de 1.000 € en ciudades grandes)</span></div></div><p>Los estudiantes europeos se benefician de una subvención parcial de los <u>estudios</u> universitarios a nivel de grado en Países Bajos, lo cual ubica el coste de matrícula en <b class="txt-teal">2.771 €/año</b>.</p><p>Cae destacar que el alojamiento en Paises Bajos suele ser mas elevado en otros países europeos, siendo la media 850 euros, aunque llegando a marcar una media superior a los 1000 euros en ciudades grandes como Amsterdam, Rotterdam, La Haya o Eindhoven.</p></div>
+  </div>
+  
+  <div class="sec-sep"><span>RESEARCH UNIVERSITIES</span></div>
+<article class="card" id="twente-iba">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.utwente.nl/en/education/bachelor/programmes/international-business-administration/" target="_blank" rel="noopener">International Business Administration<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">University of Twente · Enschede</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><a class="rbadge" href="https://www.shanghairanking.com/universities/university-of-twente" target="_blank" rel="noopener">#501-600 del mundo</a><a class="rbadge rbadge-gold" href="https://www.shanghairanking.com/institution/university-of-twente" target="_blank" rel="noopener">#100-150 del mundo del programa de business</a></div>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja · sin selección</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Enschede (162.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('paises-bajos','map-paises-bajos')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">2.771€</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">1 de Julio</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>En este grado aprenderás lo necesario para ayudar a las empresas, incluidos sus empleados, máquinas y procesos, a desempeñarse mejor y de manera más sostenible en nuestra sociedad en rápida digitalización. Aprenderás rápidamente sobre gestión de empresas, abarcando disciplinas como modelos de negocios, ingeniería financiera y gestión de proyectos. También te convertirás en un experto en IT con conocimientos de programación, diseño de software, interacción entre humanos y tecnología, o sistemas de gestión de flujo de trabajo que te permitirán automatizar los procesos comerciales logísticos, administrativos y financieros dentro de una organización. Este grado te ayudará a comprender los problemas y desafíos que las empresas pueden enfrentar, y te dará las habilidades necesarias para resolverlos mediante el diseño e implementación de sistemas socio-técnicos y digitales complejos, eficaces y orientados al futuro.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Enschede es una ciudad de aproximadamente 162.000 habitantes, situada al este de los Países Bajos, cerca de la frontera alemana. Es un importante centro universitario, con cerca de 30.000 estudiantes y tres instituciones destacadas: University of Twente, Saxion University of Applied Sciences y ArtEZ. Su ambiente es juvenil, dinámico e internacional, con más de 150 nacionalidades y una amplia oferta de programas en inglés. La bicicleta es el medio de transporte más habitual entre estudiantes, complementado por autobuses y trenes. No es necesario disponer de automóvil. Su oferta cultural incluye museos, teatros, festivales musicales, asociaciones estudiantiles y una animada vida social en el centro. <b>Dato curioso:</b> Enschede organiza la <i>Batavierenrace</i>, considerada la mayor carrera universitaria de relevos del mundo. Además, está a poca distancia de Alemania, ideal para excursiones internacionales</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b><ul><li>Título de bachiller aprobado con una media de 5 en cada asignatura + EVAU (apto)</li><li>Matemáticas en el EVAU (apto)</li></ul></li><li><b>De nivel de inglés:</b><ul><li><b>IELTS:</b> Nota mínima 6.0 (mínimo 5.5 en cada subcomponente)</li><li><b>TOEFL:</b> Nota mínima 90 (mínimo 21 en cada subcomponente)</li><li><b>C1 Advanced:</b> Puntaje mínimo de 169 (mínimo de 162 en cada subcomponente)</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de octubre</li><li><b>Fecha de resolución:</b> 6- 8 semanas (aproximadamente). Rolling admissions</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 1 de Julio</div>
+    <h5>Proceso de selección</h5><div><b>No hay proceso de selección</b>: si se cumplen los requisitos, tu admisión está prácticamente garantizada.</div>
+    <h5>Dificultad de acceso</h5><div><p><span class="txt-green"><b>BAJA</b></span></p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.utwente.nl/en/education/bachelor/programmes/international-business-administration/study-programme/" target="_blank" rel="noopener">Curriculum ↗</a> <a class="linkbtn" href="https://www.utwente.nl/en/education/study-choice-calendar/bsc-online-open-days/" target="_blank" rel="noopener">Open Days ↗</a> <a class="linkbtn" href="https://www.utwente.nl/en/education/bachelor/programmes/international-business-administration/" target="_blank" rel="noopener">Web de la universidad ↗</a></div>
+</article>
+<article class="card" id="groningen-ib">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.rug.nl/bachelors/international-business/" target="_blank" rel="noopener">BSc International Business<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">University of Groningen · Groningen</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><a class="rbadge" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#84 universidad del mundo</a><a class="rbadge rbadge-gold" href="https://www.shanghairanking.com/universities/university-of-groningen" target="_blank" rel="noopener">#46 universidad del mundo en Business Administration</a></div>
+    </div>
+    <div class="card-diff"><span class="dbadge d-orange">Alta · Numerus Fixus</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Groningen (250.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('paises-bajos','map-paises-bajos')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">2.771 €</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">15 de enero</span></div><div class="mcell"><span class="mlabel">Plazas</span><span class="mval">Numerus Fixus: 400 plazas</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>El plan de estudios del Grado en International Business ofrece una visión integral de la empresa desde una perspectiva internacional. Combina asignaturas fundamentales en administración de empresas —finanzas, marketing, economía, gestión estratégica, organización, métodos cuantitativos— con un fuerte enfoque en la internacionalización de los negocios. A lo largo de los tres años, los estudiantes aprenden cómo funcionan las empresas en mercados globales y cómo las diferencias culturales, institucionales y económicas influyen en la toma de decisiones empresariales.</p><p>El programa incluye un <b>módulo obligatorio de movilidad internacional</b>: cada estudiante debe cursar un semestre en el extranjero en una de las universidades socias de Groningen o realizar prácticas internacionales. Esta experiencia busca reforzar las competencias interculturales, la adaptación a nuevos entornos y la creación de redes profesionales en el extranjero.</p><p>Además, hay espacio para la especialización mediante <b>optativas avanzadas</b> en temas como gestión internacional, estrategia corporativa global, negocios sostenibles o economía de mercados emergentes. También se presta gran atención a los métodos de investigación, preparando al estudiante tanto para el mercado laboral como para la continuación en programas de máster.</p><p>Al terminar, los graduados cuentan con competencias en análisis de mercados internacionales, gestión intercultural, dirección estratégica y habilidades de comunicación en inglés, además de haber vivido una experiencia académica y cultural internacional. Las salidas profesionales abarcan áreas como consultoría, marketing internacional, comercio exterior, gestión financiera y estratégica, recursos humanos globales y puestos de dirección en empresas multinacionales o instituciones internacionales.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Groningen es una ciudad universitaria joven, dinámica y relativamente compacta, con aproximadamente 250.000 habitantes, de los cuales cerca de 60.000 son estudiantes. Su ambiente es marcadamente universitario, con una comunidad estudiantil activa y numerosas asociaciones académicas, deportivas y sociales. La bicicleta es el medio de transporte por excelencia: gran parte de los desplazamientos cotidianos se realizan en dos ruedas. También cuenta con autobuses y conexiones ferroviarias; no es necesario depender de un automóvil. Es una ciudad internacional y multicultural, con estudiantes de más de 120 nacionalidades y amplia presencia del inglés. Su oferta cultural incluye museos, teatros, conciertos y festivales como Eurosonic y Noorderzon. <b>Dato curioso:</b> ¡aproximadamente uno de cada cuatro habitantes es estudiante! Además, la Universidad de Groningen, fundada en 1614, es una de las más antiguas de los Países Bajos. Es un entorno atractivo para combinar formación académica, independencia y experiencias internacionales</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Numerus Fixus:</b> 400 plazas disponibles</li><li><b>Académicos:</b> Bachillerato español con Matemáticas de 2º curso</li><li><b>Requisitos de inglés:</b><ul><li><b>IELTS Academic:</b> Nota mínima 6 (Speaking &amp; Writing:6, Listening &amp; Reading: 5.5);</li><li><b>TOEFL internet-based:</b> overall score 80 (Speaking 20, Writing 20)</li><li>Cambridge C1 Advanced or C2 Proficiency (overall score 169, Speaking &amp; Writing 165, Listening 160, Reading 160).</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1ra semana de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de octubre</li><li><b>Fecha de resolución:</b> 15 de abril</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 15 de enero</div>
+    <h5>Proceso de selección</h5><div>Sí hay proceso de selección, hay solo 400 plazas y hay que competir con otros estudiantes para conseguir ser admitido. El criterio de selección será el resultado de unos formularios web llamados <b><i>“IB Programme Fit &amp; Benchmarking Activity”</i></b>, una novedad de este curso. Según la universidad informa los formularios tienen el objetivo de buscar el <b><i>“match”</i></b> con el tipo de estudiantes que buscan, y no se valorarán aspectos como la nota media escolar o CV, sino solo las respuestas a estos formularios. El 15 de enero se os invitará a una sesión de prueba, y a partir de febrero se confirmará el horario de la prueba real de cada candidato. <a href="https://www.rug.nl/feb/education/study-programmes/numerus-fixus-bsc-ib/?lang=en" target="_blank" rel="noopener">Mas información.</a></div>
+    <h5>Dificultad de acceso</h5><div><p><span class="txt-red"><b>Alta</b></span></p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.rug.nl/bachelors/international-business/" target="_blank" rel="noopener">Web de la universidad ↗</a></div>
+</article>
+<article class="card" id="tilburg-iba">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.tilburguniversity.edu/education/bachelors-programs/international-business-administration" target="_blank" rel="noopener">BSc International Business Administration<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Tilburg University · Tilburg</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><a class="rbadge" href="https://www.shanghairanking.com/universities/tilburg-university" target="_blank" rel="noopener">#801-900 universidad del mundo</a><a class="rbadge rbadge-gold txt-red" href="https://www.shanghairanking.com/universities/tilburg-university" target="_blank" rel="noopener">#17 universidad del mundo en Business Administration</a></div>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Tilburg (230.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('paises-bajos','map-paises-bajos')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">2.771 €/año</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">1 de mayo</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Ayuda a las empresas a marcar la diferencia en todo el mundo. En el programa de Administración de Empresas Internacionales, aprenderás cómo funcionan las organizaciones internacionales y cómo las normas culturales influyen en los negocios. Adquirirás una amplia perspectiva sobre economía, cultura y liderazgo, al tiempo que desarrollarás habilidades para el trabajo en equipo, la presentación de proyectos y el pensamiento crítico. Este programa te prepara para una carrera directiva en un entorno internacional.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Tilburg es una ciudad de aproximadamente 231.000 habitantes, situada al sur de los Países Bajos. Tiene un ambiente joven y universitario, con unos 30.000 estudiantes y una vida social activa, especialmente alrededor de Tilburg University y Fontys. La bicicleta es uno de los medios de transporte más utilizados, complementada por autobuses y trenes; vivir sin automóvil es perfectamente viable. Es una ciudad multicultural, con estudiantes de más de 120 nacionalidades y numerosos programas impartidos en inglés. Su oferta cultural incluye museos, teatros, conciertos y festivales de música; destaca el recinto 013, referente de la música en directo. <b>Dato curioso:</b> aproximadamente una de cada cinco personas está vinculada a la vida estudiantil. Además, Tilburg está muy bien conectada por tren con otras ciudades neerlandesas y con Bélgica, facilitando los viajes y las visitas familiares.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b> Bachillerato + EVAU superada con nota mínima de 6/10 en todas las materias de la fase obligatoria<ul><li><span class="txt-red"><b><i>PAU/EVAU Matematicas II o Matematicas Aplicadas a las CCSS con una nota mínima de 6</i></b></span></li></ul></li><li><b>Requisitos de inglés <span class="txt-red">necesario presentarlo al enviar la matricula (máximo 1 de mayo):</span></b><ul><li>IELTS Academic mínimo overall 6.0 y ninguna subseccion por debajo del 5.5</li><li>TOEFL internet-based overall score 80 y un mínimo de 17 en Speaking y 19 en Writing).</li><li>Cambridge C1 (CAE) mínimo 169 overall y un mínimo de 162 en Writing y Speaking</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de octubre</li><li><b>Fecha de resolución:</b> 4-6 semanas después de haber aplicado. Rolling admissions.</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 1 de mayo</div>
+    <h5>Proceso de selección</h5><div>No hay proceso de selección. Todos los candidatos que cumplan los requisitos de admisión deberían recibir su oferta condicional tras presentar la matrícula, que será oficial al presentar las notas finales.</div>
+    <h5>Dificultad de acceso</h5><div><p>Baja</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.tilburguniversity.edu/education/bachelors-programs/international-business-administration" target="_blank" rel="noopener">Web de la universidad ↗</a></div>
+</article>
+<article class="card" id="maastricht-ib">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="http://maastrichtuniversity.nl/education/bachelor/programmes/international-business" target="_blank" rel="noopener">International Business<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Maastricht University · Maastricht</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><a class="rbadge" href="https://www.shanghairanking.com/universities/maastricht-university" target="_blank" rel="noopener">#301-400 universidad del mundo</a><a class="rbadge rbadge-gold" href="https://www.shanghairanking.com/universities/maastricht-university" target="_blank" rel="noopener">#201-300 universidad del mundo en Business Administration</a></div>
+    </div>
+    <div class="card-diff"><span class="dbadge d-orange">Alta</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Maastricht (123.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('paises-bajos','map-paises-bajos')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">3 años (180 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">2.771€</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">31 de agosto</span></div><div class="mcell"><span class="mlabel">Nota requerida</span><span class="mval">Media superior a 7,0 en el último año de Bachiller</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>En el programa de Negocios Internacionales, descubrirás todos los entresijos de la gestión de empresas internacionales, desde los pequeños detalles hasta una perspectiva global. Analizarás cuestiones como: ¿De dónde se obtienen las materias primas?, ¿Cómo se gestiona al personal y las finanzas?, ¿Cómo se debe fabricar, comercializar y vender el producto?, ¿Cuál es la mejor forma de evaluar las ventas y ajustar la estrategia según sea necesario?, etc.</p><p>Abordarás temas que van desde la contabilidad hasta el marketing, pasando por la gestión de la cadena de suministro y la gestión de la información. Además, desarrollarás las cualidades personales que necesitarás para triunfar en el mundo de los negocios internacionales: adaptabilidad, creatividad, seguridad en ti mismo y mucho más. No es de extrañar que este programa encabece las clasificaciones neerlandesas año tras año.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Maastricht es una ciudad de aproximadamente 123.000 habitantes, histórica, acogedora y con un ambiente universitario muy internacional. Maastricht University cuenta con cerca de 23.000 estudiantes y destaca por su metodología de aprendizaje basado en problemas y trabajo en pequeños grupos. Más del 60% de sus estudiantes son internacionales, procedentes de 128 nacionalidades. La bicicleta y los desplazamientos a pie son habituales; también dispone de autobuses y buenas conexiones ferroviarias, por lo que no es necesario tener automóvil. Su oferta cultural incluye museos, teatros, cines, conciertos, festivales y una animada vida gastronómica.</p><p><b>Dato curioso:</b> Maastricht está situada junto a las fronteras de Bélgica y Alemania, lo que permite viajar fácilmente a otros países europeos. Además, fue la ciudad donde se firmó el Tratado de Maastricht (1992), que dio origen a la Unión Europea.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos</b>: Título de Bachiller con una nota media superior a 7,0 en el último año + Prueba de Acceso a la Universidad PAU, EBAU o EvAU, con calificación de APTO.<ul><li><i>Matemáticas aplicadas a las Ciencias Sociales I y II</i></li></ul></li><li><b>Requisitos de inglés:</b><ul><li>Como has estudiado y vas a seguir estudiando inglés hasta el último año de tu formación secundaria en España, cumples automáticamente con los requisitos de inglés, y no necesitas entregar un certificado oficial de inglés</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de octubre</li><li><b>Fecha de resolución:</b> 15 de Abril</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 31 de agosto</div>
+    <h5>Proceso de selección</h5><div>Sí hay proceso de selección, hay que competir con otros estudiantes para conseguir ser admitido. Los criterios de selección son:<ul><li>33% las notas de 1º de bachiller</li><li>33% El resultado de una especie de formulario online llamado “International Classroom Essay”, en la que te consultarán sobre tus motivaciones, planes de futuro, etc</li><li>33% tu perfil extraescolar, valorando tu CV y resto de documentos que podamos aportar</li></ul></div>
+    <h5>Dificultad de acceso</h5><div><p>Dificultad de admisión: <span class="txt-red"><b>ALTA</b></span></p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="http://maastrichtuniversity.nl/education/bachelor/programmes/international-business" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article><div class="sec-sep"><span>UNIVERSITIES OF APPLIED SCIENCES</span></div>
+<article class="card" id="hanze-ib">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.hanze.nl/en/programmes/full-time/bachelor/international-business-4-year" target="_blank" rel="noopener">International Business<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Hanze University of Applied Sciences · Groningen</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><span class="rbadge rbadge-none">No aparece en el ranking de Shanghái</span></div><p class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Groningen (aprox. 250.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('paises-bajos','map-paises-bajos')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">4 años (240 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">2.771 € / año</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">15 de agosto</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado forma líderes con visión global mediante una enseñanza en inglés que combina teoría, proyectos reales y experiencias internacionales desde el inicio. Incluye un año completo en el extranjero (intercambio académico y prácticas profesionales), y permite especializarse en áreas como marketing, finanzas o RRHH. Los estudiantes desarrollan liderazgo, comunicación intercultural y pensamiento crítico, mientras aprenden un segundo idioma. El plan de estudios abarca fundamentos empresariales, proyectos aplicados, consultoría y un proyecto final, con fuertes vínculos con empresas como Amazon o Philips, garantizando alta empleabilidad en un entorno global.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Groningen es una ciudad universitaria joven, dinámica y relativamente compacta, con aproximadamente 250.000 habitantes, de los cuales cerca de 60.000 son estudiantes. Su ambiente es marcadamente universitario, con una comunidad estudiantil activa y numerosas asociaciones académicas, deportivas y sociales. La bicicleta es el medio de transporte por excelencia: gran parte de los desplazamientos cotidianos se realizan en dos ruedas. También cuenta con autobuses y conexiones ferroviarias; no es necesario depender de un automóvil. Es una ciudad internacional y multicultural, con estudiantes de más de 120 nacionalidades y amplia presencia del inglés. Su oferta cultural incluye museos, teatros, conciertos y festivales como Eurosonic y Noorderzon. <b>Dato curioso:</b> ¡aproximadamente uno de cada cuatro habitantes es estudiante! Además, la Universidad de Groningen, fundada en 1614, es una de las más antiguas de los Países Bajos. Es un entorno atractivo para combinar formación académica, independencia y experiencias internacionales</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b> Bachillerato español.</li><li><b>Requisitos de inglés:</b><ul><li>TOEFL iBT nota mínima: 80 (con ningún subscore por debajo de 17).</li><li>Cambridge English (FCE / CAE): mínimo First Certificate Grade B (173–175) o Grade C (169–172)</li><li>IELTS Academic nota mínima: 6.0 (mínimo 5.5 en todas las partes).</li><li>Pearson Academic; mínimo 61.</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de octubre</li><li><b>Fecha de resolución:</b> 2 – 4 semanas después de haber enviado aplicación (Rolling admissions)</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 15 de agosto</div>
+    <h5>Proceso de selección</h5><div>No hay proceso de selección. Todos los candidatos que cumplan los requisitos de admisión deberían recibir su oferta condicional tras presentar la matrícula, que será oficial al presentar las notas finales.</div>
+    <h5>Dificultad de acceso</h5><div><p>Baja</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.hanze.nl/en/programmes/full-time/bachelor/international-business-4-year" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article>
+<article class="card" id="nhlstenden-ib">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.nhlstenden.com/en/courses/international-business" target="_blank" rel="noopener">International Business<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">NHL Stenden University of Applied Sciences · Leeuwarden · Emmen</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><span class="rbadge rbadge-none">No aparece en el ranking de Shanghái</span></div><p class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Leeuwarden (aprox. 130.000 habitantes) y Emmen (aprox. 110.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('paises-bajos','map-paises-bajos')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">4 años (240 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">2.771 €</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">15 de agosto</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado combina teoría, práctica e innovación mediante el modelo Design-Based Education (DBE), donde los estudiantes trabajan desde el inicio en proyectos reales con empresas. Con un marcado enfoque internacional, ofrece más de 120 convenios de intercambio, el programa Grand Tour para estudiar en lugares como Sudáfrica o Bali, y prácticas profesionales remuneradas. Incluye asignaturas de gestión, marketing, finanzas y liderazgo con apoyo personalizado de un coach académico. Los alumnos pueden personalizar su formación con más de 100 minors, acceder a laboratorios de innovación y colaborar con incubadoras de startups. Acreditado por la NVAO y miembro de AACSB, prepara profesionales versátiles y globales.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Leeuwarden, capital de la provincia de Frisia (Fryslân), cuenta con aproximadamente 130.000 habitantes y una comunidad estudiantil de entre 20.000 y 30.000 estudiantes. Es una ciudad universitaria acogedora, con instituciones como University of Groningen (Campus Fryslân) y NHL Stenden University of Applied Sciences.</p><p>Su ambiente es juvenil, tranquilo e internacional, con estudiantes de distintos países y un buen nivel de inglés. La bicicleta es el medio de transporte más habitual: la ciudad es compacta y permite desplazarse fácilmente sin automóvil. También dispone de autobuses y conexiones ferroviarias con otras ciudades neerlandesas. En cultura, ofrece museos, festivales, conciertos, teatros y una animada vida en cafeterías. Fue Capital Europea de la Cultura en 2018 y es Ciudad UNESCO de la Literatura. <b>Dato curioso:</b> alberga la torre Oldehove, conocida como la «Torre de Pisa neerlandesa» por su inclinación. Además, el coste de alojamiento y vida cotidiana suele ser más asequible que en Ámsterdam o Utrecht, algo interesante para las familias.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b> Bachillerato español.</li><li><b>Requisitos de inglés:</b><ul><li>TOEFL iBT: mínimo 80.</li><li>Cambridge FCE (B2): Grade B (173–175) o Grade C (169–172).</li><li>IELTS académico: mínimo 6.0 (recomendado mínimo 5.0 en cada parte).</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de octubre</li><li><b>Fecha de resolución:</b> 2-4 semanas después de enviar aplicación. Rolling admissions.</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 15 de agosto.</div>
+    <h5>Proceso de selección</h5><div>No hay proceso de selección. Todos los candidatos que cumplan los requisitos de admisión deberían recibir su oferta condicional tras presentar la matrícula, que será oficial al presentar las notas finales.</div>
+    <h5>Dificultad de acceso</h5><div><p>Baja</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.nhlstenden.com/en/courses/international-business" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article>
+<article class="card" id="rotterdam-ib">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.rotterdamuas.com/programmes/bachelor/international-business/" target="_blank" rel="noopener">International Business<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Rotterdam University of Applied Sciences · Róterdam</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><span class="rbadge rbadge-none">No aparece en el ranking de Shanghái</span></div><p class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Rotterdam (aprox. 670.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('paises-bajos','map-paises-bajos')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">4 años (240 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">2.771 € / Año</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">31 de julio</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado forma profesionales preparados para liderar en el ámbito empresarial global. Desde Rotterdam, uno de los principales centros logísticos y económicos de Europa, combina teoría y práctica con un enfoque multicultural e interdisciplinar en áreas como estrategia, marketing, finanzas, comercio internacional y logística. Desde el primer año se trabaja con casos reales de empresas, fomentando el aprendizaje práctico, el liderazgo y la comunicación intercultural. Incluye neerlandés obligatorio y un segundo idioma a elegir (como español o chino), además de especialización en comercio con Asia. A lo largo de la carrera se realizan prácticas profesionales internacionales, un semestre de intercambio y un trabajo final aplicado en colaboración con una empresa, asegurando así una excelente preparación para el mercado laboral.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Rotterdam, segunda ciudad más grande de los Países Bajos, cuenta con unos 670.000 habitantes y destaca por su ambiente urbano, moderno y multicultural. Es un importante centro universitario, con instituciones como Erasmus University Rotterdam y Rotterdam University of Applied Sciences, que atraen estudiantes de numerosos países. Su población representa más de 170 nacionalidades, por lo que el inglés está muy extendido. La bicicleta es un medio de transporte habitual, complementado por una excelente red de metro, tranvía y autobuses; no es necesario disponer de automóvil. Su oferta cultural incluye museos, festivales, conciertos, arquitectura contemporánea, gastronomía internacional y una animada vida nocturna. <b>Dato de interés:</b> Rotterdam alberga uno de los puertos más grandes del mundo y es un referente internacional en logística y comercio. Para las familias, es importante considerar la escasez de alojamiento estudiantil y reservar con bastante antelación.</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b> Bachillerato español.</li><li><b>Requisitos de inglés:</b><ul><li>TOEFL iBT nota mínima: 80</li><li>Cambridge FCE (B2) / CAE (C1) / CPE (C2) nota mínima: 169</li><li>IELTS Academic nota mínima: 6.0</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de octubre</li><li><b>Fecha de resolución:</b> 2-4 semanas después de enviar aplicación. Rolling admissions.</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 31 de julio.</div>
+    <h5>Proceso de selección</h5><div>No hay proceso de selección. Todos los candidatos que cumplan los requisitos de admisión deberían recibir su oferta condicional tras presentar la matrícula, que será oficial al presentar las notas finales.</div>
+    <h5>Dificultad de acceso</h5><div><p>Baja</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.rotterdamuas.com/programmes/bachelor/international-business/?gad_source=1&gad_campaignid=22505636066&gbraid=0AAAAAoYNAJZyhthSCH4Q3tcx-4ZUsbpY9&gclid=Cj0KCQiA-8XXBhDaARIsADnEOrA4t7q9FMHBoPgGWyxLhiGygfpjok_OJvXgKeeTXA6xTw8Jax6wq2waAhdLEALw_wcB" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article>
+<article class="card" id="thuas-ib">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.thuas.com/programmes/bachelors/international-business-4-years" target="_blank" rel="noopener">International Business<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">The Hague University of Applied Sciences · La Haya</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><span class="rbadge rbadge-none">No aparece en el ranking de Shanghái</span></div><p class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">La Haya (aprox. 560.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('paises-bajos','map-paises-bajos')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">4 años (240 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">2.771 € / Año</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">31 de julio</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>Este grado te forma para una carrera global, combinando economía, marketing, ventas, finanzas y gestión con un enfoque práctico e internacional. Estudiarás en un entorno multicultural con estudiantes y profesores de más de 40 países, participarás en talleres y proyectos reales, y realizarás unas prácticas de un semestre en una empresa internacional, preparándote para liderar el cambio en organizaciones de todo el mundo.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>La Haya (The Hague o Den Haag), tercera ciudad más grande de los Países Bajos, cuenta con aproximadamente 560.000 habitantes y unos 35.000 estudiantes universitarios. Ofrece un ambiente académico internacional, con instituciones como Leiden University (campus de La Haya) y The Hague University of Applied Sciences. Es una ciudad especialmente multicultural, con residentes de más de 100 nacionalidades y una importante presencia de organizaciones internacionales. La bicicleta es un medio de transporte muy habitual, complementado por una excelente red de tranvías, autobuses y trenes; no es necesario tener automóvil. Su oferta cultural incluye museos, galerías, teatros, festivales y restaurantes internacionales, además de playas y espacios verdes. <b>Dato curioso:</b> alberga el Palacio de la Paz y la Corte Internacional de Justicia, por lo que es conocida como la «Ciudad Internacional de la Paz y la Justicia». La vivienda estudiantil es limitada, por lo que conviene buscar alojamiento con mucha antelación</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b> Bachillerato español</li><li><b>Requisitos de inglés:</b><ul><li>TOEFL iBT nota mínima: 80</li><li>Cambridge: puntuación mínima global de 169 en los componentes de Reading, Use of English, Writing, Listening y Speaking (calificación A, B o C).</li><li>IELTS Academic nota mínima: 6.0</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de octubre</li><li><b>Fecha de resolución:</b> 2-4 semanas después de enviar aplicación. Rolling admissions.</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 31 de julio</div>
+    <h5>Proceso de selección</h5><div>No hay proceso de selección. Todos los candidatos que cumplan los requisitos de admisión deberían recibir su oferta condicional tras presentar la matrícula, que será oficial al presentar las notas finales.</div>
+    <h5>Dificultad de acceso</h5><div><p>Baja</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.thuas.com/programmes/bachelors/international-business-4-years" target="_blank" rel="noopener">Enlace a la web de la universidad ↗</a></div>
+</article>
+<article class="card" id="inholland-bi">
+  <header class="card-head">
+    <div class="card-titles">
+      <h3 class="card-title"><a href="https://www.inholland.nl/inhollandcom/degree-programmes/business-innovation-eng-full-time/" target="_blank" rel="noopener">Business Innovation<span class="clickicon" aria-hidden="true">🖱️</span></a></h3>
+      <p class="card-uni">Inholland University of Applied Sciences · Ámsterdam</p>
+      <div class="ranks"><span class="rank-label">Ranking de la universidad:</span><span class="rbadge rbadge-none">No aparece en el ranking de Shanghái</span></div><p class="rank-note">Las universidades de <i>Applied Science</i> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+    </div>
+    <div class="card-diff"><span class="dbadge d-green">Baja</span></div>
+  </header>
+  <div class="meta-grid"><div class="mcell mcell-city"><span class="mlabel">Ciudad</span><span class="mval">Ámsterdam (aprox. 905.000 habitantes)</span><button class="mapbtn" onclick="scrollToMap('paises-bajos','map-paises-bajos')">🗺️ Ver mapa</button></div><div class="mcell"><span class="mlabel">Duración</span><span class="mval">4 años (240 ECTS)</span></div><div class="mcell"><span class="mlabel">Coste</span><span class="mval">2.771 €</span></div><div class="mcell"><span class="mlabel">Idioma</span><span class="mval">Inglés</span></div><div class="mcell"><span class="mlabel">Fecha límite</span><span class="mval">1 de agosto</span></div></div>
+  <div class="desc"><h4>Descripción del programa</h4><p>El grado en <i>Business Innovation</i> es un programa de cuatro años impartido íntegramente en inglés, diseñado para formar a los profesionales que liderarán la transformación empresarial del futuro. Lejos de enfocarse en el negocio tradicional, este programa se centra en rediseñar modelos sostenibles, sociales y económicos mediante la innovación, la creatividad y el pensamiento crítico. La metodología es completamente práctica y basada en proyectos reales: los estudiantes trabajan desde el primer año con empresas, desarrollan iniciativas propias y participan en laboratorios creativos donde aplican herramientas como el pensamiento de diseño (<i>design thinking</i>) y la resolución de problemas complejos. Todo ello en un entorno internacional y flexible que promueve el desarrollo personal, la autonomía y el aprendizaje autodirigido. El programa ofrece oportunidades de prácticas en empresas tanto en los Países Bajos como en el extranjero, así como intercambios académicos con universidades socias. También se potencia el emprendimiento a través del lanzamiento de startups propias como parte del plan de estudios. Esta formación permite construir un perfil profesional híbrido, creativo y estratégico, altamente demandado en sectores como la innovación, el desarrollo sostenible, el marketing experiencial, el análisis de tendencias o la consultoría de impacto social. La flexibilidad curricular permite al estudiante diseñar su propio itinerario formativo en los últimos años, eligiendo entre distintas especializaciones como sostenibilidad, innovación social o impacto medioambiental. El enfoque en la empleabilidad y la experiencia práctica real garantiza que los graduados estén preparados para asumir roles de liderazgo en contextos globales, con una sólida base ética y una mirada innovadora del mundo.</p></div>
+  <details class="city-prof"><summary>Ver perfil de la ciudad</summary><div class="det-body"><p>Ámsterdam, capital de los Países Bajos, cuenta con aproximadamente 930.000 habitantes y destaca por su ambiente cosmopolita, dinámico y multicultural. Es un importante destino universitario, con instituciones reconocidas como la University of Amsterdam (UvA) y Vrije Universiteit Amsterdam (VU), que reciben estudiantes de numerosos países. La ciudad tiene una elevada diversidad cultural y una amplia oferta de programas impartidos en inglés. La bicicleta es el medio de transporte más popular, complementado por una excelente red de tranvías, metro, autobuses y trenes; vivir sin automóvil es perfectamente viable. Su oferta cultural es extraordinaria: museos de prestigio internacional, teatros, conciertos, festivales, galerías y una intensa vida social. <b>Dato curioso y consejo práctico:</b> Ámsterdam tiene más de 160 nacionalidades representadas entre sus residentes y es conocida por sus canales, declarados Patrimonio Mundial por la UNESCO. Sin embargo, es una de las ciudades más caras del país y encontrar alojamiento estudiantil puede resultar complicado. Se recomienda gestionar la vivienda con varios meses de antelación, incluso antes de llegar a los Países Bajos</p></div></details>
+  <details class="reqs"><summary>Ver requisitos de admisión y fechas</summary><div class="det-body">
+    <h5>Requisitos</h5><ul><li><b>Académicos:</b> Bachillerato español.</li><li><b>Requisitos de inglés:</b><ul><li>TOEFL iBT: Mínimo 80.</li><li>Cambridge FCE (B2) / CAE (C1) / CPE (C2): Nota mínima C (169–172).</li><li>IELTS: Mínimo 6.0.</li></ul></li></ul>
+    <h5>Fechas</h5><ul><li><b>Fecha de inicio:</b> 1 de septiembre</li><li><b>Apertura proceso de aplicación:</b> 1 de octubre</li><li><b>Fecha de resolución:</b> Depende de cuando se envía la aplicación. Rolling admissions.</li></ul>
+    <div class="deadline">⏰ <b>Fecha límite para presentar la matrícula:</b> 1 de agosto.</div>
+    <h5>Proceso de selección</h5><div>No hay proceso de selección. Todos los candidatos que cumplan los requisitos de admisión deberían recibir su oferta condicional tras presentar la matrícula, que será oficial al presentar las notas finales.</div>
+    <h5>Dificultad de acceso</h5><div><p>Baja</p></div>
+  </div></details>
+  
+  <div class="card-links"><a class="linkbtn" href="https://www.inholland.nl/inhollandcom/degree-programmes/business-innovation-eng-full-time/" target="_blank" rel="noopener">Web de la universidad ↗</a></div>
+</article>
+  <div class="map-wrap"><h3>Mapa de universidades · Países Bajos</h3><div class="map" id="map-paises-bajos"></div></div>
+</section>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-logo"><svg class="logo-svg" role="img" aria-label="educoWay" id="lf-logo" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .lf-cls-1 {
+        fill: #36aadc;
+      }
+
+      .lf-cls-1, .lf-cls-2, .lf-cls-3, .lf-cls-4 {
+        opacity: .8;
+      }
+
+      .lf-cls-2 {
+        fill: #30ac71;
+      }
+
+      .lf-cls-5 {
+        fill: #737373;
+      }
+
+      .lf-cls-3 {
+        fill: #32abbb;
+      }
+
+      .lf-cls-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="lf-capa3" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="lf-cls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="lf-cls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lf-cls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="lf-cls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="lf-cls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lf-cls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lf-cls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lf-cls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lf-cls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="lf-cls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="lf-cls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lf-cls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="lf-cls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="lf-cls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lf-cls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="lf-cls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="lf-cls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="lf-cls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="lf-cls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="lf-cls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lf-cls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lf-cls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="lf-cls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="lf-cls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="lf-cls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lf-cls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lf-cls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="lf-cls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="lf-cls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lf-cls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lf-cls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lf-cls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lf-cls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="lf-cls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="lf-cls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="lf-cls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="lf-cls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="lf-cls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lf-cls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="lf-cls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="lf-cls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="lf-cls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="lf-cls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="lf-cls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="lf-cls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="lf-cls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="lf-cls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="lf-cls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="lf-cls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="lf-cls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="lf-cls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="lf-cls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="lf-cls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="lf-cls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="lf-cls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="lf-cls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+  <p>Informe elaborado por educoWay para Alonso de Miguel.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const mapData = {
+ "dinamarca": {
+  "center": [
+   55.9,
+   9.9
+  ],
+  "zoom": 6,
+  "universities": [
+   {
+    "id": "aarhus-eba",
+    "name": "Economics and Business Administration",
+    "school": "Aarhus University · campus Aarhus (Aarhus BSS)",
+    "lat": 56.1681,
+    "lng": 10.2036,
+    "webUrl": "https://bachelor.au.dk/en/economics-and-business-administration/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Aarhus+BSS+Aarhus+University"
+   },
+   {
+    "id": "aarhus-eba",
+    "name": "Economics and Business Administration",
+    "school": "Aarhus University · campus Herning",
+    "lat": 56.1349,
+    "lng": 8.985,
+    "webUrl": "https://bachelor.au.dk/en/economics-and-business-administration/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Aarhus+University+Herning+Birk+Centerpark"
+   },
+   {
+    "id": "aalborg-eba",
+    "name": "Economics and Business Administration",
+    "school": "Aalborg University",
+    "lat": 57.0147,
+    "lng": 9.9867,
+    "webUrl": "https://www.en.aau.dk/education/bachelor/economics-and-business-administration",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Aalborg+University+Aalborg"
+   },
+   {
+    "id": "sdu-eba",
+    "name": "BA in Economics and Business Administration",
+    "school": "University of Southern Denmark (SDU) · Sønderborg",
+    "lat": 54.9128,
+    "lng": 9.7798,
+    "webUrl": "https://www.sdu.dk/en/uddannelse/bachelor/ha#/uddannelsen",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=SDU+Alsion+S%C3%B8nderborg"
+   }
+  ]
+ },
+ "suecia": {
+  "center": [
+   60.8,
+   17.3
+  ],
+  "zoom": 5,
+  "universities": [
+   {
+    "id": "umea-ibe",
+    "name": "International Business and Economics",
+    "school": "Umeå University",
+    "lat": 63.8203,
+    "lng": 20.3062,
+    "webUrl": "https://www.umu.se/en/education/programmes/international-business-and-economics-programme/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Ume%C3%A5+University+Ume%C3%A5"
+   },
+   {
+    "id": "jonkoping-im",
+    "name": "International Management",
+    "school": "Jönköping University",
+    "lat": 57.7782,
+    "lng": 14.1617,
+    "webUrl": "https://ju.se/en/study-at-ju/our-programmes/bachelor-programmes/international-management-autumn-2027-ku101.html",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=J%C3%B6nk%C3%B6ping+International+Business+School"
+   }
+  ]
+ },
+ "alemania": {
+  "center": [
+   51.7897,
+   6.1436
+  ],
+  "zoom": 9,
+  "universities": [
+   {
+    "id": "rhine-waal-ibm",
+    "name": "BA International Business and Management",
+    "school": "Rhine-Waal University of Applied Sciences · campus Kleve",
+    "lat": 51.7975,
+    "lng": 6.1415,
+    "webUrl": "https://www.hochschule-rhein-waal.de/en/faculties/society-and-economics/degree-programmes/international-business-and-management-ba",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Hochschule+Rhein-Waal+Kleve"
+   }
+  ]
+ },
+ "belgica": {
+  "center": [
+   50.95,
+   4.0
+  ],
+  "zoom": 8,
+  "universities": [
+   {
+    "id": "kuleuven-ba",
+    "name": "Business Administration",
+    "school": "KU Leuven · campus Bruselas",
+    "lat": 50.8496,
+    "lng": 4.3542,
+    "webUrl": "https://onderwijsaanbod.kuleuven.be/opleidingen/e/SC_53266472/diploma_omschrijving",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=KU+Leuven+Campus+Brussel+Warmoesberg"
+   },
+   {
+    "id": "vives-bm",
+    "name": "Bachelor of Business Management",
+    "school": "VIVES University of Applied Sciences · Kortrijk",
+    "lat": 50.8135,
+    "lng": 3.2775,
+    "webUrl": "https://www.vives.be/en/commercial-sciences-business-management/bachelor-business-management-english-programme",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=VIVES+Kortrijk+Doorniksesteenweg"
+   },
+   {
+    "id": "artevelde-ib",
+    "name": "International Business",
+    "school": "Artevelde University of Applied Sciences · Gent",
+    "lat": 51.0418,
+    "lng": 3.7266,
+    "webUrl": "https://www.arteveldehogeschool.be/en/programmes/bachelor/international-business-management",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Artevelde+Hogeschool+Kantienberg+Gent"
+   },
+   {
+    "id": "thomasmore-ibm",
+    "name": "International Business Management (especialización en International Business and Trade)",
+    "school": "Thomas More University of Applied Sciences · Mechelen",
+    "lat": 51.023,
+    "lng": 4.4847,
+    "webUrl": "https://thomasmore.be/en/educations/degree-students/business-management",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Thomas+More+Mechelen+Zandpoortvest"
+   }
+  ]
+ },
+ "paises-bajos": {
+  "center": [
+   52.35,
+   5.6
+  ],
+  "zoom": 7,
+  "universities": [
+   {
+    "id": "twente-iba",
+    "name": "International Business Administration",
+    "school": "University of Twente · Enschede",
+    "lat": 52.2394,
+    "lng": 6.8502,
+    "webUrl": "https://www.utwente.nl/en/education/bachelor/programmes/international-business-administration/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=University+of+Twente+Enschede"
+   },
+   {
+    "id": "groningen-ib",
+    "name": "BSc International Business",
+    "school": "University of Groningen · Faculty of Economics and Business",
+    "lat": 53.2413,
+    "lng": 6.5372,
+    "webUrl": "https://www.rug.nl/bachelors/international-business/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=University+of+Groningen+Faculty+of+Economics+and+Business+Zernike"
+   },
+   {
+    "id": "tilburg-iba",
+    "name": "BSc International Business Administration",
+    "school": "Tilburg University",
+    "lat": 51.5636,
+    "lng": 5.0419,
+    "webUrl": "https://www.tilburguniversity.edu/education/bachelors-programs/international-business-administration",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Tilburg+University+Warandelaan"
+   },
+   {
+    "id": "maastricht-ib",
+    "name": "International Business",
+    "school": "Maastricht University · School of Business and Economics",
+    "lat": 50.8448,
+    "lng": 5.6866,
+    "webUrl": "http://maastrichtuniversity.nl/education/bachelor/programmes/international-business",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Maastricht+University+School+of+Business+and+Economics+Tongersestraat"
+   },
+   {
+    "id": "hanze-ib",
+    "name": "International Business",
+    "school": "Hanze University of Applied Sciences · Groningen",
+    "lat": 53.2398,
+    "lng": 6.532,
+    "webUrl": "https://www.hanze.nl/en/programmes/full-time/bachelor/international-business-4-year",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Hanze+University+of+Applied+Sciences+Zernikeplein+Groningen"
+   },
+   {
+    "id": "nhlstenden-ib",
+    "name": "International Business",
+    "school": "NHL Stenden University of Applied Sciences · Leeuwarden",
+    "lat": 53.2117,
+    "lng": 5.801,
+    "webUrl": "https://www.nhlstenden.com/en/courses/international-business",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=NHL+Stenden+Rengerslaan+Leeuwarden"
+   },
+   {
+    "id": "nhlstenden-ib",
+    "name": "International Business",
+    "school": "NHL Stenden University of Applied Sciences · Emmen",
+    "lat": 52.7918,
+    "lng": 6.9005,
+    "webUrl": "https://www.nhlstenden.com/en/courses/international-business",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=NHL+Stenden+Van+Schaikweg+Emmen"
+   },
+   {
+    "id": "rotterdam-ib",
+    "name": "International Business",
+    "school": "Rotterdam University of Applied Sciences · Kralingse Zoom",
+    "lat": 51.918,
+    "lng": 4.5262,
+    "webUrl": "https://www.rotterdamuas.com/programmes/bachelor/international-business/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Hogeschool+Rotterdam+Kralingse+Zoom"
+   },
+   {
+    "id": "thuas-ib",
+    "name": "International Business",
+    "school": "The Hague University of Applied Sciences",
+    "lat": 52.0672,
+    "lng": 4.3236,
+    "webUrl": "https://www.thuas.com/programmes/bachelors/international-business-4-years",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Hague+University+of+Applied+Sciences+Johanna+Westerdijkplein"
+   },
+   {
+    "id": "inholland-bi",
+    "name": "Business Innovation",
+    "school": "Inholland University of Applied Sciences · Ámsterdam",
+    "lat": 52.358,
+    "lng": 4.9085,
+    "webUrl": "https://www.inholland.nl/inhollandcom/degree-programmes/business-innovation-eng-full-time/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Inholland+Amsterdam+Wibautstraat"
+   }
+  ]
+ }
+};
+const mapsInitialized = {};
+const mapInstances = {};
+let currentTab = 'intro';
+
+function showTab(id, btn) {
+  document.querySelectorAll('.panel').forEach(p => { p.hidden = (p.id !== 'tab-' + id); });
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === id));
+  const b = btn || document.querySelector('.tab[data-tab="' + id + '"]');
+  if (b && b.scrollIntoView) b.scrollIntoView({block: 'nearest', inline: 'center'});
+  currentTab = id;
+  if (mapData[id]) initMap(id);
+  window.scrollTo({top: 0, behavior: 'auto'});
+}
+
+function highlight(el) {
+  if (!el || !el.classList.contains('card')) return;
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+}
+
+function goTo(tab, anchor) {
+  showTab(tab);
+  setTimeout(() => {
+    const el = document.getElementById(anchor);
+    if (el) { el.scrollIntoView({behavior: 'smooth', block: 'start'}); highlight(el); }
+  }, 60);
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({behavior: 'smooth', block: 'start'});
+  highlight(el);
+}
+
+function scrollToMap(tab, anchor) {
+  const go = () => {
+    const el = document.getElementById(anchor);
+    if (el) el.scrollIntoView({behavior: 'smooth', block: 'center'});
+    if (mapInstances[tab]) setTimeout(() => mapInstances[tab].invalidateSize(), 400);
+  };
+  if (currentTab === tab) go();
+  else { showTab(tab); setTimeout(go, 80); }
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function initMap(countryId) {
+  if (mapsInitialized[countryId]) {
+    setTimeout(() => mapInstances[countryId] && mapInstances[countryId].invalidateSize(), 50);
+    return;
+  }
+  if (typeof L === 'undefined') return;
+  const d = mapData[countryId];
+  const el = document.getElementById('map-' + countryId);
+  if (!d || !el) return;
+  mapsInitialized[countryId] = true;
+  const map = L.map(el, {scrollWheelZoom: false}).setView(d.center, d.zoom);
+  mapInstances[countryId] = map;
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+  }).addTo(map);
+  const icon = L.divIcon({className: '', html: '<div class="uni-marker">🎓</div>', iconSize: [28, 28], iconAnchor: [14, 26], popupAnchor: [0, -24]});
+  const bounds = [];
+  d.universities.forEach(u => {
+    const popup = '<div class="pop"><h4>' + esc(u.name) + '</h4><p>' + esc(u.school) + '</p><div class="pbtns">' +
+      '<a href="' + u.webUrl + '" target="_blank" rel="noopener">Ver grado</a>' +
+      '<button type="button" onclick="scrollToCard(\'' + u.id + '\')">Ver ficha</button>' +
+      '<a href="' + u.mapsUrl + '" target="_blank" rel="noopener">Google Maps</a></div></div>';
+    L.marker([u.lat, u.lng], {icon: icon, title: u.school}).addTo(map).bindPopup(popup);
+    bounds.push([u.lat, u.lng]);
+  });
+  if (bounds.length > 1) map.fitBounds(bounds, {padding: [40, 40], maxZoom: 9});
+  setTimeout(() => map.invalidateSize(), 120);
+}
+
+</script>
+</body>
+</html>
