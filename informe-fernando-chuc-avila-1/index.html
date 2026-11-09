@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informe personalizado de opciones de grado · Fernando Chuc Ávila · educoWay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>:root{--teal:#0a9baa;--teal-dark:#077a87;--teal-light:#e0f5f7;--navy:#0d2b3e;--bg:#f4f8fa;--border:#c8e0e5;
+--text:#1d3442;--muted:#6b7f8a;--red:#d0021b;--green:#1e9e4a;--orange:#e07b00;--gold:#c8961e;--hdr-h:150px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:16px;line-height:1.6;color:var(--text);background:var(--bg)}
+a{color:var(--teal-dark)}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--teal);outline-offset:2px;border-radius:4px}
+.txt-red{color:var(--red);font-weight:700}
+.txt-green{color:var(--green);font-weight:700}
+.pending{display:inline-block;font-size:12px;font-style:italic;color:#8a6d00;background:#fff6d6;border:1px dashed #d9b64a;border-radius:6px;padding:0 6px;line-height:1.6}
+
+/* header */
+.hdr{position:sticky;top:0;z-index:1000;background:var(--navy);color:#fff;box-shadow:0 3px 14px rgba(13,43,62,.25)}
+.hdr-top{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:28px;padding:14px 20px 10px}
+.logo-hdr{height:46px;width:auto;flex:none}
+.hdr-text h1{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:clamp(18px,2.6vw,26px);line-height:1.2;margin:0}
+.hdr-sub{margin:2px 0 0;font-variant:small-caps;text-transform:lowercase;letter-spacing:.06em;font-size:15px;color:#9fdbe2}
+.tabs{max-width:1100px;margin:0 auto;display:flex;gap:4px;overflow-x:auto;padding:0 20px;scrollbar-width:thin}
+.tab{flex:none;display:inline-flex;align-items:center;gap:8px;font:500 14px 'DM Sans',sans-serif;color:#cfe6ea;background:transparent;border:0;border-bottom:3px solid transparent;padding:10px 12px 9px;cursor:pointer;white-space:nowrap}
+.tab:hover{color:#fff}
+.tab.active{color:#fff;border-bottom-color:var(--teal);font-weight:700}
+
+/* flags */
+.flag{display:inline-flex;position:relative;width:22px;height:15px;border-radius:2px;overflow:hidden;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+.flag.lg{width:84px;height:56px;border-radius:5px;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.flag-nl,.flag-de,.flag-es{flex-direction:column}
+.flag-nl span,.flag-de span,.flag-es span{flex:1;display:block}
+.flag-nl span:nth-child(1){background:#ae1c28}.flag-nl span:nth-child(2){background:#fff}.flag-nl span:nth-child(3){background:#21468b}
+.flag-de span:nth-child(1){background:#000}.flag-de span:nth-child(2){background:#dd0000}.flag-de span:nth-child(3){background:#ffce00}
+.flag-es span:nth-child(1),.flag-es span:nth-child(3){background:#aa151b}.flag-es span:nth-child(2){background:#f1bf00;flex:2}
+.flag-dk{background:#c8102e}.flag-fi{background:#fff}
+.flag-dk span,.flag-fi span{position:absolute;display:block}
+.flag-dk .v{left:32.4%;width:10.8%;top:0;bottom:0;background:#fff}.flag-dk .h{top:42.9%;height:14.3%;left:0;right:0;background:#fff}
+.flag-fi .v{left:27.8%;width:16.7%;top:0;bottom:0;background:#002f6c}.flag-fi .h{top:36.4%;height:27.3%;left:0;right:0;background:#002f6c}
+
+/* layout */
+.wrap{max-width:1100px;margin:0 auto;padding:32px 20px 48px}
+.panel{display:none}.panel.active{display:block}
+.prose{max-width:76ch}
+.prose p{margin:0 0 1em}
+.greet{font-family:'Playfair Display',Georgia,serif;font-size:22px;font-weight:600;color:var(--navy)}
+.sec-title{font-family:'Playfair Display',Georgia,serif;font-size:28px;color:var(--navy);margin:36px 0 18px;line-height:1.25}
+#panel-rva .sec-title{margin-top:0}
+
+/* index */
+.index{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.ix-country{background:#fff;border:2px solid var(--border);border-radius:12px;padding:16px 18px}
+.ix-country h3{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:16px;color:var(--navy)}
+.ix-country ul{list-style:none;margin:0;padding:0}
+.ix-country li+li{border-top:1px solid var(--teal-light)}
+.ix-country a{display:flex;flex-direction:column;padding:9px 6px;text-decoration:none;border-radius:6px}
+.ix-country a:hover{background:var(--teal-light)}
+.ix-deg{font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:400;color:var(--text);line-height:1.35}
+.ix-uni{font-family:'Playfair Display',Georgia,serif;font-size:11.5px;font-style:italic;color:var(--muted);margin-top:2px}
+.next-steps{margin-top:36px;background:var(--navy);color:#e8f4f6;border-radius:12px;padding:24px 28px;max-width:76ch}
+.next-steps h2{font-family:'Playfair Display',Georgia,serif;color:#fff;margin:0 0 10px;font-size:24px}
+.next-steps p{margin:0 0 .8em}.next-steps p:last-child{margin:0}
+
+/* RvA */
+.rva-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin:20px 0 24px;max-width:none}
+.prose .rva-grid{width:min(1060px,calc(100vw - 40px))}
+.rva-item{background:#fff;border:2px solid var(--border);border-radius:12px;padding:18px 20px}
+.rva-item h3{font-family:'Playfair Display',Georgia,serif;color:var(--teal-dark);margin:0 0 8px;font-size:19px}
+.rva-item p{font-size:15px}
+.links{padding-left:20px}.links li{margin:4px 0}
+
+/* country */
+.country-intro{display:flex;align-items:center;gap:22px;margin-bottom:22px}
+.country-intro h2{font-family:'Playfair Display',Georgia,serif;font-size:34px;margin:0;color:var(--navy);line-height:1.1}
+.country-meta{display:flex;flex-wrap:wrap;gap:6px 24px;margin-top:8px;font-size:14px;color:var(--muted)}
+.country-meta strong{color:var(--text)}
+.country-alert{background:#fff8e6;border:2px solid #f0c24b;border-left-width:6px;border-radius:12px;padding:16px 20px;margin:0 0 26px;font-size:15px}
+.country-alert p{margin:0 0 .7em}.country-alert p:last-child{margin:0}
+.alert-label{font-weight:700;color:#8a5a00}
+.sec-sep{display:flex;align-items:center;gap:14px;margin:30px 0 16px;color:var(--teal-dark);font-weight:700;font-size:13px;letter-spacing:.08em}
+.sec-sep::after{content:"";flex:1;height:2px;background:var(--border)}
+
+/* cards */
+.card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:22px 24px;margin-bottom:22px;box-shadow:0 1px 3px rgba(13,43,62,.05);transition:border-color .2s,box-shadow .2s;scroll-margin-top:calc(var(--hdr-h) + 16px)}
+.card:hover{border-color:var(--teal);box-shadow:0 8px 24px rgba(10,155,170,.16)}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px}
+.card-title{font-family:'Playfair Display',Georgia,serif;font-size:23px;line-height:1.25;margin:0}
+.card-title a{color:var(--navy);text-decoration:none;transition:color .2s}
+.card-title a:hover{color:var(--teal)}
+.click-ico{display:inline-block;font-size:17px;margin-left:8px;transition:transform .2s;vertical-align:2px}
+.card-title a:hover .click-ico{transform:scale(1.35)}
+.card-uni{color:var(--teal);font-weight:700;margin:4px 0 10px;font-size:15px}
+.rank-label{margin:0 0 4px;font-size:12px;color:var(--muted)}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.badge-rank{font-size:12.5px;font-weight:500;background:var(--teal-light);color:var(--teal-dark);border-radius:20px;padding:2px 11px}
+.badge-rank.gold{background:#fbf1d6;color:#7a5a0a}
+.rank-note{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+.diff{flex:none;font-size:13px;font-weight:700;border:2px solid;border-radius:20px;padding:4px 12px;white-space:nowrap}
+.diff-low{color:var(--green);border-color:var(--green);background:#ecf8f0}
+.diff-high{color:var(--orange);border-color:var(--orange);background:#fff3e3}
+.diff-vhigh{color:var(--red);border-color:var(--red);background:#fdecee}
+.diff-none{color:#8a6d00;border-color:#d9b64a;border-style:dashed;background:#fff6d6}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin:18px 0}
+.meta{background:var(--bg);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:14.5px}
+.ml{font-size:11.5px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.mv{line-height:1.4}
+.pop{color:var(--muted);font-size:13px}
+.mx{font-size:12px;line-height:1.4;margin-top:4px;word-break:break-all}
+.btn-map{align-self:flex-start;margin-top:6px;font:700 11.5px 'DM Sans',sans-serif;background:var(--teal-light);color:var(--teal-dark);border:1.5px solid var(--teal);border-radius:6px;padding:3px 9px;cursor:pointer}
+.btn-map:hover{background:var(--teal);color:#fff}
+.desc{background:#f3f9fb;border-left:4px solid var(--teal);border-radius:0 8px 8px 0;padding:14px 18px;font-size:15px}
+.desc p{margin:0 0 .8em}.desc p:last-child{margin:0}
+.desc-label{font-weight:700;color:var(--teal-dark);font-size:13px}
+.card-important{margin-top:14px;background:#fff8e6;border:2px solid #f0c24b;border-radius:8px;padding:12px 16px;font-size:15px}
+details{margin-top:14px;border:2px solid var(--border);border-radius:10px;background:#fff}
+summary{cursor:pointer;padding:11px 16px;font-weight:700;color:var(--teal-dark);font-size:14.5px}
+summary:hover{background:var(--teal-light);border-radius:8px}
+details[open] summary{border-bottom:1px solid var(--border)}
+.req{padding:6px 18px 16px;font-size:14.5px}
+.req-block h4{margin:14px 0 6px;font-size:13px;color:var(--navy)}
+.req p{margin:0 0 .4em}
+.req ul{margin:4px 0 6px;padding-left:20px}
+.req ul.checks{list-style:none;padding-left:4px}
+.req ul.checks li{position:relative;padding-left:22px;margin-bottom:6px}
+.req ul.checks li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:700}
+.req a{word-break:break-all}
+.deadline-box{margin-top:16px;background:#fff7c2;border:2px solid #f0d34b;border-radius:8px;padding:10px 14px}
+
+/* map */
+.map-wrap{margin-top:34px;scroll-margin-top:calc(var(--hdr-h) + 16px)}
+.map-title{font-family:'Playfair Display',Georgia,serif;font-size:22px;color:var(--navy);margin:0 0 12px}
+.map{height:440px;border:2px solid var(--border);border-radius:12px;overflow:hidden;scroll-margin-top:calc(var(--hdr-h) + 60px)}
+.uni-marker{font-size:26px;line-height:1;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.pop-deg{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:15px;color:var(--navy);margin-bottom:2px}
+.pop-uni{font-size:12.5px;color:var(--teal-dark);margin-bottom:8px}
+.pop-btns{display:flex;flex-wrap:wrap;gap:5px}
+.pop-btns a,.pop-btns button{font:700 11.5px 'DM Sans',sans-serif;border-radius:6px;padding:4px 8px;cursor:pointer;text-decoration:none;border:1.5px solid var(--teal);background:var(--teal-light);color:var(--teal-dark)}
+.pop-btns a.primary{background:var(--teal);color:#fff}
+.leaflet-popup-content{margin:12px 14px;font-family:'DM Sans',sans-serif}
+
+/* footer */
+.ftr{text-align:center;padding:30px 20px 40px;border-top:2px solid var(--border);color:var(--muted);font-size:13px}
+.logo-ftr{height:52px;width:auto;opacity:.6}
+
+@media (max-width:640px){
+ .hdr-top{gap:14px;padding:10px 14px 6px}.logo-hdr{height:32px}
+ .hdr-sub{font-size:13px}
+ .tabs{padding:0 10px}
+ .card{padding:18px 16px}.card-head{flex-direction:column}
+ .country-intro h2{font-size:27px}.flag.lg{width:63px;height:42px}
+ .map{height:340px}
+}
+@media print{.hdr{position:static}.panel{display:block!important}.map-wrap{display:none}details{display:block}}
+.txt-orange{color:var(--orange);font-weight:700}
+.diff-corte{display:block;font-size:11.5px;font-weight:500;text-align:center;margin-top:1px}
+.diff{text-align:center}
+</style>
+</head>
+<body>
+<header class="hdr" id="hdr">
+<div class="hdr-top">
+<svg class="logo-svg logo-hdr" viewBox="0 0 1800 433" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="educoWay"><style>.lt-hdr{fill: #ffffff;}</style><path class="lt-hdr" fill-rule="evenodd" d="M1730,376 1720,376 1715,380 1713,379 1713,376 1709,376 1709,413 1713,413 1713,394 1716,385 1722,380 1728,380 1731,382 1733,378ZM1637,376 1632,376 1632,423 1629,427 1620,426 1619,430 1625,432 1631,431 1635,428 1636,425 1636,420 1637,419ZM1510,377 1498,376 1492,380 1491,376 1486,376 1486,413 1491,413 1491,390 1492,387 1496,382 1500,380 1505,380 1509,382 1511,378ZM1400,376 1413,394 1399,413 1404,413 1416,398 1427,413 1433,413 1419,394 1432,376 1426,376 1416,389 1414,388 1405,376ZM1003,376 1003,413 1007,413 1007,376ZM989,378 985,376 976,376 970,380 969,376 964,376 964,413 969,413 969,390 972,384 978,380 983,380 987,382ZM846,376 846,413 851,413 851,376ZM783,376 773,376 767,381 766,376 762,376 762,413 766,413 766,391 768,386 775,380 781,380 784,382 786,378ZM659,376 674,413 679,413 695,376 690,376 677,406 675,404 664,376ZM638,376 638,413 642,413 642,376ZM531,376 531,402 533,407 538,412 543,414 550,414 559,409 560,413 564,413 564,376 560,376 560,398 559,402 555,407 551,409 542,409 537,405 535,399 535,376ZM371,376 371,413 375,413 375,376ZM99,376 99,413 103,413 103,376ZM85,378 81,376 72,376 66,380 65,376 60,376 60,413 65,413 65,390 68,384 74,380 79,380 83,382ZM1760,375 1753,377 1747,382 1744,388 1743,398 1746,406 1751,411 1758,414 1766,414 1775,410 1779,405 1781,400 1781,389 1779,384 1773,378 1765,375ZM1758,380 1767,380 1771,382 1776,388 1777,391 1776,401 1768,409 1764,410 1757,409 1750,403 1748,399 1748,390 1750,386ZM1666,376 1661,379 1656,385 1654,392 1655,402 1657,406 1662,411 1669,414 1681,413 1689,407 1687,404 1679,409 1671,410 1664,407 1660,402 1659,398 1660,397 1691,397 1692,396 1691,387 1689,383 1684,378 1676,375ZM1659,390 1660,387 1668,380 1678,380 1682,382 1687,388 1686,392 1660,392ZM1579,376 1579,413 1583,413 1583,390 1584,387 1587,383 1592,380 1600,380 1606,384 1608,389 1608,413 1612,413 1612,386 1610,382 1605,377 1598,375 1588,377 1584,380 1583,376ZM1529,378 1523,384 1521,389 1521,400 1524,407 1530,412 1536,414 1543,414 1549,412 1553,408 1554,413 1558,413 1558,376 1554,376 1553,381 1550,378 1541,375 1537,375ZM1535,380 1544,380 1548,382 1553,388 1554,391 1553,401 1545,409 1541,410 1534,409 1526,401 1525,398 1526,388 1531,382ZM1367,375 1360,377 1353,384 1351,388 1351,401 1354,407 1358,411 1365,414 1374,414 1381,411 1386,406 1382,404 1375,409 1367,410 1362,408 1357,403 1355,398 1356,397 1387,397 1388,396 1388,389 1386,384 1382,379 1376,376ZM1355,390 1357,386 1364,380 1377,381 1383,388 1382,392 1356,392ZM1261,375 1254,377 1247,384 1245,388 1245,401 1248,407 1252,411 1259,414 1268,414 1275,411 1280,406 1276,404 1269,409 1261,410 1256,408 1251,403 1249,398 1250,397 1281,397 1282,396 1282,389 1280,384 1276,379 1270,376ZM1249,391 1251,386 1258,380 1271,381 1277,388 1276,392 1250,392ZM1165,376 1165,413 1169,413 1169,389 1171,385 1178,380 1186,380 1190,382 1193,386 1194,390 1194,413 1198,413 1198,387 1196,382 1191,377 1184,375 1176,376 1170,380 1169,376ZM1126,375 1118,378 1112,384 1110,389 1110,400 1114,408 1119,412 1124,414 1133,414 1139,412 1145,406 1143,404 1141,404 1140,406 1135,409 1131,410 1123,409 1116,403 1115,398 1116,397 1147,397 1147,388 1144,382 1140,378 1131,375ZM1115,388 1120,382 1124,380 1134,380 1142,387 1143,391 1142,392 1116,392ZM1033,378 1028,383 1025,391 1025,398 1028,406 1033,411 1040,414 1048,414 1057,409 1059,410 1059,413 1063,413 1063,376 1059,376 1058,381 1053,377 1046,375 1042,375ZM1039,380 1049,380 1054,383 1058,389 1059,395 1056,404 1053,407 1046,410 1039,409 1035,407 1030,400 1031,387ZM913,379 910,382 906,392 906,397 909,406 914,411 921,414 929,414 936,411 939,408 940,413 944,413 944,376 940,376 939,381 936,378 927,375 919,376ZM920,380 930,380 934,382 939,389 940,393 939,400 937,404 931,409 927,410 920,409 912,402 911,390 913,386ZM806,376 800,380 798,384 799,390 806,395 821,398 824,401 824,405 820,409 815,410 807,409 800,404 797,407 801,411 809,414 821,413 828,408 829,405 828,398 822,394 811,392 804,389 803,384 808,380 819,380 826,384 828,380 817,375ZM723,375 715,378 710,383 707,390 707,399 710,406 716,412 722,414 730,414 738,411 742,406 739,404 732,409 728,410 720,409 714,404 712,398 713,397 744,397 745,394 744,387 742,383 737,378 729,375ZM712,389 714,385 721,380 731,380 738,385 740,391 739,392 713,392ZM612,378 608,376 601,375 596,376 590,380 589,376 584,376 584,413 589,413 589,389 591,385 598,380 606,380 611,383 614,391 614,413 618,413 618,387 616,382ZM477,378 473,376 466,375 461,376 454,380 453,376 449,376 449,413 454,413 454,388 460,381 463,380 471,380 477,385 478,388 478,413 483,413 483,389 480,381ZM409,375 401,378 396,383 393,390 393,399 396,406 401,411 408,414 416,414 423,411 429,405 431,400 431,390 428,383 423,378 415,375ZM407,380 417,380 425,387 427,393 427,397 424,404 421,407 414,410 407,409 403,407 398,400 397,395 398,389ZM337,375 327,379 324,382 321,388 320,398 322,404 328,411 336,414 343,414 351,411 354,408 350,405 345,409 341,410 334,409 326,402 325,399 325,390 327,386 332,381 344,380 350,384 353,382 350,378 346,376ZM273,378 267,384 265,389 265,400 269,408 274,412 280,414 287,414 293,412 296,409 298,410 298,413 302,413 302,376 298,376 297,381 294,378 285,375 281,375ZM279,380 288,380 292,382 297,388 298,391 297,401 289,409 285,410 278,409 270,401 269,398 270,388 275,382ZM176,376 176,413 180,413 180,392 181,388 189,380 198,380 204,385 205,388 205,413 210,413 210,390 207,381 204,378 195,375 188,376 182,380 180,379 180,376ZM133,376 129,378 123,385 121,391 122,402 124,406 129,411 136,414 148,413 156,407 154,404 146,409 138,410 131,407 127,402 126,398 127,397 158,397 159,396 158,387 156,383 151,378 143,375ZM126,390 129,384 135,380 145,380 149,382 154,389 153,392 127,392ZM21,375 11,379 8,382 5,388 4,397 6,404 12,411 19,414 27,414 33,412 39,407 42,401 42,396 43,395 40,384 34,378 26,375ZM19,380 28,380 32,382 37,388 38,391 37,401 29,409 25,410 18,409 11,403 9,399 9,390 11,386ZM1453,365 1452,366 1452,375 1451,376 1444,376 1444,380 1451,380 1452,381 1452,405 1453,409 1455,412 1459,414 1466,414 1471,412 1469,408 1461,410 1457,406 1457,381 1458,380 1469,380 1469,376 1458,376 1457,375 1457,365ZM876,365 875,366 875,375 874,376 867,376 867,380 874,380 875,381 875,405 876,409 882,414 889,414 894,412 892,408 884,410 880,406 880,381 881,380 892,380 892,376 881,376 880,375 880,365ZM234,365 234,375 233,376 226,376 226,380 233,380 234,381 234,408 238,413 247,414 252,412 251,408 246,410 242,410 239,408 238,405 238,381 239,380 250,380 250,376 239,376 238,375 238,365ZM1633,362 1631,364 1631,367 1633,369 1637,368 1638,365 1636,362ZM1004,362 1002,364 1002,367 1004,369 1008,368 1009,365 1007,362ZM847,362 845,364 845,367 847,369 850,369 852,367 852,364 850,362ZM639,362 637,363 637,367 639,369 641,369 643,367 643,363ZM372,362 370,363 370,368 374,369 376,367 376,363ZM100,362 98,364 98,367 100,369 104,368 105,365 103,362ZM1299,361 1299,413 1304,413 1304,361ZM420,361 414,361 408,371 413,371ZM1799,70 1777,70 1737,163 1719,208 1717,206 1713,194 1710,189 1663,70 1642,70 1642,73 1646,83 1649,88 1676,157 1679,162 1704,226 1707,231 1706,237 1679,298 1677,305 1698,305ZM472,67 472,168 473,169 474,182 477,192 483,204 488,211 501,223 514,230 527,234 541,235 542,236 560,235 577,230 592,221 602,211 603,212 603,233 623,233 623,67 603,67 603,158 602,159 602,170 599,181 594,191 581,205 569,212 551,216 534,215 523,212 512,206 500,193 496,185 493,173 493,67ZM1446,87 1434,101 1426,116 1420,140 1420,160 1421,161 1422,172 1428,189 1438,205 1451,218 1463,226 1481,233 1490,235 1498,235 1499,236 1518,235 1527,233 1540,228 1554,219 1567,205 1568,206 1568,233 1588,233 1588,67 1568,67 1568,94 1567,95 1555,82 1543,74 1528,68 1512,65 1497,65 1496,66 1489,66 1480,68 1461,76ZM1495,85 1520,86 1535,91 1543,96 1555,107 1560,114 1565,124 1569,139 1569,162 1564,179 1559,188 1541,206 1531,211 1517,215 1509,215 1508,216 1492,215 1476,210 1466,204 1457,196 1449,185 1445,177 1441,163 1441,156 1440,155 1441,137 1445,123 1451,112 1468,95 1482,88ZM758,66 736,72 726,77 716,84 702,99 693,116 689,129 688,142 687,143 688,165 692,181 698,194 709,209 719,218 734,227 752,233 766,234 767,235 786,234 802,230 815,224 829,214 834,208 821,195 805,207 794,212 782,215 757,214 744,210 733,204 718,189 712,178 709,169 708,157 707,156 707,144 708,143 709,131 712,122 718,111 728,100 738,93 753,87 763,85 781,85 791,87 804,92 812,97 821,105 834,91 818,78 804,71 795,68 785,66 774,66 773,65ZM61,67 52,70 38,77 31,82 18,95 7,113 3,124 0,139 0,162 6,186 14,201 30,218 37,223 51,230 72,235 97,235 118,230 141,218 157,202 142,190 130,202 109,212 95,215 74,215 64,213 47,205 34,193 25,178 21,165 21,161 22,160 166,160 166,151 167,150 166,130 161,111 155,99 150,92 136,79 121,71 109,67 99,66 98,65 71,65ZM21,137 27,118 34,107 45,96 59,88 73,84 97,84 106,86 119,91 129,98 137,107 143,118 147,133 147,140 146,141 22,141ZM970,64 950,68 936,74 924,82 912,94 904,106 897,123 894,137 894,164 899,184 907,200 914,209 929,222 940,228 959,234 964,234 965,235 990,235 1008,231 1025,223 1032,218 1045,205 1051,196 1059,177 1062,161 1062,140 1059,124 1055,113 1046,97 1034,84 1023,76 1002,67 993,65 986,65 985,64ZM958,86 967,84 989,84 1003,88 1017,96 1028,107 1037,122 1042,142 1042,159 1038,176 1029,192 1019,202 1010,208 1001,212 988,215 967,215 952,211 944,207 932,198 926,191 918,177 914,162 914,139 920,119 926,109 935,99 948,90ZM399,0 378,0 378,93 377,94 365,81 358,76 346,70 327,65 300,65 280,70 268,76 257,84 250,91 241,104 236,115 231,134 230,156 231,157 231,166 233,176 237,188 246,204 259,218 269,225 285,232 298,235 307,235 308,236 327,235 342,231 355,225 365,218 377,205 378,206 378,233 399,233ZM308,84 320,84 321,85 332,86 338,88 354,97 365,108 374,124 378,140 378,159 376,169 373,178 364,193 355,202 346,208 331,214 319,215 318,216 301,215 293,213 279,207 272,202 265,195 256,181 252,169 251,156 250,155 250,145 251,144 251,136 255,121 263,107 277,94 292,87Z"/><path fill="#59bd8d" fill-rule="evenodd" d="M1140,69 1128,73 1121,79 1116,89 1116,94 1115,95 1116,104 1165,225 1164,221 1167,209 1192,149 1166,84 1162,78 1156,73 1149,70Z"/><path fill="#3ab1a1" fill-rule="evenodd" d="M1216,91 1166,215 1166,220 1165,221 1166,222 1166,228 1169,235 1174,241 1180,245 1186,247 1198,247 1204,245 1213,238 1219,227 1231,195 1242,170 1242,167 1237,157 1215,100Z"/><path fill="#39b0bb" fill-rule="evenodd" d="M1236,70 1229,73 1222,79 1217,88 1216,100 1219,110 1224,120 1265,223 1266,213 1291,153 1292,146 1274,104 1268,86 1264,79 1257,73 1250,70Z"/><path fill="#34aec3" fill-rule="evenodd" d="M1293,149 1266,217 1266,224 1270,235 1278,243 1288,247 1298,247 1308,243 1316,235 1319,227 1319,214Z"/><path fill="#54bbe3" fill-rule="evenodd" d="M1350,70 1334,71 1327,75 1322,80 1319,85 1311,107 1308,112 1294,147 1294,151 1297,156 1320,214 1320,226 1370,102 1370,89 1367,82 1358,73Z"/></svg>
+<div class="hdr-text"><h1>Informe personalizado de opciones de grado</h1><p class="hdr-sub">Preparado para Fernando Chuc Ávila</p></div>
+</div>
+<nav class="tabs" aria-label="Secciones del informe"><button class="tab active" data-tab="intro" onclick="showTab('intro',this)">Introducción</button><button class="tab" data-tab="rva" onclick="showTab('rva',this)">Research vs Applied Sciences</button><button class="tab" data-tab="nl" onclick="showTab('nl',this)"><span class="flag flag-nl" aria-hidden="true"><span></span><span></span><span></span></span><span>Países Bajos</span></button><button class="tab" data-tab="dk" onclick="showTab('dk',this)"><span class="flag flag-dk" aria-hidden="true"><span class="v"></span><span class="h"></span></span><span>Dinamarca</span></button><button class="tab" data-tab="es" onclick="showTab('es',this)"><span class="flag flag-es" aria-hidden="true"><span></span><span></span><span></span></span><span>España</span></button><button class="tab" data-tab="fi" onclick="showTab('fi',this)"><span class="flag flag-fi" aria-hidden="true"><span class="v"></span><span class="h"></span></span><span>Finlandia</span></button><button class="tab" data-tab="de" onclick="showTab('de',this)"><span class="flag flag-de" aria-hidden="true"><span></span><span></span><span></span></span><span>Alemania</span></button></nav>
+</header>
+<main class="wrap">
+<section class="panel active" id="panel-intro">
+<div class="prose">
+<p class="greet">Hola, Fernando:</p>
+<p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencido de que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+<p>Estos días he estado trabajando en la búsqueda de los grados solicitados y de otros programas afines que, según lo que hemos hablado, podrían interesarte especialmente.</p>
+<p>Te dejo primero un índice para que puedas localizar fácilmente las distintas opciones y, a continuación, encontrarás el listado completo con los detalles más relevantes de cada programa, junto con algunas recomendaciones finales.</p>
+<p><strong>Una consideración importante sobre el acceso a las universidades de investigación en Países Bajos (<em>Research Universities</em>):</strong> con el Bachillerato mexicano, por regla general, no se obtiene directamente la equivalencia académica necesaria para acceder a estos grados, ya que suelen exigir un nivel equivalente al VWO neerlandés. Por ello, una posible vía alternativa sería cursar primero un año académico de 60 ECTS en una universidad de ciencias aplicadas (<em>University of Applied Sciences – UAS</em>), como HZ University of Applied Sciences, en un programa relacionado con Ingeniería Civil. Una vez superado ese primer año, se podría solicitar la admisión en una universidad de investigación como TU Delft o Universidad de Twente (dos universidades que tienen el grado de Ingeneria Civil)</p>
+<p>Es importante tener presente que esta vía no garantiza la admisión: cada universidad evalúa individualmente los estudios previos, las asignaturas cursadas, los créditos obtenidos y las calificaciones. Además, los requisitos específicos de TU Delft y Twente pueden ser diferentes. Por eso, antes de elegir esta ruta, recomiendo solicitar a la universidad de destino una confirmación por escrito de que el primer año cursado en la UAS será válido para su proceso de admisión.</p>
+</div>
+<h2 class="sec-title">Índice de opciones</h2>
+<div class="index"><div class="ix-country"><h3><span class="flag flag-nl" aria-hidden="true"><span></span><span></span><span></span></span> Países Bajos</h3><ul><li><a href="#card-hz" onclick="goTo('nl','card-hz');return false;"><span class="ix-deg">Bachelor (BSc) in Civil Engineering</span><span class="ix-uni">HZ University of Applied Sciences</span></a></li><li><a href="#card-saxion" onclick="goTo('nl','card-saxion');return false;"><span class="ix-deg">Bachelor in Civil Engineering</span><span class="ix-uni">Saxion University of Applied Sciences</span></a></li></ul></div><div class="ix-country"><h3><span class="flag flag-dk" aria-hidden="true"><span class="v"></span><span class="h"></span></span> Dinamarca</h3><ul><li><a href="#card-via" onclick="goTo('dk','card-via');return false;"><span class="ix-deg">Bachelor in Architectural Technology and Construction Management</span><span class="ix-uni">VIA University College</span></a></li><li><a href="#card-zealand" onclick="goTo('dk','card-zealand');return false;"><span class="ix-deg">Bachelor in Architectural Technology and Construction Management</span><span class="ix-uni">Zealand University of Applied Sciences</span></a></li></ul></div><div class="ix-country"><h3><span class="flag flag-es" aria-hidden="true"><span></span><span></span><span></span></span> España</h3><ul><li><a href="#card-upv" onclick="goTo('es','card-upv');return false;"><span class="ix-deg">Ingeniería Civil</span><span class="ix-uni">Universidad Politécnica de Valencia (UPV)</span></a></li><li><a href="#card-ua" onclick="goTo('es','card-ua');return false;"><span class="ix-deg">Ingeniería Civil</span><span class="ix-uni">Universidad de Alicante</span></a></li><li><a href="#card-uax" onclick="goTo('es','card-uax');return false;"><span class="ix-deg">Ingeniería Civil en Construcciones Civiles</span><span class="ix-uni">Universidad Alfonso X el Sabio (UAX)</span></a></li><li><a href="#card-ue" onclick="goTo('es','card-ue');return false;"><span class="ix-deg">Ingeniería Civil</span><span class="ix-uni">Universidad Europea</span></a></li></ul></div><div class="ix-country"><h3><span class="flag flag-fi" aria-hidden="true"><span class="v"></span><span class="h"></span></span> Finlandia</h3><ul><li><a href="#card-lut" onclick="goTo('fi','card-lut');return false;"><span class="ix-deg">Bachelor in Civil Engineering</span><span class="ix-uni">LUT University</span></a></li><li><a href="#card-hamk" onclick="goTo('fi','card-hamk');return false;"><span class="ix-deg">Bachelor in Construction Engineering</span><span class="ix-uni">HAMK University of Applied Sciences (HAMK)</span></a></li></ul></div><div class="ix-country"><h3><span class="flag flag-de" aria-hidden="true"><span></span><span></span><span></span></span> Alemania</h3><ul><li><a href="#card-thi" onclick="goTo('de','card-thi');return false;"><span class="ix-deg">Bachelor in Sustainable Civil Engineering</span><span class="ix-uni">Technische Hochschule Ingolstadt (THI)</span></a></li></ul></div></div>
+<div class="next-steps">
+<h2>¿Qué tienes que hacer ahora?</h2>
+<p>Echa un vistazo a todas las opciones, mira los videos, lee el contenido de las webs (asignaturas, especializaciones, etc.) y ve apuntando cualquier duda que te surja y pensando en qué opciones te gustan más. Cuando hayas terminado, avísame y buscamos un día y hora para tener una reunión, comentar las opciones y resolver dudas.</p>
+<p>¡Un saludo!</p>
+</div>
+</section><section class="panel" id="panel-rva">
+<h2 class="sec-title">Universidades de “Research” vs “Applied Sciences”</h2>
+<div class="prose">
+<p>Como creo que ya te hemos explicado, en la mayoría de países europeos tenemos que diferenciar entre <u>2 tipos de universidades</u>: "<em>Research</em>" y "<em>Applied Sciences</em>". Los dos tipos de universidad comparten muchos puntos muy atractivos, pero para entender bien estos dos sistemas, es interesante fijarse en sus principales diferencias:</p>
+<div class="rva-grid">
+<div class="rva-item"><h3>Metodología teórica vs práctica</h3>
+<p>Las universidades de <em>Applied Sciences</em> destacan por usar una metodología muy práctica llamada PBL (<em>Project</em>/<em>Problem Based Learning</em>). Se trata de imitar desde el primer año un entorno de trabajo real por proyectos, en los que hay que colaborar con compañeros, investigar para encontrar y evaluar soluciones y consensuar una estrategia que después debe ser implementada en conjunto. Es una metodología súper interesante (la misma que se usa en Dinamarca) y que facilita mucho el aprendizaje y la obtención de habilidades reales que podrás aplicar en cuanto te gradúes. Este tipo de universidades casi siempre incluyen un periodo de prácticas profesionales obligatorio de 1 semestre. Las universidades de <em>Research</em> no tienen este enfoque tan práctico, sino que intentan sentar unas bases profundas de teoría y de habilidades de investigación para que los estudiantes luego elijan un máster en el que especializarse y donde sí adquieran habilidades más reales (más aplicables a su posición laboral). Estas universidades no suelen incluir prácticas dentro del grado.</p></div>
+<div class="rva-item"><h3>Duración</h3>
+<p>Las universidades de <em>Applied Sciences</em> duran un año más (4 años, 240 ECTS) porque incluyen prácticas en empresa y porque están pensadas para que accedas directamente al mercado laboral sin pasar por un máster.</p>
+<p>Las de <em>Research</em> duran solo 3 años (180 ECTS) porque no tienen prácticas y se suelen complementar con un máster de 1 o 2 años.</p></div>
+<div class="rva-item"><h3>Ranking / Prestigio</h3>
+<p>El principal motivo por el cual se podría escoger una universidad de <em>Research</em> es por el mayor ranking y prestigio que estas universidades tienen.</p>
+<p>Las universidades de <em>Applied Sciences</em> (<em>Hogeschools</em> en holandés) a veces son infravaloradas entre los estudiantes por no aparecer en los rankings internacionales (no tienen facultades de investigación que desarrollen estudios ni publicaciones científicas que es lo que más puntúa en los rankings).</p></div>
+<div class="rva-item"><h3>Acceso a Másteres</h3>
+<p>Aquí es importante diferenciar si tu máster será en Holanda u otro país. Si es fuera de Holanda, ambos títulos te dan las mismas oportunidades. Si se trata de Holanda, con tu título de universidad de <em>Research</em> podrás acceder a másteres tanto en universidades de <em>Research</em> como <em>Applied Sciences</em>. En cambio, con tu título de <em>Applied Sciences</em> podrás acceder a másteres en universidades de <em>Applied Sciences</em>, pero si quieres acceder a universidades de <em>Research,</em> te pedirán cursar un pre-máster (de 1 semestre o un año de duración).</p></div>
+</div>
+<p>Para que tengas más información, te dejo dos enlaces interesantes de 2 fuentes distintas (una universidad de <em>Research</em> y otra de <em>Applied Sciences</em>):</p>
+<ul class="links">
+<li><a href="https://www.rug.nl/education/bachelor/international-students/study-choice-and-information/choose-a-study/" target="_blank" rel="noopener">Applied Science vs. Research University</a></li>
+<li><a href="https://www.inholland.nl/inhollandcom/about-inholland/types-of-universities/" target="_blank" rel="noopener">Types of universities in the Netherlands</a></li>
+</ul>
+<p>Ahora sí, habiendo comentado estos detalles, te paso primero las opciones de grado y posteriormente comentamos el resto de opciones.</p>
+</div>
+</section><section class="panel" id="panel-nl">
+<div class="country-intro"><span class="flag flag-nl lg" aria-hidden="true"><span></span><span></span><span></span></span><div><h2>Países Bajos</h2>
+<div class="country-meta"><span><strong>Matrícula:</strong> 9.360 € – 10.176 € / año (non-EU), según las fichas</span><span><strong>Alojamiento:</strong> <span class="pending">Pendiente: dato no incluido en el informe</span></span></div></div></div>
+<div class="country-alert"><p class="alert-label">Aviso para todo el país</p><p><strong>Una consideración importante sobre el acceso a las universidades de investigación en Países Bajos (<em>Research Universities</em>):</strong> con el Bachillerato mexicano, por regla general, no se obtiene directamente la equivalencia académica necesaria para acceder a estos grados, ya que suelen exigir un nivel equivalente al VWO neerlandés. Por ello, una posible vía alternativa sería cursar primero un año académico de 60 ECTS en una universidad de ciencias aplicadas (<em>University of Applied Sciences – UAS</em>), como HZ University of Applied Sciences, en un programa relacionado con Ingeniería Civil. Una vez superado ese primer año, se podría solicitar la admisión en una universidad de investigación como TU Delft o Universidad de Twente (dos universidades que tienen el grado de Ingeneria Civil)</p>
+<p>Es importante tener presente que esta vía no garantiza la admisión: cada universidad evalúa individualmente los estudios previos, las asignaturas cursadas, los créditos obtenidos y las calificaciones. Además, los requisitos específicos de TU Delft y Twente pueden ser diferentes. Por eso, antes de elegir esta ruta, recomiendo solicitar a la universidad de destino una confirmación por escrito de que el primer año cursado en la UAS será válido para su proceso de admisión.</p></div>
+<div class="sec-sep"><span>APPLIED SCIENCE UNIVERSITIES</span></div><article class="card" id="card-hz">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://hz.nl/en/study-programmes/civil-engineering" target="_blank" rel="noopener">Bachelor (BSc) in Civil Engineering<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">HZ University of Applied Sciences, Middelburg</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">No aparece en el ranking de Shanghái</span></div>
+<p class="rank-note">Las universidades de <em>Applied Science</em> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+</div>
+<span class="diff diff-low">Dificultad: BAJA</span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Middelburg <span class="pop">(40.000 habitantes)</span></span>
+<button class="btn-map" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">3-4 años (180-240 ECTS)</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">€10,176 non -EU</span></span><span class="mx">Posibilidad de una BECA: <a href="https://hz.nl/en/practical-information/fees-and-finances" target="_blank" rel="noopener">https://hz.nl/en/practical-information/fees-and-finances</a></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">inglés</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv"><span class="txt-red">1 de junio</span></span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>El programa de Civil Engineering en HZ (Holanda) es un grado práctico y aplicado, impartido en inglés, con duración de 3 o 4 años según la vía escogida. Desde el primer año los estudiantes aprenden tanto teoría como práctica: sobre construcción de infraestructuras, hidráulica, hidrología, estructuras, materiales y diseño sostenible. Se estudian los fundamentos del funcionamiento de construcciones, el impacto del agua y el medio ambiente, así como los principios de sostenibilidad y circularidad aplicados a las edificaciones y obras civiles. Durante los cursos posteriores se profundiza en diseño estructural, geotecnia, gestión de proyectos, protección costera, drenajes, sistemas de transporte y diseño de diques, integrando enfoques ambientales y desafíos del cambio climático. Además, el programa incluye trabajos reales del sector, dos prácticas profesionales (internships) y un minor (especialización) para ganar experiencia directa en empresas u organizaciones del ámbito civil.</p>
+<p>Al finalizar, los graduados adquieren un perfil versátil para desempeñarse en múltiples fases de proyectos civiles: desde la fase de viabilidad, el diseño, la construcción, hasta el mantenimiento y operación de infraestructuras. Pueden trabajar como diseñadores estructurales, ingenieros de obra, gestores de proyecto, consultores, especialistas en protección costera, hidráulica, drenaje, transportes o urbanismo técnico. También tienen opciones de convertirse en investigadores o continuar con másteres en campos como ingeniería civil avanzada, modelos hidráulicos, medio ambiente, o desarrollo en zonas delta. Con el título de HZ se puede acceder a un máster en HZ (por ejemplo “River Delta Development”) o bien continuar estudios en universidades holandesas u otras internacionales (posiblemente con un prerrequisito o “pre-master”).</p></div>
+
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><p><strong>Académicos:</strong> Título de Bachillerato</p>
+<ul><li>Matemáticas (obligatoria)</li><li>Física (obligatoria)<ul><li>Si hay una deficiencia puedes realizar un curso online <a href="https://hz.nl/en/study-programmes/introductory-mathematics-course" target="_blank" rel="noopener">https://hz.nl/en/study-programmes/introductory-mathematics-course</a></li></ul></li></ul></div><div class="req-block"><h4>Inglés</h4><p><strong>Nivel de inglés:</strong> Certificado B2</p>
+<ul><li>IELTS (Academic): Overall mínimo 6.0.</li>
+<li>TOEFL iBT (Traditional &amp; Paper Edition, en centro oficial): Overall mínimo 80.</li>
+<li>TOEIC: Listening and Reading: 865 y Speaking and Writing: 335</li>
+<li>Pearson PTE Academic: Overall mínimo 61.</li>
+<li>LanguageCert Academic: Overall mínimo 65.</li>
+<li>Cambridge English: First (FCE) – Grade B (escala 173–175) o Grade C (escala 169–172)</li></ul></div><div class="req-block"><h4>Proceso de selección</h4><p>no hay proceso de selección</p></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> <span class="txt-red">1 de junio</span></div></div></details>
+</article><article class="card" id="card-saxion">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://www.saxion.edu/programmes/bachelor/civil-engineering" target="_blank" rel="noopener">Bachelor in Civil Engineering<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">Saxion University of Applied Sciences, Enschede</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">No aparece en el ranking de Shanghái</span></div>
+<p class="rank-note">Las universidades de <em>Applied Science</em> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+</div>
+<span class="diff diff-low">Dificultad: BAJA</span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Enschede <span class="pop">(161.000 habitantes)</span></span>
+<button class="btn-map" onclick="scrollToMap('nl','map-nl')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">4 años 240 ECTS</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">9360€ año Non-EU</span></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">inglés (impartida íntegramente en inglés, según la descripción del programa)</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv"><span class="txt-red">1 de mayo</span></span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>Civil Engineering en Saxion University of Applied Sciences es una licenciatura universitaria de cuatro años (240 ECTS), impartida íntegramente en inglés en Enschede, Países Bajos. Forma ingenieros especializados en el diseño y construcción de infraestructuras como puentes, carreteras, puertos, canales y sistemas hidráulicos, con especial atención a la sostenibilidad, la gestión del agua y la adaptación al cambio climático. Combinas matemáticas, mecánica y geotecnia con proyectos prácticos, incluye seis meses de prácticas profesionales y permite especializarse en ingeniería hidráulica, gestión del agua, estructuras e infraestructuras. Al graduarse, el estudiante obtiene un título Bachelor of Science (BSc) y puede trabajar en empresas de ingeniería, construcción y consultoría.</p></div>
+
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><p><strong>Académicos:</strong> Título de Bachillerato</p></div><div class="req-block"><h4>Inglés</h4><p><strong>Nivel de inglés:</strong> Certificado B2</p>
+<ul><li>IELTS Academic with a minimum overall score of 6.0.</li>
+<li>TOEFL iBT with a minimum score of 4.5. Exams taken before 21 January 2026 with a minimum score of 80. Please note that we do not accept the MyBest scores of the TOEFL test.</li>
+<li>TOEIC, both listening and reading with a minimum score of 865 and speaking and writing with a minimum score of 335.</li>
+<li>Cambridge English Language Assessment with a minimum score of 169 – First, Advanced, Proficiency.</li>
+<li>LanguageCert Academic with a minimum score of 65.</li></ul></div><div class="req-block"><h4>Proceso de selección</h4><p>entrevista – 35 estudiantes admitido cada año al programa.</p></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> <span class="txt-red">1 de mayo</span></div></div></details>
+</article>
+<div class="map-wrap"><h3 class="map-title">Mapa de universidades: Países Bajos</h3><div class="map" id="map-nl"></div></div>
+</section><section class="panel" id="panel-dk">
+<div class="country-intro"><span class="flag flag-dk lg" aria-hidden="true"><span class="v"></span><span class="h"></span></span><div><h2>Dinamarca</h2>
+<div class="country-meta"><span><strong>Matrícula:</strong> 14.200 € – 16.610 € / año, según las fichas</span><span><strong>Alojamiento:</strong> <span class="pending">Pendiente: dato no incluido en el informe</span></span></div></div></div>
+
+<div class="sec-sep"><span>APPLIED SCIENCE UNIVERSITIES</span></div><article class="card" id="card-via">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://en.via.dk/programmes/bachelor/architectural-technology" target="_blank" rel="noopener">Bachelor in Architectural Technology and Construction Management<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">VIA University College, Horsens</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">No aparece en el ranking de Shanghái</span></div>
+<p class="rank-note">Las universidades de <em>Applied Science</em> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+</div>
+<span class="diff diff-none">Dificultad: pendiente</span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Horsens <span class="pop">(60.000 habitantes)</span></span>
+<button class="btn-map" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">3,5 años (210 ECTS)</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">€16,610/año</span></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">inglés (impartido en inglés, según la descripción del programa)</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv">15 de marzo.</span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>El programa de Architectural Technology and Construction Management (ATCM) en VIA es un grado profesional de 3,5 años (210 ECTS) impartido en inglés, con inicio en agosto y un fuerte componente práctico. Desde los semestres iniciales los estudiantes trabajan con proyectos reales de construcción —tanto pequeños como grandes—, aprendiendo a planificar, ejecutar y gestionar obras desde su concepción hasta su finalización. En el transcurso del programa se desarrolla una vía de especialización: algunos optan por el enfoque más técnico-constructivo (Construction Management), y otros se orientan al perfil de tecnología arquitectónica (Architectural Technology).</p>
+<p>Durante el grado, aprenderás competencias técnicas como el uso de herramientas digitales para diseño (por ejemplo Revit u otras plataformas BIM), cálculo estructural, diseño de instalaciones, materiales de construcción, sostenibilidad energética y gestión de costes y plazos. Además, el programa incorpora metodologías centradas en proyectos (project based learning) y conexión con la industria, mediante visitas a empresas, realización de ‘masterclasses’ con profesionales del sector y colaboración directa con empresas durante casos reales. En el sexto semestre hay un internado obligatorio (20 semanas) en una empresa del sector, para poner en práctica lo aprendido y fortalecer tu red profesional. El programa culmina con el proyecto de fin de grado en el séptimo semestre.</p>
+<p>En cuanto a las salidas profesionales, los egresados de ATCM están capacitados para desempeñar funciones de nexo entre arquitectos, ingenieros, constructoras y autoridades. Algunos roles típicos incluyen project manager, construction manager, architectural technologist o coordinador técnico de obras. También se encuentran oportunidades en empresas de ingeniería, estudios de arquitectura, firmas de consultoría, sector público en planificación urbana, administración de propiedades o incluso emprendimiento propio en proyectos de construcción.</p></div>
+
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><p><strong>Académicos:</strong> Título de Bachillerato</p>
+<ul><li>Matemáticas (obligatoria): 125 horas</li><li>Inglés (obligatoria): 75 horas</li></ul></div><div class="req-block"><h4>Inglés</h4><p><strong>Nivel de inglés:</strong> No es necesario aportar un certificado si se cumple el requisito de haber cursado al menos 210 horas durante el bachillerato.</p></div><div class="req-block"><h4>Proceso de selección</h4><p>Las solicitudes son evaluadas según varios criterios adicionales: el expediente académico, un vídeo de motivación, experiencia laboral, estancias en el extranjero y cursos relevantes. También pueden convocar entrevistas personales para algunos candidatos como parte del proceso de evaluación. Para quienes no cumplen todos los requisitos de admisión, existe la opción de admisión con permiso especial (special permission), en la que VIA evalúa si tus cualificaciones profesionales pueden suplir las carencias formales.</p></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> 15 de marzo.</div></div></details>
+</article><article class="card" id="card-zealand">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://zealand.com/fuldtid/architectural-technology-and-construction-management/" target="_blank" rel="noopener">Bachelor in Architectural Technology and Construction Management<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">Zealand University of Applied Sciences, Næstved</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">No aparece en el ranking de Shanghái</span></div>
+<p class="rank-note">Las universidades de <em>Applied Science</em> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+</div>
+<span class="diff diff-low">Dificultad: BAJA</span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Næstved <span class="pop">(<span class="pending">Pendiente: dato no incluido en el informe</span>)</span></span>
+<button class="btn-map" onclick="scrollToMap('dk','map-dk')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">3,5 años (210 ECTS)</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">14.200 €/ año</span></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">inglés (impartida en inglés, según la descripción del programa)</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv"><span class="txt-red">15 de marzo.</span></span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>Architectural Technology and Construction Management es una carrera profesional de 3,5 años (210 ECTS), impartida en inglés en Dinamarca. Forma especialistas en diseño técnico de edificios, sistemas constructivos, modelado BIM, planificación y gestión de proyectos de construcción. Combina conocimientos de arquitectura, tecnología y administración de obras, e incluye 20 semanas de prácticas profesionales.</p>
+<p>Salidas laborales: técnico de construcción, coordinador BIM, gestor de proyectos y supervisor de obras.</p>
+<p>Importante: no es Ingeniería Civil; está más enfocada en edificios y gestión de construcción que en estructuras, carreteras, puentes o hidráulica.</p></div>
+
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><p><strong>Académicos:</strong> Título de Bachillerato</p>
+<ul><li>Matemáticas 75 horas</li><li>Inglés 210 horas</li></ul></div><div class="req-block"><h4>Inglés</h4><p><strong>Nivel de inglés:</strong></p>
+<ul><li>Nivel danés B o equivalente</li>
+<li>IELTS Academic: 6.5 mínimo</li>
+<li>TOEFL iBT: 94 para pruebas anteriores al 21 de enero de 2026; 4.5 para el formato nuevo posterior a esa fecha</li>
+<li>Cambridge: C1 Advanced o C2 Proficiency, mínimo 180</li></ul></div><div class="req-block"><h4>Proceso de selección</h4><p>no hay un proceso de selección</p></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> <span class="txt-red">15 de marzo.</span></div></div></details>
+</article>
+<div class="map-wrap"><h3 class="map-title">Mapa de universidades: Dinamarca</h3><div class="map" id="map-dk"></div></div>
+</section><section class="panel" id="panel-es">
+<div class="country-intro"><span class="flag flag-es lg" aria-hidden="true"><span></span><span></span><span></span></span><div><h2>España</h2>
+<div class="country-meta"><span><strong>Matrícula:</strong> 2.080 € – 13.100 € / año, según las fichas</span><span><strong>Alojamiento:</strong> <span class="pending">Pendiente: dato no incluido en el informe</span></span></div></div></div>
+
+<div class="sec-sep"><span>UNIVERSIDADES PUBLICAS</span></div><article class="card" id="card-upv">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://www.upv.es/titulaciones/GIC/indexi.html" target="_blank" rel="noopener">Ingeniería Civil<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">Universidad Politécnica de Valencia (UPV), Valencia</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">Shanghái mundial: 401–500</span><span class="badge-rank gold">Shanghái Ingeniería Civil: 50</span></div>
+<p class="rank-note">Puesto 401–500 mundial en el ranking de Shanghái y 50 en el grado de Ingeneria Civil. Es una de las universidades politécnicas españolas reconocidas internacionalmente.</p>
+</div>
+<span class="diff diff-high">Dificultad: MEDIA ALTA<span class="diff-corte">Nota de corte: 10,47 / 14</span></span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Valencia <span class="pop">(840.000 habitantes)</span></span>
+<button class="btn-map" onclick="scrollToMap('es','map-es')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">4 años (240 ECTS)</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">2.081 € NON -EU</span></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">español</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv"><span class="txt-red">15 de junio al 3 de julio</span></span></div><div class="meta"><span class="ml">Plazas</span><span class="mv">100</span></div><div class="meta"><span class="ml">Nota de corte</span><span class="mv"><span class="txt-orange">10,47 sobre 14</span> (2026/2027, primera referencia de admisión)</span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>El Grado en Ingeniería Civil de la Universitat Politècnica de València (UPV) es una carrera universitaria pública y presencial de cuatro años (240 ECTS), impartida principalmente en español en Valencia. Forma profesionales capaces de diseñar, calcular, construir y gestionar infraestructuras como carreteras, puentes, túneles, presas, puertos y sistemas hidráulicos. Durante la carrera, los estudiantes adquieren conocimientos de matemáticas, física, estructuras, geotecnia, hidráulica, transporte y gestión de obras, combinando formación científica y técnica. Al finalizar, el título habilita para ejercer como Ingeniero Técnico de Obras Públicas, en la especialidad de Construcciones Civiles, y permite continuar con el Máster Universitario en Ingeniería de Caminos, Canales y Puertos. Sus graduados pueden trabajar en empresas constructoras, consultoras de ingeniería, organismos públicos y proyectos de infraestructuras.</p></div>
+
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><ul><li><strong>Académicos:</strong> Título de Bachillerato mexicano homologable al Bachillerato español.</li>
+<li>Matemáticas y física cursado en Bachiller</li>
+<li>La nota de corte publicada para 2026/2027 fue de <span class="txt-orange">10,47 sobre 14</span> en la primera referencia de admisión. La nota de corte puede cambiar cada año según la demanda y las plazas disponibles. La oferta es de 100 plazas para el grado</li></ul></div><div class="req-block"><h4>Proceso de selección</h4><ul class="checks">
+<li>Homologación: Obtener la homologación del bachillerato mexicano al título de Bachiller español, tramitada ante el Ministerio de Educación de España.</li>
+<li>Acreditación UNEDasiss: Solicitar la acreditación de acceso universitario mediante UNEDasiss, que permite calcular la nota de admisión.</li>
+<li>Pruebas PCE: Se pueden realizar las Pruebas de Competencias Específicas de UNED para mejorar la nota de admisión hasta 14 puntos.</li>
+<li>Preinscripción universitaria: Presentar la solicitud de plaza mediante el sistema de preinscripción de la Generalitat Valenciana.</li>
+<li>Adjudicación: Las plazas se asignan según la nota de admisión y la disponibilidad de plazas.</li>
+</ul></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> <span class="txt-red">15 de junio al 3 de julio</span></div></div></details>
+</article><article class="card" id="card-ua">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://web.ua.es/es/grados/grado-en-ingenieria-civil" target="_blank" rel="noopener">Ingeniería Civil<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">Universidad de Alicante, Alicante</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">Shanghái mundial: 901–1000</span></div>
+<p class="rank-note">puesto 901–1000 mundial en el Academic Ranking of World Universities (Shanghái 2026).</p>
+</div>
+<span class="diff diff-low">Dificultad: MEDIA<span class="diff-corte">Nota de corte: 8,483 / 14</span></span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Alicante <span class="pop">(<span class="pending">Pendiente: dato no incluido en el informe</span>)</span></span>
+<button class="btn-map" onclick="scrollToMap('es','map-es')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">4 años (240 ECTS)</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">2.080 € NON -EU</span></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">español</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv"><span class="txt-red">15 de junio al 3 de julio</span></span></div><div class="meta"><span class="ml">Plazas</span><span class="mv">75</span></div><div class="meta"><span class="ml">Nota de corte</span><span class="mv"><span class="txt-orange">8,483 sobre 14</span> (2026/2027, primera referencia de admisión)</span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>El Grado en Ingeniería Civil de la Universidad de Alicante es una carrera pública y presencial de cuatro años (240 ECTS), impartida principalmente en castellano. Forma profesionales capaces de diseñar, planificar, construir y gestionar infraestructuras civiles y sistemas de transporte e hidráulicos. El programa incluye formación en matemáticas, física, estructuras, geotecnia, hidráulica, construcción y transporte. Ofrece tres itinerarios de especialización: Construcciones Civiles, Hidrología y Transportes y Servicios Urbanos. También contempla prácticas académicas externas. El título habilita para ejercer como Ingeniero Técnico de Obras Públicas y permite continuar estudios de posgrado relacionados con la ingeniería civil.</p></div>
+
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><ul><li><strong>Académicos:</strong> Título de Bachillerato mexicano homologable al Bachillerato español.</li>
+<li>Matemáticas y física cursado en Bachiller</li>
+<li>La nota de corte publicada para 2026/2027 fue de <span class="txt-orange">8,483 sobre 14,</span> en la primera referencia de admisión. La nota de corte puede cambiar cada año según la demanda y las plazas disponibles. La oferta es de 100 plazas para el grado</li></ul></div><div class="req-block"><h4>Proceso de selección</h4><ul class="checks">
+<li>Homologación: Obtener la homologación del bachillerato mexicano al título de Bachiller español, tramitada ante el Ministerio de Educación de España.</li>
+<li>Acreditación UNEDasiss: Solicitar la acreditación de acceso universitario mediante UNEDasiss, que permite calcular la nota de admisión.</li>
+<li>Pruebas PCE: Se pueden realizar las Pruebas de Competencias Específicas de UNED para mejorar la nota de admisión hasta 14 puntos.</li>
+<li>Preinscripción universitaria: Presentar la solicitud de plaza mediante el sistema de preinscripción de la Generalitat Valenciana.</li>
+<li>Adjudicación: Las plazas se asignan según la nota de admisión y la disponibilidad de plazas.</li>
+</ul></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> <span class="txt-red">15 de junio al 3 de julio</span></div></div></details>
+</article><div class="sec-sep"><span>UNIVERSIDADES PRIVADAS</span></div><article class="card" id="card-uax">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://www.uax.com/titulaciones/grado-en-ingenieria-civil-en-construcciones-civiles" target="_blank" rel="noopener">Ingeniería Civil en Construcciones Civiles<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">Universidad Alfonso X el Sabio (UAX), Madrid (Villanueva de la Cañada)</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">No aparece en el ranking de Shanghái</span></div>
+
+</div>
+<span class="diff diff-low">Dificultad: BAJA</span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Madrid (Villanueva de la Cañada) <span class="pop">(<span class="pending">Pendiente: dato no incluido en el informe</span>)</span></span>
+<button class="btn-map" onclick="scrollToMap('es','map-es')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">4 años (240 ECTS)</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">€13.100 año (incluido matricula, y reserva)</span></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">español</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv"><span class="txt-red">1 de abril</span></span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>El Grado en Ingeniería Civil en Construcciones Civiles de la Universidad Alfonso X el Sabio (UAX) es una carrera universitaria presencial de cuatro años (240 ECTS), impartida en español en Madrid, que forma profesionales capaces de diseñar, calcular, construir y gestionar infraestructuras como carreteras, puentes, edificios y obras hidráulicas. Durante la carrera, los estudiantes adquieren conocimientos de matemáticas, física, estructuras, geotecnia, hidráulica, transporte y gestión de obras, combinando formación teórica y práctica. Al finalizar, podrán trabajar en empresas constructoras, consultoras de ingeniería, organismos públicos y proyectos de infraestructuras, participando en el diseño, ejecución y supervisión de obras civiles.</p></div>
+
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><p><strong>Académicos:</strong> Título de Bachillerato</p><ul><li>Matemáticas y física cursado en Bachiller</li></ul></div><div class="req-block"><h4>Proceso de selección</h4><ul class="checks">
+<li>Prueba de competencias online</li>
+<li>Entrevista online</li>
+<li>Haber obtenido la <strong>credencial de homologación a título de Bachiller</strong> del Sistema Educativo Español expedida por el Ministerio de Educación, Cultura y Deporte:</li>
+<li>Los estudiantes procedentes de los sistemas educativos citados en el apartado anterior, que no cumplan los requisitos académicos exigidos en el sistema educativo respectivo para acceder a sus universidades, pero que sí acrediten estudios homologables al título de Bachillerato español.</li>
+<li>Conseguir la <strong>acreditación o certificación de acceso</strong>, que incluye la nota de acceso a la universidad (NAU). Organismo responsable: <a href="https://unedasiss.uned.es/home" target="_blank" rel="noopener">UNEDasiss.</a></li>
+</ul></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> <span class="txt-red">1 de abril</span></div></div></details>
+</article><article class="card" id="card-ue">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://www.uax.com/titulaciones/grado-en-ingenieria-civil-en-construcciones-civiles" target="_blank" rel="noopener">Ingeniería Civil<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">Universidad Europea, Madrid (Villaviciosa de Odón)</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">No aparece en el ranking de Shanghái</span></div>
+
+</div>
+<span class="diff diff-low">Dificultad: BAJA</span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Madrid (Villaviciosa de Odón) <span class="pop">(<span class="pending">Pendiente: dato no incluido en el informe</span>)</span></span>
+<button class="btn-map" onclick="scrollToMap('es','map-es')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">4 años (240 ECTS)</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">€12.720 * posibilidad de becas académicas.</span></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">español</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv"><span class="txt-red">1 de abril</span></span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>Grado en Ingeniería Civil de la Universidad Europea de Madrid es una carrera universitaria oficial de cuatro años (240 ECTS), presencial y en español, impartida en el campus de Villaviciosa de Odón, Madrid. Forma ingenieros capaces de diseñar, calcular, construir y gestionar infraestructuras como puentes, carreteras, ferrocarriles y redes hidráulicas. El programa combina matemáticas, física, estructuras, geotecnia, hidráulica y transporte con formación práctica mediante proyectos reales, laboratorios especializados y metodología BIM. También incluye prácticas profesionales y prepara al estudiante para trabajar en empresas constructoras, consultoras de ingeniería y organismos públicos, tanto en España como internacionalmente.</p></div>
+
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><p><strong>Académicos:</strong> Título de Bachillerato</p><ul><li>Matemáticas y física cursado en Bachiller</li></ul></div><div class="req-block"><h4>Proceso de selección</h4><ul class="checks">
+<li>Prueba de competencias online</li>
+<li>Entrevista/ carta de motivación online</li>
+<li>Haber obtenido la <strong>credencial de homologación a título de Bachiller</strong> del Sistema Educativo Español expedida por el Ministerio de Educación, Cultura y Deporte:</li>
+<li>Los estudiantes procedentes de los sistemas educativos citados en el apartado anterior, que no cumplan los requisitos académicos exigidos en el sistema educativo respectivo para acceder a sus universidades, pero que sí acrediten estudios homologables al título de Bachillerato español.</li>
+<li>Conseguir la <strong>acreditación o certificación de acceso</strong>, que incluye la nota de acceso a la universidad (NAU). Organismo responsable: <a href="https://unedasiss.uned.es/home" target="_blank" rel="noopener">UNEDasiss.</a></li>
+</ul></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> <span class="txt-red">1 de abril</span></div></div></details>
+</article>
+<div class="map-wrap"><h3 class="map-title">Mapa de universidades: España</h3><div class="map" id="map-es"></div></div>
+</section><section class="panel" id="panel-fi">
+<div class="country-intro"><span class="flag flag-fi lg" aria-hidden="true"><span class="v"></span><span class="h"></span></span><div><h2>Finlandia</h2>
+<div class="country-meta"><span><strong>Matrícula:</strong> 9.700 € – 12.000 € / año (non-EU), según las fichas</span><span><strong>Alojamiento:</strong> <span class="pending">Pendiente: dato no incluido en el informe</span></span></div></div></div>
+
+<div class="sec-sep"><span>RESEARCH UNIVERSITIES</span></div><article class="card" id="card-lut">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://www.lut.fi/en/studies/technology/bachelors-programmes-technology/bachelors-programme-civil-engineering" target="_blank" rel="noopener">Bachelor in Civil Engineering<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">LUT University, Lahti</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">No aparece en el ranking de Shanghái</span></div>
+<p class="rank-note">Las universidades de <em>Applied Science</em> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+</div>
+<span class="diff diff-high">Dificultad: Medio-alto</span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Lahti <span class="pop">(121.000 habitantes)</span></span>
+<button class="btn-map" onclick="scrollToMap('fi','map-fi')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">3+2 (180 (bachelor's) + 120 (master's) ECTS credits)</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">EUR 12,000/academic year. An early bird discount of EUR 2,000 is available for the first year. + 100€ matricula</span></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">Ingles</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv"><span class="txt-red">30 abril</span></span></div><div class="meta"><span class="ml">Plazas</span><span class="mv">no especificado</span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>La LUT University, ubicada en Lahti, Finlandia, es una universidad pública que ofrece el programa de Ingeniería Civil completamente en inglés. Tiene una duración de 3 años de grado y 2 años de máster, con un enfoque en el diseño y desarrollo de edificios, estructuras e infraestructuras sostenibles, combinando innovación, tecnología y protección medioambiental. Sus principales áreas de estudio incluyen ingeniería estructural, materiales de construcción, planificación urbana y herramientas digitales BIM. La matrícula para estudiantes internacionales es de aproximadamente 12.000 € anuales. Es una buena alternativa para estudiantes mexicanos interesados en una formación internacional y en especializarse en construcción e infraestructuras sostenibles.</p></div>
+
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><p><strong>Académicos:</strong> Título de Bachillerato</p>
+<ul><li><strong>GPA 70% o mas</strong></li><li><strong>Matemáticas avanzado 80% o mas</strong></li></ul></div><div class="req-block"><h4>Inglés</h4><p><strong>Nivel de inglés:</strong></p>
+<ul><li>Cambridge B2 First (2005-&gt;) Minimum score: 180</li>
+<li>TOEFL iBT &amp; TOEFL iBT Home Edition (Valid for two years): Minimum overall score: 90 with a minimum score of 22 in writing and in speaking</li>
+<li>New TOEFL iBT (Valid for two years): Minimum overall score: 4.5 with a minimum score of 4 in writing and in speaking</li>
+<li>IELTS Academic or IELTS Online (Valid for two years): Minimum overall score: 6.5 with a minimum score of 6.0 in writing and in speaking</li>
+<li>PTE Academic or PTE Academic Online (Valid for two years): Minimum overall score: 62 with a minimum score of 54 in writing and in speaking</li>
+<li>Cambridge English C1 Advanced (2005-&gt;): Pass on levels A, B or C</li>
+<li>Cambridge English C2 Proficiency (2005-&gt;): Pass on levels A, B or C or Level C1 Certificate</li></ul></div><div class="req-block"><h4>Proceso de selección</h4><p>Selección según las notas del expediente académico</p><p><strong>Plazas:</strong> no especificado</p></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> <span class="txt-red">30 abril</span></div></div></details>
+</article><div class="sec-sep"><span>APPLIED SCIENCE UNIVERSITIES</span></div><article class="card" id="card-hamk">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://www.hamk.fi/en/degree/construction-engineering/" target="_blank" rel="noopener">Bachelor in Construction Engineering<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">HAMK University of Applied Sciences (HAMK), Hämeenlinna</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">No aparece en el ranking de Shanghái</span></div>
+<p class="rank-note">Las universidades de <em>Applied Science</em> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+</div>
+<span class="diff diff-high">Dificultad: Medio-alto</span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Hämeenlinna <span class="pop">(70.000 habitantes)</span></span>
+<button class="btn-map" onclick="scrollToMap('fi','map-fi')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">4 años (240 ECTS)</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">€9 700 año Non-EU</span></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">Ingles</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv"><span class="txt-red">21 de enero.</span></span></div><div class="meta"><span class="ml">Plazas</span><span class="mv">20</span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>El programa de Construction Engineering en HAMK tiene una duración de 4 años y se imparte en inglés. El enfoque principal está en la ingeniería estructural y el diseño de estructuras portantes (load-bearing structures). Aprenderás a manejar tecnologías modernas de diseño y producción, modelado de información de construcción (BIM), cálculo estructural, mecánica, dibujo técnico y técnicas de visualización 3D. Durante el grado se trabaja con casos reales, proyectos grupales, prácticas profesionales (work placement) y un proyecto de tesis orientado a problemas concretos del sector.</p>
+<p>Una parte importante del currículo son los módulos de perfilado (profiling competence) que permiten al estudiante especializarse en áreas de interés como estructuras de hormigón, acero, tecnología ambiental o diseño de edificios residenciales. Además, el programa permite cierta flexibilidad: puedes elegir asignaturas optativas que refuercen otros ámbitos relacionados con la construcción sostenible y mantenimiento. También incluye períodos de prácticas (30 créditos / aproximadamente 5 meses en total) y la realización de una tesis (15 créditos), muchas veces en colaboración con empresas del sector.</p>
+<p>En cuanto a salidas profesionales, los graduados pueden trabajar como ingenieros estructurales, diseñadores de edificios, gestores de proyectos de construcción, supervisores de obra, técnicos en renovación o mantenimiento de estructuras, o consultores en diseño estructural. También pueden desempeñarse en oficinas de ingeniería, empresas constructoras, organismos públicos o agencias reguladoras. Gracias al enfoque internacional del programa y al dominio del inglés, el perfil también es adecuado para trabajar en proyectos de construcción internacionales o empresas multinacionales del sector.</p></div>
+
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><p><strong>Académicos:</strong> Título de Bachillerato</p></div><div class="req-block"><h4>Inglés</h4><p><strong>Nivel de inglés:</strong></p>
+<ul><li>IELTS academic level, overall score 6.0 or higher</li>
+<li>TOEFL iBT score 60 or higher. If you have taken the TOEFL test on or after 21 January 2026, a minimum total score of 3.5 is required.</li>
+<li>PTE, Academic score 55 or higher</li>
+<li>iTEP, Academic-Plus 3.7 or higher</li>
+<li>Cambridge C2 Proficiency (Certificate of Proficiency in English) overall Cambridge English Scale score 169 or higher</li>
+<li>Cambridge C1 Advanced (Certificate in Advanced English) overall Cambridge English Scale score of 169 or higher</li></ul></div><div class="req-block"><h4>Proceso de selección</h4><p>Selección según las notas del expediente académico</p><p><strong>Plazas:</strong> 20</p></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> <span class="txt-red">21 de enero.</span></div></div></details>
+</article>
+<div class="map-wrap"><h3 class="map-title">Mapa de universidades: Finlandia</h3><div class="map" id="map-fi"></div></div>
+</section><section class="panel" id="panel-de">
+<div class="country-intro"><span class="flag flag-de lg" aria-hidden="true"><span></span><span></span><span></span></span><div><h2>Alemania</h2>
+<div class="country-meta"><span><strong>Matrícula:</strong> 800 € / semestre (non-EU), según la ficha</span><span><strong>Alojamiento:</strong> <span class="pending">Pendiente: dato no incluido en el informe</span></span></div></div></div>
+
+<div class="sec-sep"><span>APPLIED SCIENCE UNIVERSITIES</span></div><article class="card" id="card-thi">
+<header class="card-head">
+<div class="card-id">
+<h3 class="card-title"><a href="https://www.thi.de/en/faculties/sustainable-infrastructure/degree-programmes/sustainable-civil-engineering-beng/" target="_blank" rel="noopener">Bachelor in Sustainable Civil Engineering<span class="click-ico" aria-hidden="true">🖱️</span></a></h3>
+<p class="card-uni">Technische Hochschule Ingolstadt (THI), Neuburg / Donau</p>
+<p class="rank-label">Ranking de la universidad:</p>
+<div class="badges"><span class="badge-rank">No aparece en el ranking de Shanghái</span></div>
+<p class="rank-note">Las universidades de <em>Applied Science</em> no entran en el ranking de Shanghái por su metodología de estudio.</p>
+</div>
+<span class="diff diff-low">Dificultad: BAJA</span>
+</header>
+<div class="meta-grid"><div class="meta"><span class="ml">Ciudad</span><span class="mv">Neuburg / Donau <span class="pop">(30.146 habitantes)</span></span>
+<button class="btn-map" onclick="scrollToMap('de','map-de')">🗺️ Ver mapa</button></div><div class="meta"><span class="ml">Duración</span><span class="mv">4 años (210 ECTS)</span></div><div class="meta"><span class="ml">Coste</span><span class="mv"><span class="txt-red">800 € por semestre non EU</span></span></div><div class="meta"><span class="ml">Idioma</span><span class="mv">Ingles</span></div><div class="meta"><span class="ml">Fecha límite</span><span class="mv"><span class="txt-red">15 julio</span></span></div></div>
+<div class="desc"><p class="desc-label">Descripción del programa</p><p>Sustainable Civil Engineering (B.Eng.) es una carrera de Ingeniería Civil de 4 años (210 ECTS), impartida inicialmente en inglés en la Technische Hochschule Ingolstadt (THI), Alemania. Forma ingenieros especializados en el diseño, construcción y mantenimiento sostenible de infraestructuras como edificios, puentes, carreteras y sistemas hidráulicos y energéticos. Incluye asignaturas de estructuras, mecánica, geotecnia, hidráulica, materiales sostenibles, BIM y gestión de construcción, además de 18 semanas de prácticas profesionales.</p></div>
+<div class="card-important"><strong>Importante: aunque comienza en inglés, a partir del quinto semestre la enseñanza es principalmente en alemán. El programa contempla alcanzar el nivel B2 de alemán durante los primeros semestres.</strong></div>
+<details><summary>Ver requisitos de admisión y fechas</summary><div class="req"><div class="req-block"><h4>Requisitos académicos</h4><p><strong>Académicos:</strong> Título de Bachillerato</p></div><div class="req-block"><h4>Inglés</h4><p><strong>Nivel de inglés:</strong></p>
+<ul><li>IELTS Academic 5.5</li><li>TOEFL iBT 72 en el formato anterior a 2026; para el nuevo formato TOEFL, la equivalencia publicada es 4.</li></ul></div><div class="req-block"><h4>Idioma local</h4><p><strong>Nivel de Alemán:</strong> no se exige B2 para comenzar, pero se debe alcanzar A2 al terminar el segundo semestre y B2 al terminar el quinto semestre.</p></div><div class="req-block"><h4>Proceso de selección</h4><ul class="checks"><li>Entregar el trabajo de motivación: escribir un ensayo en inglés de máximo una página y 500 palabras sobre por qué desea estudiar Sustainable Civil Engineering en THI. La universidad prohíbe expresamente presentar cartas de motivación generadas por IA.</li>
+<li>Realizar una entrevista: los candidatos internacionales de fuera de la UE deben participar en el procedimiento de orientación y selección. La facultad les contactará por correo para coordinarla.</li></ul></div><div class="deadline-box"><strong>Fecha límite para presentar la matrícula:</strong> <span class="txt-red">15 julio</span></div></div></details>
+</article>
+<div class="map-wrap"><h3 class="map-title">Mapa de universidades: Alemania</h3><div class="map" id="map-de"></div></div>
+</section>
+</main>
+<footer class="ftr"><svg class="logo-svg logo-ftr" viewBox="0 0 1800 433" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="educoWay"><style>.lt-ftr{fill: #737373;}</style><path class="lt-ftr" fill-rule="evenodd" d="M1730,376 1720,376 1715,380 1713,379 1713,376 1709,376 1709,413 1713,413 1713,394 1716,385 1722,380 1728,380 1731,382 1733,378ZM1637,376 1632,376 1632,423 1629,427 1620,426 1619,430 1625,432 1631,431 1635,428 1636,425 1636,420 1637,419ZM1510,377 1498,376 1492,380 1491,376 1486,376 1486,413 1491,413 1491,390 1492,387 1496,382 1500,380 1505,380 1509,382 1511,378ZM1400,376 1413,394 1399,413 1404,413 1416,398 1427,413 1433,413 1419,394 1432,376 1426,376 1416,389 1414,388 1405,376ZM1003,376 1003,413 1007,413 1007,376ZM989,378 985,376 976,376 970,380 969,376 964,376 964,413 969,413 969,390 972,384 978,380 983,380 987,382ZM846,376 846,413 851,413 851,376ZM783,376 773,376 767,381 766,376 762,376 762,413 766,413 766,391 768,386 775,380 781,380 784,382 786,378ZM659,376 674,413 679,413 695,376 690,376 677,406 675,404 664,376ZM638,376 638,413 642,413 642,376ZM531,376 531,402 533,407 538,412 543,414 550,414 559,409 560,413 564,413 564,376 560,376 560,398 559,402 555,407 551,409 542,409 537,405 535,399 535,376ZM371,376 371,413 375,413 375,376ZM99,376 99,413 103,413 103,376ZM85,378 81,376 72,376 66,380 65,376 60,376 60,413 65,413 65,390 68,384 74,380 79,380 83,382ZM1760,375 1753,377 1747,382 1744,388 1743,398 1746,406 1751,411 1758,414 1766,414 1775,410 1779,405 1781,400 1781,389 1779,384 1773,378 1765,375ZM1758,380 1767,380 1771,382 1776,388 1777,391 1776,401 1768,409 1764,410 1757,409 1750,403 1748,399 1748,390 1750,386ZM1666,376 1661,379 1656,385 1654,392 1655,402 1657,406 1662,411 1669,414 1681,413 1689,407 1687,404 1679,409 1671,410 1664,407 1660,402 1659,398 1660,397 1691,397 1692,396 1691,387 1689,383 1684,378 1676,375ZM1659,390 1660,387 1668,380 1678,380 1682,382 1687,388 1686,392 1660,392ZM1579,376 1579,413 1583,413 1583,390 1584,387 1587,383 1592,380 1600,380 1606,384 1608,389 1608,413 1612,413 1612,386 1610,382 1605,377 1598,375 1588,377 1584,380 1583,376ZM1529,378 1523,384 1521,389 1521,400 1524,407 1530,412 1536,414 1543,414 1549,412 1553,408 1554,413 1558,413 1558,376 1554,376 1553,381 1550,378 1541,375 1537,375ZM1535,380 1544,380 1548,382 1553,388 1554,391 1553,401 1545,409 1541,410 1534,409 1526,401 1525,398 1526,388 1531,382ZM1367,375 1360,377 1353,384 1351,388 1351,401 1354,407 1358,411 1365,414 1374,414 1381,411 1386,406 1382,404 1375,409 1367,410 1362,408 1357,403 1355,398 1356,397 1387,397 1388,396 1388,389 1386,384 1382,379 1376,376ZM1355,390 1357,386 1364,380 1377,381 1383,388 1382,392 1356,392ZM1261,375 1254,377 1247,384 1245,388 1245,401 1248,407 1252,411 1259,414 1268,414 1275,411 1280,406 1276,404 1269,409 1261,410 1256,408 1251,403 1249,398 1250,397 1281,397 1282,396 1282,389 1280,384 1276,379 1270,376ZM1249,391 1251,386 1258,380 1271,381 1277,388 1276,392 1250,392ZM1165,376 1165,413 1169,413 1169,389 1171,385 1178,380 1186,380 1190,382 1193,386 1194,390 1194,413 1198,413 1198,387 1196,382 1191,377 1184,375 1176,376 1170,380 1169,376ZM1126,375 1118,378 1112,384 1110,389 1110,400 1114,408 1119,412 1124,414 1133,414 1139,412 1145,406 1143,404 1141,404 1140,406 1135,409 1131,410 1123,409 1116,403 1115,398 1116,397 1147,397 1147,388 1144,382 1140,378 1131,375ZM1115,388 1120,382 1124,380 1134,380 1142,387 1143,391 1142,392 1116,392ZM1033,378 1028,383 1025,391 1025,398 1028,406 1033,411 1040,414 1048,414 1057,409 1059,410 1059,413 1063,413 1063,376 1059,376 1058,381 1053,377 1046,375 1042,375ZM1039,380 1049,380 1054,383 1058,389 1059,395 1056,404 1053,407 1046,410 1039,409 1035,407 1030,400 1031,387ZM913,379 910,382 906,392 906,397 909,406 914,411 921,414 929,414 936,411 939,408 940,413 944,413 944,376 940,376 939,381 936,378 927,375 919,376ZM920,380 930,380 934,382 939,389 940,393 939,400 937,404 931,409 927,410 920,409 912,402 911,390 913,386ZM806,376 800,380 798,384 799,390 806,395 821,398 824,401 824,405 820,409 815,410 807,409 800,404 797,407 801,411 809,414 821,413 828,408 829,405 828,398 822,394 811,392 804,389 803,384 808,380 819,380 826,384 828,380 817,375ZM723,375 715,378 710,383 707,390 707,399 710,406 716,412 722,414 730,414 738,411 742,406 739,404 732,409 728,410 720,409 714,404 712,398 713,397 744,397 745,394 744,387 742,383 737,378 729,375ZM712,389 714,385 721,380 731,380 738,385 740,391 739,392 713,392ZM612,378 608,376 601,375 596,376 590,380 589,376 584,376 584,413 589,413 589,389 591,385 598,380 606,380 611,383 614,391 614,413 618,413 618,387 616,382ZM477,378 473,376 466,375 461,376 454,380 453,376 449,376 449,413 454,413 454,388 460,381 463,380 471,380 477,385 478,388 478,413 483,413 483,389 480,381ZM409,375 401,378 396,383 393,390 393,399 396,406 401,411 408,414 416,414 423,411 429,405 431,400 431,390 428,383 423,378 415,375ZM407,380 417,380 425,387 427,393 427,397 424,404 421,407 414,410 407,409 403,407 398,400 397,395 398,389ZM337,375 327,379 324,382 321,388 320,398 322,404 328,411 336,414 343,414 351,411 354,408 350,405 345,409 341,410 334,409 326,402 325,399 325,390 327,386 332,381 344,380 350,384 353,382 350,378 346,376ZM273,378 267,384 265,389 265,400 269,408 274,412 280,414 287,414 293,412 296,409 298,410 298,413 302,413 302,376 298,376 297,381 294,378 285,375 281,375ZM279,380 288,380 292,382 297,388 298,391 297,401 289,409 285,410 278,409 270,401 269,398 270,388 275,382ZM176,376 176,413 180,413 180,392 181,388 189,380 198,380 204,385 205,388 205,413 210,413 210,390 207,381 204,378 195,375 188,376 182,380 180,379 180,376ZM133,376 129,378 123,385 121,391 122,402 124,406 129,411 136,414 148,413 156,407 154,404 146,409 138,410 131,407 127,402 126,398 127,397 158,397 159,396 158,387 156,383 151,378 143,375ZM126,390 129,384 135,380 145,380 149,382 154,389 153,392 127,392ZM21,375 11,379 8,382 5,388 4,397 6,404 12,411 19,414 27,414 33,412 39,407 42,401 42,396 43,395 40,384 34,378 26,375ZM19,380 28,380 32,382 37,388 38,391 37,401 29,409 25,410 18,409 11,403 9,399 9,390 11,386ZM1453,365 1452,366 1452,375 1451,376 1444,376 1444,380 1451,380 1452,381 1452,405 1453,409 1455,412 1459,414 1466,414 1471,412 1469,408 1461,410 1457,406 1457,381 1458,380 1469,380 1469,376 1458,376 1457,375 1457,365ZM876,365 875,366 875,375 874,376 867,376 867,380 874,380 875,381 875,405 876,409 882,414 889,414 894,412 892,408 884,410 880,406 880,381 881,380 892,380 892,376 881,376 880,375 880,365ZM234,365 234,375 233,376 226,376 226,380 233,380 234,381 234,408 238,413 247,414 252,412 251,408 246,410 242,410 239,408 238,405 238,381 239,380 250,380 250,376 239,376 238,375 238,365ZM1633,362 1631,364 1631,367 1633,369 1637,368 1638,365 1636,362ZM1004,362 1002,364 1002,367 1004,369 1008,368 1009,365 1007,362ZM847,362 845,364 845,367 847,369 850,369 852,367 852,364 850,362ZM639,362 637,363 637,367 639,369 641,369 643,367 643,363ZM372,362 370,363 370,368 374,369 376,367 376,363ZM100,362 98,364 98,367 100,369 104,368 105,365 103,362ZM1299,361 1299,413 1304,413 1304,361ZM420,361 414,361 408,371 413,371ZM1799,70 1777,70 1737,163 1719,208 1717,206 1713,194 1710,189 1663,70 1642,70 1642,73 1646,83 1649,88 1676,157 1679,162 1704,226 1707,231 1706,237 1679,298 1677,305 1698,305ZM472,67 472,168 473,169 474,182 477,192 483,204 488,211 501,223 514,230 527,234 541,235 542,236 560,235 577,230 592,221 602,211 603,212 603,233 623,233 623,67 603,67 603,158 602,159 602,170 599,181 594,191 581,205 569,212 551,216 534,215 523,212 512,206 500,193 496,185 493,173 493,67ZM1446,87 1434,101 1426,116 1420,140 1420,160 1421,161 1422,172 1428,189 1438,205 1451,218 1463,226 1481,233 1490,235 1498,235 1499,236 1518,235 1527,233 1540,228 1554,219 1567,205 1568,206 1568,233 1588,233 1588,67 1568,67 1568,94 1567,95 1555,82 1543,74 1528,68 1512,65 1497,65 1496,66 1489,66 1480,68 1461,76ZM1495,85 1520,86 1535,91 1543,96 1555,107 1560,114 1565,124 1569,139 1569,162 1564,179 1559,188 1541,206 1531,211 1517,215 1509,215 1508,216 1492,215 1476,210 1466,204 1457,196 1449,185 1445,177 1441,163 1441,156 1440,155 1441,137 1445,123 1451,112 1468,95 1482,88ZM758,66 736,72 726,77 716,84 702,99 693,116 689,129 688,142 687,143 688,165 692,181 698,194 709,209 719,218 734,227 752,233 766,234 767,235 786,234 802,230 815,224 829,214 834,208 821,195 805,207 794,212 782,215 757,214 744,210 733,204 718,189 712,178 709,169 708,157 707,156 707,144 708,143 709,131 712,122 718,111 728,100 738,93 753,87 763,85 781,85 791,87 804,92 812,97 821,105 834,91 818,78 804,71 795,68 785,66 774,66 773,65ZM61,67 52,70 38,77 31,82 18,95 7,113 3,124 0,139 0,162 6,186 14,201 30,218 37,223 51,230 72,235 97,235 118,230 141,218 157,202 142,190 130,202 109,212 95,215 74,215 64,213 47,205 34,193 25,178 21,165 21,161 22,160 166,160 166,151 167,150 166,130 161,111 155,99 150,92 136,79 121,71 109,67 99,66 98,65 71,65ZM21,137 27,118 34,107 45,96 59,88 73,84 97,84 106,86 119,91 129,98 137,107 143,118 147,133 147,140 146,141 22,141ZM970,64 950,68 936,74 924,82 912,94 904,106 897,123 894,137 894,164 899,184 907,200 914,209 929,222 940,228 959,234 964,234 965,235 990,235 1008,231 1025,223 1032,218 1045,205 1051,196 1059,177 1062,161 1062,140 1059,124 1055,113 1046,97 1034,84 1023,76 1002,67 993,65 986,65 985,64ZM958,86 967,84 989,84 1003,88 1017,96 1028,107 1037,122 1042,142 1042,159 1038,176 1029,192 1019,202 1010,208 1001,212 988,215 967,215 952,211 944,207 932,198 926,191 918,177 914,162 914,139 920,119 926,109 935,99 948,90ZM399,0 378,0 378,93 377,94 365,81 358,76 346,70 327,65 300,65 280,70 268,76 257,84 250,91 241,104 236,115 231,134 230,156 231,157 231,166 233,176 237,188 246,204 259,218 269,225 285,232 298,235 307,235 308,236 327,235 342,231 355,225 365,218 377,205 378,206 378,233 399,233ZM308,84 320,84 321,85 332,86 338,88 354,97 365,108 374,124 378,140 378,159 376,169 373,178 364,193 355,202 346,208 331,214 319,215 318,216 301,215 293,213 279,207 272,202 265,195 256,181 252,169 251,156 250,155 250,145 251,144 251,136 255,121 263,107 277,94 292,87Z"/><path fill="#59bd8d" fill-rule="evenodd" d="M1140,69 1128,73 1121,79 1116,89 1116,94 1115,95 1116,104 1165,225 1164,221 1167,209 1192,149 1166,84 1162,78 1156,73 1149,70Z"/><path fill="#3ab1a1" fill-rule="evenodd" d="M1216,91 1166,215 1166,220 1165,221 1166,222 1166,228 1169,235 1174,241 1180,245 1186,247 1198,247 1204,245 1213,238 1219,227 1231,195 1242,170 1242,167 1237,157 1215,100Z"/><path fill="#39b0bb" fill-rule="evenodd" d="M1236,70 1229,73 1222,79 1217,88 1216,100 1219,110 1224,120 1265,223 1266,213 1291,153 1292,146 1274,104 1268,86 1264,79 1257,73 1250,70Z"/><path fill="#34aec3" fill-rule="evenodd" d="M1293,149 1266,217 1266,224 1270,235 1278,243 1288,247 1298,247 1308,243 1316,235 1319,227 1319,214Z"/><path fill="#54bbe3" fill-rule="evenodd" d="M1350,70 1334,71 1327,75 1322,80 1319,85 1311,107 1308,112 1294,147 1294,151 1297,156 1320,214 1320,226 1370,102 1370,89 1367,82 1358,73Z"/></svg><p>Informe preparado por educoWay para Fernando Chuc Ávila</p></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>const mapData = {
+ "nl": {
+  "center": [
+   52.1,
+   5.2
+  ],
+  "zoom": 7,
+  "universities": [
+   {
+    "id": "card-hz",
+    "name": "Bachelor (BSc) in Civil Engineering",
+    "school": "HZ University of Applied Sciences",
+    "lat": 51.4988,
+    "lng": 3.6136,
+    "webUrl": "https://hz.nl/en/study-programmes/civil-engineering",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=HZ+University+of+Applied+Sciences+Middelburg"
+   },
+   {
+    "id": "card-saxion",
+    "name": "Bachelor in Civil Engineering",
+    "school": "Saxion University of Applied Sciences",
+    "lat": 52.219,
+    "lng": 6.8913,
+    "webUrl": "https://www.saxion.edu/programmes/bachelor/civil-engineering",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Saxion+University+of+Applied+Sciences+Enschede"
+   }
+  ]
+ },
+ "dk": {
+  "center": [
+   55.6,
+   10.8
+  ],
+  "zoom": 7,
+  "universities": [
+   {
+    "id": "card-via",
+    "name": "Bachelor in Architectural Technology and Construction Management",
+    "school": "VIA University College",
+    "lat": 55.8607,
+    "lng": 9.8503,
+    "webUrl": "https://en.via.dk/programmes/bachelor/architectural-technology",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=VIA+University+College+Horsens"
+   },
+   {
+    "id": "card-zealand",
+    "name": "Bachelor in Architectural Technology and Construction Management",
+    "school": "Zealand University of Applied Sciences",
+    "lat": 55.2299,
+    "lng": 11.7609,
+    "webUrl": "https://zealand.com/fuldtid/architectural-technology-and-construction-management/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Zealand+University+of+Applied+Sciences+N%C3%A6stved"
+   }
+  ]
+ },
+ "es": {
+  "center": [
+   39.6,
+   -2.3
+  ],
+  "zoom": 6,
+  "universities": [
+   {
+    "id": "card-upv",
+    "name": "Ingeniería Civil",
+    "school": "Universidad Politécnica de Valencia (UPV)",
+    "lat": 39.4817,
+    "lng": -0.3437,
+    "webUrl": "https://www.upv.es/titulaciones/GIC/indexi.html",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Universidad+Polit%C3%A9cnica+de+Valencia+%28UPV%29+Valencia"
+   },
+   {
+    "id": "card-ua",
+    "name": "Ingeniería Civil",
+    "school": "Universidad de Alicante",
+    "lat": 38.3452,
+    "lng": -0.481,
+    "webUrl": "https://web.ua.es/es/grados/grado-en-ingenieria-civil",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Universidad+de+Alicante+Alicante"
+   },
+   {
+    "id": "card-uax",
+    "name": "Ingeniería Civil en Construcciones Civiles",
+    "school": "Universidad Alfonso X el Sabio (UAX)",
+    "lat": 40.4497,
+    "lng": -4.0006,
+    "webUrl": "https://www.uax.com/titulaciones/grado-en-ingenieria-civil-en-construcciones-civiles",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Universidad+Alfonso+X+el+Sabio+%28UAX%29+Madrid+%28Villanueva+de+la+Ca%C3%B1ada%29"
+   },
+   {
+    "id": "card-ue",
+    "name": "Ingeniería Civil",
+    "school": "Universidad Europea",
+    "lat": 40.3578,
+    "lng": -3.9003,
+    "webUrl": "https://www.uax.com/titulaciones/grado-en-ingenieria-civil-en-construcciones-civiles",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Universidad+Europea+Madrid+%28Villaviciosa+de+Od%C3%B3n%29"
+   }
+  ]
+ },
+ "fi": {
+  "center": [
+   61.0,
+   25.0
+  ],
+  "zoom": 7,
+  "universities": [
+   {
+    "id": "card-lut",
+    "name": "Bachelor in Civil Engineering",
+    "school": "LUT University",
+    "lat": 60.9827,
+    "lng": 25.6615,
+    "webUrl": "https://www.lut.fi/en/studies/technology/bachelors-programmes-technology/bachelors-programme-civil-engineering",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=LUT+University+Lahti"
+   },
+   {
+    "id": "card-hamk",
+    "name": "Bachelor in Construction Engineering",
+    "school": "HAMK University of Applied Sciences (HAMK)",
+    "lat": 60.9959,
+    "lng": 24.4643,
+    "webUrl": "https://www.hamk.fi/en/degree/construction-engineering/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=HAMK+University+of+Applied+Sciences+%28HAMK%29+H%C3%A4meenlinna"
+   }
+  ]
+ },
+ "de": {
+  "center": [
+   48.73,
+   11.18
+  ],
+  "zoom": 9,
+  "universities": [
+   {
+    "id": "card-thi",
+    "name": "Bachelor in Sustainable Civil Engineering",
+    "school": "Technische Hochschule Ingolstadt (THI)",
+    "lat": 48.7337,
+    "lng": 11.184,
+    "webUrl": "https://www.thi.de/en/faculties/sustainable-infrastructure/degree-programmes/sustainable-civil-engineering-beng/",
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Technische+Hochschule+Ingolstadt+%28THI%29+Neuburg+%2F+Donau"
+   }
+  ]
+ }
+};
+const maps = {};
+const mapsInitialized = {};
+
+function setHeaderOffset(){
+  const h = document.getElementById('hdr').offsetHeight;
+  document.documentElement.style.setProperty('--hdr-h', h + 'px');
+}
+window.addEventListener('resize', setHeaderOffset);
+window.addEventListener('load', setHeaderOffset);
+setHeaderOffset();
+
+function showTab(id, btn){
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + id));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === id));
+  const b = btn || document.querySelector('.tab[data-tab="' + id + '"]');
+  if (b) b.scrollIntoView({block:'nearest', inline:'center'});
+  window.scrollTo({top:0, behavior:'auto'});
+  if (mapData[id]) initMap(id);
+  if (history.replaceState) history.replaceState(null, '', '#' + id);
+}
+
+function scrollToEl(el){
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.scrollY - document.getElementById('hdr').offsetHeight - 14;
+  window.scrollTo({top:y, behavior:'smooth'});
+}
+
+function goTo(tab, anchor){
+  showTab(tab);
+  requestAnimationFrame(() => setTimeout(() => scrollToEl(document.getElementById(anchor)), 40));
+}
+
+function scrollToCard(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  const panel = el.closest('.panel');
+  if (panel && !panel.classList.contains('active')) { goTo(panel.id.replace('panel-',''), id); return; }
+  scrollToEl(el);
+  el.style.borderColor = 'var(--teal)';
+  setTimeout(() => { el.style.borderColor = ''; }, 1600);
+}
+
+function scrollToMap(tab, anchor){
+  const active = document.getElementById('panel-' + tab).classList.contains('active');
+  const target = () => scrollToEl(document.getElementById(anchor).closest('.map-wrap'));
+  if (active) { target(); }
+  else { showTab(tab); setTimeout(target, 60); }
+}
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function initMap(countryId){
+  if (mapsInitialized[countryId] || typeof L === 'undefined') return;
+  const d = mapData[countryId];
+  const m = L.map('map-' + countryId, {scrollWheelZoom:false}).setView(d.center, d.zoom);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:18, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+  }).addTo(m);
+  const icon = L.divIcon({className:'', html:'<div class="uni-marker">🎓</div>', iconSize:[30,30], iconAnchor:[15,26], popupAnchor:[0,-24]});
+  const pts = [];
+  d.universities.forEach(u => {
+    pts.push([u.lat, u.lng]);
+    L.marker([u.lat, u.lng], {icon, title:u.school}).addTo(m).bindPopup(
+      '<div class="pop-deg">' + esc(u.name) + '</div><div class="pop-uni">' + esc(u.school) + '</div>' +
+      '<div class="pop-btns"><a class="primary" href="' + u.webUrl + '" target="_blank" rel="noopener">Ver grado</a>' +
+      '<button onclick="scrollToCard(\'' + u.id + '\')">Ver ficha</button>' +
+      '<a href="' + u.mapsUrl + '" target="_blank" rel="noopener">Google Maps</a></div>');
+  });
+  if (pts.length > 1) m.fitBounds(pts, {padding:[60,60], maxZoom:d.zoom + 2});
+  maps[countryId] = m;
+  mapsInitialized[countryId] = true;
+  setTimeout(() => m.invalidateSize(), 50);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const h = (location.hash || '').slice(1);
+  if (h && document.getElementById('panel-' + h)) showTab(h);
+});
+</script>
+</body>
+</html>
