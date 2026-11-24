@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Opciones de Grado · Mateo Martínez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root {
+    --teal: #0a9baa;
+    --teal-dark: #077a87;
+    --teal-light: #e0f5f7;
+    --navy: #0d2b3e;
+    --bg: #f4f8fa;
+    --border: #c8e0e5;
+    --text: #1f2d36;
+    --muted: #6b7c86;
+    --white: #ffffff;
+    --gold-bg: #fff4d6;
+    --gold-border: #e3b53b;
+    --gold-text: #7a5a00;
+    --red: #d32f2f;
+    --red-bg: #fdecec;
+    --orange: #e07b00;
+    --orange-bg: #fff1e0;
+    --green: #2e8b57;
+    --green-bg: #e7f6ee;
+    --hdr-h: 150px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+  }
+  a { color: var(--teal-dark); }
+  a:hover { color: var(--teal); }
+  h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; }
+
+  /* ---------- HEADER ---------- */
+  .site-header {
+    position: sticky; top: 0; z-index: 1000;
+    background: var(--navy);
+    color: var(--white);
+    box-shadow: 0 4px 18px rgba(13, 43, 62, .25);
+  }
+  .header-inner {
+    max-width: 1100px; margin: 0 auto;
+    padding: 14px 16px 10px;
+    display: flex; align-items: center; gap: 24px;
+  }
+  .header-logo { width: 170px; flex-shrink: 0; line-height: 0; }
+  .header-logo svg { display: block; width: 100%; height: auto; }
+  .header-titles { border-left: 1px solid rgba(255,255,255,.25); padding-left: 24px; min-width: 0; }
+  .header-titles h1 { margin: 0; font-size: 1.35rem; line-height: 1.25; font-weight: 600; }
+  .header-titles .prepared {
+    margin-top: 4px; font-size: .72rem; letter-spacing: .14em;
+    text-transform: uppercase; color: #9fd9df;
+  }
+  .tabs {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; gap: 6px;
+    padding: 0 16px 10px;
+    overflow-x: auto; scrollbar-width: thin;
+  }
+  .tab-btn {
+    flex-shrink: 0;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: .88rem; font-weight: 500;
+    color: #d5e9ee; background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 999px; padding: 7px 14px; cursor: pointer;
+    transition: background .2s, color .2s, border-color .2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,.16); color: #fff; }
+  .tab-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+  /* ---------- FLAGS (pure CSS) ---------- */
+  .flag {
+    display: inline-flex; position: relative; overflow: hidden;
+    width: 1.5em; height: 1em; font-size: 15px;
+    border-radius: 2px; box-shadow: 0 0 0 1px rgba(0,0,0,.18);
+    flex-shrink: 0; vertical-align: middle;
+  }
+  .flag.big { font-size: 64px; border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+  .flag.mid { font-size: 22px; }
+  .flag > span { display: block; }
+  .flag-h { flex-direction: column; }
+  .flag-h > span { flex: 1; width: 100%; }
+  .flag-v { flex-direction: row; }
+  .flag-v > span { flex: 1; height: 100%; }
+  .flag-es > span:nth-child(2) { flex: 2; }
+  .flag-dk { background: #c8102e; }
+  .flag-dk .v { position: absolute; left: 32.4%; top: 0; width: 10.8%; height: 100%; background: #fff; }
+  .flag-dk .h { position: absolute; top: 42.9%; left: 0; height: 14.3%; width: 100%; background: #fff; }
+  .flag-uk { background: #012169; }
+  .flag-uk span { position: absolute; }
+  .flag-uk .dw1, .flag-uk .dw2 { left: -15%; top: 50%; width: 130%; height: 20%; background: #fff; margin-top: -10%; }
+  .flag-uk .dr1, .flag-uk .dr2 { left: -15%; top: 50%; width: 130%; height: 6.6%; background: #c8102e; margin-top: -3.3%; }
+  .flag-uk .dw1, .flag-uk .dr1 { transform: rotate(33.7deg); }
+  .flag-uk .dw2, .flag-uk .dr2 { transform: rotate(-33.7deg); }
+  .flag-uk .cwh { left: 0; top: 33.3%; width: 100%; height: 33.4%; background: #fff; }
+  .flag-uk .cwv { top: 0; left: 40%; height: 100%; width: 20%; background: #fff; }
+  .flag-uk .crh { left: 0; top: 40%; width: 100%; height: 20%; background: #c8102e; }
+  .flag-uk .crv { top: 0; left: 44%; height: 100%; width: 12%; background: #c8102e; }
+
+  /* ---------- LAYOUT ---------- */
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 48px; }
+  .tab-panel { display: none; animation: fade .25s ease; }
+  .tab-panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  [id] { scroll-margin-top: calc(var(--hdr-h) + 16px); }
+
+  .panel {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 24px;
+  }
+  .panel h2 { margin: 0 0 14px; color: var(--navy); font-size: 1.7rem; }
+  .panel h3 { color: var(--teal-dark); font-size: 1.2rem; margin: 26px 0 8px; }
+  .panel p { margin: 0 0 14px; }
+  .lead-title { font-family: 'Playfair Display', serif; color: var(--teal); font-size: 1.05rem; letter-spacing: .06em; text-transform: uppercase; margin: 0 0 4px; }
+  .teal-num { color: var(--teal-dark); font-weight: 700; }
+
+  /* ---------- INDEX ---------- */
+  .index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; margin-top: 10px; }
+  .index-country {
+    border: 2px solid var(--border); border-radius: 12px; padding: 16px 18px; background: #fbfdfe;
+  }
+  .index-country h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; color: var(--navy); font-size: 1.1rem; }
+  .index-sub { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 12px 0 4px; font-weight: 700; }
+  .index-list { list-style: none; margin: 0; padding: 0; }
+  .index-list li { border-bottom: 1px dashed var(--border); }
+  .index-list li:last-child { border-bottom: 0; }
+  .index-list a { display: block; padding: 7px 4px; text-decoration: none; border-radius: 6px; transition: background .15s; }
+  .index-list a:hover { background: var(--teal-light); }
+  .ix-grade { display: block; font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 400; color: var(--text); line-height: 1.35; }
+  .ix-uni { display: block; font-family: 'Playfair Display', serif; font-size: 11.5px; font-style: italic; color: var(--muted); line-height: 1.4; margin-top: 1px; }
+
+  /* ---------- RvA ---------- */
+  .rva-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 18px 0; }
+  .rva-item { border: 2px solid var(--border); border-radius: 12px; padding: 18px 20px; background: #fbfdfe; transition: border-color .2s, box-shadow .2s; }
+  .rva-item:hover { border-color: var(--teal); box-shadow: 0 8px 22px rgba(10,155,170,.14); }
+  .rva-item h3 { margin-top: 0; }
+  .link-list { padding-left: 20px; }
+  .link-list li { margin-bottom: 6px; }
+
+  /* ---------- COUNTRY INTRO ---------- */
+  .country-intro { display: flex; gap: 26px; align-items: flex-start; }
+  .country-intro .ci-body { flex: 1; min-width: 0; }
+  .country-intro h2 { margin: 0 0 10px; font-size: 2rem; }
+  .ci-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .ci-chip { background: var(--teal-light); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; font-size: .88rem; }
+  .ci-chip .k { display: block; font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 700; }
+  .ci-chip .v { font-weight: 700; color: var(--navy); }
+
+  .section-sep { display: flex; align-items: center; gap: 14px; margin: 34px 0 18px; }
+  .section-sep span { font-size: .78rem; font-weight: 700; letter-spacing: .18em; color: var(--teal-dark); white-space: nowrap; }
+  .section-sep::before, .section-sep::after { content: ""; flex: 1; height: 2px; background: var(--border); }
+  .section-sep::before { max-width: 40px; }
+
+  .info-box { background: var(--teal-light); border: 2px solid var(--border); border-left: 5px solid var(--teal); border-radius: 12px; padding: 18px 22px; margin-bottom: 22px; }
+  .info-box h3 { margin: 0 0 8px; color: var(--teal-dark); font-size: 1.15rem; }
+  .info-box p { margin: 0 0 8px; }
+
+  /* ---------- CARDS ---------- */
+  .card {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 26px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 6px rgba(13,43,62,.04);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .card:hover { border-color: var(--teal); box-shadow: 0 10px 28px rgba(10,155,170,.16); }
+  .card.flash { animation: flash 1.6s ease; }
+  @keyframes flash { 0%,100% { box-shadow: 0 2px 6px rgba(13,43,62,.04); } 25% { box-shadow: 0 0 0 5px rgba(10,155,170,.35); } }
+  .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+  .card-title { margin: 0; font-size: 1.35rem; line-height: 1.3; }
+  .card-title a { color: var(--navy); text-decoration: none; transition: color .2s; }
+  .card-title a:hover { color: var(--teal); }
+  .click-ico { display: inline-block; font-size: .85em; margin-left: 6px; transition: transform .2s; }
+  .card-title a:hover .click-ico { transform: scale(1.35); }
+  .card-school { color: var(--teal); font-weight: 500; margin-top: 4px; font-size: .97rem; }
+
+  .diff { flex-shrink: 0; font-size: .74rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; border: 1.5px solid; white-space: nowrap; }
+  .diff-red { color: var(--red); background: var(--red-bg); border-color: var(--red); }
+  .diff-orange { color: var(--orange); background: var(--orange-bg); border-color: var(--orange); }
+  .diff-green { color: var(--green); background: var(--green-bg); border-color: var(--green); }
+  .diff-grey { color: #5d6b73; background: #eef2f4; border-color: #9aa8b0; }
+
+  .rank-label { margin-top: 14px; font-size: .76rem; color: var(--muted); }
+  .ranks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .rank { display: inline-block; font-size: .8rem; font-weight: 500; padding: 4px 11px; border-radius: 999px; background: var(--teal-light); color: var(--teal-dark); border: 1px solid var(--border); text-decoration: none; }
+  a.rank:hover { border-color: var(--teal); color: var(--teal-dark); }
+  .rank.gold { background: var(--gold-bg); border-color: var(--gold-border); color: var(--gold-text); }
+  .rank-note { font-size: .85rem; color: var(--muted); font-style: italic; }
+
+  .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 18px 0; }
+  .meta-cell { background: #f7fafb; border: 1px solid var(--border); border-radius: 10px; padding: 10px 13px; }
+  .meta-cell .k { display: block; font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .meta-cell .v { display: block; font-size: .93rem; color: var(--navy); font-weight: 500; }
+  .map-btn {
+    margin-top: 7px; display: inline-block;
+    background: var(--teal-light); border: 1.5px solid var(--teal); color: var(--teal-dark);
+    font-family: 'DM Sans', sans-serif; font-size: .74rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 999px; cursor: pointer; transition: background .2s, color .2s;
+  }
+  .map-btn:hover { background: var(--teal); color: #fff; }
+
+  .desc { background: #f0f8fb; border-left: 4px solid var(--teal); border-radius: 0 10px 10px 0; padding: 14px 18px; font-size: .96rem; }
+  .desc p { margin: 0 0 10px; }
+  .desc p:last-child, .desc ul:last-child { margin-bottom: 0; }
+  .desc ul { margin: 6px 0 10px; padding-left: 20px; }
+
+  details.req { margin-top: 16px; border: 1px solid var(--border); border-radius: 10px; background: #fff; }
+  details.req summary { cursor: pointer; padding: 11px 16px; font-weight: 700; color: var(--teal-dark); font-size: .93rem; list-style: none; display: flex; align-items: center; gap: 8px; }
+  details.req summary::-webkit-details-marker { display: none; }
+  details.req summary::before { content: "▸"; transition: transform .2s; display: inline-block; }
+  details.req[open] summary::before { transform: rotate(90deg); }
+  details.req summary:hover { background: var(--teal-light); border-radius: 10px; }
+  .req-body { padding: 4px 20px 18px; font-size: .94rem; }
+  .req-body h4 { margin: 14px 0 4px; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--navy); }
+  .req-body ul { margin: 4px 0 8px; padding-left: 20px; }
+  .req-body ul ul { margin: 2px 0; }
+  .req-body p { margin: 4px 0 8px; }
+  .deadline { margin-top: 14px; background: #fff8c5; border: 1.5px solid #e9cf3a; border-radius: 10px; padding: 10px 14px; font-weight: 500; }
+  .txt-red { color: #e00000; font-weight: 700; }
+  .txt-orange { color: #f79646; font-weight: 700; }
+  .txt-green { color: #1e9e4a; font-weight: 700; }
+
+  .dtu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin: 10px 0 12px; }
+  .dtu-col { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: .85rem; }
+  .dtu-col b { display: inline-block; font-size: .68rem; letter-spacing: .08em; padding: 3px 8px; border-radius: 3px; margin-bottom: 6px; }
+  .dtu-col ul { margin: 0; padding-left: 16px; }
+
+  /* ---------- MAP ---------- */
+  .map-wrap { margin-top: 34px; }
+  .map-wrap h3 { font-size: 1.3rem; color: var(--navy); margin: 0 0 10px; }
+  .map { height: 460px; border: 2px solid var(--border); border-radius: 12px; overflow: hidden; z-index: 1; }
+  .uni-marker { font-size: 26px; line-height: 1; text-align: center; filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
+  .leaflet-popup-content { font-family: 'DM Sans', sans-serif; margin: 12px 14px; }
+  .pop-grade { font-weight: 700; color: var(--navy); font-size: .95rem; line-height: 1.3; }
+  .pop-uni { font-family: 'Playfair Display', serif; font-style: italic; color: var(--muted); font-size: .85rem; margin: 2px 0 10px; }
+  .pop-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pop-btns a, .pop-btns button {
+    font-family: 'DM Sans', sans-serif; font-size: .75rem; font-weight: 700;
+    padding: 5px 10px; border-radius: 999px; cursor: pointer; text-decoration: none;
+    border: 1.5px solid var(--teal); background: var(--teal-light); color: var(--teal-dark);
+  }
+  .pop-btns a.primary { background: var(--teal); color: #fff !important; }
+  .pop-btns a:hover, .pop-btns button:hover { background: var(--teal-dark); color: #fff !important; border-color: var(--teal-dark); }
+
+  /* ---------- FOOTER ---------- */
+  footer { border-top: 2px solid var(--border); background: #fff; padding: 30px 16px; text-align: center; color: var(--muted); font-size: .85rem; }
+  .footer-logo { width: 200px; margin: 0 auto 10px; opacity: .55; line-height: 0; }
+  .footer-logo svg { width: 100%; height: auto; }
+
+  @media (max-width: 720px) {
+    .header-inner { gap: 14px; padding: 10px 16px 8px; }
+    .header-logo { width: 110px; }
+    .header-titles { padding-left: 14px; }
+    .header-titles h1 { font-size: 1rem; }
+    .header-titles .prepared { font-size: .62rem; }
+    .panel, .card { padding: 20px 18px; }
+    .card-head { flex-direction: column; gap: 10px; }
+    .country-intro { flex-direction: column; gap: 14px; }
+    .flag.big { font-size: 48px; }
+    .map { height: 360px; }
+    main { padding-top: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <div class="header-logo" aria-label="Educoway"><svg preserveAspectRatio="xMidYMid meet" id="Capa_2_hdr" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .hcls-1 {
+        fill: #36aadc;
+      }
+
+      .hcls-1, .hcls-2, .hcls-3, .hcls-4 {
+        opacity: .8;
+      }
+
+      .hcls-2 {
+        fill: #30ac71;
+      }
+
+      .hcls-5 {
+        fill: #ffffff;
+      }
+
+      .hcls-3 {
+        fill: #32abbb;
+      }
+
+      .hcls-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="Capa_3_hdr" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="hcls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="hcls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hcls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="hcls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="hcls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hcls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hcls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="hcls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hcls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="hcls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="hcls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="hcls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="hcls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="hcls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hcls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="hcls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="hcls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="hcls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="hcls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="hcls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hcls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hcls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="hcls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="hcls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="hcls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="hcls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hcls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="hcls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="hcls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="hcls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hcls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hcls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hcls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="hcls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="hcls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="hcls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="hcls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="hcls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hcls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="hcls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="hcls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="hcls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="hcls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="hcls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="hcls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="hcls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="hcls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="hcls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="hcls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="hcls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="hcls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="hcls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="hcls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="hcls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="hcls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="hcls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+    <div class="header-titles">
+      <h1>Informe Personalizado de Opciones de Grado</h1>
+      <div class="prepared">Preparado para Mateo Martínez Arlandis</div>
+    </div>
+  </div>
+  <nav class="tabs" aria-label="Secciones del informe">
+    <button class="tab-btn active" data-tab="intro" onclick="showTab('intro', this)">Introducción</button>
+    <button class="tab-btn" data-tab="es" onclick="showTab('es', this)"><span class="flag flag-h flag-es"><span style="background:#AA151B"></span><span style="background:#F1BF00"></span><span style="background:#AA151B"></span></span>España</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============================ INTRODUCCIÓN ============================ -->
+<section class="tab-panel active" id="tab-intro">
+  <div class="panel">
+    <p class="lead-title">Informe personalizado de opciones de grado</p>
+    <h2>Mateo Martínez Arlandis</h2>
+    <p>Hola Mateo,</p>
+    <p>Enhorabuena de nuevo por tu valentía y gracias por haber confiado en nosotros para acompañarte en este gran paso. Estoy convencida de que estás tomando una decisión súper acertada, de la que te alegrarás y acordarás toda la vida.</p>
+    <p>Estos días he estado trabajando en la búsqueda de los grados solicitados y afines que, según lo que hemos hablado, más podrían interesarte.</p>
+    <p>Te dejo primero un índice para que te ayude a localizar las opciones en el listado, y a continuación el listado completo con todos los detalles relevantes.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Contenido</h2>
+    <div class="index-grid">
+
+      <div class="index-country">
+        <h3><span class="flag mid flag-h flag-es"><span style="background:#AA151B"></span><span style="background:#F1BF00"></span><span style="background:#AA151B"></span></span>España</h3>
+        <div class="index-sub">Research Universities</div>
+        <ul class="index-list">
+          <li><a href="#es-uax-ae" onclick="goTo('es','es-uax-ae');return false;"><span class="ix-grade">Grado en Ingeniería Aeroespacial</span><span class="ix-uni">Universidad Alfonso X el Sabio (UAX)</span></a></li>
+          <li><a href="#es-ue-ae" onclick="goTo('es','es-ue-ae');return false;"><span class="ix-grade">Grado en Ingeniería Aeroespacial en Aeronaves</span><span class="ix-uni">Universidad Europea</span></a></li>
+          <li><a href="#es-ue-ma" onclick="goTo('es','es-ue-ma');return false;"><span class="ix-grade">Grado en Ingeniería Mecánica + Automoción</span><span class="ix-uni">Universidad Europea</span></a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+<!-- ============================ ESPAÑA ============================ -->
+<section class="tab-panel" id="tab-es">
+  <div class="panel country-intro">
+    <span class="flag big flag-h flag-es"><span style="background:#AA151B"></span><span style="background:#F1BF00"></span><span style="background:#AA151B"></span></span>
+    <div class="ci-body">
+      <h2>España</h2>
+      <div class="ci-meta">
+        <div class="ci-chip"><span class="k">Matrícula (privadas)</span><span class="v">9.000 – 15.400 €/año</span></div>
+        <div class="ci-chip"><span class="k">Ubicación</span><span class="v">Madrid</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-sep"><span>RESEARCH UNIVERSITIES</span></div>
+
+  <!-- UAX Aero -->
+  <article class="card" id="es-uax-ae">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://www.uax.com/titulaciones/grado-en-ingenieria-aeroespacial" target="_blank" rel="noopener">Grado en Ingeniería Aeroespacial<span class="click-ico">🖱️</span></a></h3>
+        <div class="card-school">Universidad Alfonso X el Sabio (UAX) · Madrid – Campus Villanueva de la Cañada</div>
+      </div>
+      <span class="diff diff-green">Dificultad: Media</span>
+    </div>
+    <div class="rank-label">Ranking de la universidad:</div>
+    <div class="rank-note">No está en el ranking mundial Shanghai</div>
+    <div class="meta">
+      <div class="meta-cell"><span class="k">Ciudad</span><span class="v">Madrid – Campus Villanueva de la Cañada</span><button class="map-btn" onclick="scrollToMap('es','map-es')">🗺️ Ver mapa</button></div>
+      <div class="meta-cell"><span class="k">Duración y créditos</span><span class="v">4 años – <strong>240 ECTS</strong></span></div>
+      <div class="meta-cell"><span class="k">Coste</span><span class="v"><strong>15,400 €/año (privada) 800€ reservar la plaza y 1100 € de matrícula</strong></span></div>
+    </div>
+    <div class="desc">
+      <p><strong>Breve descripción:</strong> El Grado en Ingeniería Aeroespacial de UAX prepara a los estudiantes para diseñar, desarrollar y gestionar sistemas aeronáuticos y espaciales. El programa combina una sólida formación en ingeniería con un enfoque práctico, trabajando desde los primeros cursos con tecnologías, laboratorios y proyectos reales del sector.</p>
+      <p>Los estudiantes se forman en áreas como el diseño y fabricación de aeronaves, satélites, sistemas de propulsión, motores de cohete, turbinas de gas, aerodinámica y estructuras aeroespaciales.</p>
+      <p>El programa, actualizado en 2025, incorpora el nuevo laboratorio UAX ELAb y cuenta con la colaboración de empresas del sector. Además, ofrece prácticas optativas de 9 ECTS en empresas aeroespaciales.</p>
+    </div>
+    <details class="req">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <h4>Requisitos académicos</h4>
+        <p>Título de Bachiller (con una buena base en Matemáticas, Física y Química)</p>
+        <h4>Requisitos de inglés</h4>
+        <p>Nivel B1</p>
+        <h4>Proceso de selección</h4>
+        <p>El proceso comienza con la solicitud de admisión y presentación de la documentación requerida. El acceso dependerá de que el candidato cumpla los requisitos legales de acceso a la universidad española y los requisitos establecidos por UAX.</p>
+        <p><strong>Dificultad de admisión:</strong> MEDIA (sujeta al cumplimiento de los requisitos y disponibilidad de plazas)</p>
+        <div class="deadline">📅 <strong>Fecha límite para presentar la matrícula:</strong> no especifica</div>
+      </div>
+    </details>
+  </article>
+
+
+
+  <!-- UE Aero -->
+  <article class="card" id="es-ue-ae">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://universidadeuropea.com/grado-ingenieria-aeroespacial-madrid/" target="_blank" rel="noopener">Grado en Ingeniería Aeroespacial en Aeronaves<span class="click-ico">🖱️</span></a></h3>
+        <div class="card-school">Universidad Europea · Madrid – Villaviciosa de Odón</div>
+      </div>
+      <span class="diff diff-green">Dificultad: Media</span>
+    </div>
+    <div class="rank-label">Ranking de la universidad:</div>
+    <div class="ranks">
+      <span class="rank">Top 5 de universidades privadas de España según El Mundo</span>
+      <span class="rank">5 estrellas QS Stars</span>
+    </div>
+    <div class="rank-note" style="margin-top:6px">La Universidad Europea indica estar en el Top 5 de universidades privadas de España según El Mundo y contar con 5 estrellas QS Stars.</div>
+    <div class="meta">
+      <div class="meta-cell"><span class="k">Ciudad</span><span class="v">Madrid – Villaviciosa de Odón</span><button class="map-btn" onclick="scrollToMap('es','map-es')">🗺️ Ver mapa</button></div>
+      <div class="meta-cell"><span class="k">Duración y créditos</span><span class="v">4 años – 240 ECTS</span></div>
+      <div class="meta-cell"><span class="k">Coste</span><span class="v"><strong>entre 9.000-13.000€ año, prueba de admisión 150€, reserva de plaza 800€ y matrícula 1500€</strong></span></div>
+      <div class="meta-cell"><span class="k">Idioma</span><span class="v"><strong>Grado 100% en INGLÉS</strong></span></div>
+    </div>
+    <div class="desc">
+      <p><strong>Breve descripción:</strong> El Grado en Ingeniería Aeroespacial de la Universidad Europea ofrece una formación especializada en el diseño, desarrollo, fabricación y mantenimiento de sistemas y tecnologías aeronáuticas y espaciales.</p>
+      <p>El programa combina conocimientos de ingeniería mecánica, eléctrica, electrónica y aeronáutica, trabajando áreas como aerodinámica, estructuras, mecánica de vuelo, propulsión, navegación, satélites y vehículos espaciales.</p>
+      <p>A lo largo de la carrera, los estudiantes trabajan con herramientas de diseño y simulación y tienen acceso a instalaciones especializadas, incluido un túnel de viento utilizado también por Airbus. El programa incorpora además prácticas profesionales y proyectos vinculados al sector aeroespacial.</p>
+      <p>El grado habilita para ejercer como Ingeniero Técnico Aeronáutico, de acuerdo con la normativa indicada por la universidad.</p>
+      <p><strong>Prácticas y salidas profesionales:</strong> El programa incluye prácticas profesionales y la posibilidad de realizar prácticas extracurriculares. La universidad señala experiencias de estudiantes en empresas como Airbus, Sener Aeroespacial, Aertec Solutions, Accenture y Capgemini.</p>
+      <p>Entre las posibles salidas profesionales se encuentran:</p>
+      <ul>
+        <li>Diseño y fabricación de aeronaves.</li>
+        <li>Diseño de satélites y sistemas espaciales.</li>
+        <li>Motores y sistemas de propulsión.</li>
+        <li>Aerodinámica y estructuras.</li>
+        <li>Mantenimiento y certificación de aeronaves.</li>
+        <li>Aeronavegación.</li>
+        <li>Infraestructuras aeroportuarias.</li>
+        <li>Industria aeronáutica y espacial.</li>
+      </ul>
+    </div>
+    <details class="req">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <h4>Requisitos académicos</h4>
+        <p>Título de Bachiller</p>
+        <h4>Requisitos de inglés</h4>
+        <p>Nivel B2</p>
+        <h4>Proceso de selección</h4>
+        <p>El proceso comienza con la solicitud de admisión y presentación de la documentación. Posteriormente, el candidato realiza las pruebas de acceso:</p>
+        <p><strong>Pruebas de admisión:</strong> El proceso de admisión incluye:</p>
+        <ul>
+          <li>Test de evaluación de competencias y habilidades.</li>
+          <li>Test de conocimientos generales.</li>
+          <li>Prueba de evaluación de idiomas.</li>
+          <li>Entrevista personal.</li>
+        </ul>
+        <p><strong>Dificultad de admisión:</strong> MEDIA : solo hay 140 plazas</p>
+        <div class="deadline">📅 <strong>Fecha límite para presentar la matrícula:</strong> La Universidad Europea no establece en la ficha del grado una fecha límite única de matrícula. La admisión está condicionada al proceso de acceso y a la disponibilidad de plazas. Por ello, es recomendable iniciar el proceso con suficiente antelación.</div>
+      </div>
+    </details>
+  </article>
+
+  <!-- UE Mecánica + Automoción -->
+  <article class="card" id="es-ue-ma">
+    <div class="card-head">
+      <div>
+        <h3 class="card-title"><a href="https://universidadeuropea.com/grado-ingenieria-mecanica-automocion-madrid/" target="_blank" rel="noopener">Grado en Ingeniería Mecánica + Automoción<span class="click-ico">🖱️</span></a></h3>
+        <div class="card-school">Universidad Europea · Madrid – Villaviciosa de Odón</div>
+      </div>
+      <span class="diff diff-green">Dificultad: Media</span>
+    </div>
+    <p style="margin:8px 0 0;font-size:.92rem;color:var(--muted)">(Doble especialidad para impulsar tu desarrollo profesional en Ingeniería Mecánica: Máquinas + Automoción)</p>
+    <div class="rank-label">Ranking de la universidad:</div>
+    <div class="ranks">
+      <span class="rank">Top 5 de universidades privadas de España según El Mundo</span>
+      <span class="rank">5 estrellas QS Stars</span>
+    </div>
+    <div class="rank-note" style="margin-top:6px">La Universidad Europea indica estar en el Top 5 de universidades privadas de España según El Mundo y contar con 5 estrellas QS Stars.</div>
+    <div class="meta">
+      <div class="meta-cell"><span class="k">Ciudad</span><span class="v">Madrid – Villaviciosa de Odón</span><button class="map-btn" onclick="scrollToMap('es','map-es')">🗺️ Ver mapa</button></div>
+      <div class="meta-cell"><span class="k">Duración y créditos</span><span class="v">4 años – 240 ECTS</span></div>
+      <div class="meta-cell"><span class="k">Coste</span><span class="v"><strong>entre 9.000-13.000€ año, prueba de admisión 150€, reserva de plaza 800€ y matrícula 1500€</strong></span></div>
+    </div>
+    <div class="desc">
+      <p><strong>Breve descripción:</strong> Es una formación de 4 años y 240 ECTS que combina la base de la Ingeniería Mecánica con una especialización específica en Automoción, sin ampliar la duración del grado. El programa incluye materias como diseño de máquinas, termodinámica, materiales, procesos de fabricación, dinámica vehicular, vehículo eléctrico, motores de combustión y simulación y ensayos en automoción.</p>
+      <p>Tiene un enfoque especialmente práctico, con acceso a instalaciones como el Taller de Automoción, FAB LAB, Laboratorio de Industria 4.0 y túnel de viento, además del Club Formula UE, donde los estudiantes participan en el diseño y construcción de vehículos de competición.</p>
+      <p>En 4.º curso incluye 12 ECTS de prácticas académicas externas y TFG. La universidad menciona colaboraciones/prácticas con empresas como Renault, BMW, Gestamp y Siemens, entre otras.</p>
+      <p>Salidas: ingeniería mecánica, automoción, diseño y desarrollo de vehículos, maquinaria industrial, fabricación, mantenimiento, simulación, movilidad eléctrica y estructuras industriales.</p>
+    </div>
+    <details class="req">
+      <summary>Ver requisitos de admisión y fechas</summary>
+      <div class="req-body">
+        <h4>Requisitos académicos</h4>
+        <p>Título de Bachiller</p>
+        <h4>Requisitos de inglés</h4>
+        <p>Nivel B1</p>
+        <h4>Proceso de selección</h4>
+        <p>El proceso comienza con la solicitud de admisión y presentación de la documentación. Posteriormente, el candidato realiza las pruebas de acceso:</p>
+        <p><strong>Pruebas de admisión:</strong> El proceso de admisión incluye:</p>
+        <ul>
+          <li>Test de evaluación de competencias y habilidades.</li>
+          <li>Test de conocimientos generales.</li>
+        </ul>
+        <p><strong>Dificultad de admisión:</strong> MEDIA (según requisitos y disponibilidad de plazas)</p>
+        <div class="deadline">📅 <strong>Fecha límite para presentar la matrícula:</strong> La Universidad Europea no establece en la ficha del grado una fecha límite única de matrícula. La admisión está condicionada al proceso de acceso y a la disponibilidad de plazas. Por ello, es recomendable iniciar el proceso con suficiente antelación.</div>
+      </div>
+    </details>
+  </article>
+
+  <div class="map-wrap" id="map-es-wrap">
+    <h3>🗺️ Mapa de universidades · España</h3>
+    <div class="map" id="map-es"></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-logo" aria-label="Educoway"><svg preserveAspectRatio="xMidYMid meet" id="Capa_2_ftr" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 371.17 89.18">
+  <defs>
+    <style>
+      .fcls-1 {
+        fill: #36aadc;
+      }
+
+      .fcls-1, .fcls-2, .fcls-3, .fcls-4 {
+        opacity: .8;
+      }
+
+      .fcls-2 {
+        fill: #30ac71;
+      }
+
+      .fcls-5 {
+        fill: #737373;
+      }
+
+      .fcls-3 {
+        fill: #32abbb;
+      }
+
+      .fcls-4 {
+        fill: #31ac9c;
+      }
+    </style>
+  </defs>
+  <g id="Capa_3_ftr" data-name="Capa 3">
+    <g>
+      <g>
+        <path class="fcls-5" d="M6.98,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <path class="fcls-5" d="M15.84,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="fcls-5" d="M20.42,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.31-.3-.82-.29-1.1,0Z"/>
+        <rect class="fcls-5" x="20.46" y="77.57" width="1.03" height="7.81"/>
+        <path class="fcls-5" d="M31.02,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="fcls-5" d="M42.48,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="fcls-5" d="M51.62,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="fcls-5" d="M61.52,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="fcls-5" d="M72.28,83.65c-.29,.29-.62,.51-.99,.65-.88,.34-1.9,.27-2.69-.15-.46-.25-.82-.6-1.08-1.06-.27-.46-.4-1-.4-1.61s.13-1.18,.4-1.64c.26-.45,.63-.81,1.08-1.04,.45-.24,.96-.36,1.52-.36,.4,0,.79,.07,1.15,.21,.36,.14,.67,.35,.94,.64l.14,.15,.71-.71-.14-.14c-.77-.77-1.7-1.15-2.78-1.15-.76,0-1.45,.17-2.06,.5-.61,.34-1.1,.82-1.45,1.43-.35,.61-.53,1.32-.53,2.11s.18,1.47,.53,2.09c.35,.61,.84,1.1,1.46,1.44,.61,.34,1.3,.51,2.05,.51,.52,0,1.04-.1,1.53-.29,.49-.19,.94-.48,1.32-.84l.14-.14-.7-.75-.15,.15Z"/>
+        <rect class="fcls-5" x="76.5" y="77.57" width="1.03" height="7.81"/>
+        <path class="fcls-5" d="M76.46,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="fcls-5" d="M87.13,77.96c-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07c-.34-.62-.82-1.1-1.43-1.45Zm-2.06,6.56c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+        <polygon class="fcls-5" points="86.82 74.48 85.57 74.48 84.18 76.7 85.26 76.7 86.82 74.48"/>
+        <path class="fcls-5" d="M98.79,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="fcls-5" d="M115.45,81.9c0,.48-.11,.93-.33,1.32-.22,.39-.52,.7-.91,.93-.39,.23-.85,.34-1.35,.34-.75,0-1.31-.21-1.71-.63-.4-.42-.6-1.04-.6-1.84v-4.45h-1.03v4.48c0,1.07,.3,1.92,.88,2.52,.59,.61,1.4,.92,2.41,.92,.65,0,1.25-.15,1.78-.45,.34-.19,.64-.44,.89-.72v1.07h1v-7.81h-1.03v4.33Z"/>
+        <path class="fcls-5" d="M126.71,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <rect class="fcls-5" x="131.56" y="77.57" width="1.03" height="7.81"/>
+        <path class="fcls-5" d="M131.52,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <polygon class="fcls-5" points="139.64 83.92 137.01 77.57 135.89 77.57 139.16 85.38 140.11 85.38 143.4 77.57 142.28 77.57 139.64 83.92"/>
+        <path class="fcls-5" d="M151.82,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="fcls-5" d="M160.47,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="fcls-5" d="M169.7,81.37c-.45-.18-1.07-.34-1.84-.48-.61-.12-1.07-.23-1.39-.35-.29-.11-.5-.23-.61-.37-.11-.13-.16-.3-.16-.52,0-.38,.17-.67,.53-.88,.38-.23,.94-.35,1.66-.35,.5,0,.93,.06,1.29,.19,.36,.13,.72,.33,1.06,.6l.16,.13,.61-.76-.15-.13c-.42-.34-.87-.6-1.34-.77-.48-.17-1.02-.25-1.63-.25-.96,0-1.73,.19-2.3,.57-.6,.4-.9,.95-.9,1.64,0,.42,.1,.78,.31,1.06,.2,.27,.53,.5,.97,.68,.42,.17,1.01,.33,1.75,.47,.65,.13,1.16,.26,1.51,.38,.32,.12,.55,.25,.67,.41,.12,.14,.18,.33,.18,.56,0,.39-.19,.7-.57,.93-.41,.25-.96,.38-1.65,.38-.55,0-1.07-.1-1.54-.3-.47-.2-.85-.46-1.14-.79l-.15-.17-.66,.71,.11,.14c.34,.41,.82,.76,1.43,1.02,.6,.26,1.26,.39,1.95,.39,.95,0,1.73-.21,2.31-.61,.61-.42,.92-.99,.92-1.69,0-.44-.11-.82-.33-1.12-.22-.29-.56-.54-1.03-.73Z"/>
+        <path class="fcls-5" d="M174.51,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <rect class="fcls-5" x="174.55" y="77.57" width="1.03" height="7.81"/>
+        <path class="fcls-5" d="M183.93,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="fcls-5" d="M193.83,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="fcls-5" d="M202.25,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <rect class="fcls-5" x="206.86" y="77.57" width="1.03" height="7.81"/>
+        <path class="fcls-5" d="M206.82,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="fcls-5" d="M218.34,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="fcls-5" d="M234.87,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="fcls-5" d="M246.33,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="fcls-5" d="M262.65,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <rect class="fcls-5" x="267.96" y="74.48" width="1.03" height="10.9"/>
+        <path class="fcls-5" d="M284.5,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <polygon class="fcls-5" points="295.51 77.57 294.23 77.57 293.08 79.12 292.04 80.47 289.89 77.57 288.61 77.57 291.41 81.31 288.38 85.38 289.63 85.38 292.05 82.16 294.45 85.38 295.74 85.38 292.68 81.31 295.51 77.57"/>
+        <path class="fcls-5" d="M302.91,84.21c-.19,.09-.4,.18-.63,.24-.22,.06-.41,.1-.56,.1-.47,0-.79-.12-.94-.36-.17-.27-.25-.68-.25-1.23v-4.4h2.57v-.99h-2.57v-2.27l-1.03,.1v2.17h-1.59v.99h1.59v4.4c0,.83,.17,1.47,.49,1.89,.34,.44,.92,.66,1.73,.66,.5,0,1.04-.14,1.6-.43l.17-.09-.41-.89-.19,.09Z"/>
+        <path class="fcls-5" d="M309.9,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="fcls-5" d="M320.51,78.77c-.26-.32-.59-.6-.97-.81-.59-.34-1.27-.51-2.01-.51s-1.43,.17-2.02,.51c-.59,.34-1.06,.82-1.39,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.33,.61,.8,1.09,1.39,1.44,.59,.34,1.27,.52,2.02,.52s1.42-.17,2.01-.5c.39-.22,.71-.49,.98-.81v1.19h1.01v-7.81h-1v1.2Zm-2.95,5.74c-.57,0-1.08-.13-1.52-.38-.44-.25-.78-.61-1.03-1.06-.25-.46-.37-1-.37-1.6s.13-1.14,.37-1.6c.25-.46,.59-.81,1.03-1.06,.44-.25,.95-.38,1.52-.38s1.07,.13,1.51,.38c.44,.25,.79,.61,1.03,1.06,.25,.46,.37,1,.37,1.6s-.13,1.14-.37,1.6c-.25,.45-.59,.81-1.03,1.06-.44,.25-.95,.38-1.51,.38Z"/>
+        <path class="fcls-5" d="M331.73,78.38c-.59-.61-1.41-.92-2.45-.92-.66,0-1.27,.15-1.81,.44-.35,.19-.65,.43-.9,.71v-1.05h-1v7.81h1.03v-4.33c0-.48,.11-.93,.33-1.32,.22-.39,.54-.7,.94-.93,.4-.23,.87-.34,1.38-.34,.76,0,1.33,.21,1.73,.63,.4,.42,.6,1.04,.6,1.84v4.45h1.03v-4.48c0-1.07-.3-1.92-.89-2.52h0Z"/>
+        <path class="fcls-5" d="M336.58,86.47c0,.64-.09,1.1-.27,1.35-.17,.24-.44,.35-.85,.35-.37,0-.71-.1-1.02-.29l-.2-.12-.39,.91,.16,.09c.51,.27,.99,.41,1.44,.41,.74,0,1.29-.23,1.64-.68,.34-.44,.51-1.1,.51-2.03v-8.9h-1.03v8.9Z"/>
+        <path class="fcls-5" d="M336.54,74.92c-.14,.15-.21,.33-.21,.54s.07,.4,.22,.54h0c.14,.14,.33,.22,.55,.22,.21,0,.4-.07,.54-.21,.15-.14,.23-.33,.23-.54s-.08-.4-.22-.55c-.3-.3-.82-.29-1.1,0Z"/>
+        <path class="fcls-5" d="M347.14,77.92c-.59-.32-1.28-.48-2.05-.48s-1.44,.18-2.03,.52c-.59,.35-1.06,.83-1.4,1.44-.33,.61-.5,1.31-.5,2.08s.17,1.47,.5,2.08c.34,.61,.81,1.1,1.41,1.45,.6,.35,1.28,.52,2.04,.52,.68,0,1.31-.13,1.9-.4,.59-.27,1.07-.64,1.44-1.1l.12-.15-.76-.64-.13,.17c-.25,.33-.61,.6-1.08,.81-.47,.21-.98,.31-1.49,.31-.83,0-1.52-.25-2.04-.75-.48-.46-.77-1.09-.86-1.86h6.75l.02-.18c.01-.1,.02-.26,.02-.46,0-.75-.16-1.42-.48-2-.32-.58-.79-1.04-1.38-1.36Zm.85,3.01h-5.77c.1-.72,.39-1.31,.86-1.76,.52-.5,1.19-.75,2.01-.75,.57,0,1.09,.12,1.52,.34,.43,.23,.77,.55,1.02,.95,.21,.35,.34,.76,.36,1.21Z"/>
+        <path class="fcls-5" d="M355.8,77.5c-.59,0-1.13,.17-1.61,.49-.28,.19-.53,.43-.74,.72v-1.13h-1v7.81h1.03v-4.01c0-.53,.1-1.02,.31-1.46,.2-.44,.49-.78,.84-1.03,.35-.25,.73-.37,1.15-.37s.81,.1,1.14,.3l.18,.11,.47-.89-.15-.1c-.45-.29-1-.44-1.62-.44Z"/>
+        <path class="fcls-5" d="M366.98,79.41c-.34-.62-.82-1.1-1.43-1.45-.6-.35-1.3-.52-2.06-.52s-1.44,.18-2.04,.52c-.6,.35-1.08,.83-1.43,1.45-.34,.61-.51,1.31-.51,2.07s.17,1.46,.51,2.07c.34,.61,.82,1.1,1.43,1.45,.6,.35,1.29,.52,2.04,.52s1.45-.18,2.06-.52c.6-.35,1.08-.83,1.43-1.45,.34-.61,.51-1.31,.51-2.07s-.17-1.46-.51-2.07Zm-3.48,5.11c-.56,0-1.07-.13-1.52-.39-.45-.26-.8-.63-1.05-1.09-.25-.46-.38-.99-.38-1.56s.13-1.1,.38-1.56c.25-.46,.6-.83,1.05-1.09,.45-.26,.96-.39,1.52-.39s1.07,.13,1.52,.39c.45,.26,.8,.63,1.06,1.09,.26,.46,.39,.99,.39,1.56s-.13,1.1-.39,1.56c-.26,.46-.61,.83-1.06,1.09-.45,.26-.96,.39-1.52,.39Z"/>
+      </g>
+      <path class="fcls-2" d="M240.85,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(5.31 92.75) rotate(-22.05)"/>
+      <path class="fcls-4" d="M251.28,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(471.66 157.46) rotate(-157.95)"/>
+      <path class="fcls-1" d="M272.09,13.34h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.01c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(511.78 165.16) rotate(-157.95)"/>
+      <path class="fcls-3" d="M261.66,13.4h0c3,0,5.44,2.44,5.44,5.44v27.68c0,3.13-2.54,5.67-5.67,5.67h0c-3,0-5.44-2.44-5.44-5.44V19.07c0-3.13,2.54-5.67,5.67-5.67Z" transform="translate(6.81 100.57) rotate(-22.05)"/>
+      <g>
+        <path class="fcls-5" d="M17.43,13.35C7.49,13.35,0,20.96,0,31.05s7.17,17.63,17.43,17.63c6,0,11.66-2.53,14.76-6.6l.3-.39-3.14-2.52-.31,.41c-2.54,3.36-7.66,4.86-11.61,4.86-7.01,0-12.17-4.53-13-11.34h29.91l.04-.45c.57-5.82-.75-10.69-3.83-14.09-3.04-3.36-7.7-5.2-13.12-5.2Zm12.98,15.85H4.43c.88-7.09,6.04-11.81,13-11.81,7.89,0,12.71,4.4,12.98,11.81Z"/>
+        <path class="fcls-5" d="M78.09,19.83c-2.79-4.14-7.55-6.48-13.33-6.48-10.3,0-17.23,7.11-17.23,17.7s6.9,17.7,17.16,17.7c5.46,0,10.44-2.51,13.39-6.65v6.11h4.24V0h-4.24V19.83Zm-.07,11.16c0,7.84-5.52,13.53-13.12,13.53s-13.12-5.28-13.12-13.46c0-9.97,6.78-13.53,13.12-13.53,7.6,0,13.12,5.66,13.12,13.46Z"/>
+        <path class="fcls-5" d="M124.29,32.87c0,6.68-4.7,11.58-11.17,11.64-.06,0-.11,0-.17,0-3.49,0-6.35-1.01-8.28-2.92-1.94-1.92-2.92-4.65-2.92-8.11V13.83h-4.3v19.72c0,9.24,6.1,15.2,15.55,15.2,4.8-.07,8.85-2,11.36-5.36v4.82h4.24V13.83h-4.3v19.05Z"/>
+        <path class="fcls-5" d="M159.38,17.66c3.68,0,7.19,1.4,9.63,3.83l.35,.35,2.88-2.79-.37-.36c-3.38-3.31-7.81-5.13-12.49-5.13-10.38,0-17.63,7.19-17.63,17.5s7.41,17.5,17.63,17.5c4.74,0,9.18-1.82,12.49-5.14l.35-.35-2.93-2.93-.35,.35c-2.52,2.52-6.01,3.97-9.56,3.97-6.67,0-13.39-4.14-13.39-13.39s6.73-13.39,13.39-13.39Z"/>
+        <path class="fcls-5" d="M201.73,13.29c-10.1,0-17.43,7.5-17.43,17.83s7.17,17.56,17.43,17.56,17.43-7.22,17.43-17.56-7.33-17.83-17.43-17.83Zm13.19,17.83c0,7.85-5.42,13.33-13.19,13.33s-13.19-5.48-13.19-13.33,5.55-13.73,13.19-13.73,13.19,5.77,13.19,13.73Z"/>
+        <path class="fcls-5" d="M323.4,19.91c-2.85-4.05-7.63-6.42-13.12-6.42-9.94,0-17.43,7.55-17.43,17.56s7.49,17.7,17.43,17.7c5.35,0,9.96-2.3,13.12-6.51v5.97h4.3V13.89h-4.3v6.02Zm.29,11.17c0,3.53-1.19,6.81-3.35,9.24-2.43,2.74-5.91,4.18-10.06,4.18-7.6,0-13.12-5.66-13.12-13.46s5.52-13.39,13.12-13.39c9.21,0,13.41,6.96,13.41,13.43Z"/>
+        <polygon class="fcls-5" points="366.48 14.56 357.94 34.6 354.54 43.2 351.08 34.67 343.16 14.56 338.48 14.56 352.1 48.13 345.72 63.01 350.33 63.01 371.17 14.56 366.48 14.56"/>
+      </g>
+    </g>
+  </g>
+</svg></div>
+  <div>Informe personalizado de opciones de grado · Preparado por Educoway para Mateo Martínez Arlandis</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+  const mapsInitialized = {};
+  const mapInstances = {};
+  let currentTab = 'intro';
+
+  function gm(lat, lng) { return 'https://maps.google.com/?q=' + lat + ',' + lng; }
+
+  const mapData = {
+    es: { center: [40.41, -3.96], zoom: 11, universities: [
+      { id: 'es-uax-ae', name: 'Grado en Ingeniería Aeroespacial', school: 'Universidad Alfonso X el Sabio (UAX)', lat: 40.4475, lng: -4.0045, webUrl: 'https://www.uax.com/titulaciones/grado-en-ingenieria-aeroespacial' },
+      { id: 'es-ue-ae',  name: 'Grado en Ingeniería Aeroespacial en Aeronaves', school: 'Universidad Europea', lat: 40.3732, lng: -3.9200, webUrl: 'https://universidadeuropea.com/grado-ingenieria-aeroespacial-madrid/' },
+      { id: 'es-ue-ma',  name: 'Grado en Ingeniería Mecánica + Automoción', school: 'Universidad Europea', lat: 40.3720, lng: -3.9185, webUrl: 'https://universidadeuropea.com/grado-ingenieria-mecanica-automocion-madrid/' }
+    ]}
+  };
+  Object.values(mapData).forEach(c => c.universities.forEach(u => { u.mapsUrl = gm(u.lat, u.lng); }));
+
+  function headerHeight() {
+    const h = document.getElementById('siteHeader').offsetHeight;
+    document.documentElement.style.setProperty('--hdr-h', h + 'px');
+    return h;
+  }
+
+  function scrollToEl(el) {
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - headerHeight() - 14;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  }
+
+  function showTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const panel = document.getElementById('tab-' + id);
+    if (panel) panel.classList.add('active');
+    const button = btn || document.querySelector('.tab-btn[data-tab="' + id + '"]');
+    if (button) {
+      button.classList.add('active');
+      button.scrollIntoView({ block: 'nearest', inline: 'center' });
+    }
+    currentTab = id;
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    if (mapData[id]) setTimeout(() => initMap(id), 60);
+  }
+
+  function goTo(tab, anchor) {
+    showTab(tab);
+    setTimeout(() => {
+      const el = document.getElementById(anchor);
+      scrollToEl(el);
+      flash(el);
+    }, 120);
+  }
+
+  function flash(el) {
+    if (!el || !el.classList.contains('card')) return;
+    el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+  }
+
+  function scrollToCard(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const panel = el.closest('.tab-panel');
+    const tab = panel ? panel.id.replace('tab-', '') : currentTab;
+    if (tab !== currentTab) { goTo(tab, id); return; }
+    scrollToEl(el);
+    flash(el);
+  }
+
+  function scrollToMap(tab, anchor) {
+    const go = () => scrollToEl(document.getElementById(anchor + '-wrap') || document.getElementById(anchor));
+    if (currentTab === tab) { initMap(tab); go(); }
+    else { showTab(tab); setTimeout(go, 160); }
+  }
+
+  function initMap(countryId) {
+    if (mapsInitialized[countryId]) {
+      if (mapInstances[countryId]) mapInstances[countryId].invalidateSize();
+      return;
+    }
+    if (typeof L === 'undefined') return;
+    const data = mapData[countryId];
+    const el = document.getElementById('map-' + countryId);
+    if (!data || !el) return;
+    mapsInitialized[countryId] = true;
+    const map = L.map(el, { scrollWheelZoom: false }).setView(data.center, data.zoom);
+    map.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>');
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+    }).addTo(map);
+    const icon = L.divIcon({ className: 'uni-marker', html: '🎓', iconSize: [30, 30], iconAnchor: [15, 15], popupAnchor: [0, -12] });
+    data.universities.forEach(u => {
+      const html =
+        '<div class="pop-grade">' + u.name + '</div>' +
+        '<div class="pop-uni">' + u.school + '</div>' +
+        '<div class="pop-btns">' +
+          '<a class="primary" href="' + u.webUrl + '" target="_blank" rel="noopener">Ver grado</a>' +
+          '<button type="button" onclick="scrollToCard(\'' + u.id + '\')">Ver ficha</button>' +
+          '<a href="' + u.mapsUrl + '" target="_blank" rel="noopener">Google Maps</a>' +
+        '</div>';
+      L.marker([u.lat, u.lng], { icon: icon, title: u.name + ' · ' + u.school }).addTo(map).bindPopup(html, { maxWidth: 260 });
+    });
+    mapInstances[countryId] = map;
+    setTimeout(() => map.invalidateSize(), 120);
+  }
+
+  window.addEventListener('resize', headerHeight);
+  window.addEventListener('load', headerHeight);
+  headerHeight();
+</script>
+</body>
+</html>
